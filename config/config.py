@@ -1,9 +1,4 @@
 solvers = [
-    "cvc4 --strings-exp --incremental --produce-models --check-unsat-cores --check-models --quiet",
-    "cvc4 --strings-exp --sygus-inference --produce-models --check-unsat-cores --check-models --quiet",
-    "z3release model_validate=true",
-    "z3release smt.ematching=false rewriter.flat=false smt.threads=3 smt.arith.solver=2 model_validate=true",
-    "z3release smt.ematching=false rewriter.flat=false smt.threads=3 model_validate=true"
 ]
 
 crash_msgs = [

@@ -90,7 +90,7 @@ class Solver:
 
         stdout = output.stdout.decode()
         stderr = output.stderr.decode()
-        print(stdout+"\n"+stderr,flush=True)
+        # print(stdout+"\n"+stderr,flush=True)
 
         if "Couldn't open file:" in stdout or "failed to open file" in stderr:
             return SolverResult(SolverResultType.FAIL), output
