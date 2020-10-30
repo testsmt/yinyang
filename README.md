@@ -1,4 +1,4 @@
-![Travis](https://travis-ci.com/wintered/yinyang.svg?token=sgWHG8TT217zpf5KHHqh&branch=master)
+![Travis](https://travis-ci.com/testsmt/yinyang.svg?token=sgWHG8TT217zpf5KHHqh&branch=master)
 [![Twitter](https://img.shields.io/twitter/follow/testsmtsolvers?style=social)](https://twitter.com/testsmtsolvers)
 
 

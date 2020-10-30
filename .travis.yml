@@ -6,6 +6,5 @@ python:
   - "nightly"  
 install:
   - pip install antlr4-python3-runtime 
-  - pip install coverage
 script:
   - python -m unittest tests/runtests.py
