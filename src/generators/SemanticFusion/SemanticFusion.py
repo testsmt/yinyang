@@ -45,14 +45,14 @@ class SemanticFusion(Generator):
         for i,mr in enumerate(_mrs):
             template = parse_str(mr)
             sort = template.commands[0].sort
+
             if not sort in self.templates:
                 self.templates[sort] = [template]
             else:
                 self.templates[sort].append(template)
 
 
-    def fuse(self, occs1, occs2, formula1, formula2):
-        metamorphic_tuples = random_mr_tuples(occs1, occs2, self.templates)
+    def fuse(self, occs1, occs2, formula1, formula2, metamorphic_tuples):
         fusion_constr = []
         vars = []
         for t in metamorphic_tuples:
@@ -69,7 +69,6 @@ class SemanticFusion(Generator):
         add_var_decls(formula, vars)
         return formula
 
-
     def generate(self):
         if self.formula1.free_var_occs == [] or self.formula2.free_var_occs == []:
             return None, False
@@ -77,5 +76,8 @@ class SemanticFusion(Generator):
         formula1.prefix_vars("scr1_")
         formula2.prefix_vars("scr2_")
         occs1, occs2 = formula1.free_var_occs, formula2.free_var_occs
-        fused = self.fuse(occs1, occs2, formula1, formula2)
+        metamorphic_tuples = random_mr_tuples(occs1, occs2, self.templates)
+        if not metamorphic_tuples:
+            return None, False
+        fused = self.fuse(occs1, occs2, formula1, formula2, metamorphic_tuples)
         return fused, True

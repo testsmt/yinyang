@@ -44,14 +44,14 @@
 #end
 
 ;#begin
-(declare-const x Int)
-(declare-const y Int)
-(declare-const z Int)
-(declare-const c Int)
-(assert (= z (+ x c) y))
-(assert (= x (- (- z c) y)))
-(assert (= y (- (- z c) x)))
-#end
+;(declare-const x Int)
+;(declare-const y Int)
+;(declare-const z Int)
+;(declare-const c Int)
+;(assert (= z (+ x c) y))
+;(assert (= x (- (- z c) y)))
+;(assert (= y (- (- z c) x)))
+;#end
 
 ; Real
 ;
@@ -64,25 +64,25 @@
 (assert (= y (/ z x)))
 #end
 
-#begin
-(declare-const x Real)
-(declare-const y Real)
-(declare-const z Real)
-(declare-const c Real)
-(assert (= z (+ (+ x c) y)))
-(assert (= x (- z y)))
-(assert (= y (- z x)))
-#end
+;#begin
+;(declare-const x Real)
+;(declare-const y Real)
+;(declare-const z Real)
+;(declare-const c Real)
+;(assert (= z (+ (+ x c) y)))
+;(assert (= x (- z y)))
+;(assert (= y (- z x)))
+;#end
 
-#begin
-(declare-const x Real)
-(declare-const y Real)
-(declare-const z Real)
-(declare-const c Real)
-(assert (= z (+ x c) y))
-(assert (= x (- (- z  c) y)))
-(assert (= y (- (- z  c) x)))
-#end
+;#begin
+;(declare-const x Real)
+;(declare-const y Real)
+;(declare-const z Real)
+;(declare-const c Real)
+;(assert (= z (+ x c) y))
+;(assert (= x (- (- z c) y)))
+;(assert (= y (- (- z c) x)))
+;#end
 
 ; BV
 ;
@@ -115,12 +115,12 @@
 (assert (= y (str.replace z x "")))
 #end
 
-#begin
-(declare-const x String)
-(declare-const y String)
-(declare-const z String)
-(declare-const c String)
-(assert (= z (str++ x y c)))
-(assert (= x (str.substr z 0 (str.len x))))
-(assert (= y (str.replace (str.replace z x "") c "")))
-#end
+;#begin
+;(declare-const x String)
+;(declare-const y String)
+;(declare-const z String)
+;(declare-const c String)
+;(assert (= z (str++ x y c)))
+;(assert (= x (str.substr z 0 (str.len x))))
+;(assert (= y (str.replace (str.replace z x "") c "")))
+;#end

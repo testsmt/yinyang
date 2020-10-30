@@ -15,13 +15,14 @@ class MetamorphicTuple:
         self.y = y
         self.z = Var(self.x.name +"_"+self.y.name+"_fused",self.x.type)
         self.c = None
-        new_cmds = []
+        self.r = None
 
+        new_cmds = []
         for v in template.free_var_occs:
             if v.name == "c":
                 self.c = v
                 break
-
+        
         for cmd in template.commands:
             if isinstance(cmd,DeclareConst):
                if cmd.symbol == "c":
@@ -33,15 +34,21 @@ class MetamorphicTuple:
             if isinstance(cmd, Assert):
                 break
         if self.c:
-            self.c_type = self.x.type
+            if self.c.type == "Int": self.r = random.randint(-1000,1000)
+            if self.c.type == "Real": self.r = round(random.uniform(-1000, 1000),1)
+            if self.c.type == "Bool": self.r = random.choice(["true","false"])
+            if self.c.type == "String": self.r = '"'+gen_random_string(length)+'"'
 
         for ass in self.template.commands[i:]:
             ass.term.substitute_all(Var("x",self.x.type),x)
             ass.term.substitute_all(Var("y",self.y.type),y)
             ass.term.substitute_all(Var("z",self.z.type),self.z)
             if self.c:
+                print("self.c_substituent", self.c_substituent())
+                print("c.name",self.c.name)
                 ass.term.substitute_all(Var("c", self.z.type), self.c_substituent())
-
+                
+   
     def x_substituent(self):
         cmds = self.template.commands
         return cmds[4].term.subterms[1]
@@ -51,23 +58,22 @@ class MetamorphicTuple:
         return cmds[5].term.subterms[1]
 
     def c_substituent(self):
-        if self.c_type == "Int":
-            r = random.randint(-1000,1000)
-            if r < 0:
-                return Expr(op="-", subterms=[Const(name=str(-r), type=self.c_type)])
+        if self.c.type == "Int":
+            if self.r < 0:
+                return Expr(op="-", subterms=[Const(name=str(-self.r), type=self.c.type)])
             else:
-                return Const(name=str(), type=self.c_type)
-        if self.x.type == "Real":
-            r = round(random.uniform(-1000, 1000),5)
-            if r < 0:
-                return Expr(op="-", subterms=[Const(name=str(-r), type=self.c_type)])
+                return Const(name=str(self.r), type=self.c.type)
+        if self.c.type == "Real":
+            if self.r < 0:
+                return Expr(op="-", subterms=[Const(name=str(-self.r), type=self.c.type)])
             else:
-                return Const(str(r), type=self.c_type)
-        if self.x.type == "Bool":
-            return Const(random.choice(["true","false"]),type=self.c_type)
-        if self.x.type == "String":
+                return Const(str(self.r), type=self.c.type)
+        if self.c.type == "Bool":
+            return Const(self.r,type=self.c.type)
+        if self.c.type == "String":
             length = random.randint(0, 20)
-            return Const('"'+gen_random_string(length)+'"',type=self.c_type)
+            return Const(self.r,type=self.c.type)
+        print("llllllllllllllllllllllllllllllllllllllllllllllllllllll",self.c.type, flush=True)
 
     def xyz_constraints(self):
         return self.template.commands[3:6]
