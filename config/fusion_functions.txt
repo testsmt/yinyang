@@ -1,0 +1,137 @@
+; Configuration file for fusion and inversion functions as described in PLDI 2020 
+; paper's Definition 1 and Definition 2 which we will repeat here.  
+;  
+; Definition 1 (Fusion function).  
+; Let phi1, phi2 be formulas and x and y be variables of phi1 and phi2 
+; respectively, and z a fresh variable which does not occur in neither phi1 nor 
+; phi2. We define  z := f(x,y) and call f a fusion function.   
+;               
+;
+; Definition 2 (Inversion function). 
+; Let phi1, phi2 be formulas and f be a fusion function. For two variables x and 
+; y be variables of phi1 and phi2 and z = f(x,y), we define  
+; x = r_x(y,z); y = r_y (x,z) and call them inversion functions.  
+;
+; ** File format:  
+;
+; Each triplet of a fusion and two inversion functions is contained within a     
+; "#begin-#end" block. Note, variables x,y,z are hard-coded to reflect Definition 1
+; and Definition 2 closely and should be declared as three constants. An additional 
+; constant "c" represents a randomly chosen constant. The first assert represents    
+; the equation "z := f(x,y)", the second and third represent the equations    
+; x = r_x(y,z) and y = r_y (x,z) respectively. 
+;
+; The below fusion and inversion function triplets are based on the PLDI 2020 paper.    
+;
+; Int
+;
+#begin
+(declare-const x Int)
+(declare-const y Int)
+(declare-const z Int)
+(assert (= z (* x y)))
+(assert (= x (div z y)))
+(assert (= y (div z x)))
+#end
+
+#begin
+(declare-const x Int)
+(declare-const y Int)
+(declare-const z Int)
+(assert (= z (+ x y)))
+(assert (= x (- z y)))
+(assert (= y (- z x)))
+#end
+
+#begin
+(declare-const x Int)
+(declare-const y Int)
+(declare-const z Int)
+(declare-const c Int)
+(assert (= z (+ x c) y))
+(assert (= x (- (- z  c) y)))
+(assert (= y (- (- z  c) x)))
+#end
+
+; Real
+;
+#begin
+(declare-const x Real)
+(declare-const y Real)
+(declare-const z Real)
+(assert (= z (* x y)))
+(assert (= x (/ z y)))
+(assert (= y (/ z x)))
+#end
+
+#begin
+(declare-const x Real)
+(declare-const y Real)
+(declare-const z Real)
+(declare-const c Real)
+(assert (= z (+ (+ x c) y)))
+(assert (= x (- z y)))
+(assert (= y (- z x)))
+#end
+
+#begin
+(declare-const x Real)
+(declare-const y Real)
+(declare-const z Real)
+(declare-const c Real)
+(assert (= z (+ x c) y))
+(assert (= x (- (- z  c) y)))
+(assert (= y (- (- z  c) x)))
+#end
+
+; Bool
+;
+#begin
+(declare-const x Bool)
+(declare-const y Bool)
+(declare-const z Bool)
+(assert (= z (xor x y)))
+(assert (= x (xor z y)))
+(assert (= y (xor z x)))
+#end
+
+; BV
+;
+#begin
+(declare-const x (_ BitVec 8))
+(declare-const y (_ BitVec 8))
+(declare-const z (_ BitVec 8))
+(assert (= z (bvxor x y)))
+(assert (= x (bvxor z y)))
+(assert (= y (bvxor z x)))
+#end
+
+; String
+;
+#begin
+(declare-const x String)
+(declare-const y String)
+(declare-const z String)
+(assert (= z (str++ x y)))
+(assert (= x (str.substr z 0 (str.len x))))
+(assert (= y (str.substr z 0 (str.len y))))
+#end
+
+#begin
+(declare-const x String)
+(declare-const y String)
+(declare-const z String)
+(assert (= z (str++ x y)))
+(assert (= x (str.substr z 0 (str.len x))))
+(assert (= y (str.replace z x "")))
+#end
+
+#begin
+(declare-const x String)
+(declare-const y String)
+(declare-const z String)
+(declare-const c String)
+(assert (= z (str++ x y c)))
+(assert (= x (str.substr z 0 (str.len x))))
+(assert (= y (str.replace (str.replace z x "") c "")))
+#end

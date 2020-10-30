@@ -1,0 +1,35 @@
+; Configuration file for the type-aware operator mutations based on the operators 
+; as specified in the OOPSLA '20 paper. 
+;
+; Format:
+;
+; op1, op2, ... ,op_n
+;
+; Operators op_i in the same line form an equivalence class and can mutually 
+; replace each other. 
+;
+; Example:
+; +, -, * 
+;
+; Operator mutations can be conditioned on operator's arity. 
+; 
+; Example: 
+; =,distinct: arity: 2+ 
+; -,abs: arity: 1- 
+;
+; This requires operators "=" and "distinct" to have at least two arguments to trigger the  
+; mutation, and "-","abs" to have at most one argument. At the moment, only the arities  
+; 2+ ("two or more") and 1- (one or less) are supported  
+; 
+; Unidirectional mutations can be specified as   
+; 
+; abs -> - 
+;
+; which corresponds to a one-way mutation from operator "abs" to operator "-" 
+;
+=,distinct
+exists,forall
+and,or,=>
+<=, >=,<,>
++,-,*,/ :arity 2+
+mod -> div
