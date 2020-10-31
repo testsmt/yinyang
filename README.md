@@ -116,9 +116,6 @@ The testing approaches implemented in Yin-Yang are based on following two papers
 }
 ```
 
-## Comparing against Yin-Yang 
-The testing approaches within Yin-Yang are slightly different from the research prototypes used for these publications. If you want to compare against either one of them, please contact us to provide you with these prototypes and the configurations  used.
-
 Contributors                                                                       
 ------------                          
 * [Dominik Winterer](https://wintered.github.io/) (primary maintainer) - dominik.winterer@inf.ethz.ch
