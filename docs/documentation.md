@@ -1,4 +1,4 @@
-Yin-Yang provides a bunch of arguments to configure the fuzzing process. Here is the list:
+Yin-Yang provides the following arguments to configure the fuzzing process:
 
 ```
 -h, --help            show this help message and exit
