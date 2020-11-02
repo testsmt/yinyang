@@ -73,19 +73,42 @@ def random_tuple_list(lst1, lst2, lb=1):
     return random.sample(list(itertools.product(lst1,lst2)),k)
 
 
+def random_tuple_list(lst1, lst2, lb=1):
+    """
+    Generate a random list of tuples (x,y) where x is in lst1 and y is in lst2;
+
+    """
+    len_lst1 = len(lst1)
+    len_lst2 = len(lst2)
+    k = random.randint(lb, max(len_lst1, len_lst2))
+    product = list(itertools.product(lst1, lst2))
+
+    tups = random.sample(product,k)
+    random.shuffle(tups)
+
+    new_tups = []
+    lhs, rhs = [], []
+    for tup in tups:
+        if tup[0] in lhs: continue
+        if tup[1] in rhs: continue
+        lhs.append(tup[0])
+        rhs.append(tup[1])
+        new_tups.append(tup)
+    return new_tups
+
 def create_var_map(m1, m2, templates): 
     """
     Create a random variable mapping of variables with same type      
     """
     supported_types = list(templates.keys())
     mapping=[]
-    for t in m1:   
-        if not t in m2: continue 
+    for t in m1:
+        if not t in m2: continue
         if not t in supported_types: continue
         len_m1 = len(m1[t])
         len_m2 = len(m2[t])
         random_tuples = random_tuple_list(m1[t],m2[t])
-        for tup in random_tuples: 
+        for tup in random_tuples:
             mapping.append((tup[0], tup[1], random.choice(templates[t])))
     return mapping 
 
@@ -93,8 +116,7 @@ def create_var_map(m1, m2, templates):
 def random_mr_tuples(occs1,occs2,templates):
     m1, m2 = type_var_map(occs1), type_var_map(occs2)
     var_map = create_var_map(m1,m2, templates)
-
-    if var_map == []: 
+    if var_map == []:
         return None
 
     metamorphic_tuples = []
