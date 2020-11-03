@@ -15,11 +15,11 @@ crash_msgs = [
     "Failed to verify",
     "failed to verify",
     "ERROR: AddressSanitizer:",
-    "invalid expression"
+    "invalid expression",
+    "(error",
 ]
 
 ignore_msgs = [
-    "(error",
     "Expected result sat but got unsat",
     "Expected result unsat but got sat",
     "Parse Error",

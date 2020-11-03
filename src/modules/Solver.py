@@ -90,13 +90,12 @@ class Solver:
 
         stdout = output.stdout.decode()
         stderr = output.stderr.decode()
-        # print(stdout+"\n"+stderr,flush=True)
 
         if "Couldn't open file:" in stdout or "failed to open file" in stderr:
             return SolverResult(SolverResultType.FAIL), output
         elif self.ignored_error(stdout,stderr):
             return SolverResult(SolverResultType.IGNORED), output
-        elif self.warning_or_error(stdout, stderr):
+        elif self.warning_or_error(stdout, stderr) and not self.ignored_error(stdout, stderr):
             return SolverResult(SolverResultType.CRASH), output
         elif not re.search("^unsat$", stdout, flags=re.MULTILINE) and \
              not re.search("^sat$", stdout, flags=re.MULTILINE) and \

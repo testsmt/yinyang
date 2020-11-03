@@ -3,7 +3,20 @@ import itertools
 import string
 import copy
 
-from src.generators.SemanticFusion.MetamorphicTuple import *
+from src.parsing.ast import *
+from src.generators.SemanticFusion.VariableFusion import *
+
+def cvars(occs): 
+    """
+    Return a single representative occurrence for each variable.  
+    """
+    names = []
+    canonicals = [] 
+    for occ in occs: 
+        if occ.name in names:
+            continue 
+        canonicals.append(occ)
+    return canonicals 
 
 
 def debug_formula(formula,name="formula"):
@@ -63,14 +76,14 @@ def type_var_map(occs):
     return m 
 
 
-def random_tuple_list(lst1, lst2, lb=1):
-    """
-    Generate a random list of tuples (x,y) where x is in lst1 and y is in lst2  
-    """
-    len_lst1 = len(lst1) 
-    len_lst2 = len(lst2) 
-    k = random.randint(lb,max(len_lst1,len_lst2))
-    return random.sample(list(itertools.product(lst1,lst2)),k)
+# def random_tuple_list(lst1, lst2, lb=1):
+    # """
+    # Generate a random list of tuples (x,y) where x is in lst1 and y is in lst2  
+    # """
+    # len_lst1 = len(lst1) 
+    # len_lst2 = len(lst2) 
+    # k = random.randint(lb,max(len_lst1,len_lst2))
+    # return random.sample(list(itertools.product(lst1,lst2)),k)
 
 
 def random_tuple_list(lst1, lst2, lb=1):
@@ -113,37 +126,19 @@ def create_var_map(m1, m2, templates):
     return mapping 
 
 
-def random_mr_tuples(occs1,occs2,templates):
+def random_var_occs_triplets(occs1,occs2,templates):
     m1, m2 = type_var_map(occs1), type_var_map(occs2)
     var_map = create_var_map(m1,m2, templates)
     if var_map == []:
         return None
 
-    metamorphic_tuples = []
+    triplets = []
     for v in var_map:
         x_name, y_name, template = v[0], v[1], v[2]
         var_occs1 = [var for var in occs1 if var.name == v[0]]
         var_occs2 = [var for var in occs2 if var.name == v[1]]
         random_occs = random_tuple_list(var_occs1, var_occs2)
-        
-        for occ in random_occs: 
-            metamorphic_tuples.append(MetamorphicTuple(template,occ[0], occ[1]))
-    return metamorphic_tuples
+        for occ in random_occs:
+            triplets.append((occ[0], occ[1], template))
+    return triplets  
 
-def add_fusion_constraints(formula,asserts):
-    i = -1
-    for i,cmd in enumerate(formula.commands):
-        if isinstance(cmd, CheckSat): break
-    if i == -1: return
-    formula.commands = formula.commands[:i] + asserts +  formula.commands[i:]
-
-def add_var_decls(formula, vars):
-    i = -1
-    for cmd in formula.commands:
-        if isinstance(cmd, Assert): break
-        i += 1
-    if i == -1: return
-    var_decls =[]
-    for var in vars:
-        var_decls.append(DeclareConst(var.name,var.type))
-    formula.commands = formula.commands[:i+1] + var_decls + formula.commands[i+1:]
