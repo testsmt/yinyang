@@ -6,7 +6,7 @@ sys.path.append("../../")
 from src.parsing.ast import * 
 from src.parsing.parse import *
 from src.generators.SemanticFusion.SemanticFusion import *
-from src.generators.SemanticFusion.MetamorphicTuple import * 
+from src.generators.SemanticFusion.VariableFusion import * 
 
 class SemanticFusionTestCase(unittest.TestCase): 
     def test_sf_sat(self):
