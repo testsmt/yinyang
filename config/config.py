@@ -2,6 +2,10 @@ solvers = [
 ]
 
 crash_msgs = [
+    "Exception",
+    "lang.AssertionError",
+    "lang.Error",
+    "runtime error",
     "LEAKED",
     "Leaked",
     "Segmentation fault",
