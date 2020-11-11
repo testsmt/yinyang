@@ -1,9 +1,8 @@
 import random
 
-class Generator:
-    def __init__(self,seeds,config_file):
+class Generator: 
+    def __init__(self,seeds):
         self.seeds = seeds
-        self.config_file = config_file
 
-    def generate(self):
+    def generate(self): 
         pass

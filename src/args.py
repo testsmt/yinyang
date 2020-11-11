@@ -34,12 +34,12 @@ parser.add_argument(
     type=int,
     help="set mutating iterations for each seed/pair (default: 300 for Type-Aware Operator Mutation, 30 for SemanticFusion)"
 )
-parser.add_argument(
-    "-m", "--modulo",
-    type=int,
-    default=2,
-    help="determines when the mutant will be forwarded to the solvers"
-)
+# parser.add_argument(
+#     "-m", "--modulo",
+#     type=int,
+#     default=2,
+#     help="determines when the mutant will be forwarded to the solvers"
+# )
 parser.add_argument(
     "-t", "--timeout",
     default=8,
@@ -66,16 +66,16 @@ parser.add_argument(
     default=rootpath+"/scratch",
     help="set scratch folder (default: "+rootpath+"/scratch)"
 )
-parser.add_argument(
-    "-opconfig","--opconfig",
-    default=rootpath+"/config/operator_mutations.txt",
-    help="set operator mutation configuration (default: "+rootpath+"/config/operator_mutations.txt)"
-)
-parser.add_argument(
-    "-fusionfun","--fusionfun",
-    default=rootpath+"/config/fusion_functions.txt",
-    help="set fusion function configuration (default: "+rootpath+"/config/fusion_functions.txt)"
-)
+# parser.add_argument(
+#     "-opconfig","--opconfig",
+#     default=rootpath+"/config/operator_mutations.txt",
+#     help="set operator mutation configuration (default: "+rootpath+"/config/operator_mutations.txt)"
+# )
+# parser.add_argument(
+#     "-fusionfun","--fusionfun",
+#     default=rootpath+"/config/fusion_functions.txt",
+#     help="set fusion function configuration (default: "+rootpath+"/config/fusion_functions.txt)"
+# )
 parser.add_argument(
     "-km", "--keep-mutants",
     action='store_true',

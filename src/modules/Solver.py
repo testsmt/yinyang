@@ -80,7 +80,7 @@ class Solver:
             else:
                 return SolverResult(SolverResultType.TIMEOUT), "timeout"
         except KeyboardInterrupt:
-            print("Accepted keyboard interrupt. Stop.")
+            print("Accepted keyboard interrupt. Stop.", end="\r", flush=True)
             exit(0)
         except Exception as e:
             print("Exception rises when running solver:")
