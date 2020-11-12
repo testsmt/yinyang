@@ -84,11 +84,10 @@ parser.add_argument(
 args = parser.parse_args()
 
 # pre-processing
-if args.SOLVER_CLIS == "":
-    args.SOLVER_CLIS = solvers
-else:
-    args.SOLVER_CLIS = args.SOLVER_CLIS.split(";") + solvers
 
+# Parse CLI
+if args.SOLVER_CLIS == "": args.SOLVER_CLIS = solvers
+else: args.SOLVER_CLIS = args.SOLVER_CLIS.split(";") + solvers
 
 if args.timeout <= 0: exit("Error: timeout should not be a negative number or zero.")
 
@@ -133,7 +132,10 @@ for path in args.PATH_TO_SEEDS:
         exit("Error: %s is neither a file nor a directory")
 args.PATH_TO_SEEDS = temp_seeds
 
-if args.optfuzz == "":
-    args.optfuzz = None
-else:
-    args.optfuzz = OptionGenerator(args.optfuzz)
+if (args.strategy == "opfuzz" and len(args.PATH_TO_SEEDS) < 1):
+    exit("Error: please provide at least one seed for opfuzz strategy.")
+if (args.strategy == "fusion" and len(args.PATH_TO_SEEDS) < 2):
+    exit("Error: please provide at least two seeds for fusion strategy.")
+
+if args.optfuzz == "": args.optfuzz = None
+else: args.optfuzz = OptionGenerator(args.optfuzz)

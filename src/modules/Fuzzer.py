@@ -35,8 +35,10 @@ class Fuzzer:
                 self.currentseeds = Path(seed).stem
                 self.generator = TypeAwareOpMutation([seed], self.args)
             elif (self.args.strategy == "fusion"):
-                seed1 = seeds[0]
-                seed2 = seeds[1]
+                seed1 = seeds[random.randrange(len(seeds))]
+                seed2 = seeds[random.randrange(len(seeds))]
+                while seed1 == seed2:
+                    seed2 = seeds[random.randrange(len(seeds))]
                 self.statistic.seeds += 2
                 self.currentseeds = Path(seed1).stem + "-" + Path(seed2).stem
                 fusion_seeds = [seed1, seed2]
