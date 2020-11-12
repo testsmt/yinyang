@@ -64,14 +64,13 @@ class Fuzzer:
 
         testbook = []
         for cli in self.args.SOLVER_CLIS:
-            with open(fn, 'r') as generated_test:
-                pure_formula = generated_test.read()
-            testcase = "%s/%s-%s" % (self.args.scratchfolder, plain(cli), fn.split('/')[-1])
-            with open(testcase, 'w') as testcase_writer:
-                if self.args.optfuzz != None: 
+            testcase = fn
+            if self.args.optfuzz != None:
+                with open(fn, 'r') as generated_test:
+                    pure_formula = generated_test.read()
+                testcase = "%s/%s-%s" % (self.args.scratchfolder, plain(cli), fn.split('/')[-1])
+                with open(testcase, 'w') as testcase_writer:
                     testcase_writer.write(self.args.optfuzz.generate(cli) + pure_formula)
-                else: 
-                    testcase_writer.write(pure_formula)
             testbook.append((cli,testcase))
         
         reference = ("", "", "")
