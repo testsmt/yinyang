@@ -3,6 +3,7 @@ import shutil
 import os
 
 from pathlib import Path
+from antlr4 import *
 
 from src.modules.Solver import SolverResultType, SolverResult, Solver
 from src.modules.Statistic import Statistic
