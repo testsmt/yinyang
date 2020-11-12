@@ -1,77 +1,81 @@
 import random
 
 from src.generators.Generator import Generator
+from src.parsing.parse import *
 
-class TypeAwareOpMutation(Generator): 
 
-    op2type = {
-        "(=": "T T Bool",
-        "(distinct": "T T Bool",
-        "(<=": "Num Num Bool",
-        "(>=": "Num Num Bool",
-        "(<": "Num Num Bool",
-        "(>": "Num Num Bool",
-        "(+" : "Num Num Num",
-        "(/" : "Real Real Real",
-        "(-" : "Num Num Num",
-        "(*" : "Num Num Num",
-        "(div": "Int Int Int",
-        "(mod": "Int Int Int",
-        "(not" : "Bool Bool",
-        "(and" : "Bool Bool Bool",
-        "(or" : "Bool Bool Bool",
-        "(forall": "Q",
-        "(exists": "Q",
-    }
-
-    def __init__(self, seeds, args): 
-        super().__init__(seeds)
+class TypeAwareOpMutation(Generator):
+    def __init__(self, seeds, args):
         assert(len(seeds) == 1)
-        self.type2ops = {}
-        for k,v in self.op2type.items():
-            if not v in self.type2ops: self.type2ops[v] = [k]
-            else: self.type2ops[v].append(k)
         self.args = args
-        self.fn = seeds[0]
+        self.formula = parse_file(seeds[0])
+        self.bidirectional = []
+        self.unidirectional = []
 
-    def tokenize(self, fn):
-        with open(fn) as f:
-            lines = []
-            for line in f.readlines():
-                if "(set-info :status" in line: line = ";" + line
-                lines.append(line)
-            return "".join(lines).split(" ")
+        self.parse_config_file()
+
+    def parse_config_file(self):
+        with open(self.args.opconfig) as f:
+            lines = f.readlines()
+        for l in lines:
+            if ";" in l: continue
+            if not l.strip(): continue
+            arity = -1
+            if ":arity" in l:
+                arity = l.split(":arity")[-1].split(" ")[-1].strip()
+                l =  " ".join(l.split(" ")[:-2])
+            if "->" in l:
+                op_from,op_to = l.split("->")[0].strip(), l.split("->")[1].strip()
+                self.unidirectional.append((arity,op_from,op_to))
+                continue
+
+            op_class = [op.strip() for op in l.split(",")]
+            self.bidirectional.append((arity, op_class))
+
+    def arities_mismatch(self, arity, op_occ):
+        if arity == "2+" and len(op_occ.subterms) < 2:
+           return True
+
+        if arity == "1-" and len(op_occ.subterms) > 2:
+            return True
+        return False
+
+    def get_replacee(self,op_occ):
+        for b in self.bidirectional:
+            arity, op_class = b[0], b[1]
+            if self.arities_mismatch(arity,op_occ):
+                continue
+
+            if op_occ.op in op_class:
+                diff = op_class.copy()
+                diff.remove(op_occ.op)
+                replacee = random.choice(diff)
+                return replacee
+
+            if op_occ.quantifier in op_class:
+                diff = op_class.copy()
+                diff.remove(op_occ.quantifier)
+                replacee = random.choice(diff)
+                return replacee
+
+        for u in self.unidirectional:
+            arity, op, replacee = u[0], u[1], u[2]
+            if op_occ.op != op or op_occ.quantifier != op: continue
+            if self.arities_mismatch(arity, op_occ):
+                continue
+            return replacee
         return None
-    
-    def toks2formula(self, toks):
-        return " ".join(toks)
 
-    def mutate(self, toks):
-        new_toks = []
-        r = random.randint(0,len(toks))
-        for i, tok in enumerate(toks[r:]):
-            op_type = None
-            if tok in self.op2type:
-                if tok == "(not":
-                    toks[r+i] = random.choice(["(and","(or"])
-                    return toks
-                op_type = self.op2type[tok]
-                ops = self.type2ops[op_type].copy()
-                ops.remove(tok)
-                if len(ops) == 0:
-                    # Fallback case that should not happen if op2type
-                    # is correctly defined
-                    return self.mutate(toks)
-                toks[r+i] = random.choice(ops)
-                if tok == "(-": toks.insert(r+i+1, str(random.randint(1, 1000)))
-                if tok == "(not": toks.insert(r+i+1, "false")
-                break
-        return toks
-     
     def generate(self):
-        toks = self.tokenize(self.fn)
-        mutated_toks = self.mutate(toks)
-        mutated_formula = self.toks2formula(mutated_toks)
+        max_choices = len(self.formula.op_occs)
+        for _ in range(max_choices):
+            op_occ = random.choice(self.formula.op_occs)
+            replacee = self.get_replacee(op_occ)
+
+            if replacee:
+                # print(op_occ.op,"->",replacee)
+                op_occ.op = replacee
+                break
         mutated_fn = "%s/%s.smt2" % (self.args.scratchfolder, self.args.name)
-        with open(mutated_fn,"w") as f: f.write(mutated_formula)
+        with open(mutated_fn,"w") as f: f.write(self.formula.__str__())
         return mutated_fn

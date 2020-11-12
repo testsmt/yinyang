@@ -66,11 +66,11 @@ parser.add_argument(
     default=rootpath+"/scratch",
     help="set scratch folder (default: "+rootpath+"/scratch)"
 )
-# parser.add_argument(
-#     "-opconfig","--opconfig",
-#     default=rootpath+"/config/operator_mutations.txt",
-#     help="set operator mutation configuration (default: "+rootpath+"/config/operator_mutations.txt)"
-# )
+parser.add_argument(
+    "-opconfig","--opconfig",
+    default=rootpath+"/config/operator_mutations.txt",
+    help="set operator mutation configuration (default: "+rootpath+"/config/operator_mutations.txt)"
+)
 # parser.add_argument(
 #     "-fusionfun","--fusionfun",
 #     default=rootpath+"/config/fusion_functions.txt",
