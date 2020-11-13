@@ -34,12 +34,12 @@ parser.add_argument(
     type=int,
     help="set mutating iterations for each seed/pair (default: 300 for Type-Aware Operator Mutation, 30 for SemanticFusion)"
 )
-# parser.add_argument(
-#     "-m", "--modulo",
-#     type=int,
-#     default=2,
-#     help="determines when the mutant will be forwarded to the solvers"
-# )
+parser.add_argument(
+    "-m", "--modulo",
+    type=int,
+    default=2,
+    help="determines when the mutant will be forwarded to the solvers for opfuzz"
+)
 parser.add_argument(
     "-t", "--timeout",
     default=8,

@@ -24,33 +24,34 @@ class Fuzzer:
 
 
     def run(self):
-        self.runforever = True
-        seeds = self.args.PATH_TO_SEEDS
-        if (self.args.strategy == "opfuzz" and len(seeds) == 1) or \
-           (self.args.strategy == "fusion" and len(seeds) == 2):
-            self.runforever = False
-        while True:
+
+        if (self.args.strategy == "opfuzz"):
+            seeds = self.args.PATH_TO_SEEDS
+        elif (self.args.strategy == "fusion"):
+            seeds = [(a, b) for a in self.args.PATH_TO_SEEDS for b in self.args.PATH_TO_SEEDS]
+        else: assert(False)
+
+        while len(seeds) != 0:
+
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
                 self.statistic.seeds += 1
                 self.currentseeds = Path(seed).stem
                 self.generator = TypeAwareOpMutation([seed], self.args)
             elif (self.args.strategy == "fusion"):
-                seed1 = seeds[random.randrange(len(seeds))]
-                seed2 = seeds[random.randrange(len(seeds))]
-                while seed1 == seed2:
-                    seed2 = seeds[random.randrange(len(seeds))]
+                seed = seeds.pop(random.randrange(len(seeds)))
+                seed1 = seed[0]
+                seed2 = seed[1]
                 self.statistic.seeds += 2
                 self.currentseeds = Path(seed1).stem + "-" + Path(seed2).stem
                 fusion_seeds = [seed1, seed2]
                 self.generator = SemanticFusion(fusion_seeds, self.args)
             else: assert(False)
+            
             for _ in range(self.args.iterations):
                 self.statistic.printbar()
-                self.validate(self.generator.generate())
+                if not self.validate(self.generator.generate()): break
                 self.statistic.mutants += 1
-            if not self.runforever or len(seeds) == 0:
-                break
 
     def validate(self, fn):
 

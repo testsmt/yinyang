@@ -67,15 +67,14 @@ class TypeAwareOpMutation(Generator):
         return None
 
     def generate(self):
-        max_choices = len(self.formula.op_occs)
-        for _ in range(max_choices):
-            op_occ = random.choice(self.formula.op_occs)
-            replacee = self.get_replacee(op_occ)
-
-            if replacee:
-                # print(op_occ.op,"->",replacee)
-                op_occ.op = replacee
-                break
+        for _ in range(self.args.modulo):
+            max_choices = len(self.formula.op_occs)
+            for _ in range(max_choices):
+                op_occ = random.choice(self.formula.op_occs)
+                replacee = self.get_replacee(op_occ)
+                if replacee:
+                    op_occ.op = replacee
+                    break
         mutated_fn = "%s/%s.smt2" % (self.args.scratchfolder, self.args.name)
         with open(mutated_fn,"w") as f: f.write(self.formula.__str__())
         return mutated_fn
