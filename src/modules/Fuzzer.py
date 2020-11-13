@@ -28,7 +28,11 @@ class Fuzzer:
         if (self.args.strategy == "opfuzz"):
             seeds = self.args.PATH_TO_SEEDS
         elif (self.args.strategy == "fusion"):
-            seeds = [(a, b) for a in self.args.PATH_TO_SEEDS for b in self.args.PATH_TO_SEEDS]
+            if len(self.args.PATH_TO_SEEDS) > 2:
+                seeds = [(a, b) for a in self.args.PATH_TO_SEEDS for b in self.args.PATH_TO_SEEDS]
+            elif len(self.args.PATH_TO_SEEDS) == 2:
+                seeds = [(self.args.PATH_TO_SEEDS[0],self.args.PATH_TO_SEEDS[1])]
+            else: assert(False)
         else: assert(False)
 
         while len(seeds) != 0:
