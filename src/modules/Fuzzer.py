@@ -31,7 +31,7 @@ class Fuzzer:
             self.runforever = False
         while True:
             if (self.args.strategy == "opfuzz"):
-                seed = seeds[random.randrange(len(seeds))]
+                seed = seeds.pop(random.randrange(len(seeds)))
                 self.statistic.seeds += 1
                 self.currentseeds = Path(seed).stem
                 self.generator = TypeAwareOpMutation([seed], self.args)
@@ -49,7 +49,7 @@ class Fuzzer:
                 self.statistic.printbar()
                 self.validate(self.generator.generate())
                 self.statistic.mutants += 1
-            if not self.runforever:
+            if not self.runforever or len(seeds) == 0:
                 break
 
     def validate(self, fn):
