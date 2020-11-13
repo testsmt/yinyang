@@ -66,7 +66,7 @@ class Solver:
 
     def solve(self, file, timeout):
         try:
-            output = subprocess.run(self.cil.split(" ") + [file], timeout=timeout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = subprocess.run(list(filter(None, self.cil.split(" "))) + [file], timeout=timeout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         except subprocess.TimeoutExpired as te:
             if te.stdout != None and te.stderr != None:
                 stdout = te.stdout.decode()
