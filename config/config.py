@@ -11,15 +11,16 @@ crash_msgs = [
     "Segmentation fault",
     "segmentation fault",
     "segfault",
-    "ASSERTION VIOLATION",
-    "Assertion failure",
+    "ASSERTION",
+    "Assertion",
     "Fatal failure",
     "Internal error detected",
     "an invalid model was generated",
     "Failed to verify",
     "failed to verify",
     "ERROR: AddressSanitizer:",
-    "invalid expression"
+    "invalid expression",
+    "Aborted"
 ]
 
 ignore_msgs = [
