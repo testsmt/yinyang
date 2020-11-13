@@ -29,7 +29,27 @@
 ;
 =,distinct
 exists,forall
-and,or,=>
-<=, >=,<,>
-+,-,*,/ :arity 2+
-mod -> div
+not -> and,or
+and,or,=> :arity 3+
+and,or,=>,xor :arity 2
+<=,>=,<,>
++,-,* :arity 2+
+mod,div
+abs,- :arity 1
+re.++,re.union,re.inter,re.diff
+str.<=,str.<,str.prefixof,str.suffixof,str.contains
+str.replace,str.replace_all
+str.replace_re,str.replace_re_all
+re.comp,re.+,re.opt,re.*
+re.none,re.all,re.allchar
+str.to_code,str.to_int
+str.from_code,str.from_int
+union,intersection,setminus
+bvnot,bvneg
+bvand,bvor,bvnand,bvnor,bvxor,bvxnor,bvsub,bvsdiv,bvsmod,bvadd,bvmul,bvudiv,bvurem,bvshl,bvlshr,bvashr
+bvule,bvugt,bvuge,bvslt,bvsle,bvsgt,bvsge
+fp.abs,fp.neg
+fp.add,fp.sub,fp.mul,fp.div
+fp.min,fp.max
+fp.leq,fp.lt,fp.geq,fp.gt,fp.eq
+fp.isNormal,fp.isSubnormal,fp.isZero,fp.isInfinite,fp.isNaN,fp.isNegative,fp.isPositive
