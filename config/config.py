@@ -23,6 +23,9 @@ crash_msgs = [
 ]
 
 ignore_msgs = [
+    "Expected result sat but got unsat",
+    "Expected result unsat but got sat",
+    "Cannot get model",
     "Symbol 'str.to-re' not declared as a variable",
     "Symbol 'str.to.re' not declared as a variable",
     "Unimplemented code encountered",
