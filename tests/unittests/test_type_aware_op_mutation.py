@@ -1,12 +1,19 @@
 import unittest
 import sys
 sys.path.append("../../")
-import os 
+import os
 
 from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 
+
+class Mockargs:
+    opconfig = ""
+    scratchfolder = "."
+    name = ""
+
 class TypeAwareOpMutationTestCase(unittest.TestCase):
+
     def test_ta(self):
         configfile="operators.txt"
         formulafile="formula.smt2"
@@ -33,7 +40,12 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         with open(formulafile,"w") as f: 
             f.write(formula)
         script = parse_str(formula)
-        gen = TypeAwareOpMutation([formulafile],config_file=configfile)
+        args = Mockargs()
+        print(formulafile)
+        args.name = formulafile.strip(".smt2")
+        args.opconfig = configfile
+        args.modulo = 2
+        gen = TypeAwareOpMutation([formulafile],args)
         gen.generate()
         os.system("rm -rf "+configfile+ " "+ formulafile)
 

@@ -11,19 +11,20 @@ crash_msgs = [
     "Segmentation fault",
     "segmentation fault",
     "segfault",
-    "ASSERTION VIOLATION",
-    "Assertion failure",
+    "ASSERTION",
+    "Assertion",
     "Fatal failure",
     "Internal error detected",
     "an invalid model was generated",
     "Failed to verify",
     "failed to verify",
     "ERROR: AddressSanitizer:",
-    "invalid expression"
+    "invalid expression",
+    "Aborted"
 ]
 
 ignore_msgs = [
-    "(error",
+    "(error ",
     "Expected result sat but got unsat",
     "Expected result unsat but got sat",
     "Parse Error",
@@ -31,5 +32,4 @@ ignore_msgs = [
     "Symbol 'str.to-re' not declared as a variable",
     "Symbol 'str.to.re' not declared as a variable",
     "Unimplemented code encountered",
-    '(error "Error in option parsing: sygus inference not supported with incremental solving")'
 ]

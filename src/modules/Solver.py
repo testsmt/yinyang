@@ -66,7 +66,7 @@ class Solver:
 
     def solve(self, file, timeout):
         try:
-            output = subprocess.run(self.cil.split(" ") + [file], timeout=timeout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = subprocess.run(list(filter(None, self.cil.split(" "))) + [file], timeout=timeout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         except subprocess.TimeoutExpired as te:
             if te.stdout != None and te.stderr != None:
                 stdout = te.stdout.decode()
@@ -80,7 +80,7 @@ class Solver:
             else:
                 return SolverResult(SolverResultType.TIMEOUT), "timeout"
         except KeyboardInterrupt:
-            print("Accepted keyboard interrupt. Stop.")
+            print("Accepted keyboard interrupt. Stop.", end="\r", flush=True)
             exit(0)
         except Exception as e:
             print("Exception rises when running solver:")

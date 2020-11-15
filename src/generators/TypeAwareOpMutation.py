@@ -5,10 +5,9 @@ from src.parsing.parse import *
 
 
 class TypeAwareOpMutation(Generator):
-    def __init__(self, seeds, config_file):
-        super().__init__(seeds, config_file)
+    def __init__(self, seeds, args):
         assert(len(seeds) == 1)
-
+        self.args = args
         self.formula = parse_file(seeds[0])
         self.bidirectional = []
         self.unidirectional = []
@@ -16,7 +15,7 @@ class TypeAwareOpMutation(Generator):
         self.parse_config_file()
 
     def parse_config_file(self):
-        with open(self.config_file) as f:
+        with open(self.args.opconfig) as f:
             lines = f.readlines()
         for l in lines:
             if ";" in l: continue
@@ -68,13 +67,14 @@ class TypeAwareOpMutation(Generator):
         return None
 
     def generate(self):
-        max_choices = len(self.formula.op_occs)
-        for i in range(max_choices):
-            op_occ = random.choice(self.formula.op_occs)
-            replacee = self.get_replacee(op_occ)
-
-            if replacee:
-                # print(op_occ.op,"->",replacee)
-                op_occ.op = replacee
-                break
-        return self.formula,True
+        for _ in range(self.args.modulo):
+            max_choices = len(self.formula.op_occs)
+            for _ in range(max_choices):
+                op_occ = random.choice(self.formula.op_occs)
+                replacee = self.get_replacee(op_occ)
+                if replacee:
+                    op_occ.op = replacee
+                    break
+        mutated_fn = "%s/%s.smt2" % (self.args.scratchfolder, self.args.name)
+        with open(mutated_fn,"w") as f: f.write(self.formula.__str__())
+        return mutated_fn
