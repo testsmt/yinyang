@@ -85,7 +85,6 @@ class Fuzzer:
 
             if result.equals(SolverResultType.IGNORED):
                 #ignored
-                print(output.stdout)
                 self.statistic.ignored += 1
             elif result.equals(SolverResultType.UNKNOWN):
                 #unknown
