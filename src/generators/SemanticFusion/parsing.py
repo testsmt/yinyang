@@ -80,12 +80,14 @@ def decompose(script):
         logic = logic[0]
     else:
         logic = []
+
+    decl_sorts= [c for c in commands if c.startswith("(declare-sort")]
     decl_consts = [c for c in commands if c.startswith("(declare-const")]
     decl_funcs = [c for c in commands if c.startswith("(declare-fun")]
     def_funcs = [c for c in commands if c.startswith("(define-fun")]
-    def_sorts= [c for c in commands if c.startswith("(declare-sort")]
+    def_sorts= [c for c in commands if c.startswith("(define-sort")]
     asserts = [c for c in commands if c.startswith("(assert")]
-    return "".join(logic), list(def_sorts), list(decl_consts),\
+    return "".join(logic), list(decl_sorts), list(def_sorts), list(decl_consts),\
           list(decl_funcs), list(def_funcs), list(asserts)
 
 def get_symbol(declaration):
@@ -192,10 +194,11 @@ def disjunction(script1, script2):
     Disjunction of two SMT scripts
     Assumption: script1 and script2 have no shared variables
     """
-    _,decl_sorts1, decl_consts1, decl_funcs1, def_funcs1, asserts1 = decompose(script1)
-    _,decl_sorts2, decl_consts2, decl_funcs2, def_funcs2, asserts2 = decompose(script2)
-    sorts = list(set(decl_sorts1).union(set(decl_sorts2)))
-    disjunction =  "".join(sorts) + "".join(decl_consts1) + "".join(decl_consts2)\
+    _,decl_sorts1, def_sorts1, decl_consts1, decl_funcs1, def_funcs1, asserts1 = decompose(script1)
+    _,decl_sorts2, def_sorts2, decl_consts2, decl_funcs2, def_funcs2, asserts2 = decompose(script2)
+    decl_sorts = list(set(decl_sorts1).union(set(decl_sorts2)))
+    def_sorts = list(set(def_sorts1).union(set(def_sorts2)))
+    disjunction =  "".join(decl_sorts) + "".join(decl_sorts) + "".join(decl_consts1) + "".join(decl_consts2)\
                   + "".join(decl_funcs1) + "".join(decl_funcs2) + "".join(def_funcs1) + "".join(def_funcs2)
 
 
