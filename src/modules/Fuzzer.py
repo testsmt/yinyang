@@ -85,6 +85,7 @@ class Fuzzer:
 
             if result.equals(SolverResultType.IGNORED):
                 #ignored
+                print(output.stdout)
                 self.statistic.ignored += 1
             elif result.equals(SolverResultType.UNKNOWN):
                 #unknown
@@ -109,9 +110,14 @@ class Fuzzer:
                 else:
                     #incorrect
                     self.statistic.soundness += 1
-                    report_id = self.report(testitem[1], "incorrect", testitem[0], output, random_string())
-                    if reference !=  ("", "", ""): 
-                        self.report(reference[1], "incorrect", reference[0], reference[2], report_id) 
+                    if reference != ("", "", ""):
+                        if self.args.optfuzz != None:
+                            report_id = self.report(testitem[1], "incorrect", testitem[0], output, random_string())
+                            self.report(reference[1], "incorrect", reference[0], reference[2], report_id) 
+                        else:
+                            self.reportdiff(testitem[1], "incorrect", (testitem[0], reference[0]), (output, reference[2]), random_string())
+                    else:
+                        self.report(testitem[1], "incorrect", testitem[0], output, random_string())
                     return False
 
         return True
@@ -126,10 +132,33 @@ class Fuzzer:
             exit(0)
         logpath = "%s/%s-%s-%s-%s.output" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
         with open(logpath, 'w') as log:
+            log.write("command: "+ plain_cli+"\n")
             log.write("stderr:\n")
             log.write((output.stderr).decode("utf-8"))
             log.write("stdout:\n")
             log.write((output.stdout).decode("utf-8"))
+        return report_id
+    
+    def reportdiff(self, trigger, bugtype, cli_pair, output_pair, report_id):
+        plain_cli = plain(cli_pair[0]) + "-" + plain(cli_pair[1])
+        report = "%s/%s-%s-%s-%s.smt2" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
+        try: shutil.copy(trigger, report)
+        except Exception as e: 
+            print(e)
+            exit(0)
+        logpath = "%s/%s-%s-%s-%s.output" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
+        with open(logpath, 'w') as log:
+            log.write("command: "+plain(cli_pair[0])+"\n")
+            log.write("stderr:\n")
+            log.write((output_pair[0].stderr).decode("utf-8"))
+            log.write("stdout:\n")
+            log.write((output_pair[0].stdout).decode("utf-8"))
+            log.write("*************************\n")
+            log.write("command: "+plain(cli_pair[1])+"\n")
+            log.write("stderr:\n")
+            log.write((output_pair[1].stderr).decode("utf-8")+"\n")
+            log.write("stdout:\n")
+            log.write((output_pair[1].stdout).decode("utf-8")+"\n")
         return report_id
 
     def __del__(self):
