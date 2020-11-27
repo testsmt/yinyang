@@ -59,7 +59,6 @@ class Fuzzer:
 
     def validate(self, fn):
 
-        ret = True
         if (self.args.oracle == "unknown"):
             oracle = SolverResult(SolverResultType.UNKNOWN)
         elif (self.args.oracle == "sat"):
@@ -97,7 +96,7 @@ class Fuzzer:
                 #crash
                 self.statistic.error += 1
                 self.report(testitem[1], "crash", testitem[0], output, random_string())
-                ret = False
+                return False
             elif result.equals(SolverResultType.FAIL):
                 print("\nPlease check your solver command-line interfaces.")
             else:
@@ -113,9 +112,9 @@ class Fuzzer:
                     report_id = self.report(testitem[1], "incorrect", testitem[0], output, random_string())
                     if reference !=  ("", "", ""): 
                         self.report(reference[1], "incorrect", reference[0], reference[2], report_id) 
-                    ret = False
+                    return False
 
-        return ret
+        return True
 
     def report(self, trigger, bugtype, cli, output, report_id):
         plain_cli = plain(cli)
