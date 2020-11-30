@@ -124,5 +124,6 @@ class Solver:
     def ignored_error(self, stdout, stderr):
         stdstream = stdout + " " + stderr
         for err in ignore_msgs:
-            if err in stdstream: return True
+            if err in stdstream: 
+                return True
         return False

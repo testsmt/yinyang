@@ -75,6 +75,4 @@ class TypeAwareOpMutation(Generator):
                 if replacee:
                     op_occ.op = replacee
                     break
-        mutated_fn = "%s/%s.smt2" % (self.args.scratchfolder, self.args.name)
-        with open(mutated_fn,"w") as f: f.write(self.formula.__str__())
-        return mutated_fn
+        return self.formula, True

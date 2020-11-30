@@ -54,10 +54,14 @@ class Fuzzer:
             
             for _ in range(self.args.iterations):
                 self.statistic.printbar()
-                if not self.validate(self.generator.generate()): break
+                formula, success = self.generator.generate()
+                if not success:
+                    print(formula.__str__())
+                    exit(0)
+                if not self.validate(formula): break
                 self.statistic.mutants += 1
 
-    def validate(self, fn):
+    def validate(self, formula):
 
         if (self.args.oracle == "unknown"):
             oracle = SolverResult(SolverResultType.UNKNOWN)
@@ -68,14 +72,20 @@ class Fuzzer:
         else: assert(False)
 
         testbook = []
+        if not self.args.keep_mutants:
+            testcase = "%s/%s.smt2" % (self.args.scratchfolder, self.args.name)
+        else:
+            testcase = "%s/%s-%s-%s.smt2" % (self.args.scratchfolder,escape(self.currentseeds),self.args.name,random_string())
+        with open(testcase, 'w') as testcase_writer:
+            testcase_writer.write(formula.__str__())
         for cli in self.args.SOLVER_CLIS:
-            testcase = fn
             if self.args.optfuzz != None:
-                with open(fn, 'r') as generated_test:
-                    pure_formula = generated_test.read()
-                testcase = "%s/%s-%s" % (self.args.scratchfolder, plain(cli), fn.split('/')[-1])
+                if not self.args.keep_mutants:
+                    testcase = "%s/%s-%s" % (self.args.scratchfolder, plain(cli), self.args.name)
+                else:
+                    testcase = "%s/%s-%s-%s-%s.smt2" % (self.args.scratchfolder,plain(cli),escape(self.currentseeds),self.args.name,random_string())
                 with open(testcase, 'w') as testcase_writer:
-                    testcase_writer.write(self.args.optfuzz.generate(cli) + pure_formula)
+                    testcase_writer.write(self.args.optfuzz.generate(cli) + formula.__str__())
             testbook.append((cli,testcase))
         
         reference = ("", "", "")
