@@ -8,6 +8,10 @@ from src.parsing.parse import *
 from src.generators.SemanticFusion.SemanticFusion import *
 from src.generators.SemanticFusion.VariableFusion import * 
 
+class Mockargs:
+    oracle = ""
+    fusionfun = "."
+
 class SemanticFusionTestCase(unittest.TestCase): 
     def test_sf_sat(self):
         pass
@@ -40,8 +44,12 @@ class SemanticFusionTestCase(unittest.TestCase):
             f1.write(formula1)
         with open(fn2, "w") as f2:
             f2.write(formula2)
-        sf_sat = SemanticFusion([fn1, fn2], "sat", "./config/fusion_functions.txt")
-        sf_unsat = SemanticFusion([fn1, fn2], "unsat", "./config/fusion_functions.txt")
+        args = Mockargs()
+        args.oracle = "sat"
+        args.fusionfun = "./config/fusion_functions.txt"
+        sf_sat = SemanticFusion([fn1, fn2], args)
+        args.oracle = "unsat"
+        sf_unsat = SemanticFusion([fn1, fn2], args)
         sf_sat.generate()
         os.system("rm -rf "+fn1+ " "+ fn2+" "+fn_fcts)
 
