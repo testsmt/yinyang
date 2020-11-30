@@ -61,7 +61,7 @@ class SemanticFusion(Generator):
         triplets = []
         for pair in rand_var_pairs:
             x, y = pair[0], pair[1]
-            if x.type in self.templates:
+            if x.type in self.templates and y.type in self.templates:
                 template = random.choice(self.templates[x.type])
                 triplets.append((x, y, template))
 
@@ -83,7 +83,6 @@ class SemanticFusion(Generator):
                 template = fill_template(occ_x, occ_y, template)
                 occ_x.substitute(occ_x, inv_x(template))
                 occ_y.substitute(occ_y, inv_y(template))
-                
                 fusion_vars.append(z)
                 fusion_constr += fusion_contraints(template) 
 
@@ -93,6 +92,7 @@ class SemanticFusion(Generator):
         else:
             formula = conjunction(formula1, formula2) 
         add_var_decls(formula, fusion_vars)
+
         return formula
 
     def generate(self):
