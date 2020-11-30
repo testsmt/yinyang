@@ -25,6 +25,7 @@ crash_msgs = [
 
 ignore_msgs = [
     "(error ",
+    "unsupport",
     "Expected result sat but got unsat",
     "Expected result unsat but got sat",
     "Parse Error",
