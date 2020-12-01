@@ -17,7 +17,7 @@ def call_fuzzer(first_config, second_config, fn, opts):
         if "Crash" in line:
             crash_issues = int(line.split()[-1])
 
-    return soundness_issues, crash_issues
+    return soundness_issues, crash_issues, cmd
 
 def get_cvc4():
     cvc4_link = "https://github.com/CVC4/CVC4/releases/download/1.7/cvc4-1.7-x86_64-linux-opt"
@@ -56,13 +56,14 @@ opts='-i 1 -m 1'
 print("Trying to retrigger soundness bug...")
 bug_catched = False
 for _ in range(N):
-    soundness_issues, crash_issues = call_fuzzer(first_config, second_config, fn, opts)
+    soundness_issues, crash_issues, cmd = call_fuzzer(first_config, second_config, fn, opts)
     if soundness_issues == 1:
         bug_catched = True
         break
 
 if not bug_catched:
     print("[ERROR] Soundness bug could not be reproduced.")
+    print(cmd)
     errors=True
 
 first_config=z3+ ' model_validate=true'
@@ -73,13 +74,14 @@ opts='-i 1 -m 1'
 print("Trying to retrigger invalid model bug...")
 bug_catched = False
 for _ in range(N):
-    soundness_issues, crash_issues = call_fuzzer(first_config, second_config, fn, opts)
+    soundness_issues, crash_issues, cmd = call_fuzzer(first_config, second_config, fn, opts)
     if crash_issues != 0:
         bug_catched = True
         break
 
 if not bug_catched:
     print("[ERROR] Crash bug could not be reproduced.")
+    print(cmd)
     errors=True
 
 first_config=z3+ ' model_validate=true'
@@ -90,13 +92,14 @@ opts='-i 1 -m 1'
 print("Trying to retrigger segfault...")
 bug_catched = False
 for _ in range(N):
-    soundness_issues, crash_issues = call_fuzzer(first_config, second_config, fn, opts)
+    soundness_issues, crash_issues, cmd = call_fuzzer(first_config, second_config, fn, opts)
     if crash_issues != 0:
         bug_catched = True
         break
 
 if not bug_catched:
     print("[ERROR] Crash bug could not be reproduced.")
+    print(cmd)
     error=True
 
 cleanup()
