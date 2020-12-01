@@ -1,8 +1,11 @@
 import os,subprocess
+import sys
 N=300
+python=sys.executable
+errors=False
 
 def call_fuzzer(first_config, second_config, fn, opts):
-    cmd = './yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
+    cmd = python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
     # print("cmd", cmd)
     output = subprocess.getoutput(cmd)
     # print(output)
@@ -60,7 +63,7 @@ for _ in range(N):
 
 if not bug_catched:
     print("[ERROR] Soundness bug could not be reproduced.")
-    exit(1)
+    errors=True
 
 first_config=z3+ ' model_validate=true'
 second_config=cvc4+ ' --incremental --produce-models -q'
@@ -77,7 +80,7 @@ for _ in range(N):
 
 if not bug_catched:
     print("[ERROR] Crash bug could not be reproduced.")
-    exit(1)
+    errors=True
 
 first_config=z3+ ' model_validate=true'
 second_config=cvc4+ ' --incremental --produce-models -q'
@@ -92,5 +95,14 @@ for _ in range(N):
         bug_catched = True
         break
 
-print("[SUCCESS] All bugs retriggered.")
+if not bug_catched:
+    print("[ERROR] Crash bug could not be reproduced.")
+    error=True
+
 cleanup()
+
+if errors:
+    print("[ERROR] Some bugs not retriggered.")
+    exit(1)
+
+print("[SUCCESS] All bugs retriggered.")
