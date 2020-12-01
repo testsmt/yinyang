@@ -90,6 +90,9 @@ class Solver:
 
         stdout = output.stdout.decode()
         stderr = output.stderr.decode()
+
+        # Dominik: we could have an option to release the solver output to the
+        # stdout to help the user configurate the solver configs.
         # print(stdout+"\n"+stderr,flush=True)
 
         if "Couldn't open file:" in stdout or "failed to open file" in stderr:

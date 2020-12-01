@@ -1,4 +1,6 @@
 solvers = [
+        "cvc4 --produce-models --incremental --strings-exp --check-models -q",
+        "z3release model_validate=true"
 ]
 
 crash_msgs = [
@@ -24,7 +26,8 @@ crash_msgs = [
 ]
 
 ignore_msgs = [
-    "(error ",
+    "unexpected char",
+    "failed to open file",
     "Expected result sat but got unsat",
     "Expected result unsat but got sat",
     "Parse Error",
