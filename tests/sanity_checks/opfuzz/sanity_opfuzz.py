@@ -1,7 +1,7 @@
 import os,subprocess
 
 def call_fuzzer(first_config, second_config, fn, opts):
-    cmd = 'python3.7 yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
+    cmd = 'python yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
     output = subprocess.getoutput(cmd)
     # print(output)
     soundness_issues=None
