@@ -61,9 +61,10 @@ class SemanticFusion(Generator):
         triplets = []
         for pair in rand_var_pairs:
             x, y = pair[0], pair[1]
-            if x.type in self.templates and y.type in self.templates:
-                template = random.choice(self.templates[x.type])
-                triplets.append((x, y, template))
+            if x.type == y.type:
+                if x.type in self.templates:
+                    template = random.choice(self.templates[x.type])
+                    triplets.append((x, y, template))
 
         # For each triplet (x, y, template) get random variable occurrences occ_x, occ_y       
         # to form triplets (occ_x, occ_y, template). Replace occ_x and occ_y from  

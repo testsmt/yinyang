@@ -101,7 +101,7 @@
 (declare-const x String)
 (declare-const y String)
 (declare-const z String)
-(assert (= z (str++ x y)))
+(assert (= z (str.++ x y)))
 (assert (= x (str.substr z 0 (str.len x))))
 (assert (= y (str.substr z 0 (str.len y))))
 #end
@@ -110,7 +110,7 @@
 (declare-const x String)
 (declare-const y String)
 (declare-const z String)
-(assert (= z (str++ x y)))
+(assert (= z (str.++ x y)))
 (assert (= x (str.substr z 0 (str.len x))))
 (assert (= y (str.replace z x "")))
 #end
@@ -120,7 +120,7 @@
 (declare-const y String)
 (declare-const z String)
 (declare-const c String)
-(assert (= z (str++ x y c)))
+(assert (= z (str.++ x y c)))
 (assert (= x (str.substr z 0 (str.len x))))
 (assert (= y (str.replace (str.replace z x "") c "")))
 #end

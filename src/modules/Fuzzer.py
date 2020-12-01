@@ -96,6 +96,7 @@ class Fuzzer:
             if result.equals(SolverResultType.IGNORED):
                 #ignored
                 self.statistic.ignored += 1
+                self.report(testitem[1], "ignore", testitem[0], output, random_string())
                 return False
             elif result.equals(SolverResultType.UNKNOWN):
                 #unknown
