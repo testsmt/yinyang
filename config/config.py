@@ -1,6 +1,4 @@
 solvers = [
-        "cvc4 --produce-models --incremental --strings-exp --check-models -q",
-        "z3release model_validate=true"
 ]
 
 crash_msgs = [
