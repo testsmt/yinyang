@@ -1,5 +1,5 @@
 import os,subprocess
-
+N=1000
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = './yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
     # print("cmd", cmd)
@@ -51,7 +51,7 @@ opts='-i 1 -m 1'
 
 print("Trying to retrigger soundness bug...")
 bug_catched = False
-for _ in range(100):
+for _ in range(N):
     soundness_issues, crash_issues = call_fuzzer(first_config, second_config, fn, opts)
     if soundness_issues == 1:
         bug_catched = True
@@ -68,7 +68,7 @@ opts='-i 1 -m 1'
 
 print("Trying to retrigger invalid model bug...")
 bug_catched = False
-for _ in range(100):
+for _ in range(N):
     soundness_issues, crash_issues = call_fuzzer(first_config, second_config, fn, opts)
     if crash_issues != 0:
         bug_catched = True
@@ -85,7 +85,7 @@ opts='-i 1 -m 1'
 
 print("Trying to retrigger segfault...")
 bug_catched = False
-for _ in range(100):
+for _ in range(N):
     soundness_issues, crash_issues = call_fuzzer(first_config, second_config, fn, opts)
     if crash_issues != 0:
         bug_catched = True
