@@ -1,5 +1,6 @@
 import os,subprocess
-N=1000
+N=300
+
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = './yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
     # print("cmd", cmd)
@@ -91,8 +92,5 @@ for _ in range(N):
         bug_catched = True
         break
 
-
 print("[SUCCESS] All bugs retriggered.")
 cleanup()
-
-
