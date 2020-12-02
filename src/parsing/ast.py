@@ -1,3 +1,5 @@
+from .types import *
+
 class Script:
     def __init__(self, commands, global_vars):
         self.commands = commands
@@ -296,10 +298,10 @@ class SMTLIBCommand:
     def __hash__(self):
         return self.cmd_str.__hash__()
 
-def Var(name,type, is_indexed_id=False):
+def Var(name,type=UNKNOWN, is_indexed_id=False):
     return Term(name=name,type=type, is_var=True, is_indexed_id=is_indexed_id)
 
-def Const(name, is_indexed_id=False,type="Unknown"):
+def Const(name,type=UNKNOWN, is_indexed_id=False):
     return Term(name=name,type=type, is_const=True,is_indexed_id=is_indexed_id)
 
 def Expr(op,subterms, is_indexed_id=False):
@@ -415,9 +417,9 @@ class Term:
         """
         if e == repl: self.substitute(e, repl)
         if self.subterms:
-            for sub in self.subterms: 
+            for sub in self.subterms:
                 sub.substitute(e, repl)
-         
+
     def __eq__(self,other):
         if not isinstance(other,Term): return False
         if self.name != other.name: return False

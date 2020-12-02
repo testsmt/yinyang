@@ -5,24 +5,49 @@ sys.path.append("../../")
 from src.parsing.ast import *
 from src.parsing.parse import *
 from src.parsing.typechecker import *
+from src.parsing.types import *
+
 
 
 class TypecheckerTestCase(unittest.TestCase):
-    def test_typechecker(self):
-        formula1_str="""
+    def test_core_theory(self):
+        formula_str="""
                 (declare-const y Int)
                 (declare-const v Bool)
                 (assert (= v (not (= y (- 1)))))
+                (check-sat)
+        """
+        equal = parse_str(formula_str).commands[2].term
+        self.assertEqual(typecheck_expr(equal), BOOLEAN_TYPE)
+        v = equal.subterms[0]
+        self.assertEqual(typecheck_expr(v),BOOLEAN_TYPE)
+        not_op = equal.subterms[1]
+        self.assertEqual(typecheck_expr(not_op), BOOLEAN_TYPE)
+        y = equal.subterms[1].subterms[0].subterms[0]
+        self.assertEqual(typecheck_expr(y), INTEGER_TYPE)
+        minusone= equal.subterms[1].subterms[0].subterms[1]
+        self.assertEqual(typecheck_expr(minusone), INTEGER_TYPE)
+
+        formula_str="""
+                (declare-const y Int)
+                (declare-const v Bool)
                 (assert (ite v false (= y (- 1))))
                 (check-sat)
         """
-        not_op = parse_str(formula1_str).commands[2].term.subterms[1]
-        # not_op = parse_str(formula1_str).commands[3].term.subterms[0]
-        print(typecheck_expr(not_op))
-        # self.assertEquals()
+        ite = parse_str(formula_str).commands[2].term
+        self.assertEqual(typecheck_expr(ite), BOOLEAN_TYPE)
+
+        formula_str="""
+                (declare-const y Int)
+                (declare-const v Bool)
+                (assert (and (ite v false (= y (- 1))) (= v (not (= y (- 1))))))
+                (check-sat)
+        """
+        and_expr = parse_str(formula_str)
+        self.assertEqual(typecheck_expr(and_expr), BOOLEAN_TYPE)
+
 
 if __name__ == '__main__':
-    #SemanticFusionTestCase().test_sf_sat()
     TypecheckerTestCase.test_typechecker()
     unittest.main()
 

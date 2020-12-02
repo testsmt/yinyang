@@ -1,8 +1,10 @@
 from antlr4 import *
+
 from .ast import *
 from .SMTLIBv2Parser import SMTLIBv2Parser
 from .SMTLIBv2Visitor import *
 from .util import *
+from .types import *
 
 class ASTVisitor(SMTLIBv2Visitor):
     def __init__(self, strict=True):
@@ -18,12 +20,19 @@ class ASTVisitor(SMTLIBv2Visitor):
             cmds.append(self.visitCommand(c))
         return Script(cmds,self.global_vars)
 
+    def sort2type(self,sort):
+        sort = sort.replace("Bool", "bool")
+        sort = sort.replace("Real", "real")
+        sort = sort.replace("Int", "integer")
+        sort = sort.replace("String", "string")
+        return sort
+
+
     def add_to_globals(self, identifier, input_sorts, output_sort):
         if len(input_sorts) == 0:
-            self.global_vars[identifier] = output_sort
+            self.global_vars[identifier] = self.sort2type(output_sort)
         else:
-            self.global_vars[identifier] = input_sorts + " "+ output_sort
-
+            self.global_vars[identifier] = self.sort2type(input_sorts + " "+ output_sort)
 
     def handleCommand(self, ctx:SMTLIBv2Parser.CommandContext):
         if ctx.cmd_assert():
@@ -49,7 +58,8 @@ class ASTVisitor(SMTLIBv2Visitor):
         if ctx.cmd_eval():
             return Eval(self.visitTerm(ctx.term()[0]))
         if ctx.cmd_declareConst():
-            self.global_vars[self.visitSymbol(ctx.symbol()[0])] = self.visitSort(ctx.sort()[0])
+            self.add_to_globals(self.visitSymbol(ctx.symbol()[0]),[], self.visitSort(ctx.sort()[0]))
+            # self.global_vars[self.visitSymbol(ctx.symbol()[0])] = self.visitSort(ctx.sort()[0])
             decl = DeclareConst(self.visitSymbol(ctx.symbol()[0]), self.visitSort(ctx.sort()[0]))
             return decl
         if ctx.cmd_declareFun():
@@ -184,12 +194,24 @@ class ASTVisitor(SMTLIBv2Visitor):
     | ParOpen GRW_Underscore ' bv' numeral numeral  ParClose
     ;
     """
-
     def visitSpec_constant(self, ctx:SMTLIBv2Parser.Spec_constantContext):
         if ctx.ParOpen():
             X,n = ctx.numeral()[0].getText(), ctx.numeral()[1].getText()
-            return "(_ bv"+X+" "+n+")"
-        return ctx.getText()
+            # TODO: None -> Bitvector type
+            return "(_ bv"+X+" "+n+")", None
+        if ctx.numeral():
+            return ctx.getText(),INTEGER_TYPE
+        if ctx.decimal():
+            return ctx.getText(),REAL_TYPE
+        if ctx.hexadecimal():
+            return ctx.getText(),INTEGER_TYPE
+        if ctx.binary():
+             return ctx.getText(),INTEGER_TYPE
+        if ctx.string():
+            return ctx.getText(),STRING_TYPE
+        if ctx.b_value():
+            return ctx.getText(),BOOLEAN_TYPE
+
 
     """
         term
@@ -226,7 +248,7 @@ class ASTVisitor(SMTLIBv2Visitor):
             terms = []
             var_list = []
             for b in ctx.var_binding():
-               local_vars[self.visitSymbol(b.symbol())] = "Unknown"
+               local_vars[self.visitSymbol(b.symbol())] = UNKNOWN
                var_list.append(self.visitSymbol(b.symbol()))
                terms.append(self.visitTerm(b.term(),local_vars))
             subterms = []
@@ -242,8 +264,8 @@ class ASTVisitor(SMTLIBv2Visitor):
             return Expr(op=op,subterms=subterms)
 
         if ctx.spec_constant():
-            name=self.visitSpec_constant(ctx.spec_constant())
-            return Const(name=name)
+            name,type=self.visitSpec_constant(ctx.spec_constant())
+            return Const(name=name,type=type)
 
         if ctx.qual_identifier():
             return self.visitQual_identifier(ctx.qual_identifier(),local_vars)
@@ -302,9 +324,9 @@ class ASTVisitor(SMTLIBv2Visitor):
                 index+= " "+ ind.getText()
             name = "(_ "+symbol +" "+ index+")"
             if name in local_vars:
-                return Var(name=name, type=local_vars[name],is_indexed_id=True)
+                return Var(name=name, type=local_vars[name], is_indexed_id=True)
             elif name in self.global_vars:
-                return Var(name=name, type=self.global_vars[name],is_indexed_id=True)
+                return Var(name=name, type=self.global_vars[name], is_indexed_id=True)
             else:
                 return name
 

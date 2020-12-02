@@ -29,7 +29,7 @@ def parse_file(fn, silent=True):
         try:
             ast = generate_ast(fstream)
         except Exception as e:
-            print("Error generating the AST.")
+            print("Error generating the AST.",flush=True)
             print(e)
             exit(1)
     else:
@@ -43,7 +43,7 @@ def parse_str(s, silent=True):
         try:
             ast = generate_ast(istream)
         except:
-            print("Error generating the AST.")
+            print("Error generating the AST.",flush=True)
             exit(1)
     else:
         ast = generate_ast(istream)
