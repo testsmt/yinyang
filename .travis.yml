@@ -8,3 +8,4 @@ install:
   - pip install antlr4-python3-runtime 
 script:
   - python -m unittest tests/runtests.py
+  - python tests/integration_tests/opfuzz/sanity_opfuzz.py 
