@@ -1,7 +1,10 @@
+# Solver configurations list to be used for fuzzing.
 solvers = [
 ]
 
-crash_msgs = [
+#TODO: description
+
+crash_list = [
     "Exception",
     "lang.AssertionError",
     "lang.Error",
@@ -23,7 +26,13 @@ crash_msgs = [
     "Aborted"
 ]
 
-ignore_msgs = [
+#TODO: description
+duplicate_list = [
+
+]
+
+#TODO: description
+ignore_list = [
     "(error ",
     "unsupport",
     "Expected result sat but got unsat",
