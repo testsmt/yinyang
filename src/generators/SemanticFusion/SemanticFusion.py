@@ -53,10 +53,10 @@ class SemanticFusion(Generator):
 
 
     def fuse(self, occs1, occs2, formula1, formula2, triplets):
-        # Generate random variable pairs from both formulas    
+        # Generate random variable pairs from both formulas
         rand_var_pairs = random_tuple_list(cvars(occs1), cvars(occs2))
 
-        # For each variable pair choose a suitable template for fusion     
+        # For each variable pair choose a suitable template for fusion
         # and generate the corresponding triplet (x, y, template)
         triplets = []
         for pair in rand_var_pairs:
@@ -66,9 +66,9 @@ class SemanticFusion(Generator):
                     template = random.choice(self.templates[x.type])
                     triplets.append((x, y, template))
 
-        # For each triplet (x, y, template) get random variable occurrences occ_x, occ_y       
-        # to form triplets (occ_x, occ_y, template). Replace occ_x and occ_y from  
-        # these triplets by their respective inversion functions. 
+        # For each triplet (x, y, template) get random variable occurrences occ_x, occ_y
+        # to form triplets (occ_x, occ_y, template). Replace occ_x and occ_y from
+        # these triplets by their respective inversion functions.
         fusion_vars = []
         fusion_constr = []
         for triplet in triplets:
@@ -77,21 +77,21 @@ class SemanticFusion(Generator):
             occs_y = [occ for occ in occs2 if occ.name == y.name]
             rand_pairs = random_tuple_list(occs_x, occs_y)
 
-            # Fusion step 
+            # Fusion step
             for p in rand_pairs:
-                occ_x, occ_y = p[0], p[1] 
+                occ_x, occ_y = p[0], p[1]
                 z = DeclareFun(occ_x.name+"_"+occ_y.name+"_fused","",occ_x.type)
                 template = fill_template(occ_x, occ_y, template)
                 occ_x.substitute(occ_x, inv_x(template))
                 occ_y.substitute(occ_y, inv_y(template))
                 fusion_vars.append(z)
-                fusion_constr += fusion_contraints(template) 
+                fusion_constr += fusion_contraints(template)
 
         if self.oracle == "unsat":
-            formula = disjunction(formula1, formula2) 
+            formula = disjunction(formula1, formula2)
             add_fusion_constraints(formula, fusion_constr)
         else:
-            formula = conjunction(formula1, formula2) 
+            formula = conjunction(formula1, formula2)
         add_var_decls(formula, fusion_vars)
 
         return formula

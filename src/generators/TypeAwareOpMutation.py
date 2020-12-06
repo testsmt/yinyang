@@ -73,6 +73,7 @@ class TypeAwareOpMutation(Generator):
                 op_occ = random.choice(self.formula.op_occs)
                 replacee = self.get_replacee(op_occ)
                 if replacee:
+                    # print(op_occ.op,"->",replacee)
                     op_occ.op = replacee
                     break
         return self.formula, True

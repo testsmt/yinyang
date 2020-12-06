@@ -3,7 +3,6 @@ solvers = [
 ]
 
 #TODO: description
-
 crash_list = [
     "Exception",
     "lang.AssertionError",
@@ -35,6 +34,8 @@ duplicate_list = [
 ignore_list = [
     "(error ",
     "unsupport",
+    "unexpected char",
+    "failed to open file",
     "Expected result sat but got unsat",
     "Expected result unsat but got sat",
     "Parse Error",
