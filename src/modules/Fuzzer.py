@@ -135,29 +135,42 @@ class Fuzzer:
             solver = Solver(solver_cli)
             stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout)
 
+            # (1) Detect crashes from a solver run including invalid models.
             if self.in_crash_list(stdout, stderr):
+
+                # (2) Match against the duplicate list to avoid reporting duplicate bugs.
                 if not self.in_duplicate_list(stdout, stderr):
                     self.statistic.crashes += 1
                     self.report(scratchfile, "crash", solver_cli, output, random_string())
                 else:
                     self.statistics.duplicates += 1
-                return False
+                return False # stop testing
             else:
+                # (3a) Check whether the solver run produces errors, by checking
+                # the ignore list.
                 if self.in_ignore_list(stdout, stderr):
                     self.statistic.ignored += 1
-                    continue
+                    continue # continue with next solver
+
+                # (3b) Check whether the exit code is nonzero.
                 elif exitcode != 0:
                     if exitcode == 137: #timeout
                         self.statistic.timeout += 1
                     elif exitcode == 127: #command not found
                         print("\nPlease check your solver command-line interfaces.")
-                    continue
+                    continue # continue with next solver
+
+                # (3c) if there is no '^sat$' or '^unsat$' in the output
                 elif not re.search("^unsat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^sat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^unknown$", stdout, flags=re.MULTILINE):
                      self.statistic.ignored += 1
-                     continue
+                     continue # continue with next solver
                 else:
+                    # (5) grep for '^sat$', '^unsat$', and '^unknown$' to produce
+                    # the output (including '^unknown$' to also deal with incremental
+                    # benchmarks) for comparing with the oracle (semantic fusion) or
+                    # with other non-erroneous solver runs (opfuzz) for soundness bugs
                     result = self.grep_result(stdout)
                     if oracle.equals(SolverQueryResult.UNKNOWN):
                         oracle = result
@@ -170,7 +183,7 @@ class Fuzzer:
                         report_id = self.report(scratchfile, "incorrect", solver_cli, output, random_string())
                         if reference:
                             self.report(reference[1], "incorrect", reference[0], reference[2], report_id)
-                        return False
+                        return False # stop testing
         return True
 
     def in_crash_list(self, stdout, stderr):

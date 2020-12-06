@@ -2,7 +2,7 @@
 solvers = [
 ]
 
-#TODO: description
+# Crash list: crash messages emitted by solvers to consider as bugs.
 crash_list = [
     "Exception",
     "lang.AssertionError",
@@ -25,12 +25,13 @@ crash_list = [
     "Aborted"
 ]
 
-#TODO: description
+# Duplicate list: crash messages emitted by solvers to be considered duplicates,
+# i.e. will be ignored during fuzzing.
 duplicate_list = [
 
 ]
 
-#TODO: description
+# Ignore list: error messages emitted by solvers to be ignored.
 ignore_list = [
     "(error ",
     "unsupport",
