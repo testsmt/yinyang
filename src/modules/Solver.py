@@ -55,11 +55,12 @@ class Solver:
 
     def solve(self, file, timeout):
         try:
-            # TODO: Dominik: the following line should be refactored, as its too nested
-            output = subprocess.run(list(filter(None, self.cil.split(" "))) + [file],
+            cmd = self.cil + " "+file
+            output = subprocess.run(cmd,
                                     timeout=timeout,
                                     stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE)
+                                    stderr=subprocess.PIPE,
+                                    shell=True)
         except subprocess.TimeoutExpired as te:
             if te.stdout != None and te.stderr != None:
                 stdout = te.stdout.decode()
@@ -75,4 +76,4 @@ class Solver:
             print("Exception rises when running solver:")
             print(e, '\n')
             exit(1)
-        return output.stdout.decode(), output.stdout.decode(), output.returncode
+        return output.stdout.decode(), output.stderr.decode(), output.returncode

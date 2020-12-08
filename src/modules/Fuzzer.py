@@ -109,8 +109,8 @@ class Fuzzer:
 
     def init_oracle(self):
         """
-        Initialize the oracle. For SemanticFusion the oracle is either
-        sat or unsat. For TypeAwareOpMutation the oracle is unknown
+        Initialize the oracle. For SemanticFusion the oracle is either sat or
+        unsat. For TypeAwareOpMutation the oracle is unknown
         """
         if (self.args.oracle == "unknown"):
             return SolverResult(SolverQueryResult.UNKNOWN)
@@ -134,6 +134,8 @@ class Fuzzer:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
             stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout)
+            # print("stdout", stdout)
+            # print("stderr", stderr)
 
             # (1) Detect crashes from a solver run including invalid models.
             if self.in_crash_list(stdout, stderr):
@@ -141,7 +143,7 @@ class Fuzzer:
                 # (2) Match against the duplicate list to avoid reporting duplicate bugs.
                 if not self.in_duplicate_list(stdout, stderr):
                     self.statistic.crashes += 1
-                    self.report(scratchfile, "crash", solver_cli, output, random_string())
+                    self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
                 else:
                     self.statistics.duplicates += 1
                 return False # stop testing
@@ -149,6 +151,7 @@ class Fuzzer:
                 # (3a) Check whether the solver run produces errors, by checking
                 # the ignore list.
                 if self.in_ignore_list(stdout, stderr):
+                    # print("DEBUG 1")
                     self.statistic.ignored += 1
                     continue # continue with next solver (4)
 
@@ -156,14 +159,17 @@ class Fuzzer:
                 elif exitcode != 0:
                     if exitcode == 137: #timeout
                         self.statistic.timeout += 1
+                        continue # continue with next solver (4)
+
                     elif exitcode == 127: #command not found
                         print("\nPlease check your solver command-line interfaces.")
-                    continue # continue with next solver (4)
+                        continue # continue with next solver (4)
 
                 # (3c) if there is no '^sat$' or '^unsat$' in the output
                 elif not re.search("^unsat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^sat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^unknown$", stdout, flags=re.MULTILINE):
+                     # print("DEBUG 2")
                      self.statistic.ignored += 1
                      continue # continue with next solver (4)
                 else:
@@ -180,9 +186,9 @@ class Fuzzer:
                     # non-erroneous solver runs (opfuzz) for soundness bugs.
                     if not oracle.equals(result):
                         self.statistic.soundness += 1
-                        report_id = self.report(scratchfile, "incorrect", solver_cli, output, random_string())
+                        report_id = self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
                         if reference:
-                            self.report(reference[1], "incorrect", reference[0], reference[2], report_id)
+                            self.report(reference[1], "incorrect", reference[0], reference[2], reference[3], report_id)
                         return False # stop testing
         return True
 
