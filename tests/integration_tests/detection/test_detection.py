@@ -7,7 +7,7 @@ import random
 
 python=sys.executable
 script_dir = os.path.dirname(os.path.realpath(__file__))
-errors=False
+ERRORS=False
 
 def is_sound(res1, res2):
     for i in range(len(res1)):
@@ -58,10 +58,6 @@ def create_mocksolver_timeout(script_fn):
     code+="import time; time.sleep(30)"
     open(script_fn,"w").write(code)
     os.system("chmod +x "+script_fn)
-
-
-
-
 
 def test_crash_list():
     print("1. Test crash list")
@@ -228,3 +224,6 @@ if __name__ == "__main__":
     test_empty_output()
     test_unsoundness()
     test_soundness()
+    if not ERRORS:
+        print("[SUCCESS] All tests passed.")
+
