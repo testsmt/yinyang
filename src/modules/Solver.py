@@ -56,8 +56,7 @@ class Solver:
     def solve(self, file, timeout):
         try:
             cmd = list(filter(None, self.cil.split(" "))) + [file]
-            output = subprocess.run(cmd,
-                                    timeout=timeout,
+            output = subprocess.run(cmd, timeout=timeout,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
                                     shell=False)

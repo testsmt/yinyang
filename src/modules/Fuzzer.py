@@ -27,7 +27,6 @@ class Fuzzer:
 
 
     def run(self):
-
         if (self.args.strategy == "opfuzz"):
             seeds = self.args.PATH_TO_SEEDS
         elif (self.args.strategy == "fusion"):
@@ -61,12 +60,12 @@ class Fuzzer:
                 if not success:
                     print(formula.__str__())
                     exit(0)
+
                 if not self.test(formula): break
                 self.statistic.mutants += 1
 
 
     def create_testbook(self, formula):
-
         testbook = []
         if not self.args.keep_mutants:
             testcase = "%s/%s.smt2" % (self.args.scratchfolder, self.args.name)
@@ -131,7 +130,6 @@ class Fuzzer:
         testbook = self.create_testbook(formula)
         reference = None
 
-
         for testitem in testbook:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
@@ -168,6 +166,8 @@ class Fuzzer:
                     elif exitcode == 127: #command not found
                         print("\nPlease check your solver command-line interfaces.")
                         continue # continue with next solver (4)
+
+                    self.statistic.ignored+=1
 
                 # (3c) if there is no '^sat$' or '^unsat$' in the output
                 elif not re.search("^unsat$", stdout, flags=re.MULTILINE) and \
