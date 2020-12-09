@@ -2,6 +2,7 @@ import random
 import shutil
 import os
 import re
+import signal
 
 from pathlib import Path
 from antlr4 import *
@@ -130,12 +131,11 @@ class Fuzzer:
         testbook = self.create_testbook(formula)
         reference = None
 
+
         for testitem in testbook:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
             stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout)
-            # print("stdout", stdout)
-            # print("stderr", stderr)
 
             # (1) Detect crashes from a solver run including invalid models.
             if self.in_crash_list(stdout, stderr):
@@ -151,13 +151,17 @@ class Fuzzer:
                 # (3a) Check whether the solver run produces errors, by checking
                 # the ignore list.
                 if self.in_ignore_list(stdout, stderr):
-                    # print("DEBUG 1")
                     self.statistic.ignored += 1
                     continue # continue with next solver (4)
 
                 # (3b) Check whether the exit code is nonzero.
                 elif exitcode != 0:
-                    if exitcode == 137: #timeout
+                    if exitcode == -signal.SIGSEGV or exitcode == 245: #segfault
+                        self.statistic.crashes += 1
+                        self.report(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
+                        return False # stop testing
+
+                    elif exitcode == 137: #timeout
                         self.statistic.timeout += 1
                         continue # continue with next solver (4)
 
@@ -169,7 +173,6 @@ class Fuzzer:
                 elif not re.search("^unsat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^sat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^unknown$", stdout, flags=re.MULTILINE):
-                     # print("DEBUG 2")
                      self.statistic.ignored += 1
                      continue # continue with next solver (4)
                 else:

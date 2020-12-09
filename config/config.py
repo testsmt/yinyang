@@ -3,6 +3,7 @@ solvers = [
 ]
 
 # Crash list: crash messages emitted by solvers to consider as bugs.
+# segfaults are catched by exitcode.
 crash_list = [
     "Exception",
     "lang.AssertionError",
@@ -10,9 +11,6 @@ crash_list = [
     "runtime error",
     "LEAKED",
     "Leaked",
-    "Segmentation fault",
-    "segmentation fault",
-    "segfault",
     "ASSERTION",
     "Assertion",
     "Fatal failure",

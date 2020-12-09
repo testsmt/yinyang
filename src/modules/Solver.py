@@ -55,12 +55,12 @@ class Solver:
 
     def solve(self, file, timeout):
         try:
-            cmd = self.cil + " "+file
+            cmd = list(filter(None, self.cil.split(" "))) + [file]
             output = subprocess.run(cmd,
                                     timeout=timeout,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
-                                    shell=True)
+                                    shell=False)
         except subprocess.TimeoutExpired as te:
             if te.stdout != None and te.stderr != None:
                 stdout = te.stdout.decode()

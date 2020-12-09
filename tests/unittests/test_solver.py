@@ -4,11 +4,11 @@ sys.path.append("../..")
 
 from src.modules.Solver import Solver, SolverResult, SolverResultType
 
-class SolverTestCase(unittest.TestCase): 
+class SolverTestCase(unittest.TestCase):
     def setUp(self):
         self.normalSolver = Solver("echo")
         self.sleepSolver = Solver("echo sat && sleep 5")
-    
+
     def testsat(self):
         normalsat = "sat"
         result, _ = self.normalSolver.solve(normalsat,8)
@@ -27,7 +27,7 @@ sat
         normalsat = "unsat"
         result, _ = self.normalSolver.solve(normalsat,8)
         self.assertFalse(result.equals(SolverResult(SolverResultType.SAT)))
-    
+
     def testunsat(self):
         normalunsat = "unsat"
         result, _ = self.normalSolver.solve(normalunsat,8)
@@ -113,7 +113,7 @@ sat
         normalfail = "Couldn't open file:"
         result, _ = self.normalSolver.solve(normalfail,8)
         self.assertTrue(result.equals(SolverResult(SolverResultType.FAIL)))
-    
+
     def testcrash(self):
         empty = ""
         result, _ = self.normalSolver.solve(empty,8)
@@ -124,13 +124,13 @@ sat
         segfault = "Segmentation fault"
         result, _ = self.normalSolver.solve(segfault,8)
         self.assertTrue(result.equals(SolverResult(SolverResultType.CRASH)))
-    
+
     def testtimeout(self):
         timeout = "sat"
         result, _ = self.normalSolver.solve(timeout,0)
         self.assertTrue(result.equals(SolverResult(SolverResultType.TIMEOUT)))
 
-    
+
     def testignore(self):
         ignore = "Cannot get model"
         result, _ = self.normalSolver.solve(ignore,8)
