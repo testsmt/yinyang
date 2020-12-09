@@ -190,7 +190,7 @@ def test_soundness():
     k = random.randint(1,20)
     res1 = random.choices(values, k=k)
     res2 = res1
-    j = random.randint(0, k)
+    j = random.randint(0, k-1)
     res1[j] = random.choice(["sat", "unsat"])
 
     for i in range(len(res1)):
