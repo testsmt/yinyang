@@ -165,6 +165,8 @@ def test_unsoundness():
     values = ["sat", "unsat", "unknown"]
     k = random.randint(1,20)
     res1 = random.choices(values, k=k)
+    j = random.randint(0, k-1)
+    res1[j] = random.choice(["sat", "unsat"])
     res2 = random.choices(values, k=k)
     while is_sound(res1,res2):
         res2 = random.choices(values, k=k)
