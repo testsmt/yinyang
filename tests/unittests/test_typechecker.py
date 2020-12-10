@@ -96,6 +96,7 @@ class TypecheckerTestCase(unittest.TestCase):
         for i in range(1, 4):
             typecheck_expr(formula.commands[i].term)
 
+#TODO: arrays 
 
 if __name__ == '__main__':
     TypecheckerTestCase.test_typechecker()

@@ -16,6 +16,13 @@ class ARRAY_TYPE:
             return self.index_type == other.index_type and\
                    self.payload_type == other.payload_type  
 
+class BITVECTOR_TYPE:
+    def __init__(self, bitwidth):
+        self.bitwidth = bitwidth
+
+    def __eq__(self,other):
+        if isinstance(other, self.__class__):  
+            return self.bitwidth == other.bitwidth
 
 # Core ops
 NOT="not"
@@ -127,3 +134,32 @@ STRING_OPS= [
 SELECT="select"
 STORE="store"
 ARRAY_OPS=[SELECT, STORE]
+
+# Bitvector ops  
+BV_CONCAT="concat" 
+BVNOT="bvnot"
+BVNEG="bvneg"
+BVAND="bvand"
+BVOR="bvor"
+BVADD="bvadd"
+BVMUL="bvmul"
+BVUDIV="bvudiv"
+BVUREM="bvurem"
+BVSHL="bvshl"
+BVLSHR="bvlshr"
+BVULT="bvult"
+
+BV_OPS=[
+    BV_CONCAT,
+    BVNOT,
+    BVNEG, 
+    BVAND,
+    BVOR,
+    BVADD,
+    BVMUL,
+    BVUDIV,
+    BVUREM,
+    BVSHL,
+    BVLSHR,
+    BVULT
+]

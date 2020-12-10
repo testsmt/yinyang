@@ -313,7 +313,7 @@ def typecheck_select(expr,ctxt):
     (select (Array X Y) X Y) 
     """
     array_type = typecheck_expr(expr.subterms[0],ctxt) 
-    if "ARRAY_TYPE" not in array_type.__class__.__name__:  
+    if "ARRAY_TYPE" not in array_type.__class__.__name__:  #TODO
         raise TypeCheckError(expr)  
     x_type = typecheck_expr(expr.subterms[1],ctxt)
     if x_type != array_type.index_type: 
@@ -325,7 +325,7 @@ def typecheck_store(expr,ctxt):
     (store (Array X Y) X Y (Array X Y)))
     """
     array_type = typecheck_expr(expr.subterms[0],ctxt) 
-    if "ARRAY_TYPE" not in array_type.__class__.__name__:  
+    if "ARRAY_TYPE" not in array_type.__class__.__name__:  #TODO
         raise TypeCheckError(expr)  
     x_type = typecheck_expr(expr.subterms[1],ctxt)
     y_type = typecheck_expr(expr.subterms[2],ctxt)
@@ -338,7 +338,54 @@ def typecheck_array_ops(expr,ctxt):
         return typecheck_select(expr,ctxt)
     if expr.op == STORE:
         return typecheck_store(expr,ctxt)
-   
+
+def typecheck_bv_concat(expr,ctxt): 
+    """ 
+    (concat (_ BitVec i) (_ BitVec j) (_ BitVec m)) 
+    """
+    arg1,arg2 = expr.subterms[0], expr.subterms[1]
+    if not isinstance(arg1,BITVECTOR_TYPE) or not isinstance(arg2,BITVECTOR_TYPE):  
+        raise TypeCheckError(expr)  
+    bitwidth = arg1.bitwidth + arg2.bitwidth 
+    return BITVECTOR_TYPE(bitwidth)
+
+def typecheck_bv_unary(expr,ctxt):
+    """
+     (op1 (_ BitVec m) (_ BitVec m))
+    """
+    arg = expr.subterms[0]
+    if not isinstance(arg,BITVECTOR_TYPE):
+        raise TypeCheckError(expr)  
+    return arg.type
+
+def typecheck_bv_binary(expr,ctxt):
+    """
+    (op2 (_ BitVec m) (_ BitVec m) (_ BitVec m))
+    """
+    arg1,arg2 = expr.subterms[0], expr.subterms[1]
+    if not isinstance(arg1,BITVECTOR_TYPE) or not isinstance(arg2,BITVECTOR_TYPE):  
+        raise TypeCheckError(expr)  
+    return BITVECTOR_TYPE(arg1.bitwidth)
+
+def typecheck_bvult(expr,ctxt):
+    """  
+    (bvult (_ BitVec m) (_ BitVec m) Bool)
+    """
+    arg1,arg2 = expr.subterms[0], expr.subterms[1]
+    if not isinstance(arg1,BITVECTOR_TYPE) or not isinstance(arg2,BITVECTOR_TYPE):  
+        raise TypeCheckError(expr)  
+    return BOOLEAN_TYPE
+
+def typecheck_bv_ops(expr,ctxt):
+    if expr.op == BV_CONCAT:
+        return typecheck_bv_concat(expr,ctxt)
+    if expr.op in [BVNOT,BVNEG]:
+        return typecheck_bv_unary(expr,ctxt)
+    if expr.op in [BVAND, BVOR,BVADD,BVMUL,BVUDIV,BVUREM,BVSHL,BVLSHR]:
+        return typecheck_bv_binary(expr,ctxt)
+    if expr.op == BVULT:
+        return typecheck_bvult(expr,ctxt) 
+
 def typecheck_expr(expr, ctxt=[]):
     # print("expr", expr) 
     # print("type(expr)", type(expr))
@@ -373,6 +420,8 @@ def typecheck_expr(expr, ctxt=[]):
             return typecheck_string_ops(expr,ctxt)
         if expr.op in ARRAY_OPS:
             return typecheck_array_ops(expr,ctxt) 
+        if expr.op in BV_OPS:
+            return typecheck_bv_ops(expr,ctxt)
 
     # TODO raise exception - type-checking failed
     # in non-strict case, just return Unknown
