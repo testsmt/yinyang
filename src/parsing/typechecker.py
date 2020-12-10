@@ -107,13 +107,13 @@ def typecheck_to_real(expr, ctxt):
 
 def typecheck_to_int(expr, ctxt):
     """ (to_int Real Int) """
-    if not typecheck(expr,ctxt) == REAL_TYPE:
+    if not typecheck_expr(expr,ctxt) == REAL_TYPE:
          raise TypeCheckError(expr)
     return INTEGER_TYPE
 
 def typecheck_is_int(expr, ctxt): 
     """ (is_int Real Bool) """
-    if not typecheck(expr,ctxt) == REAL_TYPE:
+    if not typecheck_expr(expr,ctxt) == REAL_TYPE:
         raise TypeCheckError(expr)
     return BOOLEAN_TYPE 
 
@@ -133,7 +133,7 @@ def typecheck_string_concat(expr, ctxt):
 
 def typecheck_strlen(expr, ctxt):
     """ (str.len String Int)"""
-    if typecheck(expr.subterms[0],ctxt) != STRING_TYPE: 
+    if typecheck_expr(expr.subterms[0],ctxt) != STRING_TYPE: 
         raise TypeCheckError(expr)
     return INTEGER_TYPE
 
@@ -151,7 +151,7 @@ def typecheck_nary_string_rt_bool(expr, ctxt):
 
 def typecheck_str_to_re(expr, ctxt):
     """ (str.to_re String RegLan) """  
-    if typecheck(expr,ctxt) != STRING_TYPE: 
+    if typecheck_expr(expr,ctxt) != STRING_TYPE: 
         raise TypeCheckError(expr)
     return REGEXP_TYPE  
 
@@ -165,7 +165,7 @@ def typecheck_regex_consts(expr, ctxt):
 
 def typecheck_str_in_re(expr,ctxt):
     """ (str.in_re String RegLan Bool) """
-    if typecheck(expr,ctxt) != REGEXP_TYPE:
+    if typecheck_expr(expr,ctxt) != REGEXP_TYPE:
         raise TypeCheckError(expr)
     return BOOLEAN_TYPE
 
@@ -176,7 +176,7 @@ def typecheck_regex_unary(expr,ctxt):
     (re.opt RegLan RegLan)
     (re.+ RegLan RegLan)
     """
-    if typecheck(expr,ctxt) != REGEXP_TYPE:
+    if typecheck_expr(expr,ctxt) != REGEXP_TYPE:
         raise TypeCheckError(expr)
     return REGEXP_TYPE
 
@@ -226,7 +226,7 @@ def typecheck_replace(expr,ctxt):
     """
     if typecheck_expr(expr.subterms[0]) != STRING_TYPE or\
        typecheck_expr(expr.subterms[1]) != STRING_TYPE or\
-       typecheck_expr(expr.subterms[2]) != STRING: 
+       typecheck_expr(expr.subterms[2]) != STRING_TYPE: 
         raise TypeCheckError(expr)
     return STRING_TYPE 
 
@@ -237,7 +237,7 @@ def typecheck_replace_re(expr,ctxt):
     """
     if typecheck_expr(expr.subterms[0]) != STRING_TYPE or\
        typecheck_expr(expr.subterms[1]) != REGEXP_TYPE or\
-       typecheck_expr(expr.subterms[2]) != STRING: 
+       typecheck_expr(expr.subterms[2]) != STRING_TYPE: 
         raise TypeCheckError(expr)
     return STRING_TYPE 
 
@@ -312,10 +312,10 @@ def typecheck_select(expr,ctxt):
     """ 
     (select (Array X Y) X Y) 
     """
-    array_type = typecheck(expr.subterms[0],ctxt) 
+    array_type = typecheck_expr(expr.subterms[0],ctxt) 
     if "ARRAY_TYPE" not in array_type.__class__.__name__:  
         raise TypeCheckError(expr)  
-    x_type = typecheck(expr.subterms[1],ctxt)
+    x_type = typecheck_expr(expr.subterms[1],ctxt)
     if x_type != array_type.index_type: 
         raise TypeCheckError(expr)  
     return array_type.payload_type
@@ -324,11 +324,11 @@ def typecheck_store(expr,ctxt):
     """
     (store (Array X Y) X Y (Array X Y)))
     """
-    array_type = typecheck(expr.subterms[0],ctxt) 
+    array_type = typecheck_expr(expr.subterms[0],ctxt) 
     if "ARRAY_TYPE" not in array_type.__class__.__name__:  
         raise TypeCheckError(expr)  
-    x_type = typecheck(expr.subterms[1],ctxt)
-    y_type = typecheck(expr.subterms[2],ctxt)
+    x_type = typecheck_expr(expr.subterms[1],ctxt)
+    y_type = typecheck_expr(expr.subterms[2],ctxt)
     if x_type != array_type.index_type and y_type != array_type.payload_type: 
         raise TypeCheckError(expr)  
     return array_type 
