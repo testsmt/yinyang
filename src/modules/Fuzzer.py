@@ -133,7 +133,7 @@ class Fuzzer:
         for testitem in testbook:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
-            stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout, debug=self.args.debug)
+            stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout, debug=self.args.diagnose)
 
             # (1) Detect crashes from a solver run including invalid models.
             if self.in_crash_list(stdout, stderr):
