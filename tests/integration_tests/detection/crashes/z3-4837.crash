@@ -1,0 +1,54 @@
+Failed to verify: len_exists
+
+=================================================================
+==101197==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 104 byte(s) in 13 object(s) allocated from:
+    #0 0x7f452be5c662 in malloc (/usr/lib/x86_64-linux-gnu/libasan.so.2+0x98662)
+    #1 0x2625eb3 in memory::allocate(unsigned long) ../src/util/memory_manager.cpp:268
+    #2 0x62e482 in region::allocate(unsigned long) ../src/util/region.h:37
+    #3 0x1048e7d in operator new[](unsigned long, region&) ../src/util/region.h:115
+    #4 0x104761c in smt::ext_simple_justification::ext_simple_justification(region&, unsigned int, smt::literal const*, unsigned int, std::pair<smt::enode*, smt::enode*> const*) ../src/smt/smt_justificati
+on.cpp:304
+    #5 0xd42823 in smt::ext_theory_simple_justification::ext_theory_simple_justification(int, region&, unsigned int, smt::literal const*, unsigned int, std::pair<smt::enode*, smt::enode*> const*, unsigned
+ int, parameter*) ../src/smt/smt_justification.h:325
+    #6 0xdfb12f in smt::ext_theory_eq_propagation_justification::ext_theory_eq_propagation_justification(int, region&, unsigned int, smt::literal const*, unsigned int, std::pair<smt::enode*, smt::enode*> 
+const*, smt::enode*, smt::enode*, unsigned int, parameter*) ../src/smt/smt_justification.h:374
+    #7 0x12089ec in smt::theory_lra::imp::fixed_var_eh(int, rational const&) ../src/smt/theory_lra.cpp:3161
+    #8 0x1206c28 in smt::theory_lra::imp::propagate_eqs(lp::tv, unsigned int, lp::lconstraint_kind, lp_api::bound&, rational const&) ../src/smt/theory_lra.cpp:3007
+    #9 0x1206642 in smt::theory_lra::imp::assert_bound(int, bool, lp_api::bound&) ../src/smt/theory_lra.cpp:2960
+    #10 0x1200ee5 in smt::theory_lra::imp::propagate() ../src/smt/theory_lra.cpp:2246
+    #11 0x11dfc80 in smt::theory_lra::propagate() ../src/smt/theory_lra.cpp:3927
+    #12 0xfc62a9 in smt::context::propagate_theories() ../src/smt/smt_context.cpp:1600
+    #13 0xfc7114 in smt::context::propagate() ../src/smt/smt_context.cpp:1698
+    #14 0xfdd66e in smt::context::bounded_search() ../src/smt/smt_context.cpp:3733
+    #15 0xfdb86a in smt::context::search() ../src/smt/smt_context.cpp:3614
+    #16 0xfd9df7 in smt::context::check(unsigned int, expr* const*, bool) ../src/smt/smt_context.cpp:3497
+    #17 0xfd9123 in smt::context::setup_and_check(bool) ../src/smt/smt_context.cpp:3433
+    #18 0xd402e2 in smt::kernel::imp::setup_and_check() ../src/smt/smt_kernel.cpp:108
+    #19 0xd3ef39 in smt::kernel::setup_and_check() ../src/smt/smt_kernel.cpp:292
+    #20 0xc70102 in smt_tactic::operator()(ref<goal> const&, sref_buffer<goal, 16u>&) ../src/smt/tactic/smt_tactic.cpp:201
+    #21 0x1a72fa5 in and_then_tactical::operator()(ref<goal> const&, sref_buffer<goal, 16u>&) ../src/tactic/tactical.cpp:120
+    #22 0x1a7b6ba in cond_tactical::operator()(ref<goal> const&, sref_buffer<goal, 16u>&) ../src/tactic/tactical.cpp:1034
+    #23 0x1a7b6ba in cond_tactical::operator()(ref<goal> const&, sref_buffer<goal, 16u>&) ../src/tactic/tactical.cpp:1034
+    #24 0x1a7b6ba in cond_tactical::operator()(ref<goal> const&, sref_buffer<goal, 16u>&) ../src/tactic/tactical.cpp:1034
+    #25 0x1a7b6ba in cond_tactical::operator()(ref<goal> const&, sref_buffer<goal, 16u>&) ../src/tactic/tactical.cpp:1034
+    #26 0x1a7b6ba in cond_tactical::operator()(ref<goal> const&, sref_buffer<goal, 16u>&) ../src/tactic/tactical.cpp:1034
+    #27 0x1a7b6ba in cond_tactical::operator()(ref<goal> const&, sref_buffer<goal, 16u>&) ../src/tactic/tactical.cpp:1034
+    #28 0x1a7b6ba in cond_tactical::operator()(ref<goal> const&, sref_buffer<goal, 16u>&) ../src/tactic/tactical.cpp:1034
+    #29 0x1a7b6ba in cond_tactical::operator()(ref<goal> const&, sref_buffer<goal, 16u>&) ../src/tactic/tactical.cpp:1034
+
+ASSERTION VIOLATION
+File: ../src/muz/spacer/spacer_util.cpp
+Line: 430
+!m.is_false(a)
+(C)ontinue, (A)bort, (S)top, (T)hrow exception, Invoke (G)DB
+
+Unexpected expression: false
+ASSERTION VIOLATION
+File: ../src/muz/spacer/spacer_util.cpp
+Line: 529
+UNREACHABLE CODE WAS REACHED.
+Z3 4.8.8.0
+Please file an issue with this message and more detail about how you encountered it at https://github.com/Z3Prover/z3/issues/new
+

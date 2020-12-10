@@ -1,0 +1,6 @@
+sat
+sat
+CVC4 suffered a segfault.
+Offending address is 0x7faa1777300c
+Aborted
+

@@ -1,0 +1,18 @@
+ASSERTION VIOLATION
+File: ../src/smt/smt_internalizer.cpp
+Line: 1056
+b_internalized(n)
+(C)ontinue, (A)bort, (S)top, (T)hrow exception, Invoke (G)DB
+
+./z3-4855.crash
+sat
+(error "line 7 column 10: an invalid model was generated")
+(
+ (define-fun b () (_ FloatingPoint 8 24)
+  (fp #b0 #x7e #b00111111111111111111111))
+ (define-fun c () (_ FloatingPoint 8 24)
+  (fp #b0 #x01 #b00000100000001000010000))
+ (define-fun a () RoundingMode
+  roundTowardZero)
+)
+unsat

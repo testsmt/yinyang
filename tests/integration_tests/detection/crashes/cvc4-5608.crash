@@ -1,0 +1,9 @@
+sat
+sat
+Fatal failure within CVC4::theory::TrustNode CVC4::theory::strings::TermRegistry::getRegisterTermLemma(CVC4::Node) at /home/peisen/test/tofuzz/CVC4/src/theory/strings/term_registry.cpp:368
+Check failure
+
+ d_proxyVarToLength.find(nc) != d_proxyVarToLength.end()
+
+Aborted (core dumped)
+

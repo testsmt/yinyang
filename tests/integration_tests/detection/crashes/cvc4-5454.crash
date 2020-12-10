@@ -1,0 +1,7 @@
+Fatal failure within CVC4::decision::JustificationHeuristic::SearchResult CVC4::decision::JustificationHeuristic::findSplitterRec(CVC4::TNode, CVC4::prop::SatValue) at /home/peisen/test/tofuzz/CVC4/src/decision/justification_heuristic.cpp:568
+Check failure
+
+ litPresent == false || litVal == desiredVal
+Output should be justified
+Aborted
+
