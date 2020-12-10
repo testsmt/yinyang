@@ -52,6 +52,6 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         
 
 if __name__ == '__main__':
-    TypeAwareOpMutationTestCase.test_ta()
-    #unittest.main()
+    #TypeAwareOpMutationTestCase.test_ta()
+    unittest.main()
 

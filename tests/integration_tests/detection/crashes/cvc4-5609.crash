@@ -1,0 +1,7 @@
+Fatal failure within void CVC4::smt::CheckModels::checkModel(CVC4::smt::Model*, CVC4::context::CDList<CVC4::NodeTemplate<true> >*, bool) at /CVC4/src/smt/check_models.cpp:249
+Internal error detectedSmtEngine::checkModel(): ERRORS SATISFYING ASSERTIONS WITH MODEL:
+assertion:     (str.contains (str.replace_re_all str7 (str.to_re str8) (str.++ "pQHRoRXwvFIzQiVZFnTiewbePvXHRuMcpJcoKPmTTjPAvGYCNjngoFlOKzthoecQkHVgJxtfUnssQkHhSMKmIYSbwvtzRUFAQ" str6)) (str.replace_re str8 (str.to_re str7) str8))
+simplifies to: false
+expected `true'.
+Run with `--check-models -v' for additional diagnostics.
+

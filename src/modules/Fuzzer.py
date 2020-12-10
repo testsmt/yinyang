@@ -1,14 +1,17 @@
 import random
 import shutil
 import os
+import re
+import signal
 
 from pathlib import Path
 from antlr4 import *
 
-from src.modules.Solver import SolverResultType, SolverResult, Solver
+from src.modules.Solver import Solver, SolverQueryResult,  SolverResult
 from src.modules.Statistic import Statistic
 
-from src.utils import random_string, plain, escape
+from config.config import crash_list, duplicate_list, ignore_list
+from src.utils import random_string, plain, escape, in_list
 
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
@@ -24,7 +27,6 @@ class Fuzzer:
 
 
     def run(self):
-
         if (self.args.strategy == "opfuzz"):
             seeds = self.args.PATH_TO_SEEDS
         elif (self.args.strategy == "fusion"):
@@ -51,113 +53,172 @@ class Fuzzer:
                 fusion_seeds = [seed1, seed2]
                 self.generator = SemanticFusion(fusion_seeds, self.args)
             else: assert(False)
-            
+
             for _ in range(self.args.iterations):
                 self.statistic.printbar()
-                if not self.validate(self.generator.generate()): break
+                formula, success = self.generator.generate()
+                if not success:
+                    print(formula.__str__())
+                    exit(0)
+
+                if not self.test(formula): break
                 self.statistic.mutants += 1
 
-    def validate(self, fn):
 
-        if (self.args.oracle == "unknown"):
-            oracle = SolverResult(SolverResultType.UNKNOWN)
-        elif (self.args.oracle == "sat"):
-            oracle = SolverResult(SolverResultType.SAT)
-        elif (self.args.oracle == "unsat"):
-            oracle = SolverResult(SolverResultType.UNSAT)
-        else: assert(False)
-
+    def create_testbook(self, formula):
         testbook = []
+        if not self.args.keep_mutants:
+            testcase = "%s/%s.smt2" % (self.args.scratchfolder, self.args.name)
+        else:
+            testcase = "%s/%s-%s-%s.smt2" % (self.args.scratchfolder,
+                                             escape(self.currentseeds),
+                                             self.args.name,random_string())
+        with open(testcase, 'w') as testcase_writer:
+            testcase_writer.write(formula.__str__())
         for cli in self.args.SOLVER_CLIS:
-            testcase = fn
             if self.args.optfuzz != None:
-                with open(fn, 'r') as generated_test:
-                    pure_formula = generated_test.read()
-                testcase = "%s/%s-%s" % (self.args.scratchfolder, plain(cli), fn.split('/')[-1])
-                with open(testcase, 'w') as testcase_writer:
-                    testcase_writer.write(self.args.optfuzz.generate(cli) + pure_formula)
-            testbook.append((cli,testcase))
-        
-        reference = ("", "", "")
-        for testitem in testbook:
-            solver = Solver(testitem[0])
-            result, output = solver.solve(testitem[1], self.args.timeout)
-
-            if result.equals(SolverResultType.IGNORED):
-                #ignored
-                self.statistic.ignored += 1
-            elif result.equals(SolverResultType.UNKNOWN):
-                #unknown
-                pass
-            elif result.equals(SolverResultType.TIMEOUT):
-                #timeout
-                self.statistic.timeout += 1
-            elif result.equals(SolverResultType.CRASH):
-                #crash
-                self.statistic.error += 1
-                self.report(testitem[1], "crash", testitem[0], output, random_string())
-                return False
-            elif result.equals(SolverResultType.FAIL):
-                print("\nPlease check your solver command-line interfaces.")
-            else:
-                if oracle.equals(SolverResultType.UNKNOWN):
-                    oracle = result
-                    reference = (testitem[0], testitem[1], output)
-                elif oracle.equals(result):
-                    #correct
-                    pass
+                if not self.args.keep_mutants:
+                    testcase = "%s/%s-%s" % (self.args.scratchfolder,
+                                             plain(cli),
+                                             self.args.name)
                 else:
-                    #incorrect
-                    self.statistic.soundness += 1
-                    if reference != ("", "", ""):
-                        if self.args.optfuzz != None:
-                            report_id = self.report(testitem[1], "incorrect", testitem[0], output, random_string())
-                            self.report(reference[1], "incorrect", reference[0], reference[2], report_id) 
-                        else:
-                            self.reportdiff(testitem[1], "incorrect", (testitem[0], reference[0]), (output, reference[2]), random_string())
-                    else:
-                        self.report(testitem[1], "incorrect", testitem[0], output, random_string())
-                    return False
+                    testcase = "%s/%s-%s-%s-%s.smt2" % (self.args.scratchfolder,
+                                                        plain(cli),
+                                                        escape(self.currentseeds),
+                                                        self.args.name,random_string())
+                with open(testcase, 'w') as testcase_writer:
+                    testcase_writer.write(self.args.optfuzz.generate(cli) + formula.__str__())
+            testbook.append((cli,testcase))
+        return testbook
 
+
+    def grep_result(self, stdout):
+        """
+        Grep the result from the stdout of a solver.
+        """
+        result = SolverResult()
+        for line in stdout.splitlines():
+            if re.search("^unsat$", line, flags=re.MULTILINE):
+                result.append(SolverQueryResult.UNSAT)
+            elif re.search("^sat$", line, flags=re.MULTILINE):
+                result.append(SolverQueryResult.SAT)
+            elif re.search("^unknown$", line, flags=re.MULTILINE):
+                result.append(SolverQueryResult.UNKNOWN)
+        return result
+
+
+    def init_oracle(self):
+        """
+        Initialize the oracle. For SemanticFusion the oracle is either sat or
+        unsat. For TypeAwareOpMutation the oracle is unknown
+        """
+        if (self.args.oracle == "unknown"):
+            return SolverResult(SolverQueryResult.UNKNOWN)
+        elif (self.args.oracle == "sat"):
+            return SolverResult(SolverQueryResult.SAT)
+        elif (self.args.oracle == "unsat"):
+            return SolverResult(SolverQueryResult.UNSAT)
+        assert(False)
+
+
+    def test(self, formula):
+        """
+        Tests the solvers with the formula returning "False" if the testing on
+        formula should be stopped and "True" otherwise.
+        """
+        oracle = self.init_oracle()
+        testbook = self.create_testbook(formula)
+        reference = None
+
+        for testitem in testbook:
+            solver_cli, scratchfile = testitem[0], testitem[1]
+            solver = Solver(solver_cli)
+            stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout)
+
+            # (1) Detect crashes from a solver run including invalid models.
+            if self.in_crash_list(stdout, stderr):
+
+                # (2) Match against the duplicate list to avoid reporting duplicate bugs.
+                if not self.in_duplicate_list(stdout, stderr):
+                    self.statistic.crashes += 1
+                    self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
+                else:
+                    self.statistics.duplicates += 1
+                return False # stop testing
+            else:
+                # (3a) Check whether the solver run produces errors, by checking
+                # the ignore list.
+                if self.in_ignore_list(stdout, stderr):
+                    self.statistic.ignored += 1
+                    continue # continue with next solver (4)
+
+                # (3b) Check whether the exit code is nonzero.
+                elif exitcode != 0:
+                    if exitcode == -signal.SIGSEGV or exitcode == 245: #segfault
+                        self.statistic.crashes += 1
+                        self.report(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
+                        return False # stop testing
+
+                    elif exitcode == 137: #timeout
+                        self.statistic.timeout += 1
+                        continue # continue with next solver (4)
+
+                    elif exitcode == 127: #command not found
+                        print("\nPlease check your solver command-line interfaces.")
+                        continue # continue with next solver (4)
+
+                    self.statistic.ignored+=1
+
+                # (3c) if there is no '^sat$' or '^unsat$' in the output
+                elif not re.search("^unsat$", stdout, flags=re.MULTILINE) and \
+                     not re.search("^sat$", stdout, flags=re.MULTILINE) and \
+                     not re.search("^unknown$", stdout, flags=re.MULTILINE):
+                     self.statistic.ignored += 1
+                     continue # continue with next solver (4)
+                else:
+                    # (5) grep for '^sat$', '^unsat$', and '^unknown$' to produce
+                    # the output (including '^unknown$' to also deal with incremental
+                    # benchmarks) for comparing with the oracle (semantic fusion) or
+                    # with other non-erroneous solver runs (opfuzz) for soundness bugs
+                    result = self.grep_result(stdout)
+                    if oracle.equals(SolverQueryResult.UNKNOWN):
+                        oracle = result
+                        reference = (solver_cli, scratchfile, stdout, stderr)
+
+                    # Comparing with the oracle (semantic fusion) or with other
+                    # non-erroneous solver runs (opfuzz) for soundness bugs.
+                    if not oracle.equals(result):
+                        self.statistic.soundness += 1
+                        report_id = self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
+                        if reference:
+                            self.report(reference[1], "incorrect", reference[0], reference[2], reference[3], report_id)
+                        return False # stop testing
         return True
 
-    def report(self, trigger, bugtype, cli, output, report_id):
+    def in_crash_list(self, stdout, stderr):
+        return in_list(stdout,stderr,crash_list)
+
+    def in_duplicate_list(self, stdout, stderr):
+        return in_list(stdout,stderr,duplicate_list)
+
+    def in_ignore_list(self,stdout, stderr):
+        return in_list(stdout,stderr,ignore_list)
+
+    def report(self, trigger, bugtype, cli, stdout, stderr, report_id):
         plain_cli = plain(cli)
-        #<solver><{crash,wrong,invalid_model}><seed-name>.<random-string>.smt2
+        #format: <solver><{crash,wrong,invalid_model}><seed-name>.<random-string>.smt2
         report = "%s/%s-%s-%s-%s.smt2" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
         try: shutil.copy(trigger, report)
-        except Exception as e: 
+        except Exception as e:
             print(e)
             exit(0)
         logpath = "%s/%s-%s-%s-%s.output" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
         with open(logpath, 'w') as log:
             log.write("command: "+ plain_cli+"\n")
             log.write("stderr:\n")
-            log.write((output.stderr).decode("utf-8"))
+            log.write(stderr)
             log.write("stdout:\n")
-            log.write((output.stdout).decode("utf-8"))
-        return report_id
-    
-    def reportdiff(self, trigger, bugtype, cli_pair, output_pair, report_id):
-        plain_cli = plain(cli_pair[0]) + "-" + plain(cli_pair[1])
-        report = "%s/%s-%s-%s-%s.smt2" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
-        try: shutil.copy(trigger, report)
-        except Exception as e: 
-            print(e)
-            exit(0)
-        logpath = "%s/%s-%s-%s-%s.output" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
-        with open(logpath, 'w') as log:
-            log.write("command: "+plain(cli_pair[0])+"\n")
-            log.write("stderr:\n")
-            log.write((output_pair[0].stderr).decode("utf-8"))
-            log.write("stdout:\n")
-            log.write((output_pair[0].stdout).decode("utf-8"))
-            log.write("*************************\n")
-            log.write("command: "+plain(cli_pair[1])+"\n")
-            log.write("stderr:\n")
-            log.write((output_pair[1].stderr).decode("utf-8")+"\n")
-            log.write("stdout:\n")
-            log.write((output_pair[1].stdout).decode("utf-8")+"\n")
+            log.write(stdout)
         return report_id
 
     def __del__(self):

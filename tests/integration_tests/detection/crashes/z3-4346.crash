@@ -1,0 +1,5 @@
+ASSERTION VIOLATION
+File: ../src/util/rational.h
+Line: 113
+is_unsigned()
+(C)ontinue, (A)bort, (S)top, (T)hrow exception, Invoke (G)DB

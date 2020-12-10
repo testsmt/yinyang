@@ -1,0 +1,67 @@
+sat
+(
+ (define-fun x () (_ FloatingPoint 11 53)
+  (_ -zero 11 53))
+)
+sat
+(error "line 8 column 20: an invalid model was generated")
+(
+ (define-fun x () (_ FloatingPoint 11 53)
+  (_ +zero 11 53))
+)
+
+
+sat
+(error "line 34 column 10: an invalid model was generated")
+(
+ (define-fun p () (_ FloatingPoint 8 24)
+  (fp #b1 #x24 #b00000000000000000000000))
+ (define-fun bb () (_ FloatingPoint 8 24)
+  (fp #b0 #xd7 #b00100000010000010110100))
+ (define-fun d () (_ FloatingPoint 8 24)
+  (fp #b1 #x7f #b01100110011001100110100))
+ (define-fun n () (_ FloatingPoint 8 24)
+  (fp #b0 #x24 #b00000000000000000110100))
+ (define-fun k () (_ FloatingPoint 8 24)
+  (_ NaN 8 24))
+ (define-fun h () (_ FloatingPoint 8 24)
+  (_ +zero 8 24))
+ (define-fun j () (_ FloatingPoint 8 24)
+  (fp #b0 #xd7 #b00100000010000010110100))
+ (define-fun o () (_ FloatingPoint 8 24)
+  (_ +zero 8 24))
+ (define-fun i () (_ FloatingPoint 8 24)
+  (fp #b1 #x7f #b11100110011001100110111))
+ (define-fun f () (_ FloatingPoint 8 24)
+  (fp #b1 #x7f #b01100110011001100110100))
+ (define-fun g () (_ FloatingPoint 8 24)
+  (_ +zero 8 24))
+ (define-fun q () (_ FloatingPoint 8 24)
+  (fp #b1 #x24 #b00000000000000000000000))
+ (define-fun l () (_ FloatingPoint 8 24)
+  (fp #b0 #x80 #b00000000000000000000000))
+ (define-fun aa () (_ FloatingPoint 8 24)
+  (_ +zero 8 24))
+ (define-fun cc () (_ FloatingPoint 8 24)
+  (_ -oo 8 24))
+ (define-fun c () RoundingMode
+  roundNearestTiesToAway)
+ (define-fun b () RoundingMode
+  roundNearestTiesToEven)
+ (define-fun a () RoundingMode
+  roundNearestTiesToEven)
+ (define-fun e () RoundingMode
+  roundTowardZero)
+)
+
+sat
+(error "line 5 column 10: an invalid model was generated")
+(
+  (define-fun Z () (_ FloatingPoint 2 6)
+    (fp #b0 #b00 #b00001))
+  (define-fun X () (_ FloatingPoint 2 6)
+    (fp #b1 #b01 #b00000))
+  (define-fun Y () (_ FloatingPoint 2 6)
+    (fp #b1 #b01 #b00001))
+)
+

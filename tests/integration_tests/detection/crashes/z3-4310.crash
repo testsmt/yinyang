@@ -1,0 +1,6 @@
+ASSERTION VIOLATION
+File: ../src/ast/ast.cpp
+Line: 431
+UNREACHABLE CODE WAS REACHED.
+Z3 4.8.9.0
+Please file an issue with this message and more detail about how you encountered it at https://github.com/Z3Prover/z3/issues/new

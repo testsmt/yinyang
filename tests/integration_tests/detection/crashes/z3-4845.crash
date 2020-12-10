@@ -1,0 +1,8 @@
+(error "line 4 column 20: an invalid model was generated")
+(
+ (define-fun b () Float16
+  (_ +zero 5 11))
+ (define-fun a () Float16
+  (fp #b0 #b10000 #b0000001000))
+)
+unsat

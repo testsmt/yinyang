@@ -71,11 +71,11 @@ parser.add_argument(
     default=rootpath+"/config/operator_mutations.txt",
     help="set operator mutation configuration (default: "+rootpath+"/config/operator_mutations.txt)"
 )
-# parser.add_argument(
-#     "-fusionfun","--fusionfun",
-#     default=rootpath+"/config/fusion_functions.txt",
-#     help="set fusion function configuration (default: "+rootpath+"/config/fusion_functions.txt)"
-# )
+parser.add_argument(
+    "-fusionfun","--fusionfun",
+    default=rootpath+"/config/fusion_functions.txt",
+    help="set fusion function configuration (default: "+rootpath+"/config/fusion_functions.txt)"
+)
 parser.add_argument(
     "-km", "--keep-mutants",
     action='store_true',

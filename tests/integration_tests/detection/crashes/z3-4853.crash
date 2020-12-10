@@ -1,0 +1,20 @@
+(error "line 17 column 10: an invalid model was generated")
+(
+  (define-fun r8 () Real
+    0.0)
+  (define-fun r12 () Real
+    (- 1.0))
+  (define-fun r2 () Real
+    (- (/ 1.0 2.0)))
+  (define-fun r7 () Real
+    0.0)
+  (define-fun r9 () Real
+    0.0)
+  (define-fun r0 () Real
+    (- (/ 1.0 2.0)))
+  (define-fun /0 ((x!0 Real) (x!1 Real)) Real
+    (- (/ 1.0 2.0)))
+)
+
+
+
