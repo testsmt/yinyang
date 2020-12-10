@@ -46,6 +46,13 @@ parser.add_argument(
     type=int,
     help="set timeout for solving process (default: 8)"
 )
+
+parser.add_argument(
+    "-d", "--diagnose",
+    action='store_true',
+    help="forward solver outputs to stdout e.g. for solver cli diagnosis"
+)
+
 parser.add_argument(
     "-optfuzz","--optfuzz",
     default="",

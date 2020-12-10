@@ -53,9 +53,11 @@ class Solver:
     def __init__ (self, cil):
         self.cil = cil
 
-    def solve(self, file, timeout):
+    def solve(self, file, timeout, debug=False):
         try:
             cmd = list(filter(None, self.cil.split(" "))) + [file]
+            if debug:
+                print(" ".join(cmd), flush=True)
             output = subprocess.run(cmd, timeout=timeout,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
@@ -75,4 +77,12 @@ class Solver:
             print("Exception rises when running solver:")
             print(e, '\n')
             exit(1)
-        return output.stdout.decode(), output.stderr.decode(), output.returncode
+
+        stdout = output.stdout.decode()
+        stderr = output.stderr.decode()
+        returncode = output.returncode
+
+        if debug:
+            print(stdout+"\n"+stderr)
+
+        return stdout, stderr, returncode
