@@ -272,7 +272,7 @@ def typecheck_int_to_string(expr,ctxt):
     (str.from_code Int String)
     (str.from_int Int String)
     """
-    if typecheck_expr(expr.subterms[0]) != STRING_TYPE:
+    if typecheck_expr(expr.subterms[0]) != INTEGER_TYPE:
         raise TypeCheckError(expr)
     return STRING_TYPE 
 
@@ -307,7 +307,37 @@ def typecheck_string_ops(expr, ctxt):
         return typecheck_int_to_string(expr,ctxt)
     if expr.op == STR_IS_DIGIT:
         return typecheck_is_digit(expr,ctxt)
-    
+   
+def typecheck_select(expr,ctxt):
+    """ 
+    (select (Array X Y) X Y) 
+    """
+    array_type = typecheck(expr.subterms[0],ctxt) 
+    if "ARRAY_TYPE" not in array_type.__class__.__name__:  
+        raise TypeCheckError(expr)  
+    x_type = typecheck(expr.subterms[1],ctxt)
+    if x_type != array_type.index_type: 
+        raise TypeCheckError(expr)  
+    return array_type.payload_type
+
+def typecheck_store(expr,ctxt):
+    """
+    (store (Array X Y) X Y (Array X Y)))
+    """
+    array_type = typecheck(expr.subterms[0],ctxt) 
+    if "ARRAY_TYPE" not in array_type.__class__.__name__:  
+        raise TypeCheckError(expr)  
+    x_type = typecheck(expr.subterms[1],ctxt)
+    y_type = typecheck(expr.subterms[2],ctxt)
+    if x_type != array_type.index_type and y_type != array_type.payload_type: 
+        raise TypeCheckError(expr)  
+    return array_type 
+
+def typecheck_array_ops(expr,ctxt):
+    if expr.op == SELECT: 
+        return typecheck_select(expr,ctxt)
+    if expr.op == STORE:
+        return typecheck_store(expr,ctxt)
    
 def typecheck_expr(expr, ctxt=[]):
     # print("expr", expr) 
@@ -341,6 +371,8 @@ def typecheck_expr(expr, ctxt=[]):
             return typecheck_is_int(expr, ctxt) 
         if expr.op in STRING_OPS:
             return typecheck_string_ops(expr,ctxt)
+        if expr.op in ARRAY_OPS:
+            return typecheck_array_ops(expr,ctxt) 
 
     # TODO raise exception - type-checking failed
     # in non-strict case, just return Unknown

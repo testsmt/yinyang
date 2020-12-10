@@ -6,10 +6,15 @@ STRING_TYPE="string"
 REGEXP_TYPE="regex"
 UNKNOWN="unknown"
 
-# class ARRAY_TYPE():
-    # def __init__(self,index, content):
-        # self.index_type = index 
-        # self.content_type = content 
+class ARRAY_TYPE:
+    def __init__(self,index_type, payload_type):
+        self.index_type = index_type 
+        self.payload_type = payload_type 
+
+    def __eq__(self,other):
+        if isinstance(other, self.__class__):  
+            return self.index_type == other.index_type and\
+                   self.payload_type == other.payload_type  
 
 
 # Core ops
@@ -121,3 +126,4 @@ STRING_OPS= [
 # Array ops 
 SELECT="select"
 STORE="store"
+ARRAY_OPS=[SELECT, STORE]

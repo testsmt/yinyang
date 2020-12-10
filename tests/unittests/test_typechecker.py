@@ -37,15 +37,6 @@ class TypecheckerTestCase(unittest.TestCase):
         ite = parse_str(formula_str).commands[2].term
         self.assertEqual(typecheck_expr(ite), BOOLEAN_TYPE)
 
-        # Dominik: looks wrong to me 
-        # formula_str="""
-                # (declare-const y Int)
-                # (declare-const v Bool)
-                # (assert (and (ite v false (= y (- 1))) (= v (not (= y (- 1))))))
-                # (check-sat)
-        # """
-        # and_expr = parse_str(formula_str)
-        # self.assertEqual(typecheck_expr(and_expr), BOOLEAN_TYPE)
     
     # TODO: expect type error here
     def test_error(self):
@@ -77,7 +68,6 @@ class TypecheckerTestCase(unittest.TestCase):
         """
         greater = parse_str(formula_str).commands[2].term
         self.assertEqual(typecheck_expr(greater), BOOLEAN_TYPE)
-
 
 if __name__ == '__main__':
     TypecheckerTestCase.test_typechecker()
