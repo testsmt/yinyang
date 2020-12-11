@@ -7,6 +7,7 @@ from src.parsing.types import *
 
 # TODO: make a difference between chainable and non-chainable ops  
 
+# TODO: give more meaningful expression  
 class TypeCheckError(Exception):
     def __init__(self, expr):
         self.message="(error Typechecker: Ill-typed expression) \nexpr: " + expr.__str__() 
@@ -145,7 +146,8 @@ def typecheck_nary_string_rt_bool(expr, ctxt):
         (str.contains String String Bool)
     """
     for term in expr.subterms:
-        if not typecheck_expr(term, ctxt) != STRING_TYPE:
+        typ=typecheck_expr(term, ctxt)
+        if typecheck_expr(term, ctxt) != STRING_TYPE:
             raise TypeCheckError(expr)
     return BOOLEAN_TYPE
 
@@ -490,8 +492,8 @@ def typecheck_fp_ops(expr,ctxt):
         return typecheck_fp_fma(expr, ctxt)
 
 def typecheck_expr(expr, ctxt=[]):
-    # print("expr", expr) 
-    # print("type(expr)", type(expr))
+    print("expr", expr) 
+    print("type(expr)", type(expr))
     # TODO: consolidate CORE, REAL and INT 
     if expr.is_const or expr.is_var or expr.is_indexed_id:
         return expr.type
@@ -528,6 +530,9 @@ def typecheck_expr(expr, ctxt=[]):
             return typecheck_bv_ops(expr,ctxt)
         if expr.op in FP_OPS:
             return typecheck_fp_ops(expr,ctxt)
+    if expr.quantifier:     
+        pass
+
 
     # TODO raise exception - type-checking failed
     # in non-strict case, just return Unknown
