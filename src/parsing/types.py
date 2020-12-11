@@ -24,6 +24,16 @@ class BITVECTOR_TYPE:
         if isinstance(other, self.__class__):  
             return self.bitwidth == other.bitwidth
 
+class FP_TYPE:
+    def __init__(self, eb, sb):
+        self.eb = eb 
+        self.sb = sb
+    
+    def __eq__(self,other):
+        if isinstance(other, self.__class__):
+            return self.eb == other.eb and self.sb == other.sb
+
+
 # Core ops
 NOT="not"
 AND="and"
@@ -162,4 +172,57 @@ BV_OPS=[
     BVSHL,
     BVLSHR,
     BVULT
+]
+
+# Floating Point ops 
+FP_ABS="fp.abs"
+FP_NEG="fp.neg"
+FP_ADD="fp.add"
+FP_SUB="fp.sub"
+FP_MUL="fp.mul"
+FP_DIV="fp.div"
+FP_SQRT="fp.sqrt"
+FP_REM="fp.rem"
+FP_ROUND_TO_INTEGRAL="fp.roundToIntegral"
+FP_FMA="fp.fma"
+FP_MIN="fp.min"
+FP_MAX="fp.max"
+FP_LEQ="fp.leq"
+FP_LT="fp.lt"
+FP_GEQ="fp.geq"
+FP_GT="fp.gt" 
+FP_EQ="fp.eq"
+FP_NORMAL="fp.isNormal"
+FP_ISSUBNORMAL="fp.isSubnormal"
+FP_IS_ZERO="fp.isZero"
+FP_ISINFINITE="fp.isInfinite"
+FP_ISNAN="fp.isNan"
+FP_ISNEGATIVE="fp.isNegative"
+FP_ISPOSITIVE="fp.isPositive"
+
+FP_OPS=[
+    FP_ABS,
+    FP_NEG,
+    FP_ADD,
+    FP_SUB,
+    FP_MUL,
+    FP_DIV,
+    FP_SQRT,
+    FP_REM,
+    FP_ROUND_TO_INTEGRAL,
+    FP_FMA,
+    FP_MIN,
+    FP_MAX,
+    FP_LEQ,
+    FP_LT,
+    FP_GEQ,
+    FP_GT,
+    FP_EQ,
+    FP_NORMAL,
+    FP_ISSUBNORMAL,
+    FP_IS_ZERO,
+    FP_ISINFINITE,
+    FP_ISNAN,
+    FP_ISNEGATIVE,
+    FP_ISPOSITIVE
 ]

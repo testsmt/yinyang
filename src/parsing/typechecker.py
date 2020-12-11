@@ -313,7 +313,7 @@ def typecheck_select(expr,ctxt):
     (select (Array X Y) X Y) 
     """
     array_type = typecheck_expr(expr.subterms[0],ctxt) 
-    if "ARRAY_TYPE" not in array_type.__class__.__name__:  #TODO
+    if isinstance(array_type, ARRAY_TYPE):
         raise TypeCheckError(expr)  
     x_type = typecheck_expr(expr.subterms[1],ctxt)
     if x_type != array_type.index_type: 
@@ -325,7 +325,7 @@ def typecheck_store(expr,ctxt):
     (store (Array X Y) X Y (Array X Y)))
     """
     array_type = typecheck_expr(expr.subterms[0],ctxt) 
-    if "ARRAY_TYPE" not in array_type.__class__.__name__:  #TODO
+    if isinstance(array_type, ARRAY_TYPE):
         raise TypeCheckError(expr)  
     x_type = typecheck_expr(expr.subterms[1],ctxt)
     y_type = typecheck_expr(expr.subterms[2],ctxt)
@@ -386,9 +386,113 @@ def typecheck_bv_ops(expr,ctxt):
     if expr.op == BVULT:
         return typecheck_bvult(expr,ctxt) 
 
+def typecheck_fp_unary(expr, ctxt): 
+    """
+    (fp.abs (_ FloatingPoint eb sb) (_ FloatingPoint eb sb))
+    (fp.neg (_ FloatingPoint eb sb) (_ FloatingPoint eb sb))
+    """
+    if not isinstance(typecheck_expr(expr.subterms[0],ctxt),FP_TYPE):
+        raise TypeCheckError(expr)  
+    return typecheck_expr(expr.subterms[0],ctxt)
+
+def typecheck_fp_binary_arith(expr, ctxt):
+    """
+    (fp.add RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
+     (_ FloatingPoint eb sb)) 
+   
+   (fp.sub RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
+     (_ FloatingPoint eb sb)) 
+   
+   (fp.mul RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
+     (_ FloatingPoint eb sb)) 
+   
+   (fp.div RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
+     (_ FloatingPoint eb sb))
+    """
+    arg1 = expr.subterms[0]  
+    arg2 = expr.subterms[1]  
+    arg3 = expr.subterms[2]  
+    if typecheck_expr(arg1,ctxt) != ROUNDINGMODE_TYPE:
+        raise TypeCheckError(expr)  
+    if not isintance(typecheck_expr(arg2,ctxt),FP_TYPE) or\
+       not isintance(typecheck_expr(arg3,ctxt),FP_TYPE):
+        raise TypeCheckError(expr)  
+    return typecheck_expr(arg2,ctxt)
+
+def typecheck_fp_unary_bool_rt(expr, ctxt):
+    """
+    (fp.isNormal (_ FloatingPoint eb sb) Bool)
+    (fp.isSubnormal (_ FloatingPoint eb sb) Bool)
+    (fp.isZero (_ FloatingPoint eb sb) Bool)
+    (fp.isInfinite (_ FloatingPoint eb sb) Bool)
+    (fp.isNaN (_ FloatingPoint eb sb) Bool)
+    (fp.isNegative (_ FloatingPoint eb sb) Bool)
+    (fp.isPositive (_ FloatingPoint eb sb) Bool)
+    """
+    arg = expr.subterms[0]  
+    if not isintance(typecheck_expr(arg,ctxt),FP_TYPE):
+        raise TypeCheckError(expr)  
+    return BOOLEAN_TYPE
+
+def typecheck_fp_comparison(expr, ctxt):
+    """
+    (fp.leq (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool :chainable)
+    (fp.lt  (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool :chainable) 
+    (fp.geq (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool :chainable) 
+    (fp.gt  (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool :chainable)
+    (fp.eq (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool :chainable) 
+    """
+    arg1 = expr.subterms[0]  
+    arg2 = expr.subterms[1]  
+    if not isintance(typecheck_expr(arg1,ctxt),FP_TYPE) or\
+       not isintance(typecheck_expr(arg2,ctxt),FP_TYPE):
+        raise TypeCheckError(expr)  
+    return BOOLEAN_TYPE
+
+def typecheck_fp_minmax(expr,ctxt):
+    """
+    (fp.min (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)) 
+    (fp.max (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) (_ FloatingPoint eb sb))
+    """
+    arg1 = expr.subterms[0]  
+    arg2 = expr.subterms[1]  
+    if not isintance(typecheck_expr(arg1,ctxt),FP_TYPE) or\
+       not isintance(typecheck_expr(arg2,ctxt),FP_TYPE):
+        raise TypeCheckError(expr)
+    return typecheck_expr(arg1,ctxt)
+
+def typecheck_fp_fma(expr,ctxt):
+    """
+    (fp.fma RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
+     (_ FloatingPoint eb sb))
+    """
+    arg1 = expr.subterms[0]  
+    arg2 = expr.subterms[1]  
+    arg3 = expr.subterms[1]  
+    if not isintance(typecheck_expr(arg1,ctxt),FP_TYPE) or\
+       not isintance(typecheck_expr(arg2,ctxt),FP_TYPE) or\
+       not isintance(typecheck_expr(arg3,ctxt),FP_TYPE):
+        raise TypeCheckError(expr)
+    return typecheck_expr(arg1,ctxt)
+
+def typecheck_fp_ops(expr,ctxt):
+    if expr.op in [FP_ABS, FP_NEG]: 
+        return typecheck_fp_unary(expr,ctxt) 
+    if expr.op in [FP_ADD, FP_SUB, FP_MUL, FP_DIV,FP_SQRT, FP_REM,FP_ROUND_TO_INTEGRAL]:
+        return typecheck_fp_binary_arith(expr, ctxt)
+    if expr.op in [FP_NORMAL, FP_ISSUBNORMAL, FP_IS_ZERO, FP_ISINFINITE, FP_ISNAN, FP_ISNEGATIVE, FP_ISPOSITIVE]:
+        return typecheck_fp_unary_bool_rt(expr, ctxt)
+    if expr.op in [FP_LEQ,FP_LT,FP_GEQ,FP_GT,FP.EQ]:
+        return typecheck_fp_comparison(expr, ctxt) 
+    if expr.op in [FP_MIN, FP_MAX]:
+        return typecheck_fp_minmax(expr, ctxt) 
+    if expr.op == FP_FMA: 
+        return typecheck_fp_fma(expr, ctxt)
+
 def typecheck_expr(expr, ctxt=[]):
     # print("expr", expr) 
     # print("type(expr)", type(expr))
+    # TODO: consolidate CORE, REAL and INT 
     if expr.is_const or expr.is_var or expr.is_indexed_id:
         return expr.type
     if expr.op:
@@ -422,6 +526,8 @@ def typecheck_expr(expr, ctxt=[]):
             return typecheck_array_ops(expr,ctxt) 
         if expr.op in BV_OPS:
             return typecheck_bv_ops(expr,ctxt)
+        if expr.op in FP_OPS:
+            return typecheck_fp_ops(expr,ctxt)
 
     # TODO raise exception - type-checking failed
     # in non-strict case, just return Unknown
