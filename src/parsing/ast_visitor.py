@@ -20,19 +20,11 @@ class ASTVisitor(SMTLIBv2Visitor):
             cmds.append(self.visitCommand(c))
         return Script(cmds,self.global_vars)
 
-    def sort2type(self,sort):
-        sort = sort.replace("Bool", "bool")
-        sort = sort.replace("Real", "real")
-        sort = sort.replace("Int", "integer")
-        sort = sort.replace("String", "string")
-        return sort
-
-
     def add_to_globals(self, identifier, input_sorts, output_sort):
         if len(input_sorts) == 0:
-            self.global_vars[identifier] = self.sort2type(output_sort)
+            self.global_vars[identifier] = sort2type(output_sort)
         else:
-            self.global_vars[identifier] = self.sort2type(input_sorts + " "+ output_sort)
+            self.global_vars[identifier] = sort2type(input_sorts + " "+ output_sort)
 
     def handleCommand(self, ctx:SMTLIBv2Parser.CommandContext):
         if ctx.cmd_assert():
@@ -59,7 +51,6 @@ class ASTVisitor(SMTLIBv2Visitor):
             return Eval(self.visitTerm(ctx.term()[0]))
         if ctx.cmd_declareConst():
             self.add_to_globals(self.visitSymbol(ctx.symbol()[0]),[], self.visitSort(ctx.sort()[0]))
-            # self.global_vars[self.visitSymbol(ctx.symbol()[0])] = self.visitSort(ctx.sort()[0])
             decl = DeclareConst(self.visitSymbol(ctx.symbol()[0]), self.visitSort(ctx.sort()[0]))
             return decl
         if ctx.cmd_declareFun():

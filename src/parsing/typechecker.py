@@ -7,6 +7,18 @@ from src.parsing.types import *
 
 # TODO: make a difference between chainable and non-chainable ops  
 
+class Context:
+    def __init__(self,globals,locals):
+        self.globals = globals
+        self.locals = locals
+
+    def add_to_globals(self, var, type):
+        self.globals[var] = type
+    
+    def add_to_locals(self, var, type):
+        self.locals[var] = type
+
+
 # TODO: give more meaningful expression  
 class TypeCheckError(Exception):
     def __init__(self, expr):
@@ -38,10 +50,9 @@ def typecheck_nary_numeral_ret(expr, ctxt=[]):
     typ = typecheck_expr(expr.subterms[0],ctxt)
     if typ not in [INTEGER_TYPE, REAL_TYPE]:
         raise TypeCheckError(expr) 
-
     for term in expr.subterms[1:]:
         if typecheck_expr(term,ctxt) != typ:
-           raise TypeCheckError(expr) 
+           raise TypeCheckError(term) 
     return typ 
 
 def typecheck_nary_int_ret(expr, ctxt=[]):
@@ -61,7 +72,9 @@ def typecheck_eq(expr, ctxt=[]):
     typ = typecheck_expr(expr.subterms[0],ctxt)
     for term in expr.subterms[1:]:
         if typecheck_expr(term,ctxt) != typ:
-           raise TypeCheckError(expr) 
+           print("expected",typ)
+           print("actual", typecheck_expr(term,ctxt))
+           raise TypeCheckError(term) 
     return BOOLEAN_TYPE
 
 def typecheck_ite(expr, ctxt=[]):
@@ -470,7 +483,7 @@ def typecheck_fp_fma(expr,ctxt):
     """
     arg1 = expr.subterms[0]  
     arg2 = expr.subterms[1]  
-    arg3 = expr.subterms[1]  
+    arg3 = expr.subterms[2]  
     if not isintance(typecheck_expr(arg1,ctxt),FP_TYPE) or\
        not isintance(typecheck_expr(arg2,ctxt),FP_TYPE) or\
        not isintance(typecheck_expr(arg3,ctxt),FP_TYPE):
@@ -491,9 +504,17 @@ def typecheck_fp_ops(expr,ctxt):
     if expr.op == FP_FMA: 
         return typecheck_fp_fma(expr, ctxt)
 
-def typecheck_expr(expr, ctxt=[]):
-    print("expr", expr) 
-    print("type(expr)", type(expr))
+def typecheck_quantifiers(expr,ctxt):
+    vars = expr.quantified_vars[0]
+    types = expr.quantified_vars[1]
+    for i in range(len(vars)): 
+        var, type = vars[i], types[i] 
+        ctxt.add_to_locals(var,type)
+    return typecheck_expr(expr.subterms[0],ctxt)
+
+def typecheck_expr(expr, ctxt):
+    # print("expr", expr) 
+    # print("type(expr)", type(expr))
     # TODO: consolidate CORE, REAL and INT 
     if expr.is_const or expr.is_var or expr.is_indexed_id:
         return expr.type
@@ -504,6 +525,8 @@ def typecheck_expr(expr, ctxt=[]):
             return typecheck_unary_minus(expr,ctxt)
         if expr.op in [MINUS, PLUS, MULTIPLY]:
             return typecheck_nary_numeral_ret(expr,ctxt)
+        if expr.op in [AND,OR,XOR]:
+            return typecheck_nary_bool(expr,ctxt)
         if expr.op in [DIV, MOD, ABS]:
             return typecheck_nary_int_ret(expr,ctxt)
         if expr.op == REAL_DIV: 
@@ -530,9 +553,8 @@ def typecheck_expr(expr, ctxt=[]):
             return typecheck_bv_ops(expr,ctxt)
         if expr.op in FP_OPS:
             return typecheck_fp_ops(expr,ctxt)
-    if expr.quantifier:     
-        pass
-
+    if expr.quantifier: 
+        return typecheck_quantifiers(expr,ctxt) 
 
     # TODO raise exception - type-checking failed
     # in non-strict case, just return Unknown

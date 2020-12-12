@@ -6,6 +6,13 @@ STRING_TYPE="string"
 REGEXP_TYPE="regex"
 UNKNOWN="unknown"
 
+def sort2type(sort):
+    sort = sort.replace("Bool", "bool")
+    sort = sort.replace("Real", "real")
+    sort = sort.replace("Int", "integer")
+    sort = sort.replace("String", "string")
+    return sort
+
 class ARRAY_TYPE:
     def __init__(self,index_type, payload_type):
         self.index_type = index_type 
@@ -226,3 +233,7 @@ FP_OPS=[
     FP_ISNEGATIVE,
     FP_ISPOSITIVE
 ]
+
+# Quantifiers
+EXISTS="exists"
+FORALL="forall"
