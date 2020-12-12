@@ -51,6 +51,17 @@ EQUAL="="
 DISTINCT="distinct"
 ITE="ite"
 
+CORE_OPS=[
+    NOT,
+    AND,
+    IMPLIES,
+    OR,
+    XOR,
+    EQUAL,
+    DISTINCT,
+    ITE
+]
+
 # Numerical ops
 UNARY_MINUS="-"
 MINUS="-"
@@ -62,17 +73,46 @@ GT=">"
 LTE="<="
 LT="<"
 
+NUMERICAL_OPS=[
+    UNARY_MINUS,
+    MINUS,
+    PLUS,
+    MULTIPLY,
+    ABS,
+    GTE,
+    GT,
+    LTE,
+    LT
+]
+
+
 # specific Int ops 
 DIV="div"
 MOD="mod"
 
+INT_OPS=[
+    DIV,        
+    MOD
+]
+
 # specific real ops 
 REAL_DIV="/"
+
+REAL_OPS=[
+    REAL_DIV
+]
 
 # casting ops 
 TO_REAL="to_real"
 TO_INT="to_int"
 IS_INT="is_int"
+
+REAL_INTS=[
+    REAL_DIV,
+    TO_REAL,
+    TO_INT,
+    IS_INT
+]
 
 EQ=[EQUAL,DISTINCT]
 RT_BOOL=[NOT, AND, IMPLIES, OR, XOR]

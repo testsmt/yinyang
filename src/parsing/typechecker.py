@@ -512,39 +512,56 @@ def typecheck_quantifiers(expr,ctxt):
         ctxt.add_to_locals(var,type)
     return typecheck_expr(expr.subterms[0],ctxt)
 
+def typecheck_core(expr,ctxt):
+    if expr.op == NOT:
+        return typecheck_not(expr,ctxt)
+    if expr.op in [AND,OR,XOR,IMPLIES]:
+        return typecheck_nary_bool(expr,ctxt)
+    if expr.op == ITE:
+        return typecheck_ite(expr,ctxt)
+    if expr.op in EQ:
+        return typecheck_eq(expr,ctxt)
+
+def typecheck_numeral(expr,ctxt):
+    if expr.op == UNARY_MINUS and len(expr.subterms) == 1:
+        return typecheck_unary_minus(expr,ctxt)
+    if expr.op in [MINUS, PLUS, MULTIPLY]:
+        return typecheck_nary_numeral_ret(expr,ctxt)
+    if expr.op in [GT,GTE,LT,LTE]:
+        return typecheck_comp_ops(expr, ctxt)
+
+def typecheck_int_ops(expr,ctxt):
+    if expr.op in [DIV, MOD, ABS]:
+        return typecheck_nary_int_ret(expr,ctxt)
+
+def typecheck_real_ops(expr,ctxt):
+    if expr.op == REAL_DIV: 
+        return typecheck_real_div(expr,ctxt)
+
+def typecheck_real_ints_ops(expr,ctxt):
+    if expr.op == TO_REAL:
+        return typecheck_to_real(expr, ctxt) 
+    if expr.op == TO_INT:
+        return typecheck_to_int(expr, ctxt) 
+    if expr.op == IS_INT:
+        return typecheck_is_int(expr, ctxt) 
+
 def typecheck_expr(expr, ctxt):
     # print("expr", expr) 
     # print("type(expr)", type(expr))
-    # TODO: consolidate CORE, REAL and INT 
     if expr.is_const or expr.is_var or expr.is_indexed_id:
         return expr.type
     if expr.op:
-        if expr.op == NOT:
-            return typecheck_not(expr,ctxt)
-        if expr.op == UNARY_MINUS and len(expr.subterms) == 1:
-            return typecheck_unary_minus(expr,ctxt)
-        if expr.op in [MINUS, PLUS, MULTIPLY]:
-            return typecheck_nary_numeral_ret(expr,ctxt)
-        if expr.op in [AND,OR,XOR]:
-            return typecheck_nary_bool(expr,ctxt)
-        if expr.op in [DIV, MOD, ABS]:
-            return typecheck_nary_int_ret(expr,ctxt)
-        if expr.op == REAL_DIV: 
-            return typecheck_real_div(expr,ctxt)
-        if expr.op == MINUS: 
-            return typecheck_nary_minus(expr,ctxt)
-        if expr.op in EQ:
-            return typecheck_eq(expr,ctxt)
-        if expr.op == ITE:
-            return typecheck_ite(expr,ctxt)
-        if expr.op in [GT,GTE,LT,LTE]:
-            return typecheck_comp_ops(expr, ctxt)
-        if expr.op == TO_REAL:
-            return typecheck_to_real(expr, ctxt) 
-        if expr.op == TO_INT:
-            return typecheck_to_int(expr, ctxt) 
-        if expr.op == IS_INT:
-            return typecheck_is_int(expr, ctxt) 
+        if expr.op in CORE_OPS:  
+            return typecheck_core(expr,ctxt)
+        if expr.op in NUMERICAL_OPS:
+            return typecheck_numeral(expr,ctxt) 
+        if expr.op in INT_OPS:  
+            return typecheck_int_ops(expr,ctxt)
+        if expr.op in REAL_OPS: 
+            return typecheck_real_ops(expr,ctxt)
+        if expr.op in REAL_INTS:
+            return typecheck_real_ints_ops(expr,ctxt) 
         if expr.op in STRING_OPS:
             return typecheck_string_ops(expr,ctxt)
         if expr.op in ARRAY_OPS:
@@ -555,6 +572,4 @@ def typecheck_expr(expr, ctxt):
             return typecheck_fp_ops(expr,ctxt)
     if expr.quantifier: 
         return typecheck_quantifiers(expr,ctxt) 
-
-    # TODO raise exception - type-checking failed
-    # in non-strict case, just return Unknown
+    return UNKNOWN
