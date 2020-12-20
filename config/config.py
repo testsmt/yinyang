@@ -23,6 +23,7 @@ crash_msgs = [
     "Aborted"
 ]
 
+
 ignore_msgs = [
     "unexpected char",
     "failed to open file",

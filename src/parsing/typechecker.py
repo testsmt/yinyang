@@ -19,23 +19,36 @@ class Context:
         self.locals[var] = type
 
 
-# TODO: give more meaningful expression  
 class TypeCheckError(Exception):
-    def __init__(self, expr):
-        self.message="(error Typechecker: Ill-typed expression) \nexpr: " + expr.__str__() 
+    def __init__(self, expr, subterm=None, expected=None, actual=None):
+        self.message="Ill-typed expression \nterm: \t \t" + expr.__str__() +"\n"
+        if isinstance(subterm, list):   
+            s="["+subterm[0]
+            for term in subterm[1:]:  
+                s+=term.__str__() + " "#TODO:
+            s+="]"
+            self.message+="faulty subterm:\t"+subterm.__str__()+"\n" 
+        else:
+            self.message+="faulty subterm:\t"+subterm.__str__()+"\n" 
+
+        self.message+="expected: \t"+str(expected)+"\n"
+        self.message+="actual: \t"+str(actual)
         super().__init__(self.message)
 
 def typecheck_not(expr, ctxt=[]):
     """ (not Bool Bool) """
-    if typecheck_expr(expr.subterms[0],ctxt) != BOOLEAN_TYPE:
-        raise TypeCheckError(expr)
+    typ = typecheck_expr(expr.subterms[0],ctxt)
+    if typ != BOOLEAN_TYPE:
+        raise TypeCheckError(expr, expr.subterms[0], typ, BOOLEAN_TYPE)
     return BOOLEAN_TYPE
 
 def typecheck_unary_minus(expr,ctxt=[]):
-    """ (- Int Int) """
-    """ (- Real Real) """
-    if not typecheck_expr(expr.subterms[0],ctxt) in [INTEGER_TYPE, REAL_TYPE]:
-        raise TypeCheckError(expr)
+    """ (- Int Int) 
+        (- Real Real) 
+    """
+    typ = typecheck_expr(expr.subterms[0],ctxt)
+    if not typ in [INTEGER_TYPE, REAL_TYPE]:
+        raise TypeCheckError(expr, expr.subterms[0], [INTEGER_TYPE, REAL_TYPE], typ)
     return typecheck_expr(expr.subterms[0],ctxt)
 
 def typecheck_nary_numeral_ret(expr, ctxt=[]):
@@ -49,10 +62,11 @@ def typecheck_nary_numeral_ret(expr, ctxt=[]):
     """
     typ = typecheck_expr(expr.subterms[0],ctxt)
     if typ not in [INTEGER_TYPE, REAL_TYPE]:
-        raise TypeCheckError(expr) 
+        raise TypeCheckError(expr, expr.subterms[0], [INTEGER_TYPE, REAL_TYPE], typ) 
     for term in expr.subterms[1:]:
-        if typecheck_expr(term,ctxt) != typ:
-           raise TypeCheckError(term) 
+        t = typecheck_expr(term,ctxt)
+        if t != typ:
+           raise TypeCheckError(expr, term, typ, t) 
     return typ 
 
 def typecheck_nary_int_ret(expr, ctxt=[]):
@@ -61,8 +75,9 @@ def typecheck_nary_int_ret(expr, ctxt=[]):
         (abs Int Int)
     """
     for term in expr.subterms:
-        if typecheck_expr(term,ctxt) != INTEGER_TYPE:
-           raise TypeCheckError(expr) 
+        t = typecheck_expr(term,ctxt)
+        if t != INTEGER_TYPE:
+           raise TypeCheckError(expr, term, INTEGER_TYPE, t) 
     return INTEGER_TYPE 
 
 def typecheck_eq(expr, ctxt=[]):
@@ -71,17 +86,20 @@ def typecheck_eq(expr, ctxt=[]):
     """
     typ = typecheck_expr(expr.subterms[0],ctxt)
     for term in expr.subterms[1:]:
-        if typecheck_expr(term,ctxt) != typ:
-           print("expected",typ)
-           print("actual", typecheck_expr(term,ctxt))
-           raise TypeCheckError(term) 
+        t = typecheck_expr(term,ctxt)
+        if t != typ:
+           raise TypeCheckError(expr, term, t,typ) 
     return BOOLEAN_TYPE
 
 def typecheck_ite(expr, ctxt=[]):
     """ (par (A) (ite Bool A A A)) """
-    if typecheck_expr(expr.subterms[0],ctxt) != BOOLEAN_TYPE and\
-        typecheck_expr(expr.subterms[1],ctxt) != typecheck_expr(expr.subterms[2],ctxt):
-        raise TypeCheckError(expr)
+    typ=typecheck_expr(expr.subterms[0],ctxt)
+    if typecheck_expr(expr.subterms[0],ctxt) != BOOLEAN_TYPE: 
+        raise TypeCheckError(expr, expr.subterms[0], typ, BOOLEAN_TYPE)
+    t1 = typecheck_expr(expr.subterms[1],ctxt)
+    t2 = typecheck_expr(expr.subterms[2],ctxt)
+    if t1 != t2: 
+       raise TypeCheckError(expr, expr.subterms[2], t1, t2)
     return typecheck_expr(expr.subterms[1],ctxt)
 
 def typecheck_nary_bool(expr, ctxt=[]):
@@ -90,8 +108,9 @@ def typecheck_nary_bool(expr, ctxt=[]):
         (xor Bool Bool Bool :left-assoc)
     """
     for term in expr.subterms:
-        if typecheck_expr(term, ctxt) != BOOLEAN_TYPE:
-            raise TypeCheckError(expr)
+        typ = typecheck_expr(term, ctxt)
+        if typ != BOOLEAN_TYPE:
+            raise TypeCheckError(expr,term, BOOLEAN_TYPE, typ)
     return BOOLEAN_TYPE
 
 def typecheck_comp_ops(expr, ctxt):
@@ -107,48 +126,55 @@ def typecheck_comp_ops(expr, ctxt):
     """
     typ = typecheck_expr(expr.subterms[0],ctxt)
     if typ not in [INTEGER_TYPE, REAL_TYPE]:
-        raise TypeCheckError(expr) 
+        raise TypeCheckError(expr, expr.subterms[0],[INTEGER_TYPE, REAL_TYPE],typ) 
+
     for term in expr.subterms[1:]:
-        if typecheck_expr(term, ctxt) not in [INTEGER_TYPE, REAL_TYPE]:
-            raise TypeCheckError(expr)
+        t = typecheck_expr(term, ctxt)
+        if t not in [INTEGER_TYPE, REAL_TYPE]:
+            raise TypeCheckError(expr,term,[INTEGER_TYPE, REAL_TYPE],t)
     return BOOLEAN_TYPE
 
 def typecheck_to_real(expr, ctxt):
     """ (to_real Int Real) """
-    if not typecheck(expr,ctxt) == INTEGER_TYPE:
-         raise TypeCheckError(expr)
+    t = typecheck(expr,ctxt)
+    if t != INTEGER_TYPE:
+         raise TypeCheckError(expr, expr, INTEGER_TYPE,t)
     return REAL_TYPE
 
 def typecheck_to_int(expr, ctxt):
     """ (to_int Real Int) """
-    if not typecheck_expr(expr,ctxt) == REAL_TYPE:
-         raise TypeCheckError(expr)
+    t = typecheck_expr(expr,ctxt)
+    if t != REAL_TYPE:
+         raise TypeCheckError(expr, expr, REAL_TYPE, t)
     return INTEGER_TYPE
 
 def typecheck_is_int(expr, ctxt): 
     """ (is_int Real Bool) """
-    if not typecheck_expr(expr,ctxt) == REAL_TYPE:
-        raise TypeCheckError(expr)
+    t = typecheck_expr(expr,ctxt)
+    if t == REAL_TYPE:
+        raise TypeCheckError(expr, expr, REAL_TYPE, t)
     return BOOLEAN_TYPE 
 
 def typecheck_real_div(expr, ctxt): 
     """ (/ Real Real Real :left-assoc) """
     for term in expr.subterms:
-        if typecheck_expr(term,ctxt) != REAL_TYPE:
-           raise TypeCheckError(expr) 
+        t = typecheck_expr(term,ctxt)
+        if t != REAL_TYPE:
+           raise TypeCheckError(expr, expr, REAL_TYPE, t) 
     return REAL_TYPE 
 
 def typecheck_string_concat(expr, ctxt):
     """ (str.++ String String String :left-assoc)"""
     for term in expr.subterms:
-        if typecheck_expr(term, ctxt) != STRING_TYPE:
-            raise TypeCheckError(expr)
+        t = typecheck_expr(term, ctxt)
+        if t != STRING_TYPE:
+            raise TypeCheckError(expr, expr, STRING_TYPE, t)
     return STRING_TYPE 
 
 def typecheck_strlen(expr, ctxt):
     """ (str.len String Int)"""
     if typecheck_expr(expr.subterms[0],ctxt) != STRING_TYPE: 
-        raise TypeCheckError(expr)
+        raise TypeCheckError(expr, expr, STRING_TYPE, t)
     return INTEGER_TYPE
 
 def typecheck_nary_string_rt_bool(expr, ctxt):
@@ -159,15 +185,16 @@ def typecheck_nary_string_rt_bool(expr, ctxt):
         (str.contains String String Bool)
     """
     for term in expr.subterms:
-        typ=typecheck_expr(term, ctxt)
-        if typecheck_expr(term, ctxt) != STRING_TYPE:
-            raise TypeCheckError(expr)
+        t = typecheck_expr(term, ctxt)
+        if t != STRING_TYPE:
+            raise TypeCheckError(expr, expr, STRING_TYPE, t)
     return BOOLEAN_TYPE
 
 def typecheck_str_to_re(expr, ctxt):
     """ (str.to_re String RegLan) """  
-    if typecheck_expr(expr,ctxt) != STRING_TYPE: 
-        raise TypeCheckError(expr)
+    t = typecheck_expr(expr,ctxt)
+    if t != STRING_TYPE: 
+        raise TypeCheckError(expr, expr, STRING_TYPE, t)
     return REGEXP_TYPE  
 
 def typecheck_regex_consts(expr, ctxt):
@@ -180,8 +207,9 @@ def typecheck_regex_consts(expr, ctxt):
 
 def typecheck_str_in_re(expr,ctxt):
     """ (str.in_re String RegLan Bool) """
-    if typecheck_expr(expr,ctxt) != REGEXP_TYPE:
-        raise TypeCheckError(expr)
+    t = typecheck_expr(expr,ctxt)
+    if t != REGEXP_TYPE:
+        raise TypeCheckError(expr,expr, REGEXP_TYPE, t)
     return BOOLEAN_TYPE
 
 def typecheck_regex_unary(expr,ctxt):
@@ -191,8 +219,9 @@ def typecheck_regex_unary(expr,ctxt):
     (re.opt RegLan RegLan)
     (re.+ RegLan RegLan)
     """
-    if typecheck_expr(expr,ctxt) != REGEXP_TYPE:
-        raise TypeCheckError(expr)
+    t = typecheck_expr(expr,ctxt)
+    if t != REGEXP_TYPE:
+        raise TypeCheckError(expr,expr, REGEXP_TYPE,t)
     return REGEXP_TYPE
 
 def typecheck_regex_binary(expr, ctxt):
@@ -203,35 +232,41 @@ def typecheck_regex_binary(expr, ctxt):
     (re.inter RegLan RegLan RegLan :left-assoc)
     """
     for term in expr.subterms:
-        if not typecheck_expr(term, ctxt) != REGEXP_TYPE:
-            raise TypeCheckError(expr)
+        t = typecheck_expr(term, ctxt)
+        if t != REGEXP_TYPE:
+            raise TypeCheckError(expr, term, REGEXP_TYPE, t)
     return REGEXP_TYPE 
     
 def typecheck_str_at(expr,ctxt):
     """ 
     (str.at String Int String)
     """
-    if typecheck_expr(expr.subterms[0]) != STRING_TYPE or\
-       typecheck_expr(expr.subterms[1]) != INTEGER_TYPE:
-        raise TypeCheckError(expr)
+    t1 = typecheck_expr(expr.subterms[0]) 
+    t2 = typecheck_expr(expr.subterms[1])
+    if t1 != STRING_TYPE: 
+        raise TypeCheckError(expr, expr, STRING_TYPE, t1)
+    if t2 != INTEGER_TYPE:
+        raise TypeCheckError(expr, expr, INTEGER_TYPE, t2)
     return STRING_TYPE 
 
 def typecheck_substr(expr,ctxt): 
     """
     (str.substr String Int Int String)
     """
-    if typecheck_expr(expr.subterms[0]) != STRING_TYPE or\
-       typecheck_expr(expr.subterms[1]) != INTEGER_TYPE or\
-       typecheck_expr(expr.subterms[2]) != INTEGER_TYPE: 
-        raise TypeCheckError(expr)
+    t1 = typecheck_expr(expr.subterms[0])
+    t2 = typecheck_expr(expr.subterms[1]) 
+    t3 = typecheck_expr(expr.subterms[2]) 
+    if t1 != STRING_TYPE or t2 != INTEGER_TYPE or t3 != INTEGER_TYPE: 
+        raise TypeCheckError(expr, expr, [STRING_TYPE, INTEGER_TYPE, INTEGER_TYPE],[t1,t2,t3])
     return STRING_TYPE 
 
 def typecheck_index_of(expr,ctxt):
     """ (str.indexof String String Int Int) """ 
-    if typecheck_expr(expr.subterms[0]) != STRING_TYPE or\
-       typecheck_expr(expr.subterms[1]) != STRING_TYPE or\
-       typecheck_expr(expr.subterms[2]) != INTEGER_TYPE: 
-        raise TypeCheckError(expr)
+    t1 = typecheck_expr(expr.subterms[0])
+    t2 = typecheck_expr(expr.subterms[1]) 
+    t3 = typecheck_expr(expr.subterms[2]) 
+    if t1 != STRING_TYPE or t2 != STRING_TYPE or t3 != INTEGER_TYPE: 
+        raise TypeCheckError(expr, expr, [STRING_TYPE, STRING_TYPE, INTEGER_TYPE],[t1,t2,t3])
     return INTEGER_TYPE
 
 def typecheck_replace(expr,ctxt):
@@ -239,10 +274,13 @@ def typecheck_replace(expr,ctxt):
     (str.replace String String String String)
     (str.replace_all String String String String)
     """
-    if typecheck_expr(expr.subterms[0]) != STRING_TYPE or\
-       typecheck_expr(expr.subterms[1]) != STRING_TYPE or\
-       typecheck_expr(expr.subterms[2]) != STRING_TYPE: 
-        raise TypeCheckError(expr)
+    t1 = typecheck_expr(expr.subterms[0])
+    t2 = typecheck_expr(expr.subterms[1]) 
+    t3 = typecheck_expr(expr.subterms[2]) 
+    if t1 != STRING_TYPE or\
+       t2 != STRING_TYPE or\
+       t3 != STRING_TYPE: 
+        raise TypeCheckError(expr, expr, [STRING_TYPE,STRING_TYPE, STRING_TYPE],[t1,t2,t3])
     return STRING_TYPE 
 
 def typecheck_replace_re(expr,ctxt):
@@ -250,19 +288,24 @@ def typecheck_replace_re(expr,ctxt):
     (str.replace_re String RegLan String String) 
     (str.replace_re_all String RegLan String String) 
     """
+    t1 = typecheck_expr(expr.subterms[0])
+    t2 = typecheck_expr(expr.subterms[1])
+    t3 = typecheck_expr(expr.subterms[2])
     if typecheck_expr(expr.subterms[0]) != STRING_TYPE or\
        typecheck_expr(expr.subterms[1]) != REGEXP_TYPE or\
        typecheck_expr(expr.subterms[2]) != STRING_TYPE: 
-        raise TypeCheckError(expr)
+        raise TypeCheckError(expr, expr, [STRING_TYPE,STRING_TYPE, STRING_TYPE],[t1,t2,t3])
     return STRING_TYPE 
 
 def typecheck_re_range(expr, ctxt):
     """
     (re.range String String RegLan)
     """
-    if typecheck_expr(expr.subterms[0]) != STRING_TYPE or\
-       typecheck_expr(expr.subterms[1]) != STRING_TYPE: 
-        raise TypeCheckError(expr)
+    t1 = typecheck_expr(expr.subterms[0])
+    t2 = typecheck_expr(expr.subterms[1])
+
+    if t1 != STRING_TYPE or t2 != STRING_TYPE: 
+        raise TypeCheckError(expr, expr, [STRING_TYPE,STRING_TYPE],[t1,t2])
     return REGEXP_TYPE 
 
 def typecheck_str_to_int(expr, ctxt):
@@ -270,16 +313,19 @@ def typecheck_str_to_int(expr, ctxt):
     (str.to_code String Int) 
     (str.to_int String Int)
     """
-    if typecheck_expr(expr.subterms[0]) != STRING_TYPE:
-        raise TypeCheckError(expr)
+    t = typecheck_expr(expr.subterms[0])
+
+    if t != STRING_TYPE:
+        raise TypeCheckError(expr, expr, STRING_TYPE, t)
     return INTEGER_TYPE 
 
 def typecheck_is_digit(expr,ctxt):
     """
     (str.is_digit String Bool)
     """
-    if typecheck_expr(expr.subterms[0]) != STRING_TYPE:
-        raise TypeCheckError(expr)
+    t = typecheck_expr(expr.subterms[0])
+    if t != STRING_TYPE:
+        raise TypeCheckError(expr, expr, BOOLEAN_TYPE, t)
     return BOOLEAN_TYPE 
 
 def typecheck_int_to_string(expr,ctxt):
@@ -287,8 +333,9 @@ def typecheck_int_to_string(expr,ctxt):
     (str.from_code Int String)
     (str.from_int Int String)
     """
-    if typecheck_expr(expr.subterms[0]) != INTEGER_TYPE:
-        raise TypeCheckError(expr)
+    t = typecheck_expr(expr.subterms[0])
+    if t != INTEGER_TYPE:
+        raise TypeCheckError(expr, expr, INTEGER_TYPE, t)
     return STRING_TYPE 
 
 def typecheck_string_ops(expr, ctxt):
@@ -329,10 +376,10 @@ def typecheck_select(expr,ctxt):
     """
     array_type = typecheck_expr(expr.subterms[0],ctxt) 
     if isinstance(array_type, ARRAY_TYPE):
-        raise TypeCheckError(expr)  
+        raise TypeCheckError(expr, expr, ARRAY_TYPE, array_type)  
     x_type = typecheck_expr(expr.subterms[1],ctxt)
     if x_type != array_type.index_type: 
-        raise TypeCheckError(expr)  
+        raise TypeCheckError(expr, expr, array_type.index_type, x_type)  
     return array_type.payload_type
 
 def typecheck_store(expr,ctxt):
@@ -341,11 +388,11 @@ def typecheck_store(expr,ctxt):
     """
     array_type = typecheck_expr(expr.subterms[0],ctxt) 
     if isinstance(array_type, ARRAY_TYPE):
-        raise TypeCheckError(expr)  
+        raise TypeCheckError(expr,expr, ARRAY_TYPE, array_type)  
     x_type = typecheck_expr(expr.subterms[1],ctxt)
     y_type = typecheck_expr(expr.subterms[2],ctxt)
     if x_type != array_type.index_type and y_type != array_type.payload_type: 
-        raise TypeCheckError(expr)  
+        raise TypeCheckError(expr, expr,[array_type.index_type,array_type.payload_type], [x_type, y_type])  
     return array_type 
 
 def typecheck_array_ops(expr,ctxt):
@@ -359,8 +406,10 @@ def typecheck_bv_concat(expr,ctxt):
     (concat (_ BitVec i) (_ BitVec j) (_ BitVec m)) 
     """
     arg1,arg2 = expr.subterms[0], expr.subterms[1]
-    if not isinstance(arg1,BITVECTOR_TYPE) or not isinstance(arg2,BITVECTOR_TYPE):  
-        raise TypeCheckError(expr)  
+    t1 = typecheck_expr(expr.subterms[0],ctxt)
+    t2 = typecheck_expr(expr.subterms[1],ctxt)
+    if not isinstance(t1,BITVECTOR_TYPE) or not isinstance(t2,BITVECTOR_TYPE):  
+        raise TypeCheckError(expr, [arg1,arg2], [BITVECTOR_TYPE, BITVECTOR_TYPE], [t1,t2])  
     bitwidth = arg1.bitwidth + arg2.bitwidth 
     return BITVECTOR_TYPE(bitwidth)
 
@@ -369,8 +418,9 @@ def typecheck_bv_unary(expr,ctxt):
      (op1 (_ BitVec m) (_ BitVec m))
     """
     arg = expr.subterms[0]
-    if not isinstance(arg,BITVECTOR_TYPE):
-        raise TypeCheckError(expr)  
+    t = typecheck_expr(expr.subterms[0],ctxt)
+    if not isinstance(t,BITVECTOR_TYPE):
+        raise TypeCheckError(expr, arg, BITVECTOR_TYPE, t)  
     return arg.type
 
 def typecheck_bv_binary(expr,ctxt):
@@ -378,8 +428,11 @@ def typecheck_bv_binary(expr,ctxt):
     (op2 (_ BitVec m) (_ BitVec m) (_ BitVec m))
     """
     arg1,arg2 = expr.subterms[0], expr.subterms[1]
-    if not isinstance(arg1,BITVECTOR_TYPE) or not isinstance(arg2,BITVECTOR_TYPE):  
-        raise TypeCheckError(expr)  
+    t1 = typecheck_expr(expr.subterms[0],ctxt)
+    t2 = typecheck_expr(expr.subterms[1],ctxt)
+    
+    if not isinstance(t1,BITVECTOR_TYPE) or not isinstance(t2,BITVECTOR_TYPE):  
+        raise TypeCheckError(expr, [arg1,arg2], [BITVECTOR_TYPE, BITVECTOR_TYPE], [t1,t2])  
     return BITVECTOR_TYPE(arg1.bitwidth)
 
 def typecheck_bvult(expr,ctxt):
@@ -387,8 +440,11 @@ def typecheck_bvult(expr,ctxt):
     (bvult (_ BitVec m) (_ BitVec m) Bool)
     """
     arg1,arg2 = expr.subterms[0], expr.subterms[1]
+    t1 = typecheck_expr(expr.subterms[0],ctxt)
+    t2 = typecheck_expr(expr.subterms[1],ctxt)
+
     if not isinstance(arg1,BITVECTOR_TYPE) or not isinstance(arg2,BITVECTOR_TYPE):  
-        raise TypeCheckError(expr)  
+        raise TypeCheckError(expr, [arg1,arg2], [BITVECTOR_TYPE, BITVECTOR_TYPE], [t1,t2])  
     return BOOLEAN_TYPE
 
 def typecheck_bv_ops(expr,ctxt):
@@ -408,6 +464,8 @@ def typecheck_fp_unary(expr, ctxt):
     """
     if not isinstance(typecheck_expr(expr.subterms[0],ctxt),FP_TYPE):
         raise TypeCheckError(expr)  
+        raise TypeCheckError(expr, [arg1,arg2], [BITVECTOR_TYPE, BITVECTOR_TYPE], [t1,t2])  
+
     return typecheck_expr(expr.subterms[0],ctxt)
 
 def typecheck_fp_binary_arith(expr, ctxt):
@@ -546,12 +604,13 @@ def typecheck_real_ints_ops(expr,ctxt):
     if expr.op == IS_INT:
         return typecheck_is_int(expr, ctxt) 
 
-def typecheck_expr(expr, ctxt):
-    # print("expr", expr) 
-    # print("type(expr)", type(expr))
+def typecheck_expr(expr, ctxt=Context({},{})):
     if expr.is_const or expr.is_var or expr.is_indexed_id:
-        return expr.type
-    if expr.op:
+        return expr.type 
+        # TODO: Dominik: here could still be some trouble, especially for let expressions 
+        # globals and their types should be returned by the parser; everything else should be  
+        # handled here 
+    elif expr.op:
         if expr.op in CORE_OPS:  
             return typecheck_core(expr,ctxt)
         if expr.op in NUMERICAL_OPS:
@@ -570,6 +629,6 @@ def typecheck_expr(expr, ctxt):
             return typecheck_bv_ops(expr,ctxt)
         if expr.op in FP_OPS:
             return typecheck_fp_ops(expr,ctxt)
-    if expr.quantifier: 
+    elif expr.quantifier: 
         return typecheck_quantifiers(expr,ctxt) 
     return UNKNOWN

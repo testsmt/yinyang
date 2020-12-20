@@ -8,7 +8,6 @@ from src.parsing.typechecker import *
 from src.parsing.types import *
 
 
-
 class TypecheckerTestCase(unittest.TestCase):
     def test_core_theory(self):
         formula_str=\
@@ -40,7 +39,6 @@ class TypecheckerTestCase(unittest.TestCase):
         self.assertEqual(typecheck_expr(ite), BOOLEAN_TYPE)
 
     
-    # TODO: expect type error here
     def test_error(self):
         formula_str=\
 """
@@ -50,7 +48,13 @@ class TypecheckerTestCase(unittest.TestCase):
 (check-sat)
 """
         equal = parse_str(formula_str).commands[2].term
-        # print(typecheck_expr(equal))
+        no_excpt=True
+        try: 
+            typecheck_expr(equal)
+        except:
+            no_except=False
+        self.assertFalse(no_except)
+
 
     def test_typecheck_nary_int_ret(self):
         formula_str=\
@@ -96,9 +100,7 @@ class TypecheckerTestCase(unittest.TestCase):
         for i in range(1, 4):
             typecheck_expr(formula.commands[i].term)
 
-#TODO: arrays 
 
 if __name__ == '__main__':
     TypecheckerTestCase.test_typechecker()
     unittest.main()
-
