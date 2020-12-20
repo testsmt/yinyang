@@ -31,8 +31,9 @@ def get_z3():
     return os.path.abspath("z3-4.8.6-x64-ubuntu-16.04/bin/z3")
 
 def cleanup():
-    subprocess.getoutput("rm -rf cvc4*")
-    subprocess.getoutput("rm -rf z3*")
+    pass
+    # subprocess.getoutput("rm -rf cvc4*")
+    # subprocess.getoutput("rm -rf z3*")
 
 cleanup()
 #

@@ -17,7 +17,7 @@ def is_sound(res1, res2):
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
     output = subprocess.getoutput(cmd)
-    # print(output)
+    print(output)
     crash_issues = None
     soundness_issues=None
     duplicate_issues=None
@@ -187,7 +187,7 @@ def test_unsoundness():
         os.system("rm -rf "+solver2)
 
 def test_soundness():
-    print("7. Soundness")
+    print("8. Soundness")
     values = ["sat", "unsat", "unknown"]
     k = random.randint(1,20)
     res1 = random.choices(values, k=k)
@@ -214,6 +214,77 @@ def test_soundness():
         os.system("rm -rf "+solver1)
         os.system("rm -rf "+solver2)
 
+
+def test_duplicate_list():
+    print("9. Test duplicate list")
+    solver = "crash.py"
+    msg=\
+"""
+Fatal failure within void CVC4::SmtEngine::checkUnsatCore() at src/smt/smt_mock.cpp:1489
+Internal error detectedSmtEngine::checkMock(): produced core was satisfiable.
+Aborted
+"""
+    config_py=\
+"""
+solvers = []
+crash_list = [
+    "Exception",
+    "lang.AssertionError",
+    "lang.Error",
+    "runtime error",
+    "LEAKED",
+    "Leaked",
+    "Segmentation fault",
+    "segmentation fault",
+    "segfault",
+    "ASSERTION",
+    "Assertion",
+    "Fatal failure",
+    "Internal error detected",
+    "an invalid model was generated",
+    "Failed to verify",
+    "failed to verify",
+    "ERROR: AddressSanitizer:",
+    "invalid expression",
+    "Aborted"
+]
+
+duplicate_list = [
+    "src/smt/smt_mock.cpp:1489"
+]
+
+ignore_list = [
+    "(error ",
+    "unsupport",
+    "unexpected char",
+    "failed to open file",
+    "Expected result sat but got unsat",
+    "Expected result unsat but got sat",
+    "Parse Error",
+    "Cannot get model",
+    "Symbol 'str.to-re' not declared as a variable",
+    "Symbol 'str.to.re' not declared as a variable",
+    "Unimplemented code encountered",
+]
+
+"""
+    os.system("mv config/config.py config/config.py.orig")
+    with open("config/config.py", "w") as f:
+        f.write(config_py)
+    create_mocksolver_msg(msg,solver)
+    first_config=os.path.abspath(solver)
+    second_config=os.path.abspath(solver)
+    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(first_config, second_config, FN,OPTS)
+
+    if duplicate != 1:
+        print("[ERROR] Duplicate crash cannot be captured.")
+        print(cmd)
+        ERRORS=True
+    else:
+        os.system("rm -rf "+solver)
+    os.system("mv config/config.py.orig config/config.py")
+
+
 if __name__ == "__main__":
     # Create empty mock.smt2, set fuzzer opts
     FN= "mock.smt2"
@@ -226,6 +297,7 @@ if __name__ == "__main__":
     test_empty_output()
     test_unsoundness()
     test_soundness()
+    test_duplicate_list()
     if not ERRORS:
         print("[SUCCESS] All tests passed.")
 
