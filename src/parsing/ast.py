@@ -130,6 +130,13 @@ class AssertSoft:
             attr_s = " "+a[0] + " " +a[1]
         return "(assert-soft " + self.term.__str__()  +attr_s+")"
 
+class Comment:
+    def __init__(self, txt):
+        self.txt = txt 
+
+    def __str__(self):
+        return "; "+ self.txt       
+
 class Define:
     def __init__(self, symbol, term):
         self.term = term

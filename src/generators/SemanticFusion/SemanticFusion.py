@@ -10,7 +10,9 @@ class SemanticFusion(Generator):
     def __init__(self, seeds, args):
         super().__init__(seeds,args)
         assert(len(seeds) == 2)
-        self.formula1, self.formula2 = parse_file(seeds[0],silent=False), parse_file(seeds[1], silent=False)
+        self.seed1 = seeds[0]
+        self.seed2 = seeds[1]
+        self.formula1, self.formula2 = parse_file(self.seed1,silent=False), parse_file(self.seed2, silent=False)
 
         self.config_file = self.args.fusionfun
         self.oracle = self.args.oracle
@@ -95,6 +97,12 @@ class SemanticFusion(Generator):
         add_var_decls(formula, fusion_vars)
 
         return formula
+    
+    def _add_seedinfo(self,formula):
+       formula.commands = [Comment(self.seed2)] + formula.commands
+       formula.commands = [Comment(self.seed1)] + formula.commands
+       return formula
+
 
     def generate(self):
         if self.formula1.free_var_occs == [] or self.formula2.free_var_occs == []:
@@ -108,4 +116,4 @@ class SemanticFusion(Generator):
         if not triplets:
             return None, False
         fused = self.fuse(occs1, occs2, formula1, formula2, triplets)
-        return fused, True
+        return self._add_seedinfo(fused), True
