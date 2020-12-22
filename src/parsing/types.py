@@ -11,35 +11,46 @@ def sort2type(sort):
     sort = sort.replace("Real", "real")
     sort = sort.replace("Int", "integer")
     sort = sort.replace("String", "string")
+    sort = sort.replace("RoundingMode", "roundingmode")
+    if "FloatingPoint" in sort:
+        print(sort)
+        eb = int(sort.split(" ")[2])
+        sb = int(sort.split(" ")[3][:-1])
+        return FP_TYPE(eb, sb)
     return sort
 
 class ARRAY_TYPE:
     def __init__(self,index_type, payload_type):
-        self.index_type = index_type 
-        self.payload_type = payload_type 
+        self.index_type = index_type
+        self.payload_type = payload_type
 
     def __eq__(self,other):
-        if isinstance(other, self.__class__):  
+        if isinstance(other, self.__class__):
             return self.index_type == other.index_type and\
-                   self.payload_type == other.payload_type  
+                   self.payload_type == other.payload_type
 
 class BITVECTOR_TYPE:
     def __init__(self, bitwidth):
         self.bitwidth = bitwidth
 
     def __eq__(self,other):
-        if isinstance(other, self.__class__):  
+        if isinstance(other, self.__class__):
             return self.bitwidth == other.bitwidth
 
 class FP_TYPE:
     def __init__(self, eb, sb):
-        self.eb = eb 
+        self.eb = eb
         self.sb = sb
-    
+
     def __eq__(self,other):
         if isinstance(other, self.__class__):
             return self.eb == other.eb and self.sb == other.sb
+        if isinstance(other, str):
+            return self.__str__() == other
 
+    def __str__(self):
+        # (_ FloatingPoint eb sb)
+        return "(_ FloatingPoint "+str(self.eb) + " " + str(self.sb)+")"
 
 # Core ops
 NOT="not"
@@ -86,23 +97,23 @@ NUMERICAL_OPS=[
 ]
 
 
-# specific Int ops 
+# specific Int ops
 DIV="div"
 MOD="mod"
 
 INT_OPS=[
-    DIV,        
+    DIV,
     MOD
 ]
 
-# specific real ops 
+# specific real ops
 REAL_DIV="/"
 
 REAL_OPS=[
     REAL_DIV
 ]
 
-# casting ops 
+# casting ops
 TO_REAL="to_real"
 TO_INT="to_int"
 IS_INT="is_int"
@@ -117,7 +128,7 @@ REAL_INTS=[
 EQ=[EQUAL,DISTINCT]
 RT_BOOL=[NOT, AND, IMPLIES, OR, XOR]
 
-# string ops 
+# string ops
 CONCAT="str.++"
 STRLEN="str.len"
 LEXORD="str.<"
@@ -187,13 +198,13 @@ STRING_OPS= [
     STR_FROM_INT
 ]
 
-# Array ops 
+# Array ops
 SELECT="select"
 STORE="store"
 ARRAY_OPS=[SELECT, STORE]
 
-# Bitvector ops  
-BV_CONCAT="concat" 
+# Bitvector ops
+BV_CONCAT="concat"
 BVNOT="bvnot"
 BVNEG="bvneg"
 BVAND="bvand"
@@ -209,7 +220,7 @@ BVULT="bvult"
 BV_OPS=[
     BV_CONCAT,
     BVNOT,
-    BVNEG, 
+    BVNEG,
     BVAND,
     BVOR,
     BVADD,
@@ -221,7 +232,7 @@ BV_OPS=[
     BVULT
 ]
 
-# Floating Point ops 
+# Floating Point ops
 FP_ABS="fp.abs"
 FP_NEG="fp.neg"
 FP_ADD="fp.add"
@@ -237,7 +248,7 @@ FP_MAX="fp.max"
 FP_LEQ="fp.leq"
 FP_LT="fp.lt"
 FP_GEQ="fp.geq"
-FP_GT="fp.gt" 
+FP_GT="fp.gt"
 FP_EQ="fp.eq"
 FP_NORMAL="fp.isNormal"
 FP_ISSUBNORMAL="fp.isSubnormal"

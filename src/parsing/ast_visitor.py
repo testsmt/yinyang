@@ -9,7 +9,7 @@ from .types import *
 class ASTVisitor(SMTLIBv2Visitor):
     def __init__(self, strict=True):
         self.strict = strict
-        self.global_vars = {}
+        self.globals= {}
 
     def visitStart(self, ctx:SMTLIBv2Parser.StartContext):
         return self.visitScript(ctx.script())
@@ -18,13 +18,13 @@ class ASTVisitor(SMTLIBv2Visitor):
         cmds=[]
         for c in ctx.command():
             cmds.append(self.visitCommand(c))
-        return Script(cmds,self.global_vars)
+        return Script(cmds,self.globals)
 
     def add_to_globals(self, identifier, input_sorts, output_sort):
         if len(input_sorts) == 0:
-            self.global_vars[identifier] = sort2type(output_sort)
+            self.globals[identifier] = sort2type(output_sort)
         else:
-            self.global_vars[identifier] = sort2type(input_sorts + " "+ output_sort)
+            self.globals[identifier] = sort2type(input_sorts + " "+ output_sort)
 
     def handleCommand(self, ctx:SMTLIBv2Parser.CommandContext):
         if ctx.cmd_assert():
@@ -316,8 +316,8 @@ class ASTVisitor(SMTLIBv2Visitor):
             name = "(_ "+symbol +" "+ index+")"
             if name in local_vars:
                 return Var(name=name, type=local_vars[name], is_indexed_id=True)
-            elif name in self.global_vars:
-                return Var(name=name, type=self.global_vars[name], is_indexed_id=True)
+            elif name in self.globals:
+                return Var(name=name, type=self.globals[name], is_indexed_id=True)
             else:
                 return name
 
@@ -325,8 +325,8 @@ class ASTVisitor(SMTLIBv2Visitor):
             name = self.visitSymbol(ctx.symbol())
             if name in local_vars:
                 return Var(name=name, type=local_vars[name])
-            elif name in self.global_vars:
-                return Var(name=name, type=self.global_vars[name])
+            elif name in self.globals:
+                return Var(name=name, type=self.globals[name])
             else:
                 return self.visitSymbol(ctx.symbol())
         raise ASTException("No match for identifier: ... |... |... ")
