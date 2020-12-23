@@ -191,7 +191,15 @@ class Fuzzer:
                         self.statistic.soundness += 1
                         report_id = self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
                         if reference:
-                            self.report(reference[1], "incorrect", reference[0], reference[2], reference[3], report_id)
+                            # Produce a diff bug report for soundness bugs in 
+                            # the opfuzz case 
+                            ref_cli = reference[0]
+                            ref_stdout = reference[1]
+                            ref_stderr = reference[2]
+                            self.report_diff(scratchfile, "incorrect", 
+                                             ref_cli, ref_stdout, ref_stderr, 
+                                             solver_cli, stdout, stderr,
+                                             random_string())
                         return False # stop testing
         return True
 
@@ -204,22 +212,50 @@ class Fuzzer:
     def in_ignore_list(self,stdout, stderr):
         return in_list(stdout,stderr,ignore_list)
 
-    def report(self, trigger, bugtype, cli, stdout, stderr, report_id):
+    def report(self, scratchfile, bugtype, cli, stdout, stderr, report_id):
         plain_cli = plain(cli)
         #format: <solver><{crash,wrong,invalid_model}><seed-name>.<random-string>.smt2
         report = "%s/%s-%s-%s-%s.smt2" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
-        try: shutil.copy(trigger, report)
+        try: shutil.copy(scratchfile, report)
         except Exception as e:
             print(e)
             exit(0)
         logpath = "%s/%s-%s-%s-%s.output" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
         with open(logpath, 'w') as log:
-            log.write("command: "+ plain_cli+"\n")
+            log.write("command: "+ cli+"\n")
             log.write("stderr:\n")
             log.write(stderr)
             log.write("stdout:\n")
             log.write(stdout)
         return report_id
+
+    def report_diff(self, scratchfile, bugtype, 
+                    ref_cli, ref_stdout, ref_stderr, 
+                    sol_cli, sol_stdout, sol_stderr,
+                    report_id):
+        plain_cli = plain(sol_cli)
+        #format: <solver><{crash,wrong,invalid_model}><seed-name>.<random-string>.smt2
+        report = "%s/%s-%s-%s-%s.smt2" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
+        try: shutil.copy(scratchfile, report)
+        except Exception as e:
+            print(e)
+            exit(0)
+        logpath = "%s/%s-%s-%s-%s.output" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
+        with open(logpath, 'w') as log:
+            log.write("*** REFERENCE \n")
+            log.write("command: "+ ref_cli+"\n")
+            log.write("stderr:\n")
+            log.write(ref_stderr)
+            log.write("stdout:\n")
+            log.write(ref_stdout)
+            log.write("\n\n*** INCORRECT \n")
+            log.write("command: "+ sol_cli+"\n")
+            log.write("stderr:\n")
+            log.write(sol_stderr)
+            log.write("stdout:\n")
+            log.write(sol_stdout)
+        return report_id
+
 
     def __del__(self):
         if not self.args.keep_mutants:
