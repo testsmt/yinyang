@@ -4,7 +4,7 @@ import copy
 from src.parsing.parse import *
 from src.generators.Generator import Generator
 from src.generators.SemanticFusion.VariableFusion import *
-from src.generators.SemanticFusion.util import *
+from src.generators.SemanticFusion.util import random_var_triplets, random_tuple_list, disjunction, conjunction, cvars
 
 class SemanticFusion(Generator):
     def __init__(self, seeds, args):
@@ -54,19 +54,19 @@ class SemanticFusion(Generator):
                 self.templates[sort].append(template)
 
 
-    def fuse(self, occs1, occs2, formula1, formula2, triplets):
+    def fuse(self, formula1, formula2):
         # Generate random variable pairs from both formulas
-        rand_var_pairs = random_tuple_list(cvars(occs1), cvars(occs2))
+        triplets = random_var_triplets(formula1.global_vars, formula2.global_vars, self.templates)
 
-        # For each variable pair choose a suitable template for fusion
-        # and generate the corresponding triplet (x, y, template)
-        triplets = []
-        for pair in rand_var_pairs:
-            x, y = pair[0], pair[1]
-            if x.type == y.type:
-                if x.type in self.templates:
-                    template = random.choice(self.templates[x.type])
-                    triplets.append((x, y, template))
+        # # For each variable pair choose a suitable template for fusion
+        # # and generate the corresponding triplet (x, y, template)
+        # triplets = []
+        # for pair in rand_var_pairs:
+        #     x, y = pair[0], pair[1]
+        #     if x.type == y.type:
+        #         if x.type in self.templates:
+        #             template = random.choice(self.templates[x.type])
+        #             triplets.append((x, y, template))
 
         # For each triplet (x, y, template) get random variable occurrences occ_x, occ_y
         # to form triplets (occ_x, occ_y, template). Replace occ_x and occ_y from
@@ -74,20 +74,25 @@ class SemanticFusion(Generator):
         fusion_vars = []
         fusion_constr = []
         for triplet in triplets:
-            x, y, template  = triplet[0], triplet[1], triplet[2]
-            occs_x = [occ for occ in occs1 if occ.name == x.name]
-            occs_y = [occ for occ in occs2 if occ.name == y.name]
-            rand_pairs = random_tuple_list(occs_x, occs_y)
-
+            x, y, template, var_type  = triplet[0], triplet[1], triplet[2], triplet[3]
+            z = DeclareFun(x+"_"+y+"_fused","",var_type)
+            fusion_vars.append(z)
+            template = fill_template(x, y, template, var_type)
+            fusion_constr += fusion_contraints(template,var_type)
+            
+            occs_x = [occ for occ in formula1.free_var_occs if occ.name == x]
+            occs_y = [occ for occ in formula2.free_var_occs if occ.name == y]
             # Fusion step
-            for p in rand_pairs:
-                occ_x, occ_y = p[0], p[1]
-                z = DeclareFun(occ_x.name+"_"+occ_y.name+"_fused","",occ_x.type)
-                template = fill_template(occ_x, occ_y, template)
-                occ_x.substitute(occ_x, inv_x(template))
-                occ_y.substitute(occ_y, inv_y(template))
-                fusion_vars.append(z)
-                fusion_constr += fusion_contraints(template)
+
+            k = random.randint(0, len(occs_x))
+            occs_x = random.sample(occs_x, k)
+            k = random.randint(0, len(occs_y))
+            occs_y = random.sample(occs_y, k)
+
+            for occ in occs_x:
+                occ.substitute(occ, inv_x(template))
+            for occ in occs_y:
+                occ.substitute(occ, inv_y(template))
 
         if self.oracle == "unsat":
             formula = disjunction(formula1, formula2)
@@ -105,15 +110,14 @@ class SemanticFusion(Generator):
 
 
     def generate(self):
-        if self.formula1.free_var_occs == [] or self.formula2.free_var_occs == []:
-            return None, False
+        is_fusion = True
+        if self.formula1.free_var_occs == [] and self.formula2.free_var_occs == []:
+            is_fusion = False
         formula1, formula2 = copy.deepcopy(self.formula1), copy.deepcopy(self.formula2)
         formula1.prefix_vars("scr1_")
         formula2.prefix_vars("scr2_")
-        occs1, occs2 = formula1.free_var_occs, formula2.free_var_occs
-        triplets = random_var_occs_triplets(occs1, occs2, self.templates)
-
+        triplets = random_var_triplets(formula1.global_vars, formula2.global_vars, self.templates)
         if not triplets:
-            return None, False
-        fused = self.fuse(occs1, occs2, formula1, formula2, triplets)
-        return self._add_seedinfo(fused), True
+            is_fusion = False
+        fused = self.fuse(formula1, formula2)
+        return self._add_seedinfo(fused), is_fusion

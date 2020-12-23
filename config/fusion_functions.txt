@@ -78,6 +78,15 @@
 (declare-const x Real)
 (declare-const y Real)
 (declare-const z Real)
+(assert (= z (+ x y)))
+(assert (= x (- z y)))
+(assert (= y (- z x)))
+#end
+
+#begin
+(declare-const x Real)
+(declare-const y Real)
+(declare-const z Real)
 (declare-const c Real)
 (assert (= z (+ x c) y))
 (assert (= x (- (- z c) y)))
@@ -103,7 +112,7 @@
 (declare-const z String)
 (assert (= z (str.++ x y)))
 (assert (= x (str.substr z 0 (str.len x))))
-(assert (= y (str.substr z 0 (str.len y))))
+(assert (= y (str.substr z (str.len x) (str.len y))))
 #end
 
 #begin

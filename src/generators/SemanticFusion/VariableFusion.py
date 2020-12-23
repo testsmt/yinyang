@@ -74,16 +74,16 @@ def get_constant_value(declare_const):
         return Const('"'+gen_random_string(length)+'"',type=const_type)
 
 
-def fill_template(occ_x, occ_y,template):
+def fill_template(x, y, template, var_type):
     """
-    Binds the variable occurrences to the template.   
-    :occ_x: variable occurrence of first formula 
-    :occ_y: variable occurrence of second formula 
-    :returns: binded template 
+    Binds the variable name to the template.   
+    :x: variable name of first formula 
+    :y: variable name of second formula 
+    :returns: bindded template 
     """
     filled_template = copy.deepcopy(template)
     first_ass_idx = get_first_assert_idx(filled_template) 
-    z = Var(occ_x.name +"_"+occ_y.name+"_fused",occ_x.type)
+    z = Var(x +"_"+ y +"_fused", var_type)
 
     # Detect whether template includes random variable c 
     random_constant_idx = get_constant_idx(template)
@@ -98,8 +98,8 @@ def fill_template(occ_x, occ_y,template):
     # Bind occurrences x,y to template 
     for ass in filled_template.commands[first_ass_idx:]:
         ass.term.substitute(Var("z",z.type),z)
-        ass.term.substitute_all(Var("x",occ_x.type),occ_x)
-        ass.term.substitute_all(Var("y",occ_y.type),occ_y)
+        ass.term.substitute_all(Var("x",var_type),Var(x,var_type))
+        ass.term.substitute_all(Var("y",var_type),Var(y,var_type))
 
     return filled_template 
 
@@ -124,11 +124,13 @@ def inv_y(template):
     return template.commands[5].term.subterms[1]
 
 
-def fusion_contraints(template):
+def fusion_contraints(template,var_type):
     """
     :returns: fusion constraints (i.e. last three asserts from filled template)    
     """
-    return template.commands[-3:]
+    if var_type == "Int" or var_type == "Real":
+        return template.commands[-3:]
+    return template.commands[-3:-2]
 
 
 def add_fusion_constraints(formula, asserts):
