@@ -69,6 +69,10 @@ class Script:
                     cmd.symbol = prefix+cmd.symbol
             if isinstance(cmd, Assert):
                 self._prefix_free_vars(prefix,cmd.term)
+        new_global_vars = {}
+        for global_var in self.global_vars:
+            new_global_vars[prefix+global_var] = self.global_vars[global_var]
+        self.global_vars = new_global_vars
         self.vars, self.types = self._decl_commands()
 
     def merge_asserts(self):

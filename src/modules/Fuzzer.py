@@ -58,8 +58,9 @@ class Fuzzer:
                 self.statistic.printbar()
                 formula, success = self.generator.generate()
                 if not success:
-                    print(formula.__str__())
-                    exit(0)
+                    self.test(formula)
+                    self.statistic.mutants += 1
+                    break
 
                 if not self.test(formula): break
                 self.statistic.mutants += 1
@@ -146,35 +147,32 @@ class Fuzzer:
                     self.statistic.duplicates += 1
                 return False # stop testing
             else:
-                # (3a) Check whether the solver run produces errors, by checking
-                # the ignore list.
-                if self.in_ignore_list(stdout, stderr):
-                    self.statistic.ignored += 1
+                # (3b) Check whether the exit code is nonzero.
+                if exitcode == -signal.SIGSEGV or exitcode == 245: #segfault
+                    self.statistic.crashes += 1
+                    self.report(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
+                    return False # stop testing
+
+                elif exitcode == 137: #timeout
+                    self.statistic.timeout += 1
                     continue # continue with next solver (4)
 
-                # (3b) Check whether the exit code is nonzero.
-                elif exitcode != 0:
-                    if exitcode == -signal.SIGSEGV or exitcode == 245: #segfault
-                        self.statistic.crashes += 1
-                        self.report(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
-                        return False # stop testing
-
-                    elif exitcode == 137: #timeout
-                        self.statistic.timeout += 1
-                        continue # continue with next solver (4)
-
-                    elif exitcode == 127: #command not found
-                        print("\nPlease check your solver command-line interfaces.")
-                        continue # continue with next solver (4)
-
-                    self.statistic.ignored+=1
+                elif exitcode == 127: #command not found
+                    print("\nPlease check your solver command-line interfaces.")
+                    continue # continue with next solver (4)
 
                 # (3c) if there is no '^sat$' or '^unsat$' in the output
                 elif not re.search("^unsat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^sat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^unknown$", stdout, flags=re.MULTILINE):
-                     self.statistic.ignored += 1
-                     continue # continue with next solver (4)
+                    # (3a) Check whether the solver run produces errors, by checking
+                    # the ignore list.
+                    if self.in_ignore_list(stdout, stderr):
+                        self.statistic.ignored += 1
+                        continue # continue with next solver (4)
+                    self.statistic.crashes += 1
+                    self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
+                    continue # continue with next solver (4)
                 else:
                     # (5) grep for '^sat$', '^unsat$', and '^unknown$' to produce
                     # the output (including '^unknown$' to also deal with incremental

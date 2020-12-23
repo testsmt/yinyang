@@ -32,7 +32,7 @@ duplicate_list = [
 
 # Ignore list: error messages emitted by solvers to be ignored.
 ignore_list = [
-    "(error ",
+   "(error ",
     "unsupport",
     "unexpected char",
     "failed to open file",
