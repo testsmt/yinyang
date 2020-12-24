@@ -387,47 +387,40 @@ class Term:
         self.subterms = subterms
         self.is_indexed_id = is_indexed_id
 
-    def find_expr(self, e, eprime):
+    def find_all(self, e, occs):
         """
-        Find first occurence of expression e in expression eprime and return it
+        Find all expressions e in self and add to list occs.  
         """
-        if e == eprime: return eprime
-        if eprime.subterms:  #i.e. e has no subterms and is also different from eprime
-            rets = []
-            for sub in eprime.subterms:
-                ret = self.find_expr(e,sub)
-                if ret:
-                    return ret
-        return None
+        if self == e:
+            return occs.append(e) 
+        if self.subterms:
+            for sub in self.subterms:
+                if sub == e: 
+                    occs.append(sub)
+                else:
+                    sub.find_all(e, occs)
 
 
     def substitute(self, e, repl):
         """
-        Substitute first occurrences of e in self by "repl"
+        Substitute all expressions e in self by repl.
         """
-        expr = self.find_expr(e,self)
-        if expr:
-            expr._initialize(name=repl.name,
-                             type=repl.type,
-                             is_const=repl.is_const,
-                             is_var=repl.is_var,
-                             label=repl.label,
-                             indices=repl.indices,
-                             quantifier=repl.quantifier,
-                             quantified_vars=repl.quantified_vars,
-                             var_binders=repl.var_binders,
-                             let_terms=repl.let_terms,
-                             op=repl.op,
-                             subterms=repl.subterms)
+        occs = []
+        self.find_all(e, occs) 
+        for occ in occs: 
+                occ._initialize(name=repl.name,
+                                 type=repl.type,
+                                 is_const=repl.is_const,
+                                 is_var=repl.is_var,
+                                 label=repl.label,
+                                 indices=repl.indices,
+                                 quantifier=repl.quantifier,
+                                 quantified_vars=repl.quantified_vars,
+                                 var_binders=repl.var_binders,
+                                 let_terms=repl.let_terms,
+                                 op=repl.op,
+                                 subterms=repl.subterms)
 
-    def substitute_all(self, e, repl):
-        """
-        Substitute all occurrences of e in self by "repl"
-        """
-        if e == repl: self.substitute(e, repl)
-        if self.subterms:
-            for sub in self.subterms: 
-                sub.substitute(e, repl)
          
     def __eq__(self,other):
         if not isinstance(other,Term): return False

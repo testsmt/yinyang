@@ -98,8 +98,8 @@ def fill_template(x, y, template, var_type):
     # Bind occurrences x,y to template 
     for ass in filled_template.commands[first_ass_idx:]:
         ass.term.substitute(Var("z",z.type),z)
-        ass.term.substitute_all(Var("x",var_type),Var(x,var_type))
-        ass.term.substitute_all(Var("y",var_type),Var(y,var_type))
+        ass.term.substitute(Var("x",var_type),Var(x,var_type))
+        ass.term.substitute(Var("y",var_type),Var(y,var_type))
 
     return filled_template 
 

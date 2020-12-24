@@ -47,7 +47,7 @@ class TermTestCase(unittest.TestCase):
             assert_expr.substitute(assert_expr.subterms[0], Expr("-",[z,y]))
             self.assertEqual(assert_expr.__str__(), "(= (- z y) y)")
 
-        def substitute_all():
+        def substitute1():
             formula=\
             """
             (declare-const x String)
@@ -59,13 +59,32 @@ class TermTestCase(unittest.TestCase):
             expr = parse_str(formula).commands[4].term
             x = Var("x","String")
             var1 = Var("var1","String")
-            expr.substitute_all(x,var1)
+            expr.substitute(x,var1)
             self.assertEqual(expr.__str__(),"(= var1 (str.substr z 0 (str.len var1)))")
+        
+        def substitute2():
+            formula="""\
+            (declare-const x String)
+            (declare-const y String)
+            (declare-const z String)
+            (assert (= z (str.++ x y)))
+            (assert (= x (str.substr z 0 (str.len x))))
+            (assert (= y (str.replace z x (str.at z (str.len z)))))
+            """
+            formula= parse_str(formula)
+            expr = Expr(op="str++", subterms=[Var("x","String"), Var("y","String")])
+            equals = formula.commands[5].term
+            replacee = formula.commands[3].term.subterms[1]
+            z = Var("z","String")
+            equals.substitute(z, replacee)
+            self.assertEqual(equals.__str__(),"(= y (str.replace (str.++ x y) x (str.at (str.++ x y) (str.len (str.++ x y)))))")
+
 
         var2const()
         entire_expr()
         subexpr()
-        substitute_all()
+        substitute1()
+        substitute2()
 
         
 if __name__ == '__main__':
