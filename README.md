@@ -1,15 +1,12 @@
-![Travis](https://travis-ci.com/testsmt/yinyang.svg?token=sgWHG8TT217zpf5KHHqh&branch=master)
+<p align="center"><a><img width="130" alt="portfolio_view" align="center" src="logo.jpg"></a></p>
+
+___________
+![Travis](https://travis-ci.com/wintered/yinyang.svg?token=sgWHG8TT217zpf5KHHqh&branch=master) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Twitter](https://img.shields.io/twitter/follow/testsmtsolvers?style=social)](https://twitter.com/testsmtsolvers)
 
 
-Yin-Yang <img width="35" alt="portfolio_view" align="left" src="./media/Yin_yang.svg"><img width="100" alt="portfolio_view" align="right" src="https://people.inf.ethz.ch/suz/logo/LOGO_AST.svg">
-========
-Yin-Yang is a tool for automatically stress-testing Satisfiability Modulo Theory (SMT) solvers. Given a set of SMT-LIB v2.6 seed formulas, Yin-Yang generates mutant formulas that are then used as the test seeds for SMT solvers.  It currently supports two mutation-based testing approaches. 
-
-- **Type-Aware Operator Mutation** [OOPSLA '20] mutates operators within SMT-LIB formulas and differentially tests two or more SMT solvers for inconsistent results.
-
-- **Semantic Fusion** [PLDI '20] is a metamorphic testing approach that generates an equisatisfiable formulas by fusing test seeds pairs of the same satisfiability to stress test one or more SMT solvers.
-
+An automated testing tool for Satisfiability Modulo Theory (SMT) solvers. Given a set of seed SMT formulas, Yin-Yang generates mutant formulas to stress-test SMT solvers. Yin-Yang can be used to robustify SMT solvers. It already found **1,000+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
 
 
 Installation
@@ -17,109 +14,26 @@ Installation
 Requirements: 
 - python 3.6+ 
 - antlr4 python runtime  
-- SMT-LIB v2.6 tests seeds  
-- SMT solver(s) under tests, e.g., [Z3](https://github.com/Z3Prover/z3) or [CVC4](https://github.com/CVC4/CVC4)   
-
-The following commands clone Yin-Yang and install the antlr4 python runtime: 
-```
+``` bash
 git clone https://github.com/testsmt/yinyang.git 
 pip3 install antlr4-python3-runtime  
 ```
 
-Usage
+Stress-testing SMT Solvers
 -------------
-Yin-Yang currently supports two mutation-based testing strategies.  *Type-Aware Operator Mutation* which mutates operators within SMT-LIB 
-formulas and needs two or more SMT solvers for differential testing and *Semantic Fusion*, a metamorphic testing approach which fuses pairs of seed formulas 
-into an equisatisfiable mutant test formula. In the following, we will illustrate the basic usage of both with standard configurations. For more detailed
-configuration, see [documentation.md](./docs/documentation.md).
+1. **Get SMT-LIB 2 benchmarks**. Edit `scripts/SMT-LIB-clone.sh` to select the logics for testing. Run `./scripts/SMT-LIB-clone.sh`
+to download the corresponding SMT-LIB 2 benchmarks. Alternatively you can download benchmarks directly form the SMT-LIB website [[1]](http://smtlib.cs.uiowa.edu/benchmarks.shtml) or supply your own benchmarks. 
 
-#### Type-Aware Operator Mutation
+2. **Get and build SMT solvers** for testing. State-of-the-art SMT solvers that accept the SMT-LIB 2 format [[2]](http://smtlib.cs.uiowa.edu/solvers.shtml). 
+
+3. **Run Yin-Yang** on the benchmarks e.g. with Z3 and CVC4.  
+```bash
+python3 yinyang.py "z3 model_validate=true;cvc4 --check-models --produce-models --incremental -q" benchmarks 
 ```
-python3 yinyang.py "<solver_clis>" <seed>
-```
-where
-
-* `<solver_clis>`: a sequence of command line interfaces to call SMT solvers splitted by semicola `;`. Note that at least two SMT solvers are necessary for differential testing.
+Yin-Yang will by default randomly select a formula from `./benchmarks` generate 300 mutants per seed formula from the folder `./benchmarks`. If a bug has been found, it is stored in `./bugs`. Yin-Yang will run in an infinite loop. You can use the shortcut CTRL+C to terminate Yin-Yang manually.
 
 
-* `<seed>`: an SMT-LIB v2.6 file
-
-Example:
-```
-python3 yinyang.py "z3;cvc4 -q" examples/formulas/phi1.smt2 
-```
-Yin-Yang will run *Type-Aware Operator Mutation* and generate 300 mutations on the seed for stress-testing z3 and cvc4. The expected behaviour of Yin-Yang is to output nothing to stdout unless an error occurred (e.g. one of the solver clis is incorrect) or a bug has been found. If a bug has been found, the bug trigger is stored in `./bugs`.
-
-#### Semantic Fusion 
-
-```
-python3 yinyang.py "<solver_clis>" -o <oracle> -s fusion <seed1> <seed2>
-```
-
-where
-
-* `<solver_clis>`: a sequence of command line interfaces to call SMT solvers separated by semicola `;`. Note, since Semantic Fusion is a metamorphic testing approach, one SMT solver is sufficient.
-
-* `<oracle>`: desired test oracle result {sat, unsat}.
-
-* `<seed1>, <seed2>`: SMT-LIB v2.6 file of the same satisfiability, i.e. both either sat or unsat in according with the oracle.
-
-
-Example: 
-
-```
-python3 yinyang.py "z3" -o sat -s fusion examples/formulas/phi1.smt2 examples/formulas/phi2.smt2 
-```
-Yin-Yang will test z3 by running *Semantic Fusion* with 30 iterations on the two satisfiable seed formulas. Note, the mutants generated by Yin-Yang will then be by construction also satisfiable.
-
-
-Test Seeds & Limitations
---------------
-SMT-LIB test seeds can be conveniently obtained via the following [script](http://smtlib.cs.uiowa.edu/SMT-LIB-clone.sh) or alternatively directly from the SMT-LIB initiatives gitlab repositories for [non-incremental](https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks) and [incremental](https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc) benchmarks. For fuzzing with Yin-Yang, we recommend to prioritize small-sized SMT-LIB files.
-#### Limitations 
-Yin-Yang's parser supports the SMT-LIB v2.6 standard and so it is able to parse existing SMT-LIB.
-*Type-Aware Operator Mutation* can be used for formulas as any logic while *Semantic Fusion* currently only supports LIA, LRA, NRA, QF_LIA, QF_LRA, QF_NRA, QF_SLIA, QF_S logics in the non-incremental mode. To apply Semantic Fusion, test seeds
-Support for other logics is experimental; we are actively working on it. For *Semantic Fusion*, the seeds need to be pre-processed to separate them into 
-satisfiable and unsatisfiable formulas. Pre-categorized are available in the following [repository](https://github.com/testsmt/semantic-fusion-seeds) 
-
-Yin-Yang may also not be able to parse some non-standard .smt2 files such as, e.g., some files from the regression test suites of Z3 and CVC4. We are working on an extension of the parser to support such files.     
-
-A further limitation of Yin-Yang is that it currently only supports modifying expression 
-inside assert statements. Support for other SMT-LIB commands expressions will be 
-added shortly.       
-
-Citation 
---------------
-The testing approaches implemented in Yin-Yang are based on following two papers.
-
-**Type-Aware Operator Mutation** [[pdf]](https://arxiv.org/pdf/2004.08799.pdf)
-
-```
-@misc{winterer-zhang-su-arxiv2020,
-      title={On the Unusual Effectiveness of Type-aware Mutations for Testing SMT Solvers}, 
-      author={Dominik Winterer and Chengyu Zhang and Zhendong Su},
-      year={2020},
-      eprint={2004.08799},
-      archivePrefix={arXiv}
-}
-```
-
-**Semantic Fusion** [[pdf]](https://dl.acm.org/doi/abs/10.1145/3385412.3385985)
-```
-@inproceedings{winterer-zhang-su-pldi2020,
-      title = {Validating SMT Solvers via Semantic Fusion},
-      author = {Winterer, Dominik and Zhang, Chengyu and Su, Zhendong},
-      year = {2020},
-      booktitle = {Proceedings of the 41st ACM SIGPLAN Conference on Programming 
-                   Language Design and Implementation},
-      pages = {718–730}
-}
-```
-
-Contributors                                                                       
-------------                          
-* [Dominik Winterer](https://wintered.github.io/) (primary maintainer) - dominik.winterer@inf.ethz.ch
-
-* [Chengyu Zhang](http://chengyuzhang.com/) (primary maintainer) - dale.chengyu.zhang@gmail.com
-
-* [Zhendong Su](https://people.inf.ethz.ch/suz/) - zhendong.su@inf.ethz.ch 
+Additional Ressources
+----------
+- Citing Yin-Yang
+TODO:
