@@ -35,5 +35,5 @@ Yin-Yang will by default randomly select a formula from `./benchmarks` generate 
 
 Additional Ressources
 ----------
-- Citing Yin-Yang
-TODO:
+- [Citing Yin-Yang](doc/Citation.md)
+
