@@ -1,4 +1,4 @@
-<p align="center"><a><img width="130" alt="portfolio_view" align="center" src="logo.jpg"></a></p>
+<p align="center"><a><img width="130" alt="portfolio_view" align="center" src="logo.png"></a></p>
 
 ___________
 ![Travis](https://travis-ci.com/wintered/yinyang.svg?token=sgWHG8TT217zpf5KHHqh&branch=master) 
