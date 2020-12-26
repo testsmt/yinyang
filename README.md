@@ -22,9 +22,9 @@ pip3 install antlr4-python3-runtime
 Stress-testing SMT Solvers
 -------------
 1. **Get SMT-LIB 2 benchmarks**. Edit `scripts/SMT-LIB-clone.sh` to select the logics for testing. Run `./scripts/SMT-LIB-clone.sh`
-to download the corresponding SMT-LIB 2 benchmarks. Alternatively you can download benchmarks directly form the SMT-LIB website [[1]](http://smtlib.cs.uiowa.edu/benchmarks.shtml) or supply your own benchmarks. 
+to download the corresponding SMT-LIB 2 benchmarks. Alternatively you can download benchmarks directly form the [SMT-LIB website](http://smtlib.cs.uiowa.edu/benchmarks.shtml) or supply your own benchmarks. 
 
-2. **Get and build SMT solvers** for testing. State-of-the-art SMT solvers that accept the SMT-LIB 2 format [[2]](http://smtlib.cs.uiowa.edu/solvers.shtml). 
+2. **Get and build SMT solvers** for testing. State-of-the-art [SMT solvers supporting the SMT-LIB 2 format](http://smtlib.cs.uiowa.edu/solvers.shtml). 
 
 3. **Run Yin-Yang** on the benchmarks e.g. with Z3 and CVC4.  
 ```bash
