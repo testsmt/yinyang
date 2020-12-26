@@ -9,6 +9,7 @@ ___________
 An automated testing tool for Satisfiability Modulo Theory (SMT) solvers. Given a set of seed SMT formulas, Yin-Yang generates mutant formulas to stress-test SMT solvers. Yin-Yang can be used to robustify SMT solvers. It already found **1,000+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
 
 
+
 Installation
 ------------
 Requirements: 
@@ -18,6 +19,7 @@ Requirements:
 git clone https://github.com/testsmt/yinyang.git 
 pip3 install antlr4-python3-runtime  
 ```
+
 
 Stress-testing SMT Solvers
 -------------
@@ -33,6 +35,7 @@ python3 yinyang.py "z3 model_validate=true;cvc4 --check-models --produce-models 
 
 Yin-Yang will by default randomly select a formula from `./benchmarks` generate 300 mutants per seed formula from the folder `./benchmarks`. If a bug has been found, it is stored in `./bugs`. Yin-Yang will run in an infinite loop. You can use the shortcut CTRL+C to terminate Yin-Yang manually.
 
+:point_right: [Further Documentation](docs/Documentation.md)
 
 Additional Ressources
 ----------
