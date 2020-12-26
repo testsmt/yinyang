@@ -30,10 +30,11 @@ to download the corresponding SMT-LIB 2 benchmarks. Alternatively you can downlo
 ```bash
 python3 yinyang.py "z3 model_validate=true;cvc4 --check-models --produce-models --incremental -q" benchmarks 
 ```
+
 Yin-Yang will by default randomly select a formula from `./benchmarks` generate 300 mutants per seed formula from the folder `./benchmarks`. If a bug has been found, it is stored in `./bugs`. Yin-Yang will run in an infinite loop. You can use the shortcut CTRL+C to terminate Yin-Yang manually.
 
 
 Additional Ressources
 ----------
-- [Citing Yin-Yang](doc/Citation.md)
-
+- [Citing Yin-Yang](docs/Citation.md)
+- [Project website](https://testsmt.github.io/) with bug statistics, talk videos etc.
