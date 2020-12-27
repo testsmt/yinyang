@@ -33,6 +33,10 @@ python3 yinyang.py "z3 model_validate=true;cvc4 --check-models --produce-models 
 Yin-Yang will by default randomly select a formula from `./benchmarks` generate 300 mutants per seed formula from the folder `./benchmarks`. If a bug has been found, it is stored in `./bugs`. Yin-Yang will run in an infinite loop. You can use the shortcut CTRL+C to terminate Yin-Yang manually.
 
 
+Bugs, Issues, Feedback, Questions, Help
+----------------------
+We are always happy to take feedback 
+
 Additional Ressources
 ----------
 - [Citing Yin-Yang](doc/Citation.md)
