@@ -40,7 +40,7 @@ Yin-Yang will by default randomly select formulas from the folder `./benchmarks`
 Feedback
 ---------
 For bugs/issues/questions please file an issue. We are always happy to receive your feedback or help you adjust YinYang to the needs of your custom solver.
-You can reach out for us [[Contact Information]](docs/Contributors.md).
+Reach out for us [[Contact Information]](docs/Contributors.md).
 
 Additional Ressources
 ----------
