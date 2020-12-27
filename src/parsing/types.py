@@ -12,11 +12,16 @@ def sort2type(sort):
     sort = sort.replace("Int", "integer")
     sort = sort.replace("String", "string")
     sort = sort.replace("RoundingMode", "roundingmode")
+
     if "FloatingPoint" in sort:
-        print(sort)
         eb = int(sort.split(" ")[2])
         sb = int(sort.split(" ")[3][:-1])
         return FP_TYPE(eb, sb)
+
+    if "BitVec" in sort:
+        bitwith = int(sort.split(" ")[2][:-1])
+        return BITVECTOR_TYPE(bitwith)
+
     return sort
 
 class ARRAY_TYPE:
@@ -36,6 +41,13 @@ class BITVECTOR_TYPE:
     def __eq__(self,other):
         if isinstance(other, self.__class__):
             return self.bitwidth == other.bitwidth
+
+        if isinstance(other, str):
+            return self.__str__() == other
+
+    def __str__(self):
+        #  (_ BitVec bitwidth)
+        return "(_ BitVec "+ str(self.bitwidth) +")"
 
 class FP_TYPE:
     def __init__(self, eb, sb):
@@ -216,6 +228,7 @@ BVUREM="bvurem"
 BVSHL="bvshl"
 BVLSHR="bvlshr"
 BVULT="bvult"
+BVSLT="bvslt"
 
 BV_OPS=[
     BV_CONCAT,
@@ -229,7 +242,8 @@ BV_OPS=[
     BVUREM,
     BVSHL,
     BVLSHR,
-    BVULT
+    BVULT,
+    BVSLT
 ]
 
 # Floating Point ops
@@ -254,7 +268,7 @@ FP_NORMAL="fp.isNormal"
 FP_ISSUBNORMAL="fp.isSubnormal"
 FP_IS_ZERO="fp.isZero"
 FP_ISINFINITE="fp.isInfinite"
-FP_ISNAN="fp.isNan"
+FP_ISNAN="fp.isNaN"
 FP_ISNEGATIVE="fp.isNegative"
 FP_ISPOSITIVE="fp.isPositive"
 

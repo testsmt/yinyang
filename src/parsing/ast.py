@@ -477,4 +477,4 @@ class Term:
             return self.name
 
         if self.is_var:
-            return self.name+":"+self.type
+            return self.name+":"+self.type.__str__()
