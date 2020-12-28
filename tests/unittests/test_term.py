@@ -20,8 +20,6 @@ class TermTestCase(unittest.TestCase):
                 (assert (= (+ x y) y))
         """
 
-     
-
         def var2const():
             script=parse_str(formula1)
             script.commands[2].term.substitute(
@@ -79,12 +77,47 @@ class TermTestCase(unittest.TestCase):
             equals.substitute(z, replacee)
             self.assertEqual(equals.__str__(),"(= y (str.replace (str.++ x y) x (str.at (str.++ x y) (str.len (str.++ x y)))))")
 
+        def free_vars_quantifier():
+            script="""\
+(set-info :category "industrial")
+(set-info :status unsat)
+(declare-fun a () Real)
+(declare-fun ts0uscore1 () Real)
+(assert (exists ((ts0uscore1 Real)) (> ts0uscore1 a)))
+(check-sat)
+"""
+            script = parse_str(script)
+            self.assertEqual(script.free_var_occs.__str__(), "[a:Real]")
+
+            script="""\
+(set-info :category "industrial")
+(set-info :status unsat)
+(declare-fun a () Real)
+;(declare-fun ts0uscore1 () Real)
+(assert (exists ((ts0uscore1 Real)) (> ts0uscore1 a)))
+(check-sat)
+"""
+            script = parse_str(script)
+            self.assertEqual(script.free_var_occs.__str__(), "[a:Real]")
+
+            script="""\
+(set-info :category "industrial")
+(set-info :status unsat)
+(declare-fun a () Real)
+(declare-fun ts0uscore1 () Real)
+(assert (> ts0uscore1 a))
+(check-sat)
+"""
+            script = parse_str(script)
+            self.assertEqual(script.free_var_occs.__str__(),"[ts0uscore1:Real, a:Real]")
+
 
         var2const()
         entire_expr()
         subexpr()
         substitute1()
         substitute2()
+        free_vars_quantifier()
 
         
 if __name__ == '__main__':
