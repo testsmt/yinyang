@@ -1,0 +1,6 @@
+Fatal failure within bool CVC4::theory::quantifiers::InstStrategyEnum::process(CVC4::Node, bool, bool) at /home/CVC4/src/theory/quantifiers/inst_strategy_enumerative.cpp:317
+Check failure
+
+ terms[i].isNull() || terms[i].getType().isComparableTo(ftypes[i])
+
+Aborted

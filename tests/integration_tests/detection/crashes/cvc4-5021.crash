@@ -1,0 +1,4 @@
+Fatal failure within CVC4::Node CVC4::theory::Rewriter::rewriteTo(CVC4::theory::TheoryId, CVC4::Node, CVC4::TConvProofGenerator*) at src/theory/rewriter.cpp:327
+Check failure
+ d_rewriteStack->find(response.d_node) == d_rewriteStack->end()
+

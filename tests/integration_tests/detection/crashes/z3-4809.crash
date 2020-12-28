@@ -1,0 +1,5 @@
+ASSERTION VIOLATION
+File: ../src/opt/maxres.cpp
+Line: 219
+m_model->is_true(m_asms) || m.limit().is_canceled()
+(C)ontinue, (A)bort, (S)top, (T)hrow exception, Invoke (G)DB

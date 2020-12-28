@@ -1,0 +1,7 @@
+Fatal failure within bool CVC4::theory::arith::nl::NlModel::simpleCheckModelMsum(const std::map<CVC4::NodeTemplate<true>, CVC4::NodeTemplate<true> >&, bool) at /home/peisen/test/tofuzz/CVC4/src/theory/arith/nl/nl_model.cpp:1095
+Check failure
+
+ false
+
+Aborted
+

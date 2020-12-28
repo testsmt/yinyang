@@ -1,0 +1,7 @@
+Fatal failure within bool CVC4::theory::arith::nl::TranscendentalSolver::checkTfTangentPlanesFun(CVC4::Node, unsigned int, std::vector<CVC4::theory::arith::nl::NlLemma>&) at /home/peisen/test/tofuzz/CVC4/src/theory/arith/nl/transcendental_solver.cpp:896
+Check failure
+
+ std::find( d_secant_points[tf][d].begin(), d_secant_points[tf][d].end(), c) == d_secant_points[tf][d].end()
+
+Aborted
+

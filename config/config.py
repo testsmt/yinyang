@@ -1,7 +1,8 @@
-solvers = [
-]
+# Solver configurations list to be used for fuzzing.
+solvers = []
 
-crash_msgs = [
+# Crash list: crash messages emitted by solvers to consider as bugs.
+crash_list = [
     "Exception",
     "lang.AssertionError",
     "lang.Error",
@@ -23,8 +24,21 @@ crash_msgs = [
     "Aborted"
 ]
 
+<<<<<<< HEAD
 
 ignore_msgs = [
+=======
+# Duplicate list: crash messages emitted by solvers to be considered duplicates,
+# i.e. will be ignored during fuzzing.
+duplicate_list = [
+
+]
+
+# Ignore list: error messages emitted by solvers to be ignored.
+ignore_list = [
+   "(error ",
+    "unsupport",
+>>>>>>> dev
     "unexpected char",
     "failed to open file",
     "Expected result sat but got unsat",

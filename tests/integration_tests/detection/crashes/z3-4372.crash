@@ -1,0 +1,34 @@
+ASSERTION VIOLATION
+File: ../src/smt/theory_arith_core.h
+Line: 2507
+m_unassigned_atoms[v] > 0
+(C)ontinue, (A)bort, (S)top, (T)hrow exception, Invoke (G)DB
+
+==111203==ERROR: AddressSanitizer: heap-use-after-free on address 0x61b0000fe580 at pc 0x00000142c3b6 bp 0x7f633a0a7e20 sp 0x7f633a0a7e10
+READ of size 1 at 0x61b0000fe580 thread T69
+    #0 0x142c3b5 in smt::theory_str::process_concat_eq_type1(expr*, expr*) ../src/smt/theory_str.cpp:3370
+    #1 0x14257de in smt::theory_str::simplify_concat_equality(expr*, expr*) ../src/smt/theory_str.cpp:2798
+    #2 0x1456581 in smt::theory_str::check_eqc_concat_concat(std::set<expr*, std::less<expr*>, std::allocator<expr*> >&, std::set<expr*, std::less<expr*>, std::allocator<expr*> >&) ../src/smt/theory_str.c
+pp:6792
+    #3 0x1454d53 in smt::theory_str::handle_equality(expr*, expr*) ../src/smt/theory_str.cpp:6689
+    #4 0x1459260 in smt::theory_str::new_eq_eh(int, int) ../src/smt/theory_str.cpp:7001
+    #5 0xfc651e in smt::context::propagate_th_eqs() ../src/smt/smt_context.cpp:1617
+    #6 0xfc70d5 in smt::context::propagate() ../src/smt/smt_context.cpp:1694
+    #7 0xfd692b in smt::context::init_assumptions(ref_vector<expr, ast_manager> const&) ../src/smt/smt_context.cpp:3203
+    #8 0xfd9d0a in smt::context::check(unsigned int, expr* const*, bool) ../src/smt/smt_context.cpp:3495
+    #9 0xd4032a in smt::kernel::imp::check(unsigned int, expr* const*) ../src/smt/smt_kernel.cpp:116
+    #10 0xd3ef87 in smt::kernel::check(unsigned int, expr* const*) ../src/smt/smt_kernel.cpp:296
+    #11 0x10f4244 in check_sat_core2 ../src/smt/smt_solver.cpp:190
+    #12 0x19f8ad5 in solver_na2as::check_sat_core(unsigned int, expr* const*) ../src/solver/solver_na2as.cpp:67
+    #13 0x19fcb3f in solver::check_sat(unsigned int, expr* const*) ../src/solver/solver.cpp:330
+    #14 0x5e117c in solver::check_sat(ref_vector<expr, ast_manager> const&) ../src/solver/solver.h:149
+    #15 0x1a0c037 in parallel_tactic::solver_state::simplify() ../src/solver/parallel_tactic.cpp:265
+    #16 0x1a0ebd0 in parallel_tactic::cube_and_conquer(parallel_tactic::solver_state&) ../src/solver/parallel_tactic.cpp:481
+    #17 0x1a0ff85 in parallel_tactic::run_solver() ../src/solver/parallel_tactic.cpp:634
+    #18 0x1a10661 in parallel_tactic::solve(ref<model>&)::{lambda()#1}::operator()() const (/home/peisen/test/tofuzz/z3-debug/build/z3+0x1a10661)
+    #19 0x1a167c1 in void std::_Bind_simple<parallel_tactic::solve(ref<model>&)::{lambda()#1} ()>::_M_invoke<>(std::_Index_tuple<>) /usr/include/c++/5/functional:1531
+    #20 0x1a166d5 in std::_Bind_simple<parallel_tactic::solve(ref<model>&)::{lambda()#1} ()>::operator()() /usr/include/c++/5/functional:1520
+    #21 0x1a16665 in std::thread::_Impl<std::_Bind_simple<parallel_tactic::solve(ref<model>&)::{lambda()#1} ()> >::_M_run() /usr/include/c++/5/thread:115
+    #22 0x7f6360410e5d  (/usr/lib/x86_64-linux-gnu/libstdc++.so.6+0xd0e5d)
+    #23 0x7f636072a6b9 in start_thread (/lib/x86_64-linux-gnu/libpthread.so.0+0x76b9)
+

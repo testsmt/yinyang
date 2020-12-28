@@ -9,3 +9,7 @@ install:
 script:
   - python -m unittest tests/runtests.py
   - python tests/integration_tests/opfuzz/sanity_opfuzz.py 
+  - python tests/integration_tests/detection/test_detection.py
+  - python tests/integration_tests/detection/test_crashes.py
+
+

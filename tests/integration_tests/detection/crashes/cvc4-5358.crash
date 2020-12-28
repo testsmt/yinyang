@@ -1,0 +1,8 @@
+sat
+Fatal failure within void CVC4::smt::CheckModels::checkModel(CVC4::smt::Model*, CVC4::context::CDList<CVC4::NodeTemplate<true> >*, bool) at /home/peisen/test/tofuzz/CVC4/src/smt/check_models.cpp:258
+Internal error detectedSmtEngine::checkModel(): ERRORS SATISFYING ASSERTIONS WITH MODEL:
+assertion:     (and (<= (/ 0 1) r6) (<= r6 r6) (<= r6 r1))
+simplifies to: false
+expected `true'.
+Run with `--check-models -v' for additional diagnostics.
+Aborted

@@ -1,0 +1,27 @@
+ASSERTION VIOLATION
+File: ../src/smt/theory_str.cpp
+Line: 998
+u.str.is_concat(a_cat)
+(C)ontinue, (A)bort, (S)top, (T)hrow exception, Invoke (G)DB
+
+./z3-4862.crash
+[584] % z3release model_validate=true small.smt2
+sat
+(
+ (define-fun X () (_ FloatingPoint 11 53)
+  (fp #b1 #b01011100010 #x83b6fffeff76e))
+ (define-fun Y () (_ FloatingPoint 9 53)
+  (fp #b1 #b000000000 #x00000003076e0))
+)
+sat
+unsat
+(error "line 5 column 10: an invalid model was generated")
+(
+ (define-fun X () (_ FloatingPoint 11 53)
+  (fp #b0 #b00000000000 #x0001a2bffffff))
+ (define-fun Y () (_ FloatingPoint 9 53)
+  (_ +oo 9 53))
+)
+sat
+unsat
+

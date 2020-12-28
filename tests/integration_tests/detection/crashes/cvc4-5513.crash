@@ -1,0 +1,5 @@
+Fatal failure within void CVC4::theory::bags::TheoryBags::eqNotifyNewClass(CVC4::TNode) at /CVC4/src/theory/bags/theory_bags.cpp:106
+Check failure
+
+ false
+Not implemented yet

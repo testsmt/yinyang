@@ -15,3 +15,9 @@ def escape(s):
     s = s.replace("=", "")
     return s
 
+
+def in_list(stdout, stderr,lst):
+    stdstream = stdout + " " + stderr
+    for err in lst:
+        if err in stdstream: return True
+    return False

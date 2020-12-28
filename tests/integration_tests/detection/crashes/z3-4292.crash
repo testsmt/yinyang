@@ -1,0 +1,24 @@
+==159304==ERROR: AddressSanitizer: heap-use-after-free on address 0x60e000028e38 at pc 0x00000141d4c4 bp 0x7ffc212c6d30 sp 0x7ffc212c6d20
+READ of size 8 at 0x60e000028e38 thread T0
+    #0 0x141d4c3 in smt::theory_str::simplify_parent(expr*, expr*) ../src/smt/theory_str.cpp:2319
+    #1 0x14535b4 in smt::theory_str::handle_equality(expr*, expr*) ../src/smt/theory_str.cpp:6705
+    #2 0x1457802 in smt::theory_str::new_eq_eh(int, int) ../src/smt/theory_str.cpp:6992
+    #3 0xfc5a08 in smt::context::propagate_th_eqs() ../src/smt/smt_context.cpp:1617
+    #4 0xfc65bf in smt::context::propagate() ../src/smt/smt_context.cpp:1694
+    #5 0xfdcae0 in smt::context::bounded_search() ../src/smt/smt_context.cpp:3732
+    #6 0xfdacdc in smt::context::search() ../src/smt/smt_context.cpp:3613
+    #7 0xfd9269 in smt::context::check(unsigned int, expr* const*, bool) ../src/smt/smt_context.cpp:3496
+    #8 0xd3f814 in smt::kernel::imp::check(unsigned int, expr* const*) ../src/smt/smt_kernel.cpp:116
+    #9 0xd3e471 in smt::kernel::check(unsigned int, expr* const*) ../src/smt/smt_kernel.cpp:296
+    #10 0x10f36b6 in check_sat_core2 ../src/smt/smt_solver.cpp:190
+    #11 0x19e4fcb in solver_na2as::check_sat_core(unsigned int, expr* const*) ../src/solver/solver_na2as.cpp:67
+    #12 0x19ebafe in combined_solver::check_sat_core(unsigned int, expr* const*) ../src/solver/combined_solver.cpp:219
+    #13 0x19e9035 in solver::check_sat(unsigned int, expr* const*) ../src/solver/solver.cpp:330
+    #14 0x19a1964 in cmd_context::check_sat(unsigned int, expr* const*) ../src/cmd_context/cmd_context.cpp:1549
+    #15 0x1932033 in smt2::parser::parse_check_sat() ../src/parsers/smt2/smt2parser.cpp:2596
+    #16 0x1935f8f in smt2::parser::parse_cmd() ../src/parsers/smt2/smt2parser.cpp:2938
+    #17 0x19376a1 in smt2::parser::operator()() ../src/parsers/smt2/smt2parser.cpp:3130
+    #18 0x19166c6 in parse_smt2_commands(cmd_context&, std::istream&, bool, params_ref const&, char const*) ../src/parsers/smt2/smt2parser.cpp:3179
+    #19 0x43c182 in read_smtlib2_commands(char const*) ../src/shell/smtlib_frontend.cpp:89
+    #20 0x4542b2 in main ../src/shell/main.cpp:352
+    #21 0x7fab2d60582f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2082f)

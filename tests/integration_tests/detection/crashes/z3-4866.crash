@@ -1,0 +1,23 @@
+sat
+(error "line 12 column 10: an invalid model was generated")
+(
+  (define-fun str0 () String
+    "!0!")
+  (define-fun i5 () Int
+    0)
+  (define-fun str2 () String
+    "\x00")
+  (define-fun i2 () Int
+    1)
+  (define-fun i4 () Int
+    0)
+  (define-fun v4 () Bool
+    true)
+  (define-fun str3 () String
+    "!0!")
+  (define-fun v5 () Bool
+    true)
+  (define-fun v1 () Bool
+    true)
+)
+

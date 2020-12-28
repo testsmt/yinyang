@@ -1,0 +1,6 @@
+Fatal failure within void CVC4::TheoryEngine::checkTheoryAssertionsWithModel(bool) at /home/suz/software/CVC4/src/theory/theory_engine.cpp:2283
+Internal error detectedTHEORY_ARRAYS has an asserted fact that the model doesn't satisfy.
+The fact: (= (store a 2 3) (store b 2 3))
+Model value: false
+Aborted
+

@@ -6,13 +6,12 @@ errors=False
 
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
-    # print("cmd", cmd)
+    # print(cmd)
     output = subprocess.getoutput(cmd)
-    # print(output)
     soundness_issues=None
     crash_issues = None
     for line in output.split("\n"):
-        if "Unsound" in line:
+        if "Soundness" in line:
             soundness_issues = int(line.split()[-1])
         if "Crash" in line:
             crash_issues = int(line.split()[-1])
@@ -32,8 +31,9 @@ def get_z3():
     return os.path.abspath("z3-4.8.6-x64-ubuntu-16.04/bin/z3")
 
 def cleanup():
-    subprocess.getoutput("rm -rf cvc4*")
-    subprocess.getoutput("rm -rf z3*")
+    pass
+    # subprocess.getoutput("rm -rf cvc4*")
+    # subprocess.getoutput("rm -rf z3*")
 
 cleanup()
 #
@@ -80,7 +80,7 @@ for _ in range(N):
         break
 
 if not bug_catched:
-    print("[ERROR] Crash bug could not be reproduced.")
+    print("[ERROR] Invalid model bug could not be reproduced.")
     print(cmd)
     errors=True
 

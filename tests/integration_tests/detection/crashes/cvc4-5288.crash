@@ -1,0 +1,4 @@
+Fatal failure within static CVC4::theory::RewriteResponse CVC4::theory::arith::ArithRewriter::rewriteIntsDivModTotal(CVC4::TNode, bool) at /local/suz-local/software/CVC4/src/theory/arith/arith_rewriter.cpp:806
+Check failure
+ n.getConst<Rational>().isIntegral()
+Aborted

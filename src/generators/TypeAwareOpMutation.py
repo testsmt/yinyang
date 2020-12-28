@@ -5,10 +5,11 @@ from src.parsing.parse import *
 
 
 class TypeAwareOpMutation(Generator):
-    def __init__(self, seeds, args):
-        assert(len(seeds) == 1)
+    def __init__(self, seed_fns, args):
+        assert(len(seed_fns) == 1)
+        self.seed_fn = seed_fns[0]
         self.args = args
-        self.formula = parse_file(seeds[0])
+        self.formula = parse_file(seed_fns[0])
         self.bidirectional = []
         self.unidirectional = []
 
@@ -66,6 +67,10 @@ class TypeAwareOpMutation(Generator):
             return replacee
         return None
 
+    def _add_seedinfo(self,formula):
+       formula.commands = [Comment(self.seed_fn)] + formula.commands
+       return formula 
+
     def generate(self):
         for _ in range(self.args.modulo):
             max_choices = len(self.formula.op_occs)
@@ -76,6 +81,5 @@ class TypeAwareOpMutation(Generator):
                     # print(op_occ.op,"->",replacee)
                     op_occ.op = replacee
                     break
-        mutated_fn = "%s/%s.smt2" % (self.args.scratchfolder, self.args.name)
-        with open(mutated_fn,"w") as f: f.write(self.formula.__str__())
-        return mutated_fn
+        f = self._add_seedinfo(self.formula)
+        return self._add_seedinfo(self.formula), True
