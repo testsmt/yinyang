@@ -223,6 +223,7 @@ class Simplify:
         self.attr = attr
 
     def __str__(self):
+        attr_s = ""
         for a in self.attr:
             attr_s = " " + a[0] + " " + a[1]
         return "(simplify " + self.term.__str__() + attr_s + ")"
