@@ -1,5 +1,3 @@
-from .types import *
-
 class Script:
     def __init__(self, commands, global_vars):
         self.commands = commands
@@ -10,7 +8,7 @@ class Script:
 
         for cmd in self.commands:
             if isinstance(cmd, Assert):
-                self._get_free_var_occs(cmd.term)
+                self._get_free_var_occs(cmd.term, self.global_vars)
                 self._get_op_occs(cmd.term)
 
     def _get_op_occs(self,e):
@@ -23,17 +21,22 @@ class Script:
         for sub in e.subterms:
             self._get_op_occs(sub)
 
-    def _get_free_var_occs(self,e):
+    def _get_free_var_occs(self,e, global_vars):
         if isinstance(e,str): return
         if e.is_const: return
         if e.label: return
+        if e.quantifier: 
+            for var in list(global_vars):
+                for quantified_var in e.quantified_vars:
+                    if var == quantified_var[0]:
+                        global_vars.pop(var)
         if e.is_var:
-            if e.type != "Unknown" and e.name in self.global_vars:
+            if e.type != "Unknown" and e.name in global_vars:
                 self.free_var_occs.append(e)
             return
 
         for sub in e.subterms:
-            self._get_free_var_occs(sub)
+            self._get_free_var_occs(sub, global_vars)
 
     def _decl_commands(self):
         vars, types = [], {}
@@ -309,10 +312,10 @@ class SMTLIBCommand:
     def __hash__(self):
         return self.cmd_str.__hash__()
 
-def Var(name,type=UNKNOWN, is_indexed_id=False):
+def Var(name,type, is_indexed_id=False):
     return Term(name=name,type=type, is_var=True, is_indexed_id=is_indexed_id)
 
-def Const(name,type=UNKNOWN, is_indexed_id=False):
+def Const(name, is_indexed_id=False,type="Unknown"):
     return Term(name=name,type=type, is_const=True,is_indexed_id=is_indexed_id)
 
 def Expr(op,subterms, is_indexed_id=False):
@@ -481,4 +484,4 @@ class Term:
             return self.name
 
         if self.is_var:
-            return self.name+":"+self.type.__str__()
+            return self.name+":"+self.type

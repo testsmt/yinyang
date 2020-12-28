@@ -17,16 +17,17 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (= v (not (= y (- 1)))))
 (check-sat)
 """
-        equal = parse_str(formula_str).commands[2].term
-        self.assertEqual(typecheck_expr(equal), BOOLEAN_TYPE)
-        v = equal.subterms[0]
-        self.assertEqual(typecheck_expr(v),BOOLEAN_TYPE)
-        not_op = equal.subterms[1]
-        self.assertEqual(typecheck_expr(not_op), BOOLEAN_TYPE)
-        y = equal.subterms[1].subterms[0].subterms[0]
-        self.assertEqual(typecheck_expr(y), INTEGER_TYPE)
-        minusone= equal.subterms[1].subterms[0].subterms[1]
-        self.assertEqual(typecheck_expr(minusone), INTEGER_TYPE)
+        formula,_ = parse_str(formula_str)
+        equals=formula.commands[2].term
+        self.assertequals(typecheck_expr(equal), BOOLEAN_TYPE)
+        v = equals.subterms[0]
+        self.assertequals(typecheck_expr(v),BOOLEAN_TYPE)
+        not_op = equals.subterms[1]
+        self.assertequals(typecheck_expr(not_op), BOOLEAN_TYPE)
+        y = equals.subterms[1].subterms[0].subterms[0]
+        self.assertequals(typecheck_expr(y), INTEGER_TYPE)
+        minusone= equals.subterms[1].subterms[0].subterms[1]
+        self.assertequals(typecheck_expr(minusone), INTEGER_TYPE)
 
         formula_str=\
 """
@@ -35,7 +36,7 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (ite v false (= y (- 1))))
 (check-sat)
 """
-        ite = parse_str(formula_str).commands[2].term
+        ite, _ = parse_str(formula_str).commands[2].term
         self.assertEqual(typecheck_expr(ite), BOOLEAN_TYPE)
 
 
@@ -47,7 +48,8 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (= v (not (= v (- 1)))))
 (check-sat)
 """
-        equal = parse_str(formula_str).commands[2].term
+        formula, _ = parse_str(formula_str)
+        equals=formula.commands[2].term
         no_excpt=True
         try:
             typecheck_expr(equal)
@@ -64,7 +66,8 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (= v (+ v v w)))
 (check-sat)
 """
-        nary_plus = parse_str(formula_str).commands[2].term.subterms[1]
+        formula, _ = parse_str(formula_str)
+        nary_plus = formula.commands[2].term.subterms[1]
         self.assertEqual(typecheck_expr(nary_plus), INTEGER_TYPE)
 
     def test_typecheck_comp_ops(self):
@@ -75,7 +78,7 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (> v (+ v v w)))
 (check-sat)
 """
-        greater = parse_str(formula_str).commands[2].term
+        greater, _ = parse_str(formula_str).commands[2].term
         self.assertEqual(typecheck_expr(greater), BOOLEAN_TYPE)
 
     def test_typecheck_string_ops(self):
@@ -84,7 +87,8 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (distinct (str.replace_all "B" "A" "") "B"))
 (check-sat)
 """
-        distinct = parse_str(formula_str).commands[0].term
+        formula, _ = parse_str(formula_str)
+        distinct = formula.commands[0].term
         self.assertEqual(typecheck_expr(distinct), BOOLEAN_TYPE)
         str_repl=distinct.subterms[0]
         self.assertEqual(typecheck_expr(str_repl), STRING_TYPE)
@@ -101,7 +105,7 @@ class TypecheckerTestCase(unittest.TestCase):
             typecheck_expr(formula.commands[i].term)
 
     def test_let_expression(self):
-   formula_str=\
+        formula_str=\
 """
 (declare-sort S1 0)
 (declare-fun f1 () S1)
@@ -117,4 +121,3 @@ class TypecheckerTestCase(unittest.TestCase):
 if __name__ == '__main__':
     TypecheckerTestCase.test_typechecker()
     unittest.main()
-

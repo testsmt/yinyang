@@ -1,18 +1,12 @@
-BOOLEAN_TYPE="bool"
-REAL_TYPE="real"
-INTEGER_TYPE="integer"
-ROUNDINGMODE_TYPE="roundingmode"
-STRING_TYPE="string"
-REGEXP_TYPE="regex"
-UNKNOWN="unknown"
+BOOLEAN_TYPE="Bool"
+REAL_TYPE="Real"
+INTEGER_TYPE="Int"
+ROUNDINGMODE_TYPE="RoundingMode"
+STRING_TYPE="String"
+REGEXP_TYPE="RegLan"
+UNKNOWN="Unknown"
 
 def sort2type(sort):
-    sort = sort.replace("Bool", "bool")
-    sort = sort.replace("Real", "real")
-    sort = sort.replace("Int", "integer")
-    sort = sort.replace("String", "string")
-    sort = sort.replace("RoundingMode", "roundingmode")
-
     if "FloatingPoint" in sort:
         eb = int(sort.split(" ")[2])
         sb = int(sort.split(" ")[3][:-1])

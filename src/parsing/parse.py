@@ -10,6 +10,7 @@ from .ast_visitor import *
 
 class ErrorListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
+        print(e)
         print("Parser error on line %d column %d." % (line, column))
         exit(1)
 

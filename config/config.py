@@ -24,10 +24,6 @@ crash_list = [
     "Aborted"
 ]
 
-<<<<<<< HEAD
-
-ignore_msgs = [
-=======
 # Duplicate list: crash messages emitted by solvers to be considered duplicates,
 # i.e. will be ignored during fuzzing.
 duplicate_list = [
@@ -38,7 +34,6 @@ duplicate_list = [
 ignore_list = [
    "(error ",
     "unsupport",
->>>>>>> dev
     "unexpected char",
     "failed to open file",
     "Expected result sat but got unsat",
