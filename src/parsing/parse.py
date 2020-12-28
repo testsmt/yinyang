@@ -10,6 +10,7 @@ from .ast_visitor import *
 
 class ErrorListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
+        print(e)
         print("Parser error on line %d column %d." % (line, column))
         exit(1)
 
@@ -27,27 +28,27 @@ def parse_file(fn, silent=True):
     ast = None
     if silent:
         try:
-            ast = generate_ast(fstream)
+            ast,globals = generate_ast(fstream)
         except Exception as e:
-            print("Error generating the AST.")
+            print("Error generating the AST.",flush=True)
             print(e)
             exit(1)
     else:
-         ast = generate_ast(fstream)
-    return remove_set_logic_status(ast)
+         ast,globals = generate_ast(fstream)
+    return remove_set_logic_status(ast),globals
 
 def parse_str(s, silent=True):
     istream = InputStream(s)
     ast = None
     if silent:
         try:
-            ast = generate_ast(istream)
+            ast,globals = generate_ast(istream)
         except:
-            print("Error generating the AST.")
+            print("Error generating the AST.",flush=True)
             exit(1)
     else:
-        ast = generate_ast(istream)
-    return remove_set_logic_status(ast)
+        ast,globals = generate_ast(istream)
+    return remove_set_logic_status(ast),globals
 
 def generate_ast(stream):
     error_listener = ErrorListener()
@@ -61,4 +62,4 @@ def generate_ast(stream):
     tree = parser.start()
     vis = ASTVisitor()
     formula = vis.visitStart(tree)
-    return formula
+    return formula, vis.globals

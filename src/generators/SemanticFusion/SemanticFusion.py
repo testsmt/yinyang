@@ -12,7 +12,8 @@ class SemanticFusion(Generator):
         assert(len(seeds) == 2)
         self.seed1 = seeds[0]
         self.seed2 = seeds[1]
-        self.formula1, self.formula2 = parse_file(self.seed1,silent=False), parse_file(self.seed2, silent=False)
+        self.formula1,_ = parse_file(self.seed1,silent=False)
+        self.formula2,_ = parse_file(self.seed2, silent=False)
 
         self.config_file = self.args.fusionfun
         self.oracle = self.args.oracle
@@ -45,7 +46,7 @@ class SemanticFusion(Generator):
                 curr.append(l)
 
         for i,mr in enumerate(_mrs):
-            template = parse_str(mr)
+            template,_ = parse_str(mr)
             sort = template.commands[0].sort
 
             if not sort in self.templates:

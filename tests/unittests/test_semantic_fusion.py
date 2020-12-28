@@ -12,7 +12,7 @@ class Mockargs:
     oracle = ""
     fusionfun = "."
 
-class SemanticFusionTestCase(unittest.TestCase): 
+class SemanticFusionTestCase(unittest.TestCase):
     def test_sf_sat(self):
         pass
         fcts= """

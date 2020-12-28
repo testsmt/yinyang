@@ -9,7 +9,7 @@ class TypeAwareOpMutation(Generator):
         assert(len(seed_fns) == 1)
         self.seed_fn = seed_fns[0]
         self.args = args
-        self.formula = parse_file(seed_fns[0])
+        self.formula, _ = parse_file(seed_fns[0])
         self.bidirectional = []
         self.unidirectional = []
 
