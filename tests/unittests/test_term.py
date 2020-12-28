@@ -112,12 +112,33 @@ class TermTestCase(unittest.TestCase):
             self.assertEqual(script.free_var_occs.__str__(),"[ts0uscore1:Real, a:Real]")
 
 
+        def free_vars_let():
+            script="""\
+(declare-fun ?v_0 () Int)
+(assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))
+(check-sat)
+(exit)
+"""
+            script = parse_str(script)
+            self.assertEqual(script.free_var_occs.__str__(),"[]")
+
+            script="""\
+(declare-fun ?v_0 () Int)
+(assert (= ?v_0 0))
+(check-sat)
+(exit)
+"""
+            script = parse_str(script)
+            self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
+
+
         var2const()
         entire_expr()
         subexpr()
         substitute1()
         substitute2()
         free_vars_quantifier()
+        free_vars_let()
 
         
 if __name__ == '__main__':

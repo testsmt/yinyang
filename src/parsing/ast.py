@@ -8,7 +8,9 @@ class Script:
 
         for cmd in self.commands:
             if isinstance(cmd, Assert):
+                # print("before:", self.free_var_occs)
                 self._get_free_var_occs(cmd.term, self.global_vars)
+                # print("after:", self.free_var_occs)
                 self._get_op_occs(cmd.term)
 
     def _get_op_occs(self,e):
@@ -30,8 +32,15 @@ class Script:
                 for quantified_var in e.quantified_vars:
                     if var == quantified_var[0]:
                         global_vars.pop(var)
+
+        if e.var_binders:
+            for var in list(global_vars):
+                for let_var in e.var_binders: 
+                     if var == let_var:
+                        global_vars.pop(var)
+
         if e.is_var:
-            if e.type != "Unknown" and e.name in global_vars:
+            if e.name in global_vars:
                 self.free_var_occs.append(e)
             return
 
