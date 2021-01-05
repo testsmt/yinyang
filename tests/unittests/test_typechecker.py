@@ -17,17 +17,18 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (= v (not (= y (- 1)))))
 (check-sat)
 """
-        formula,_ = parse_str(formula_str)
+        formula, globals = parse_str(formula_str)
+        ctxt=Context(globals,{})
         equals=formula.commands[2].term
-        self.assertequals(typecheck_expr(equal), BOOLEAN_TYPE)
+        self.assertEquals(typecheck_expr(equals,ctxt), BOOLEAN_TYPE)
         v = equals.subterms[0]
-        self.assertequals(typecheck_expr(v),BOOLEAN_TYPE)
+        self.assertEquals(typecheck_expr(v,ctxt),BOOLEAN_TYPE)
         not_op = equals.subterms[1]
-        self.assertequals(typecheck_expr(not_op), BOOLEAN_TYPE)
+        self.assertEquals(typecheck_expr(not_op,ctxt), BOOLEAN_TYPE)
         y = equals.subterms[1].subterms[0].subterms[0]
-        self.assertequals(typecheck_expr(y), INTEGER_TYPE)
+        self.assertEquals(typecheck_expr(y,ctxt), INTEGER_TYPE)
         minusone= equals.subterms[1].subterms[0].subterms[1]
-        self.assertequals(typecheck_expr(minusone), INTEGER_TYPE)
+        self.assertEquals(typecheck_expr(minusone,ctxt), INTEGER_TYPE)
 
         formula_str=\
 """
@@ -36,8 +37,10 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (ite v false (= y (- 1))))
 (check-sat)
 """
-        ite, _ = parse_str(formula_str).commands[2].term
-        self.assertEqual(typecheck_expr(ite), BOOLEAN_TYPE)
+        formula, globals = parse_str(formula_str)
+        ite = formula.commands[2].term
+        ctxt=Context(globals,{})
+        self.assertEqual(typecheck_expr(ite,ctxt), BOOLEAN_TYPE)
 
 
     def test_error(self):
@@ -48,11 +51,12 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (= v (not (= v (- 1)))))
 (check-sat)
 """
-        formula, _ = parse_str(formula_str)
+        formula, globals = parse_str(formula_str)
+        ctxt=Context(globals,{})
         equals=formula.commands[2].term
         no_excpt=True
         try:
-            typecheck_expr(equal)
+            typecheck_expr(equal,ctxt)
         except:
             no_except=False
         self.assertFalse(no_except)
@@ -66,9 +70,10 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (= v (+ v v w)))
 (check-sat)
 """
-        formula, _ = parse_str(formula_str)
+        formula, globals = parse_str(formula_str)
+        ctxt=Context(globals,{})
         nary_plus = formula.commands[2].term.subterms[1]
-        self.assertEqual(typecheck_expr(nary_plus), INTEGER_TYPE)
+        self.assertEqual(typecheck_expr(nary_plus,ctxt), INTEGER_TYPE)
 
     def test_typecheck_comp_ops(self):
         formula_str=\
@@ -78,8 +83,10 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (> v (+ v v w)))
 (check-sat)
 """
-        greater, _ = parse_str(formula_str).commands[2].term
-        self.assertEqual(typecheck_expr(greater), BOOLEAN_TYPE)
+        formula, globals = parse_str(formula_str)
+        greater = formula.commands[2].term
+        ctxt=Context(globals,{})
+        self.assertEqual(typecheck_expr(greater,ctxt), BOOLEAN_TYPE)
 
     def test_typecheck_string_ops(self):
         formula_str=\
@@ -87,11 +94,12 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (distinct (str.replace_all "B" "A" "") "B"))
 (check-sat)
 """
-        formula, _ = parse_str(formula_str)
+        formula, globals = parse_str(formula_str)
+        ctxt=Context(globals,{})
         distinct = formula.commands[0].term
-        self.assertEqual(typecheck_expr(distinct), BOOLEAN_TYPE)
+        self.assertEqual(typecheck_expr(distinct,ctxt), BOOLEAN_TYPE)
         str_repl=distinct.subterms[0]
-        self.assertEqual(typecheck_expr(str_repl), STRING_TYPE)
+        self.assertEqual(typecheck_expr(str_repl,ctxt), STRING_TYPE)
         formula_str=\
 """
 (declare-fun a () String)
@@ -100,9 +108,10 @@ class TypecheckerTestCase(unittest.TestCase):
 (assert (= (str.at a (- (str.len a) 1)) "B"))
 (check-sat)
 """
-        formula = parse_str(formula_str)
+        formula,globals = parse_str(formula_str)
+        ctxt=Context(globals,{})
         for i in range(1, 4):
-            typecheck_expr(formula.commands[i].term)
+            typecheck_expr(formula.commands[i].term,ctxt)
 
     def test_let_expression(self):
         formula_str=\
