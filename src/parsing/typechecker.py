@@ -391,7 +391,6 @@ def typecheck_select(expr,ctxt):
     array_type = typecheck_expr(expr.subterms[0],ctxt)
     if isinstance(array_type, ARRAY_TYPE):
         raise TypeCheckError(expr, expr, ARRAY_TYPE, array_type)
-    print(array_type)
     x_type = typecheck_expr(expr.subterms[1],ctxt)
     if x_type != array_type.index_type:
         raise TypeCheckError(expr, expr, array_type.index_type, x_type)
@@ -573,7 +572,6 @@ def typecheck_fp_fma(expr,ctxt):
     return typecheck_expr(arg1,ctxt)
 
 def typecheck_fp_ops(expr,ctxt):
-    print("expr", expr)
     if expr.op in [FP_ABS, FP_NEG]:
         return typecheck_fp_unary(expr,ctxt)
     if expr.op in [FP_ADD, FP_SUB, FP_MUL, FP_DIV,FP_SQRT, FP_REM,FP_ROUND_TO_INTEGRAL]:
@@ -646,8 +644,8 @@ def typecheck_label(expr, ctxt):
     return typecheck_expr(expr.subterms[0],ctxt)
 
 def typecheck_expr(expr, ctxt=Context({},{})):
-    if isinstance(expr, str):
-        print("String expr", expr)
+    # if isinstance(expr, str):
+        # print("String expr", expr)
     # print("globals", ctxt.globals)
     # print()
     # print("expr", expr)
@@ -665,7 +663,6 @@ def typecheck_expr(expr, ctxt=Context({},{})):
             return ctxt.globals[expr.name]
         return UNKNOWN
     elif expr.op:
-        print("DEBUG1", expr.op)
         if expr.op in CORE_OPS:
             return typecheck_core(expr,ctxt)
         if expr.op in NUMERICAL_OPS:
@@ -683,7 +680,6 @@ def typecheck_expr(expr, ctxt=Context({},{})):
         if expr.op in BV_OPS:
             return typecheck_bv_ops(expr,ctxt)
         if expr.op in FP_OPS:
-            print("DEBUG2")
             return typecheck_fp_ops(expr,ctxt)
         key = expr.op.__str__()
         if key in ctxt.globals:
