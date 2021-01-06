@@ -9,20 +9,20 @@ from src.parsing.typechecker import *
 formula=\
 """
 (declare-fun x () Int)
-(declare-fun w () Bool)
-(assert (= 1 1))
-(assert w)
+(declare-fun y () Int)
+(declare-fun z () Int)
+(assert (> (* (+3 x) (- y 2)) (/ 5 z)))
 (check-sat)
 """
 
 # 1. Parse formula; generates AST for SMT commands carrying expressions, e.g., 
 # asserts    
-formula, _ = parse_str(formula,silent=False)
+formula, glob = parse_str(formula,silent=False)
 print(formula)
 
 # 2. Typecheck the terms inside the first assert.  
-ctxt=Context({},{}) # carries locals and globals see src/ast/typechecker.py 
+ctxt=Context(glob,{}) # carries locals and globals see src/ast/typechecker.py 
 # 
-first_assert=formula.commands[2]
+first_assert=formula.commands[3]
 t = typecheck_expr(first_assert.term,ctxt)
-print(t)
+print(t[1])
