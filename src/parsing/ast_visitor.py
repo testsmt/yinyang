@@ -9,7 +9,8 @@ from .types import *
 class ASTVisitor(SMTLIBv2Visitor):
     def __init__(self, strict=True):
         self.strict = strict
-        self.globals= {}
+        self.globals = {}
+        self.sorts = {}
 
     def visitStart(self, ctx:SMTLIBv2Parser.StartContext):
         return self.visitScript(ctx.script())
@@ -22,6 +23,9 @@ class ASTVisitor(SMTLIBv2Visitor):
 
     def add_to_globals(self, identifier, input_sorts, output_sort):
         if len(input_sorts) == 0:
+            if output_sort in self.sorts:
+                output_sort = self.sorts[output_sort]
+                print("DEBUG")
             self.globals[identifier] = sort2type(output_sort)
         else:
             self.globals[identifier] = sort2type(input_sorts + " "+ output_sort)
@@ -121,10 +125,12 @@ class ASTVisitor(SMTLIBv2Visitor):
                 terms.append(self.visitTerm(t))
             return GetValue(terms)
 
+        # Dominik: We do not need an explicit represention of the (define-sort
+        # statements in the AST but need to add the defined sorts to the context.
         if ctx.cmd_defineSort():
-            # print("self.symbol",self.symbol())
-            print("self.sort",)
-
+            symbol = self.visitSymbol(ctx.symbol()[0])
+            sort = self.visitSort(ctx.sort()[0])
+            self.sort_ctxt[symbol] = sort
 
     def visitFunction_dec(self, ctx:SMTLIBv2Parser.Function_decContext):
         sorted_vars = []
@@ -187,14 +193,13 @@ class ASTVisitor(SMTLIBv2Visitor):
     | binary
     | string
     | b_value
-    | ParOpen GRW_Underscore ' bv' numeral numeral  ParClose
+    | ParOpen GRW_Underscore ' bv' numeral numeral ParClose
     ;
     """
     def visitSpec_constant(self, ctx:SMTLIBv2Parser.Spec_constantContext):
         if ctx.ParOpen():
             X,n = ctx.numeral()[0].getText(), ctx.numeral()[1].getText()
-            # TODO: None -> Bitvector type
-            return "(_ bv"+X+" "+n+")", None
+            return "(_ bv"+X+" "+n+")", BITVECTOR_TYPE(int(n))
         if ctx.numeral():
             return ctx.getText(),INTEGER_TYPE
         if ctx.decimal():
@@ -220,7 +225,7 @@ class ASTVisitor(SMTLIBv2Visitor):
             | ParOpen GRW_Match term ParOpen match_case+ ParClose ParClose
             | ParOpen GRW_Exclamation term attribute+ ParClose
             ;
-        """
+    """
     def visitTerm(self, ctx:SMTLIBv2Parser.TermContext, local_vars={}):
         if ctx.ParOpen() and ctx.GRW_Exclamation() and ctx.term()\
            and len(ctx.attribute()) >= 1 and ctx.ParClose():

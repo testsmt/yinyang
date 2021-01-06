@@ -5,8 +5,6 @@ from src.parsing.ast_visitor import *
 from src.parsing.parse import *
 from src.parsing.types import *
 
-# TODO: make a difference between chainable and non-chainable ops
-
 class Context:
     def __init__(self,globals,locals):
         self.globals = globals
@@ -36,7 +34,6 @@ class TypeCheckError(Exception):
             self.message+="faulty subterm:\t"+subterm.__str__()+"\n"
         else:
             self.message+="faulty subterm:\t"+subterm.__str__()+"\n"
-
         self.message+="expected: \t"+str(expected)+"\n"
         self.message+="actual: \t"+str(actual)
         super().__init__(self.message)
@@ -89,8 +86,7 @@ def typecheck_nary_int_ret(expr, ctxt=[]):
 def is_subtype(t, tprime):
     if t == INTEGER_TYPE and tprime == REAL_TYPE:
         return True
-    else:
-        return False
+    return False
 
 
 def typecheck_eq(expr, ctxt=[]):
@@ -102,7 +98,7 @@ def typecheck_eq(expr, ctxt=[]):
         t = typecheck_expr(term,ctxt)
         if t != typ:
             if not (is_subtype(t,typ) or is_subtype(typ,t)):
-               raise TypeCheckError(expr, term, t,typ)
+               raise TypeCheckError(expr, term, typ, t)
     return BOOLEAN_TYPE
 
 def typecheck_ite(expr, ctxt=[]):
@@ -445,7 +441,9 @@ def typecheck_bv_binary(expr,ctxt):
     t1 = typecheck_expr(expr.subterms[0],ctxt)
     t2 = typecheck_expr(expr.subterms[1],ctxt)
     if not isinstance(t1,BITVECTOR_TYPE) or not isinstance(t2,BITVECTOR_TYPE):
-        raise TypeCheckError(expr, [arg1,arg2], [BITVECTOR_TYPE, BITVECTOR_TYPE], [t1,t2])
+        expected = "["+ str(BITVECTOR_TYPE)+ ","+ str(BITVECTOR_TYPE) + "]"
+        actual = "["+ str(t1) + ","+ str(t2) + "]"
+        raise TypeCheckError(expr, arg1, expected, actual)
     return BITVECTOR_TYPE(t1.bitwidth)
 
 def typecheck_binary_bool_rt(expr,ctxt):
@@ -467,7 +465,7 @@ def typecheck_bv_ops(expr,ctxt):
         return typecheck_bv_concat(expr,ctxt)
     if expr.op in [BVNOT,BVNEG]:
         return typecheck_bv_unary(expr,ctxt)
-    if expr.op in [BVAND, BVOR,BVADD,BVMUL,BVUDIV,BVUREM,BVSHL,BVLSHR]:
+    if expr.op in [BVAND, BVOR,BVADD,BVSUB,BVMUL,BVUDIV,BVUREM,BVSHL,BVLSHR,BVASHR]:
         return typecheck_bv_binary(expr,ctxt)
     if expr.op in [BVULT,BVSLT]:
         return typecheck_binary_bool_rt(expr,ctxt)
@@ -481,7 +479,6 @@ def typecheck_fp_unary(expr, ctxt):
     t = typecheck_expr(expr.subterms[0],ctxt)
     if not isinstance(t,FP_TYPE):
         raise TypeCheckError(expr, arg, FP_TYPE, t)
-
     return typecheck_expr(expr.subterms[0],ctxt)
 
 def typecheck_fp_binary_arith(expr, ctxt):
@@ -542,7 +539,10 @@ def typecheck_fp_comparison(expr, ctxt):
     typ2 = typecheck_expr(arg2,ctxt)
     if not isinstance(typ1,FP_TYPE) or\
        not isinstance(typ2,FP_TYPE):
-        raise TypeCheckError(expr, [arg1, arg2], [FP_TYPE, FP_TYPE], [typ1,typ2])
+        args="["+arg1.__str__() +","+ arg2.__str__()+"]"
+        expected="["+str(FP_TYPE)+ ","+ str(FP_TYPE)+"]"
+        actual="["+typ1.__str__() + ","+ typ2.__str__()+ "]"
+        raise TypeCheckError(expr, args, expected, actual)
     return BOOLEAN_TYPE
 
 def typecheck_fp_minmax(expr,ctxt):
@@ -577,7 +577,6 @@ def typecheck_fp_ops(expr,ctxt):
     if expr.op in [FP_ADD, FP_SUB, FP_MUL, FP_DIV,FP_SQRT, FP_REM,FP_ROUND_TO_INTEGRAL]:
         return typecheck_fp_binary_arith(expr, ctxt)
     if expr.op in [FP_NORMAL, FP_ISSUBNORMAL, FP_IS_ZERO, FP_ISINFINITE, FP_ISNAN, FP_ISNEGATIVE, FP_ISPOSITIVE]:
-        print("DEBUG")
         return typecheck_fp_unary_bool_rt(expr, ctxt)
     if expr.op in [FP_LEQ,FP_LT,FP_GEQ,FP_GT,FP_EQ]:
         return typecheck_fp_comparison(expr, ctxt)
@@ -636,24 +635,57 @@ def typecheck_let_expression(expr,ctxt):
     types = []
     for i in range(l):
         var = expr.var_binders[i]
+        print("var", var)
         t = typecheck_expr(expr.let_terms[i],ctxt)
+        print("t",t)
         ctxt.add_to_locals(var,t)
     return typecheck_expr(expr.subterms[0], ctxt)
 
 def typecheck_label(expr, ctxt):
     return typecheck_expr(expr.subterms[0],ctxt)
 
+
+def typecheck_to_fp_unsigned(expr,ctxt):
+    """
+    ((_ to_fp_unsigned eb sb) RoundingMode (_ BitVec m) (_ FloatingPoint eb sb))
+    """
+    eb, sb = int(expr.op.split(" ")[2]), int(expr.op.split(" ")[3].strip(")"))
+    t1 = typecheck_expr(expr.subterms[0],ctxt)
+    t2 = typecheck_expr(expr.subterms[1],ctxt)
+    if not (isinstance(t1,ROUNDINGMODE_TYPE) and isinstance(t2,BITVECTOR_TYPE)):
+        raise TypeCheckError(expr)
+
+    return FP_TYPE(eb,sb)
+
+
+def typecheck_to_fp(expr,ctxt):
+    """
+    ((_ to_fp eb sb) (_ BitVec m) (_ FloatingPoint eb sb))
+    ((_ to_fp eb sb) RoundingMode (_ FloatingPoint mb nb) (_ FloatingPoint eb sb))
+    ((_ to_fp eb sb) RoundingMode Real (_ FloatingPoint eb sb))
+    ((_ to_fp eb sb) RoundingMode (_ BitVec m) (_ FloatingPoint eb sb))
+    """
+    eb, sb = int(expr.op.split(" ")[2]), int(expr.op.split(" ")[3].strip(")"))
+    if len(expr.subterms) == 1:
+        bv = expr.subterms[0]
+        t = typecheck_expr(expr.subterms[0],ctxt)
+        if not isinstance(t,BITVECTOR_TYPE):
+            raise TypeCheckError(expr, bv, BITVECTOR_TYPE, t)
+
+    if len(expr.subterms) == 2:
+        arg1 = expr.subterms[0]
+        arg2 = expr.subterms[1]
+        t1 = typecheck_expr(expr.subterms[0],ctxt)
+        t2 = typecheck_expr(expr.subterms[1],ctxt)
+        if not (isinstance(t1,ROUNDINGMODE_TYPE) and isinstance(t2,FP_TYPE)) or\
+           not (isinstance(t1,ROUNDINGMODE_TYPE) and t2 == REAL_TYPE) or\
+           not (isinstance(t1,ROUNDINGMODE_TYPE) and isinstance(t2,BITVECTOR_TYPE)):
+            raise TypeCheckError(expr)
+
+    return FP_TYPE(eb,sb)
+
 def typecheck_expr(expr, ctxt=Context({},{})):
-    # if isinstance(expr, str):
-        # print("String expr", expr)
-    # print("globals", ctxt.globals)
-    # print()
-    # print("expr", expr)
-    # print("expr.op", expr.op)
-    # print("expr.is_var", expr.is_var)
-    # print("expr.is_const", expr.is_const)
-    # print("globals", ctxt.globals)
-    # print("locals", ctxt.locals)
+    print("expr",expr)
     if expr.is_const:
         return expr.type
     if expr.is_var or expr.is_indexed_id:
@@ -677,10 +709,22 @@ def typecheck_expr(expr, ctxt=Context({},{})):
             return typecheck_string_ops(expr,ctxt)
         if expr.op in ARRAY_OPS:
             return typecheck_array_ops(expr,ctxt)
-        if expr.op in BV_OPS:
-            return typecheck_bv_ops(expr,ctxt)
         if expr.op in FP_OPS:
             return typecheck_fp_ops(expr,ctxt)
+
+        # FP infix ops
+        if TO_FP in expr.op:
+            return typecheck_to_fp(expr,ctxt)
+
+        if TO_FP_UNSIGNED in expr.op:
+            return typecheck_to_fp_unsigned(expr,ctxt)
+
+        # BV infix ops
+        if BV_EXTRACT in expr.op\
+            or BV_ZERO_EXTEND in expr.op\
+            or BV_SIGN_EXTEND in expr.op:
+            return typecheck_bv_unary(expr,ctxt)
+
         key = expr.op.__str__()
         if key in ctxt.globals:
             t = ctxt.globals[key].split(" ")[-1]
