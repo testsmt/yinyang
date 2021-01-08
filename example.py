@@ -1,6 +1,7 @@
 """
 Illustrates parser and typechecker on simple SMT formula/script.  
 """
+import time
 import sys  
 from src.parsing.ast import *  
 from src.parsing.parse import *  
@@ -24,7 +25,12 @@ print(formula)
 # 2. Typecheck the terms inside the first assert.  
 ctxt=Context(glob,{}) # carries locals and globals see src/ast/typechecker.py 
 first_assert=formula.commands[3]
-av_expr, expr_type = typecheck_recur(first_assert,ctxt)
+
+start_time = time.time()
+av_expr, expr_type = typecheck_recur_list(first_assert,ctxt)
+print("execution time for list: {}".format(time.time()-start_time))
 print("number of available expressions: {}".format(len(av_expr)))
-print("length of dictionary: {}".format(len(expr_type)))
-print(expr_type)
+str_expr = []
+for i in range(len(av_expr)):
+    str_expr.append((str(av_expr[i]),expr_type[i]))
+print(str_expr)

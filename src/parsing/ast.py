@@ -5,11 +5,13 @@ class Script:
         self.global_vars = global_vars
         self.free_var_occs = []
         self.op_occs = []
+        self.assert_cmd = []
 
         for cmd in self.commands:
             if isinstance(cmd, Assert):
                 self._get_free_var_occs(cmd.term, self.global_vars)
                 self._get_op_occs(cmd.term)
+                self.assert_cmd.append(cmd)
 
     def _get_op_occs(self,e):
         if isinstance(e,str): return
