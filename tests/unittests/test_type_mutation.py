@@ -20,6 +20,10 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         (declare-fun y () Int)
         (declare-fun z () Int)
         (assert (> (* (+ 3 x) (- y 2)) (/ 5 z)))
+        (assert (= (+ 7 y) x))
+        (assert (distinct z x))
+        (assert (= 1 1.0))
+        (assert true)
         (check-sat)
         """
         with open(formulafile,"w") as f: 
@@ -30,6 +34,11 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         print(formulafile)
         args.name = formulafile.strip(".smt2")
         gen = TypeMutation([formulafile],args,ctxt)
+        print("###########################################")
+        print("type mutation within single expression")
+        gen.generate_single_expression()
+        print("###########################################")
+        print("type mutation general")
         gen.generate()
         os.system("rm -rf "+formulafile)
 
