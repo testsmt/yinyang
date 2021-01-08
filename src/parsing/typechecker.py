@@ -38,6 +38,12 @@ class TypeCheckError(Exception):
         self.message+="actual: \t"+str(actual)
         super().__init__(self.message)
 
+class UnknownOperator(Exception): 
+    def __init__(self,op):
+        self.message="unknown function/constant "+op 
+        sys.tracebacklimit = 0
+        super().__init__(self.message)
+
 def typecheck_not(expr, ctxt=[]):
     """ (not Bool Bool) """
     typ = typecheck_expr(expr.subterms[0],ctxt)
@@ -685,7 +691,6 @@ def typecheck_to_fp(expr,ctxt):
     return FP_TYPE(eb,sb)
 
 def typecheck_expr(expr, ctxt=Context({},{})):
-    print("expr",expr)
     if expr.is_const:
         return expr.type
     if expr.is_var or expr.is_indexed_id:
@@ -729,6 +734,9 @@ def typecheck_expr(expr, ctxt=Context({},{})):
         if key in ctxt.globals:
             t = ctxt.globals[key].split(" ")[-1]
             return t
+
+        raise UnknownOperator(expr.op)
+
     elif expr.quantifier:
         return typecheck_quantifiers(expr,ctxt)
     elif expr.let_terms:
