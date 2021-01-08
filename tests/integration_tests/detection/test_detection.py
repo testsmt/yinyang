@@ -160,8 +160,29 @@ def test_empty_output():
         os.system("rm -rf "+sat_solver)
         os.system("rm -rf "+empty_solver)
 
+def test_get_value():
+    print("6. Test get-value ")
+    empty_solver = "empty_solver.py"
+    sat_solver = "sat_solver.py"
+    msg="(= 1.0 x)"
+    create_mocksolver_msg(msg,empty_solver)
+    msg="sat"
+    create_mocksolver_msg(msg,sat_solver)
+    first_config=os.path.abspath(empty_solver)
+    second_config=os.path.abspath(sat_solver)
+    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(first_config, second_config, FN,OPTS)
+
+    if ignored != 1:
+        print("[ERROR] Empty output undetected.")
+        print(cmd)
+        exit(1)
+    else:
+        os.system("rm -rf "+sat_solver)
+        os.system("rm -rf "+empty_solver)
+
+
 def test_unsoundness():
-    print("6. Unsoundness")
+    print("7. Unsoundness")
     values = ["sat", "unsat", "unknown"]
     k = random.randint(1,20)
     res1 = random.choices(values, k=k)
@@ -294,6 +315,7 @@ if __name__ == "__main__":
     test_segfault()
     test_timeout()
     test_empty_output()
+    test_get_value()
     test_unsoundness()
     test_soundness()
     test_duplicate_list()
