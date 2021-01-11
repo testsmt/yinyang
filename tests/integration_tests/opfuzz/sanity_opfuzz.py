@@ -2,7 +2,6 @@ import os,subprocess
 import sys
 N=300
 python=sys.executable
-errors=False
 
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
@@ -31,9 +30,8 @@ def get_z3():
     return os.path.abspath("z3-4.8.6-x64-ubuntu-16.04/bin/z3")
 
 def cleanup():
-    pass
-    # subprocess.getoutput("rm -rf cvc4*")
-    # subprocess.getoutput("rm -rf z3*")
+    subprocess.getoutput("rm -rf cvc4*")
+    subprocess.getoutput("rm -rf z3*")
 
 cleanup()
 #
@@ -64,7 +62,7 @@ for _ in range(N):
 if not bug_catched:
     print("[ERROR] Soundness bug could not be reproduced.")
     print(cmd)
-    errors=True
+    exit(1)
 
 first_config=z3+ ' model_validate=true'
 second_config=cvc4+ ' --incremental --produce-models -q'
@@ -82,7 +80,7 @@ for _ in range(N):
 if not bug_catched:
     print("[ERROR] Invalid model bug could not be reproduced.")
     print(cmd)
-    errors=True
+    exit(1)
 
 first_config=z3+ ' model_validate=true'
 second_config=cvc4+ ' --incremental --produce-models -q'
@@ -100,12 +98,8 @@ for _ in range(N):
 if not bug_catched:
     print("[ERROR] Crash bug could not be reproduced.")
     print(cmd)
-    error=True
+    exit(1)
 
 cleanup()
-
-if errors:
-    print("[ERROR] Some bugs not retriggered.")
-    exit(1)
 
 print("[SUCCESS] All bugs retriggered.")

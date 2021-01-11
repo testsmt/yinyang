@@ -175,9 +175,6 @@ class Fuzzer:
                     # the ignore list.
                     if self.in_ignore_list(stdout, stderr):
                         self.statistic.ignored += 1
-                        continue # continue with next solver (4)
-                    self.statistic.crashes += 1
-                    self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
                     continue # continue with next solver (4)
                 else:
                     # (5) grep for '^sat$', '^unsat$', and '^unknown$' to produce
@@ -193,7 +190,7 @@ class Fuzzer:
                     # non-erroneous solver runs (opfuzz) for soundness bugs.
                     if not oracle.equals(result):
                         self.statistic.soundness += 1
-                        report_id = self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
+                        self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
                         if reference:
                             # Produce a diff bug report for soundness bugs in 
                             # the opfuzz case 

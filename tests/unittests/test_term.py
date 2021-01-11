@@ -80,12 +80,68 @@ class TermTestCase(unittest.TestCase):
             equals.substitute(z, replacee)
             self.assertEqual(equals.__str__(),"(= y (str.replace (str.++ x y) x (str.at (str.++ x y) (str.len (str.++ x y)))))")
 
+        def free_vars_quantifier():
+            script="""\
+(set-info :category "industrial")
+(set-info :status unsat)
+(declare-fun a () Real)
+(declare-fun ts0uscore1 () Real)
+(assert (exists ((ts0uscore1 Real)) (> ts0uscore1 a)))
+(check-sat)
+"""
+            script = parse_str(script)
+            self.assertEqual(script.free_var_occs.__str__(), "[a:Real]")
+
+            script="""\
+(set-info :category "industrial")
+(set-info :status unsat)
+(declare-fun a () Real)
+;(declare-fun ts0uscore1 () Real)
+(assert (exists ((ts0uscore1 Real)) (> ts0uscore1 a)))
+(check-sat)
+"""
+            script = parse_str(script)
+            self.assertEqual(script.free_var_occs.__str__(), "[a:Real]")
+
+            script="""\
+(set-info :category "industrial")
+(set-info :status unsat)
+(declare-fun a () Real)
+(declare-fun ts0uscore1 () Real)
+(assert (> ts0uscore1 a))
+(check-sat)
+"""
+            script = parse_str(script)
+            self.assertEqual(script.free_var_occs.__str__(),"[ts0uscore1:Real, a:Real]")
+
+
+        def free_vars_let():
+            script="""\
+(declare-fun ?v_0 () Int)
+(assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))
+(check-sat)
+(exit)
+"""
+            script = parse_str(script)
+            self.assertEqual(script.free_var_occs.__str__(),"[]")
+
+            script="""\
+(declare-fun ?v_0 () Int)
+(assert (= ?v_0 0))
+(check-sat)
+(exit)
+"""
+            script = parse_str(script)
+            self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
+
 
         var2const()
         entire_expr()
         subexpr()
         substitute1()
         substitute2()
+        free_vars_quantifier()
+        free_vars_let()
 
         
 if __name__ == '__main__':

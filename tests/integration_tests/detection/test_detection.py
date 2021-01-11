@@ -75,7 +75,7 @@ def test_crash_list():
     if crash != 1:
         print("[ERROR] Crash cannot be captured.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver)
 
@@ -100,7 +100,7 @@ def test_ignore_list():
     if ignored != 2:
         print("[ERROR] Ignore list incorrect.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver)
 
@@ -115,7 +115,7 @@ def test_segfault():
     if crash != 1:
         print("[ERROR] Segfault undetected.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver)
 
@@ -134,7 +134,7 @@ def test_timeout():
     if timeout != 1:
         print("[ERROR] Timeout undetected.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+timeout_solver)
         os.system("rm -rf "+sat_solver)
@@ -155,7 +155,7 @@ def test_empty_output():
     if ignored != 1:
         print("[ERROR] Empty output undetected.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+sat_solver)
         os.system("rm -rf "+empty_solver)
@@ -181,7 +181,7 @@ def test_unsoundness():
     if soundness != 1:
         print("[ERROR] Unsundness undetected.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver1)
         os.system("rm -rf "+solver2)
@@ -209,7 +209,7 @@ def test_soundness():
     if soundness != 0:
         print("[ERROR] False positive.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver1)
         os.system("rm -rf "+solver2)
@@ -278,8 +278,7 @@ ignore_list = [
 
     if duplicate != 1:
         print("[ERROR] Duplicate crash cannot be captured.")
-        print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver)
     os.system("mv config/config.py.orig config/config.py")
@@ -298,6 +297,3 @@ if __name__ == "__main__":
     test_unsoundness()
     test_soundness()
     test_duplicate_list()
-    if not ERRORS:
-        print("[SUCCESS] All tests passed.")
-
