@@ -79,7 +79,7 @@ class ASTVisitor(SMTLIBv2Visitor):
             self.add_to_globals(identifier,sorted_vars, self.visitSort(ctx.function_def().sort()))
             return DefineFun(identifier,
                              sorted_vars,
-                             self.visitSort(ctx.function_def().sort(),{}),
+                             self.visitSort(ctx.function_def().sort()),
                              self.visitTerm(ctx.function_def().term(),{}))
 
         if ctx.cmd_defineFunRec():
