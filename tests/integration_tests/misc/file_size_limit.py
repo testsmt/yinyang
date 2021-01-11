@@ -49,5 +49,5 @@ opts='-i 1 -m 1'
 FN=os.path.dirname(os.path.realpath(__file__))+"/too_large.smt2"
 generated, used, crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(first_config, second_config, FN,opts)
 assert(generated == crash == soundness == duplicate == timeout == ignored == 0) 
-assert(used == 2)
+assert(used == 1)
 
