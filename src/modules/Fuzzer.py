@@ -15,7 +15,7 @@ from src.utils import random_string, plain, escape, in_list
 
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
-from src.generators.TypeMutation import *
+from src.generators.TypeMutation import TypeMutation
 
 class Fuzzer:
 

@@ -60,6 +60,7 @@ class TypeMutation(Generator):
 
     def _add_seedinfo(self,formula):
         formula.commands = [Comment(self.seed_fn)] + formula.commands
+        return formula
 
     def generate(self):
         av_expr = []
