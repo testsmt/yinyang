@@ -80,4 +80,4 @@ class TypeMutation(Generator):
             cmd1.term.substitute(av_expr[t1], t2_copy)
             cmd2.term.substitute(av_expr[t2], t1_copy)
             return self._add_seedinfo(self.formula), True
-        return False
+        return None, False
