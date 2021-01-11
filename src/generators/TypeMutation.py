@@ -5,6 +5,9 @@ from src.generators.Generator import Generator
 from src.parsing.parse import *
 from src.parsing.typechecker_recur import *
 
+type2num = {'Bool': 0, 'Real': 1, 'Int': 2, 'RoundingMode': 3, 'String': 4, 
+'RegLan': 5, 'Unknown': 6}
+
 class TypeMutation(Generator):
     # two mutation strategies
     # first, within the single expression
@@ -21,23 +24,22 @@ class TypeMutation(Generator):
         exprs = [[],[],[],[],[],[],[]]
         for i in range(len(av_expr)):
             if expr_type[i] == BOOLEAN_TYPE:
-                exprs[0].append(av_expr[i])
+                exprs[0].append(i)
             elif expr_type[i] == REAL_TYPE:
-                exprs[1].append(av_expr[i])
+                exprs[1].append(i)
             elif expr_type[i] == INTEGER_TYPE:
-                exprs[2].append(av_expr[i])
+                exprs[2].append(i)
             elif expr_type[i] == ROUNDINGMODE_TYPE:
-                exprs[3].append(av_expr[i])
+                exprs[3].append(i)
             elif expr_type[i] == STRING_TYPE:
-                exprs[4].append(av_expr[i])
+                exprs[4].append(i)
             elif expr_type[i] == Regex:
-                exprs[5].append(av_expr[i])
+                exprs[5].append(i)
             else: 
-                exprs[6].append(av_expr[i])
+                exprs[6].append(i)
         return exprs
-
-    def get_replacee_single_expression(self, cmd):
-        av_expr, expr_type = typecheck_recur_list(cmd, self.ctxt)
+        
+    def get_replacee(self, av_expr, expr_type):
         exprs = self.categorize(av_expr, expr_type)
         types = []
         for i in range(6):
@@ -45,54 +47,37 @@ class TypeMutation(Generator):
                 types.append(i)
         if types:
             typ = random.choice(types)
-            t1, t2 = random.sample(exprs[typ],2)
-            return t1, t2
-        return False
-        
-    def get_replacee(self, cmd1, cmd2):
-        av_expr1, expr_type1 = typecheck_recur_list(cmd1, self.ctxt)
-        av_expr2, expr_type2 = typecheck_recur_list(cmd2, self.ctxt)
-        exprs1 = self.categorize(av_expr1, expr_type1)
-        exprs2 = self.categorize(av_expr2, expr_type2)
-        types = []
-        for i in range(6):
-            if len(exprs1[i]) >= 1 and len(exprs2[i]) >= 1:
-                types.append(i)
-        if types:
-            typ = random.choice(types)
-            t1 = random.choice(exprs1[typ])
-            t2 = random.choice(exprs2[typ])
-            return t1, t2
+            t1, t2 = random.sample(exprs[typ], 2)
+            while av_expr[t1] == av_expr[t2]:
+                if len(exprs[typ]) >= 3:
+                    exprs[typ].remove(t2)
+                    t2 = random.choice(exprs[typ])
+            if av_expr[t1] != av_expr[t2]:
+                return t1, t2
         return False
 
     def _add_seedinfo(self,formula):
         formula.commands = [Comment(self.seed_fn)] + formula.commands
 
-    def generate_single_expression(self):
-        cmd = random.choice(self.formula.assert_cmd)
-        print("original expression: {}".format(cmd))
-        res = self.get_replacee_single_expression(cmd)
-        if res:
-            t1, t2 = res
-            t1_copy = copy.deepcopy(t1)
-            t2_copy = copy.deepcopy(t2)
-            cmd.term.substitute(t1, t2_copy)
-            cmd.term.substitute(t2, t1_copy)
-            print("mutated expression:  {}".format(cmd))
-            return self._add_seedinfo(self.formula), True
-        return False 
-
     def generate(self):
-        cmd1 = random.choice(self.formula.assert_cmd)
-        cmd2 = random.choice(self.formula.assert_cmd)
-        print("original expressions: {}, {}".format(cmd1, cmd2))
-        res = self.get_replacee(cmd1,cmd2)
+        av_expr = []
+        expr_type = []
+        cmd = []
+        for i in range(len(self.formula.assert_cmd)):
+            exp, typ = typecheck_recur(self.formula.assert_cmd[i], self.ctxt)
+            av_expr += exp
+            expr_type += typ
+            cmd += [i]*len(exp)
+        res = self.get_replacee(av_expr,expr_type)
         if res:
             t1, t2 = res
-            t1_copy = copy.deepcopy(t1)
-            t2_copy = copy.deepcopy(t2)
-            cmd1.term.substitute(t1, t2_copy)
-            cmd2.term.substitute(t2, t1_copy)
+            cmd1 = self.formula.assert_cmd[cmd[t1]]
+            cmd2 = self.formula.assert_cmd[cmd[t2]]
+            t1_copy = copy.deepcopy(av_expr[t1])
+            t2_copy = copy.deepcopy(av_expr[t2])
+            print("original expressions: {}, {}".format(cmd1, cmd2))
+            cmd1.term.substitute(av_expr[t1], t2_copy)
+            cmd2.term.substitute(av_expr[t2], t1_copy)
             print("mutated expressions:  {}, {}".format(cmd1, cmd2))
             return self._add_seedinfo(self.formula), True
         return False

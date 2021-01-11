@@ -6,7 +6,7 @@ import os
 from src.parsing.parse import *
 from src.parsing.typechecker import Context
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
-from src.generators.TypeMutation import TypeMutation
+from src.generators.TypeMutation import *
 
 class Mockargs:
     name = ""
@@ -35,12 +35,8 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         args.name = formulafile.strip(".smt2")
         gen = TypeMutation([formulafile],args,ctxt)
         print("###########################################")
-        print("type mutation within single expression")
-        gen.generate_single_expression()
-        print("###########################################")
-        print("type mutation general")
         gen.generate()
-        os.system("rm -rf "+formulafile)
+        os.system("rm "+formulafile)
 
 
 if __name__ == '__main__':
