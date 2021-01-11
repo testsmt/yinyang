@@ -15,6 +15,7 @@ from src.utils import random_string, plain, escape, in_list
 
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
+from src.generators.TypeMutation import *
 
 class Fuzzer:
 
@@ -27,7 +28,7 @@ class Fuzzer:
 
 
     def run(self):
-        if (self.args.strategy == "opfuzz"):
+        if (self.args.strategy == "opfuzz") or (self.args.strategy == "typfuzz"):
             seeds = self.args.PATH_TO_SEEDS
         elif (self.args.strategy == "fusion"):
             if len(self.args.PATH_TO_SEEDS) > 2:
@@ -52,6 +53,11 @@ class Fuzzer:
                 self.currentseeds = Path(seed1).stem + "-" + Path(seed2).stem
                 fusion_seeds = [seed1, seed2]
                 self.generator = SemanticFusion(fusion_seeds, self.args)
+            elif (self.args.strategy == "typfuzz"):
+                seed = seeds.pop(random.randrange(len(seeds)))
+                self.statistic.seeds += 1
+                self.currentseeds = Path(seed).stem
+                self.generator = TypeMutation([seed], self.args)
             else: assert(False)
 
             for _ in range(self.args.iterations):

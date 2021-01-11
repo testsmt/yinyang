@@ -12,12 +12,12 @@ class TypeMutation(Generator):
     # two mutation strategies
     # first, within the single expression
     # second, with two expressions(possible mutation happens within the single expression)
-    def __init__(self, seed_fns, args, ctxt):
+    def __init__(self, seed_fns, args):
         assert(len(seed_fns) == 1)
         self.seed_fn = seed_fns[0]
         self.args = args 
-        self.formula, _ = parse_file(seed_fns[0])
-        self.ctxt = ctxt
+        self.formula, glob = parse_file(seed_fns[0])
+        self.ctxt = Context(glob, {})
 
     def categorize(self, av_expr, expr_type):
         # 0: Bool, 1: Real, 2: Int, 3: RoundingMode, 4: String, 5: Regex, 6: Unknown 
@@ -75,9 +75,7 @@ class TypeMutation(Generator):
             cmd2 = self.formula.assert_cmd[cmd[t2]]
             t1_copy = copy.deepcopy(av_expr[t1])
             t2_copy = copy.deepcopy(av_expr[t2])
-            print("original expressions: {}, {}".format(cmd1, cmd2))
             cmd1.term.substitute(av_expr[t1], t2_copy)
             cmd2.term.substitute(av_expr[t2], t1_copy)
-            print("mutated expressions:  {}, {}".format(cmd1, cmd2))
             return self._add_seedinfo(self.formula), True
         return False

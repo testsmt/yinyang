@@ -27,7 +27,7 @@ ctxt=Context(glob,{}) # carries locals and globals see src/ast/typechecker.py
 first_assert=formula.commands[3]
 
 start_time = time.time()
-av_expr, expr_type = typecheck_recur_list(first_assert,ctxt)
+av_expr, expr_type = typecheck_recur(first_assert,ctxt)
 print("execution time for list: {}".format(time.time()-start_time))
 print("number of available expressions: {}".format(len(av_expr)))
 str_expr = []

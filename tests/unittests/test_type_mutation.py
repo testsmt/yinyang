@@ -33,8 +33,7 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         args = Mockargs()
         print(formulafile)
         args.name = formulafile.strip(".smt2")
-        gen = TypeMutation([formulafile],args,ctxt)
-        print("###########################################")
+        gen = TypeMutation([formulafile],args)
         gen.generate()
         os.system("rm "+formulafile)
 

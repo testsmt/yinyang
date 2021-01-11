@@ -19,7 +19,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-s","--strategy",
-    choices=["opfuzz", "fusion"],
+    choices=["opfuzz", "fusion", "typfuzz"],
     default="opfuzz",
     help="set fuzzing strategy"
 )
@@ -143,6 +143,8 @@ if (args.strategy == "opfuzz" and len(args.PATH_TO_SEEDS) < 1):
     exit("Error: please provide at least one seed for opfuzz strategy.")
 if (args.strategy == "fusion" and len(args.PATH_TO_SEEDS) < 2):
     exit("Error: please provide at least two seeds for fusion strategy.")
+if (args.strategy == "typfuzz" and len(args.PATH_TO_SEEDS) < 1):
+    exit("Error: please provide at least one seed for typfuzz strategy.")
 
 if args.optfuzz == "": args.optfuzz = None
 else: args.optfuzz = OptionGenerator(args.optfuzz)
