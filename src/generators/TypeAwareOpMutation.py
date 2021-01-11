@@ -67,10 +67,6 @@ class TypeAwareOpMutation(Generator):
             return replacee
         return None
 
-    def _add_seedinfo(self,formula):
-       formula.commands = [Comment(self.seed_fn)] + formula.commands
-       return formula 
-
     def generate(self):
         for _ in range(self.args.modulo):
             max_choices = len(self.formula.op_occs)
@@ -82,4 +78,4 @@ class TypeAwareOpMutation(Generator):
                     op_occ.op = replacee
                     break
         f = self._add_seedinfo(self.formula)
-        return self._add_seedinfo(self.formula), True
+        return self.formula, True
