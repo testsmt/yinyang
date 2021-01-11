@@ -11,5 +11,4 @@ script:
   - python tests/integration_tests/opfuzz/sanity_opfuzz.py 
   - python tests/integration_tests/detection/test_detection.py
   - python tests/integration_tests/detection/test_crashes.py
-
-
+  - python tests/integration_tests/misc/file_size_limit.py

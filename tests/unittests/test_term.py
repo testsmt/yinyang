@@ -131,6 +131,37 @@ class TermTestCase(unittest.TestCase):
             script = parse_str(script)
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
+        def free_vars_let2():
+            script="""\
+(declare-fun ?v_0 () Int)                                                          
+(assert (= ?v_0 0))                                                                
+(assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))                                  
+(check-sat)                                                                        
+(exit)                                                                             
+"""                                                                                
+            script = parse_str(script,False)                                                    
+            self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
+
+            script="""\
+(declare-fun ?v_0 () Int)                                                       
+(assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))                               
+(assert (= ?v_0 0))                                                             
+(check-sat)                                                                     
+(exit)                                                                          
+"""  
+            script = parse_str(script,False)                                                         
+            self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
+
+            script="""\
+(declare-fun ?v_0 () Int)                                                       
+(assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))                               
+(assert (= ?v_0 0))                                                             
+(check-sat)                                                                     
+(exit)                                                                          
+"""  
+            script = parse_str(script,False)                                                         
+            self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
+
 
         var2const()
         entire_expr()
@@ -139,6 +170,8 @@ class TermTestCase(unittest.TestCase):
         substitute2()
         free_vars_quantifier()
         free_vars_let()
+        free_vars_let2()
+
 
         
 if __name__ == '__main__':
