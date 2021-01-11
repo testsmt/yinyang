@@ -52,6 +52,8 @@ class TypeMutation(Generator):
                 if len(exprs[typ]) >= 3:
                     exprs[typ].remove(t2)
                     t2 = random.choice(exprs[typ])
+                else:
+                    return False
             if av_expr[t1] != av_expr[t2]:
                 return t1, t2
         return False
