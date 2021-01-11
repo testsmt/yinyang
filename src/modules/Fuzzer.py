@@ -57,11 +57,7 @@ class Fuzzer:
             for _ in range(self.args.iterations):
                 self.statistic.printbar()
                 formula, success = self.generator.generate()
-                if not success:
-                    self.test(formula)
-                    self.statistic.mutants += 1
-                    break
-
+                if not success: continue
                 if not self.test(formula): break
                 self.statistic.mutants += 1
 
