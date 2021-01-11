@@ -54,6 +54,10 @@ class Fuzzer:
                 self.generator = SemanticFusion(fusion_seeds, self.args)
             else: assert(False)
 
+            seed_size_in_bytes = Path(seed).stat().st_size
+            if seed_size_in_bytes >= self.args.file_size_limit:
+                break
+
             for _ in range(self.args.iterations):
                 self.statistic.printbar()
                 formula, success = self.generator.generate()

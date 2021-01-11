@@ -77,5 +77,4 @@ class TypeAwareOpMutation(Generator):
                     # print(op_occ.op,"->",replacee)
                     op_occ.op = replacee
                     break
-        f = self._add_seedinfo(self.formula)
         return self.formula, True
