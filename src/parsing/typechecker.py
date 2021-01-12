@@ -366,7 +366,7 @@ def typecheck_string_ops(expr, ctxt):
     if expr.op in [RE_KLENE, RE_COMP, RE_OPT, RE_PLUS]:
         return typecheck_regex_binary(expr,ctxt)
     if expr.op in [RE_DIFF, RE_CONCAT, RE_UNION, RE_INTER]:
-        return typecheck_regex_binary(expr,ctext)
+        return typecheck_regex_binary(expr,ctxt)
     if expr.op == STR_AT:
         return typecheck_str_at(expr,ctxt)
     if expr.op == STR_SUBSTR:
