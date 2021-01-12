@@ -33,7 +33,7 @@ class TypeMutation(Generator):
                 exprs[3].append(i)
             elif expr_type[i] == STRING_TYPE:
                 exprs[4].append(i)
-            elif expr_type[i] == Regex:
+            elif expr_type[i] == REGEXP_TYPE:
                 exprs[5].append(i)
             else: 
                 exprs[6].append(i)
@@ -58,10 +58,6 @@ class TypeMutation(Generator):
                 return t1, t2
         return False
 
-    def _add_seedinfo(self,formula):
-        formula.commands = [Comment(self.seed_fn)] + formula.commands
-        return formula
-
     def generate(self):
         av_expr = []
         expr_type = []
@@ -80,5 +76,5 @@ class TypeMutation(Generator):
             t2_copy = copy.deepcopy(av_expr[t2])
             cmd1.term.substitute(av_expr[t1], t2_copy)
             cmd2.term.substitute(av_expr[t2], t1_copy)
-            return self._add_seedinfo(self.formula), True
+            return self.formula, True
         return None, False
