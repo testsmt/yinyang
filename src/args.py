@@ -88,6 +88,14 @@ parser.add_argument(
     action='store_true',
     help="Do not delete the mutants generated in the scratchfolder."
 )
+parser.add_argument(
+    "-fl", "--file-size-limit",
+    default=20000,
+    type=int,
+    help="File size limit on seed formula in bytes"
+)
+
+
 args = parser.parse_args()
 
 # pre-processing

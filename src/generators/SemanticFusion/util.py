@@ -1,7 +1,5 @@
 import random
 import itertools
-import string
-import copy
 
 from src.parsing.ast import *
 from src.generators.SemanticFusion.VariableFusion import *
@@ -40,7 +38,6 @@ def concat(op, script1, script2):
     script1.merge_asserts()
     script2.merge_asserts()
     sorts=[]
-    cmd_str=[]
     sorts = [cmd for cmd in script1.commands + script2.commands if is_sort(cmd)]
     sorts = list(set(sorts))
     declares1 = [cmd for cmd in script1.commands if is_constant(cmd)]
@@ -75,24 +72,10 @@ def type_var_map(global_vars):
                 mapping[global_vars[var]].append(var)
     return mapping 
 
-
-# def random_tuple_list(lst1, lst2, lb=1):
-    # """
-    # Generate a random list of tuples (x,y) where x is in lst1 and y is in lst2  
-    # """
-    # len_lst1 = len(lst1) 
-    # len_lst2 = len(lst2) 
-    # k = random.randint(lb,max(len_lst1,len_lst2))
-    # return random.sample(list(itertools.product(lst1,lst2)),k)
-
-
 def random_tuple_list(lst1, lst2, lb=1):
     """
     Generate a random list of tuples (x,y) where x is in lst1 and y is in lst2;
     """
-    len_lst1 = len(lst1)
-    len_lst2 = len(lst2)
-
     product = list(itertools.product(lst1, lst2))
 
     if len(product) == 0:
@@ -112,10 +95,11 @@ def random_tuple_list(lst1, lst2, lb=1):
         new_tups.append(tup)
     return new_tups
 
-def create_var_map(m1, m2, templates): 
+def random_var_triplets(global_vars1, global_vars2, templates):
     """
     Create a random variable mapping of variables with same type      
     """
+    m1, m2 = type_var_map(global_vars1), type_var_map(global_vars2)
     mapping=[]
     for t in templates:
         if not t in m1: continue
@@ -124,18 +108,3 @@ def create_var_map(m1, m2, templates):
         for tup in random_tuples:
             mapping.append((tup[0], tup[1], random.choice(templates[t]), t))
     return mapping 
-
-
-def random_var_triplets(global_vars1, global_vars2, templates):
-    m1, m2 = type_var_map(global_vars1), type_var_map(global_vars2)
-    # if var_map == []:
-    #     return None
-    # triplets = []
-    # for v in var_map:
-    #     template = v[2]
-    #     var_occs1 = [var for var in global_vars1 if var == v[0]]
-    #     var_occs2 = [var for var in global_vars2 if var == v[1]]
-    #     random_occs = random_tuple_list(var_occs1, var_occs2)
-    #     for occ in random_occs:
-    #         triplets.append((occ[0], occ[1], template))
-    return create_var_map(m1, m2, templates)  

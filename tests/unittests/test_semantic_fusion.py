@@ -14,7 +14,6 @@ class Mockargs:
 
 class SemanticFusionTestCase(unittest.TestCase):
     def test_sf_sat(self):
-        pass
         fcts= """
         #begin
         (declare-const x Int)

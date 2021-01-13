@@ -43,8 +43,9 @@ def parse_str(s, silent=True):
     if silent:
         try:
             ast,globals = generate_ast(istream)
-        except:
-            print("Error generating the AST.",flush=True)
+        except Exception as e:
+            print("Error generating the AST.")
+            print(e)
             exit(1)
     else:
         ast,globals = generate_ast(istream)

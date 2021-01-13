@@ -1,3 +1,5 @@
+import copy 
+
 class Script:
     def __init__(self, commands, global_vars):
         self.commands = commands
@@ -9,9 +11,9 @@ class Script:
 
         for cmd in self.commands:
             if isinstance(cmd, Assert):
-                # print("before:", self.free_var_occs)
+                globs_ = copy.deepcopy(self.global_vars)
                 self._get_free_var_occs(cmd.term, self.global_vars)
-                # print("after:", self.free_var_occs)
+                self.global_vars = globs_
                 self._get_op_occs(cmd.term)
                 self.assert_cmd.append(cmd)
 
