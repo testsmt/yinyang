@@ -391,6 +391,8 @@ def typecheck_string_ops(expr, ctxt):
         return typecheck_replace(expr,ctxt)
     if expr.op in [STR_TO_CODE,STR_TO_INT]:
         return typecheck_str_to_int(expr,ctxt)
+    if expr.op == STR_TO_RE:
+        return typecheck_str_to_re(expr,ctxt)
     if expr.op in [STR_FROM_CODE,STR_FROM_INT]:
         return typecheck_int_to_string(expr,ctxt)
     if expr.op == STR_IS_DIGIT:

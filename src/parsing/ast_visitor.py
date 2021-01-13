@@ -211,6 +211,9 @@ class ASTVisitor(SMTLIBv2Visitor):
             return ctx.getText(),STRING_TYPE
         if ctx.b_value():
             return ctx.getText(),BOOLEAN_TYPE
+        if ctx.reg_const():
+            return ctx.getText(),REGEXP_TYPE
+
 
 
     """
