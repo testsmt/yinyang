@@ -212,7 +212,8 @@ def typecheck_nary_string_rt_bool(expr, ctxt):
 
 def typecheck_str_to_re(expr, ctxt):
     """ (str.to_re String RegLan) """
-    t = typecheck_expr(expr,ctxt)
+    arg = expr.subterms[0]
+    t = typecheck_expr(arg,ctxt)
     if t != STRING_TYPE:
         raise TypeCheckError(expr, expr, STRING_TYPE, t)
     return REGEXP_TYPE
@@ -227,7 +228,12 @@ def typecheck_regex_consts(expr, ctxt):
 
 def typecheck_str_in_re(expr,ctxt):
     """ (str.in_re String RegLan Bool) """
-    t = typecheck_expr(expr,ctxt)
+    s = typecheck_expr(expr.subterms[0],ctxt)
+    t = typecheck_expr(expr.subterms[1],ctxt)
+
+    if s != STRING_TYPE:
+        raise TypeCheckError(expr,expr, STRING_TYPE, t)
+
     if t != REGEXP_TYPE:
         raise TypeCheckError(expr,expr, REGEXP_TYPE, t)
     return BOOLEAN_TYPE
@@ -372,7 +378,7 @@ def typecheck_string_ops(expr, ctxt):
     if expr.op in [RE_KLENE, RE_COMP, RE_OPT, RE_PLUS]:
         return typecheck_regex_binary(expr,ctxt)
     if expr.op in [RE_DIFF, RE_CONCAT, RE_UNION, RE_INTER]:
-        return typecheck_regex_binary(expr,ctext)
+        return typecheck_regex_binary(expr,ctxt)
     if expr.op == STR_AT:
         return typecheck_str_at(expr,ctxt)
     if expr.op == STR_SUBSTR:
@@ -389,6 +395,8 @@ def typecheck_string_ops(expr, ctxt):
         return typecheck_int_to_string(expr,ctxt)
     if expr.op == STR_IS_DIGIT:
         return typecheck_is_digit(expr,ctxt)
+    if expr.op == RE_RANGE:
+        return typecheck_re_range(expr,ctxt)
 
 def typecheck_select(expr,ctxt):
     """
@@ -694,7 +702,6 @@ def typecheck_to_fp(expr,ctxt):
     return FP_TYPE(eb,sb)
 
 def typecheck_expr(expr, ctxt=Context({},{})):
-    # print(expr)
     if expr.is_const:
         return expr.type
     if expr.is_var or expr.is_indexed_id:

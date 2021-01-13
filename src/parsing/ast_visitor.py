@@ -25,10 +25,9 @@ class ASTVisitor(SMTLIBv2Visitor):
         if len(input_sorts) == 0:
             if output_sort in self.sorts:
                 output_sort = self.sorts[output_sort]
-                print("DEBUG")
             self.globals[identifier] = sort2type(output_sort)
         else:
-            self.globals[identifier] = sort2type(input_sorts + " "+ output_sort)
+            self.globals[identifier] = sort2type(input_sorts +" "+ output_sort)
 
     def handleCommand(self, ctx:SMTLIBv2Parser.CommandContext):
         if ctx.cmd_assert():
@@ -264,6 +263,7 @@ class ASTVisitor(SMTLIBv2Visitor):
                 subterms.append(self.visitTerm(term, local_vars))
             return Expr(op=op,subterms=subterms)
 
+        print("ctxt.getText()",ctx.getText())
         if ctx.spec_constant():
             name,type=self.visitSpec_constant(ctx.spec_constant())
             return Const(name=name,type=type)
@@ -338,6 +338,7 @@ class ASTVisitor(SMTLIBv2Visitor):
             elif name in self.globals:
                 return Var(name=name, type=self.globals[name])
             else:
+                print("ctx.symbol", ctx.symbol().getText())
                 return self.visitSymbol(ctx.symbol())
         raise ASTException("No match for identifier: ... |... |... ")
 
