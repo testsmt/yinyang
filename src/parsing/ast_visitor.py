@@ -263,7 +263,6 @@ class ASTVisitor(SMTLIBv2Visitor):
                 subterms.append(self.visitTerm(term, local_vars))
             return Expr(op=op,subterms=subterms)
 
-        print("ctxt.getText()",ctx.getText())
         if ctx.spec_constant():
             name,type=self.visitSpec_constant(ctx.spec_constant())
             return Const(name=name,type=type)
@@ -338,7 +337,6 @@ class ASTVisitor(SMTLIBv2Visitor):
             elif name in self.globals:
                 return Var(name=name, type=self.globals[name])
             else:
-                print("ctx.symbol", ctx.symbol().getText())
                 return self.visitSymbol(ctx.symbol())
         raise ASTException("No match for identifier: ... |... |... ")
 
