@@ -225,6 +225,8 @@ BVLSHR="bvlshr"
 BVASHR="bvashr"
 BVULT="bvult"
 BVSLT="bvslt"
+BVSGT="bvsgt"
+BVSDIV="bvsdiv"
 
 
 BV_OPS=[
@@ -242,7 +244,9 @@ BV_OPS=[
     BVASHR,
     BVLSHR,
     BVULT,
-    BVSLT
+    BVSLT,
+    BVSGT,
+    BVSDIV
 ]
 
 """

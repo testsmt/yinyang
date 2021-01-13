@@ -38,9 +38,9 @@ class TypeCheckError(Exception):
         self.message+="actual: \t"+str(actual)
         super().__init__(self.message)
 
-class UnknownOperator(Exception): 
+class UnknownOperator(Exception):
     def __init__(self,op):
-        self.message="unknown function/constant "+op 
+        self.message="unknown function/constant "+op
         sys.tracebacklimit = 0
         super().__init__(self.message)
 
@@ -471,9 +471,9 @@ def typecheck_bv_ops(expr,ctxt):
         return typecheck_bv_concat(expr,ctxt)
     if expr.op in [BVNOT,BVNEG]:
         return typecheck_bv_unary(expr,ctxt)
-    if expr.op in [BVAND, BVOR,BVADD,BVSUB,BVMUL,BVUDIV,BVUREM,BVSHL,BVLSHR,BVASHR]:
+    if expr.op in [BVAND, BVOR,BVADD,BVSUB,BVMUL,BVUDIV,BVUREM,BVSHL,BVLSHR,BVASHR,BVSDIV]:
         return typecheck_bv_binary(expr,ctxt)
-    if expr.op in [BVULT,BVSLT]:
+    if expr.op in [BVULT,BVSLT,BVSGT]:
         return typecheck_binary_bool_rt(expr,ctxt)
 
 def typecheck_fp_unary(expr, ctxt):
@@ -641,9 +641,7 @@ def typecheck_let_expression(expr,ctxt):
     types = []
     for i in range(l):
         var = expr.var_binders[i]
-        print("var", var)
         t = typecheck_expr(expr.let_terms[i],ctxt)
-        print("t",t)
         ctxt.add_to_locals(var,t)
     return typecheck_expr(expr.subterms[0], ctxt)
 
@@ -716,6 +714,8 @@ def typecheck_expr(expr, ctxt=Context({},{})):
             return typecheck_array_ops(expr,ctxt)
         if expr.op in FP_OPS:
             return typecheck_fp_ops(expr,ctxt)
+        if expr.op in BV_OPS:
+            return typecheck_bv_ops(expr,ctxt)
 
         # FP infix ops
         if TO_FP in expr.op:
