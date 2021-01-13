@@ -113,11 +113,13 @@ def typecheck_ite(expr, ctxt=[]):
     """ (par (A) (ite Bool A A A)) """
     typ=typecheck_expr(expr.subterms[0],ctxt)
     if typecheck_expr(expr.subterms[0],ctxt) != BOOLEAN_TYPE:
-        raise TypeCheckError(expr, expr.subterms[0], typ, BOOLEAN_TYPE)
+        if not (is_subtype(t,typ) or is_subtype(typ,t)):
+            raise TypeCheckError(expr, expr.subterms[0], typ, BOOLEAN_TYPE)
     t1 = typecheck_expr(expr.subterms[1],ctxt)
     t2 = typecheck_expr(expr.subterms[2],ctxt)
     if t1 != t2:
-       raise TypeCheckError(expr, expr.subterms[2], t1, t2)
+        if not (is_subtype(t1,t2) or is_subtype(t2,t1)):
+            raise TypeCheckError(expr, expr.subterms[2], t1, t2)
     return typecheck_expr(expr.subterms[1],ctxt)
 
 def typecheck_nary_bool(expr, ctxt=[]):
