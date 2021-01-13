@@ -215,14 +215,21 @@ BVNOT="bvnot"
 BVNEG="bvneg"
 BVAND="bvand"
 BVOR="bvor"
+BVXOR="bvxor"
 BVADD="bvadd"
+BVSUB="bvsub"
 BVMUL="bvmul"
 BVUDIV="bvudiv"
 BVUREM="bvurem"
 BVSHL="bvshl"
 BVLSHR="bvlshr"
+BVASHR="bvashr"
 BVULT="bvult"
+BVULE="bvule"
 BVSLT="bvslt"
+BVSGT="bvsgt"
+BVSDIV="bvsdiv"
+
 
 BV_OPS=[
     BV_CONCAT,
@@ -230,15 +237,36 @@ BV_OPS=[
     BVNEG,
     BVAND,
     BVOR,
+    BVXOR,
     BVADD,
+    BVSUB,
     BVMUL,
     BVUDIV,
     BVUREM,
     BVSHL,
+    BVASHR,
     BVLSHR,
     BVULT,
-    BVSLT
+    BVULE,
+    BVSLT,
+    BVSGT,
+    BVSDIV
 ]
+
+"""
+All function symbols with declaration of the form
+
+  ((_ extract i j) (_ BitVec m) (_ BitVec n))
+
+where
+- i, j, m, n are numerals
+- m > i >= j >= 0,
+- n = i - j + 1
+"""
+
+BV_EXTRACT="(_ extract"
+BV_ZERO_EXTEND="(_ zero_extend"
+BV_SIGN_EXTEND="(_ sign_extend"
 
 # Floating Point ops
 FP_ABS="fp.abs"
@@ -292,6 +320,10 @@ FP_OPS=[
     FP_ISNEGATIVE,
     FP_ISPOSITIVE
 ]
+
+# FP infix ops
+TO_FP="to_fp"
+TO_FP_UNSIGNED="to_fp_unsigned"
 
 # Quantifiers
 EXISTS="exists"
