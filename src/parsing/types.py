@@ -215,6 +215,7 @@ BVNOT="bvnot"
 BVNEG="bvneg"
 BVAND="bvand"
 BVOR="bvor"
+BVXOR="bvxor"
 BVADD="bvadd"
 BVSUB="bvsub"
 BVMUL="bvmul"
@@ -224,6 +225,7 @@ BVSHL="bvshl"
 BVLSHR="bvlshr"
 BVASHR="bvashr"
 BVULT="bvult"
+BVULE="bvule"
 BVSLT="bvslt"
 BVSGT="bvsgt"
 BVSDIV="bvsdiv"
@@ -235,6 +237,7 @@ BV_OPS=[
     BVNEG,
     BVAND,
     BVOR,
+    BVXOR,
     BVADD,
     BVSUB,
     BVMUL,
@@ -244,6 +247,7 @@ BV_OPS=[
     BVASHR,
     BVLSHR,
     BVULT,
+    BVULE,
     BVSLT,
     BVSGT,
     BVSDIV

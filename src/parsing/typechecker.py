@@ -41,7 +41,7 @@ class TypeCheckError(Exception):
 class UnknownOperator(Exception):
     def __init__(self,op):
         self.message="unknown function/constant "+op
-        sys.tracebacklimit = 0
+        # sys.tracebacklimit = 0
         super().__init__(self.message)
 
 def typecheck_not(expr, ctxt=[]):
@@ -91,6 +91,8 @@ def typecheck_nary_int_ret(expr, ctxt=[]):
 
 def is_subtype(t, tprime):
     if t == INTEGER_TYPE and tprime == REAL_TYPE:
+        return True
+    if isinstance(t,BITVECTOR_TYPE) and isinstance(tprime,BITVECTOR_TYPE):
         return True
     return False
 
@@ -426,7 +428,7 @@ def typecheck_bv_concat(expr,ctxt):
     t2 = typecheck_expr(expr.subterms[1],ctxt)
     if not isinstance(t1,BITVECTOR_TYPE) or not isinstance(t2,BITVECTOR_TYPE):
         raise TypeCheckError(expr, [arg1,arg2], [BITVECTOR_TYPE, BITVECTOR_TYPE], [t1,t2])
-    bitwidth = arg1.bitwidth + arg2.bitwidth
+    bitwidth = t1.bitwidth + t2.bitwidth
     return BITVECTOR_TYPE(bitwidth)
 
 def typecheck_bv_unary(expr,ctxt):
@@ -455,6 +457,7 @@ def typecheck_bv_binary(expr,ctxt):
 def typecheck_binary_bool_rt(expr,ctxt):
     """
     (bvult (_ BitVec m) (_ BitVec m) Bool)
+    (bvule (_ BitVec m) (_ BitVec m) Bool)
     (bvslt (_ BitVec m) (_ BitVec m) Bool)
     """
     arg1,arg2 = expr.subterms[0], expr.subterms[1]
@@ -471,9 +474,9 @@ def typecheck_bv_ops(expr,ctxt):
         return typecheck_bv_concat(expr,ctxt)
     if expr.op in [BVNOT,BVNEG]:
         return typecheck_bv_unary(expr,ctxt)
-    if expr.op in [BVAND, BVOR,BVADD,BVSUB,BVMUL,BVUDIV,BVUREM,BVSHL,BVLSHR,BVASHR,BVSDIV]:
+    if expr.op in [BVAND, BVOR, BVXOR,BVADD,BVSUB,BVMUL,BVUDIV,BVUREM,BVSHL,BVLSHR,BVASHR,BVSDIV]:
         return typecheck_bv_binary(expr,ctxt)
-    if expr.op in [BVULT,BVSLT,BVSGT]:
+    if expr.op in [BVULT,BVULE,BVSLT,BVSGT]:
         return typecheck_binary_bool_rt(expr,ctxt)
 
 def typecheck_fp_unary(expr, ctxt):
@@ -689,6 +692,7 @@ def typecheck_to_fp(expr,ctxt):
     return FP_TYPE(eb,sb)
 
 def typecheck_expr(expr, ctxt=Context({},{})):
+    # print(expr)
     if expr.is_const:
         return expr.type
     if expr.is_var or expr.is_indexed_id:
