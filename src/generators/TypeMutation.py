@@ -9,9 +9,6 @@ type2num = {'Bool': 0, 'Real': 1, 'Int': 2, 'RoundingMode': 3, 'String': 4,
 'RegLan': 5, 'Unknown': 6}
 
 class TypeMutation(Generator):
-    # two mutation strategies
-    # first, within the single expression
-    # second, with two expressions(possible mutation happens within the single expression)
     def __init__(self, seed_fns, args):
         assert(len(seed_fns) == 1)
         self.seed_fn = seed_fns[0]
@@ -19,10 +16,10 @@ class TypeMutation(Generator):
         self.formula, glob = parse_file(seed_fns[0])
         self.ctxt = Context(glob, {})
 
-    def categorize(self, av_expr, expr_type):
+    def categorize(self, expr_type):
         # 0: Bool, 1: Real, 2: Int, 3: RoundingMode, 4: String, 5: Regex, 6: Unknown 
         exprs = [[],[],[],[],[],[],[]]
-        for i in range(len(av_expr)):
+        for i in range(len(expr_type)):
             if expr_type[i] == BOOLEAN_TYPE:
                 exprs[0].append(i)
             elif expr_type[i] == REAL_TYPE:
@@ -40,7 +37,7 @@ class TypeMutation(Generator):
         return exprs
         
     def get_replacee(self, av_expr, expr_type):
-        exprs = self.categorize(av_expr, expr_type)
+        exprs = self.categorize(expr_type)
         types = []
         for i in range(6):
             if len(exprs[i]) >= 2:
@@ -61,20 +58,16 @@ class TypeMutation(Generator):
     def generate(self):
         av_expr = []
         expr_type = []
-        cmd = []
         for i in range(len(self.formula.assert_cmd)):
             exp, typ = typecheck_recur(self.formula.assert_cmd[i], self.ctxt)
             av_expr += exp
             expr_type += typ
-            cmd += [i]*len(exp)
         res = self.get_replacee(av_expr,expr_type)
         if res:
             t1, t2 = res
-            cmd1 = self.formula.assert_cmd[cmd[t1]]
-            cmd2 = self.formula.assert_cmd[cmd[t2]]
             t1_copy = copy.deepcopy(av_expr[t1])
             t2_copy = copy.deepcopy(av_expr[t2])
-            cmd1.term.substitute(av_expr[t1], t2_copy)
-            cmd2.term.substitute(av_expr[t2], t1_copy)
+            av_expr[t1].substitute(av_expr[t1], t2_copy)
+            av_expr[t2].substitute(av_expr[t2], t1_copy)
             return self.formula, True
         return None, False
