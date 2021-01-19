@@ -7,9 +7,8 @@ def typecheck_recur(expr, ctxt=Context({},{})):
         if expr.subterms:
             for s in expr.subterms:
                 new_av, new_type = typecheck_recur(s,ctxt)
-                for i in range(len(new_av)):
-                    av_expr.append(new_av[i])
-                    expr_type.append(new_type[i])
+                av_expr += new_av
+                expr_type += new_type
             new_type = typecheck_expr(expr,ctxt)
             expr_type.append(new_type)
             av_expr.append(expr)
@@ -19,7 +18,6 @@ def typecheck_recur(expr, ctxt=Context({},{})):
     else:
         if expr.term:
             new_av, new_type = typecheck_recur(expr.term, ctxt)
-            for i in range(len(new_av)):
-                        av_expr.append(new_av[i])
-                        expr_type.append(new_type[i])
+            av_expr += new_av
+            expr_type += new_type
     return av_expr, expr_type
