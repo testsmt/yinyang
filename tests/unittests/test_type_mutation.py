@@ -11,8 +11,7 @@ from src.generators.TypeMutation import *
 class Mockargs:
     name = ""
 
-N = 5000
-m = 50
+N = 200
 
 class TypeAwareOpMutationTestCase(unittest.TestCase):
 
@@ -32,7 +31,6 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         script, glob = parse_str(formula)
         ctxt = Context(glob,{})
         args = Mockargs()
-        print(formulafile)
         args.name = formulafile.strip(".smt2")
         gen = TypeMutation([formulafile],args)
         gen.generate()
@@ -43,17 +41,18 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         formula = """
         (declare-fun x () Int)
         (declare-fun y () Int)
-        (declare-fun z () Int)
-        (assert (> (* (+ 3 x) (- y 2)) (/ 5 z)))
-        (assert (= (+ 7 y) x))
-        (assert (< 6 (/ (+ 4 x) z)))
+        (declare-fun a () Real)
+        (declare-fun b () Real)
+        (assert (> (/ x 3) (+ a b)))
+        (assert (= (+ 4 y) x))
+        (assert (distinct a b))
         (check-sat)
         """
-        possible_outcome = ["(assert (= y x))",
-                            "(assert (= x y))",
-                            "(assert (< (+ 3 y) (/ (+ 4 x) z)))",
-                            "(assert (= (- x y) 6))",
-                            "(assert (> z (/ y x))"                            
+        possible_outcome = ["(assert (distinct (/ x 3) b))",
+                            "(assert (= x (+ 4 y)))",
+                            "(assert (> a (+ a b)))",
+                            "(assert (distinct a (+ a b)))",
+                            "(assert (> (/ (+ 4 y) 3) (+ a b)))"                           
                             ]
         with open(formulafile,"w") as f: 
             f.write(formula)
@@ -62,17 +61,17 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         args = Mockargs()
         print(formulafile)
         args.name = formulafile.strip(".smt2")
-        gen = TypeMutation([formulafile],args)
         for i in range(N):
-            if i % m == 0:
-                gen = TypeMutation([formulafile],args)
+            gen = TypeMutation([formulafile],args)
+            gen.generate()
             for cmd in gen.formula.assert_cmd:
                 if str(cmd) in possible_outcome:
                     possible_outcome.remove(str(cmd))
             if not possible_outcome:
+                os.system("rm "+formulafile)
                 return True
+        os.system("rm "+formulafile)
         return False
-
 
 
 if __name__ == '__main__':
