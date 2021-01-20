@@ -1,7 +1,7 @@
 yinyang: a fuzzer for SMT solvers 
 ====================================
 
-.. figure:: yinyang.png
+.. figure:: ../media/logo.png
   :width: 90
   :align: center 
 
