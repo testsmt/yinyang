@@ -13,7 +13,7 @@ class Mockargs:
 
 N = 200
 
-class TypeAwareOpMutationTestCase(unittest.TestCase):
+class TypeAwareMutationTestCase(unittest.TestCase):
 
     def test_ta(self):
         formulafile="formula.smt2"
