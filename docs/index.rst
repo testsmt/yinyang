@@ -23,3 +23,4 @@ yinyang is a `fuzzer <https://en.wikipedia.org/wiki/Fuzzing>`_ for SMT solvers. 
    basic_usage
    customization    
    advanced
+   building_on

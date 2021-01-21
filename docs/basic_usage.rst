@@ -1,4 +1,33 @@
 Basic usage
 ==============
 
+yinyang is a mutation-based fuzzer, i.e. it mutates a set of seed formulas using 
+a mutation strategy and then uses the mutated formulas as the test seeds for 
+SMT solvers. yinyang can so detect soundness bugs, invalid model bugs, crashes, segfaults 
+etc. Its default mutation strategy is ``opfuzz`` which generates mutants by  
+interchanging operators, e.g, ``=,distinct,+,-, *,/``.  
 
+You can run yinyang with the ``opfuzz`` strategy using the following command:   
+
+.. code-block:: bash
+   
+   $ python3 yinyang.py "<solver_clis>" <seed_path>
+
+- ``<solver_clis>``: a sequence of command line interfaces SMT solvers commandlines separated by 
+  semicolons. At least two SMT solvers commandlines are necessary  
+
+
+- ``<seed_path>``: path to directory containing the SMT-LIB seed files.   
+
+
+**Example:**
+
+.. code-block:: bash
+    
+    $ python3 yinyang.py "z3 model_validate=true;cvc4 --check-models --produce-models --incremental -q" benchmarks 
+
+yinyang will by default randomly select formulas from the folder ``./benchmarks``. By default SMT-LIB files larger than 20k will be ignored.  yinyang will generate 300 mutants per seed formula and will run in an infinite loop. You can use the shortcut ``CTRL+C`` to terminate yinyang manually. If a bug has been found, the bug trigger is stored in ``./bugs``.
+
+.. note::
+   To catch invalid model bugs, you have to supply options to enable model validation in ``<solver_clis>``. Also consider           
+   that you may need to supply options to enable model production and incremental mode to ``<solver_clis>``.
