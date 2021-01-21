@@ -15,6 +15,8 @@ yinyang is a `fuzzer <https://en.wikipedia.org/wiki/Fuzzing>`_ for SMT solvers. 
 
 3. *Oracle Check:* Finally, yinyang will query the SMT solvers under test with the mutant formulas and compare the result against a test oracle. By default, such test oracle would be a second SMT solver. 
 
+yinyang is intended for use by (1) SMT solver developers testing existing solvers, (2) researchers inventing new decision procedures to test the robustness of their implementations and (3) practitioners developing applications based on SMT solvers.    
+
 .. toctree::
    :maxdepth: 2
  
@@ -22,5 +24,5 @@ yinyang is a `fuzzer <https://en.wikipedia.org/wiki/Fuzzing>`_ for SMT solvers. 
    setup
    basic_usage
    customization    
-   advanced
+   fusion 
    building_on
