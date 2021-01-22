@@ -17,11 +17,11 @@ Requirements:
 - antlr4 python runtime  
 ``` bash
 git clone https://github.com/testsmt/yinyang.git 
-pip3 install antlr4-python3-runtime  
+pip3 install antlr4-python3-runtime==4.8  
 ```
 
 
-Stress-testing SMT Solvers
+Usage
 -------------
 1. **Get SMT-LIB 2 benchmarks**. Edit `scripts/SMT-LIB-clone.sh` to select the logics for testing. Run `./scripts/SMT-LIB-clone.sh`
 to download the corresponding SMT-LIB 2 benchmarks. Alternatively you can download benchmarks directly from the [SMT-LIB website](http://smtlib.cs.uiowa.edu/benchmarks.shtml) or supply your own benchmarks. 
