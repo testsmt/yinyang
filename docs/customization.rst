@@ -35,10 +35,36 @@ You can then use ``python3 yinyang.py "" <seed_path>`` to run run these five dif
 
 Option fuzzing
 .......................
+If you want to test many options of an SMT solver with yinyang, you turn on option fuzzing via ``-optfuzz <file>`` with config file specifying the options. This will randomly add options ``set-option`` commands to the mutants.    
+
+**Format:**
+
+.. code-block:: text 
+
+    <solver keywords>
+    <option name> [type|value]*
+    <option name> [type|value]*
+    ###
+    <solver keywords>
+    <option name> [type|value]*
+    <option name> [type|value]*
+    ###
+    <solver keywords>
+    <option name> [type|value]*
+    <option name> [type|value]*
+
+``<solver keywords>`` : Keywords for matching the solver command-line interfaces. If the keywords are found in the command-line interfaces, Yin-Yang will generate a corresponding random option setting.
+
+``<option name>``: Name of the option item. 
+
+``[type|value]*``: Type or value of the option. The type can be either `bool` or `int`. The value can be either `true`, `false`, or an arbitrary integers. By default, i.e., by leaving this position empty, the option is assigned to be `bool`. yinyang will then generate a random value based on the type of the option.
+
+``###``: Splits option blocks. The options in different blocks are independent.
+
 
 Customize bug detection  
 .........................
-yinyang's bug detection logic is based on three lists: ``crash_list, duplicate_list, ignore_list`` of ``config/config.py`` which you can customize. yinyang detects crash bugs by matching the stdout and stderr of the solvers in the ``crash_list`` . If yinyang detects a bug this way, it subsequently matches the crash message against all strings in ``duplicate_list``. The ``duplicate_list`` is useful to filter out repeatedly occurring bugs from getting copied to ``./bugs``.  The ``ignore_list`` can be used to filter out errors occurring in a solver call.  By default yinyang detects mutants returning non-zero exit codes as crashes except those that match with the ``ignore_list```.        
+yinyang's bug detection logic is based on three lists: ``crash_list, duplicate_list, ignore_list`` of ``config/config.py`` which you can customize. yinyang detects crash bugs by matching the stdout and stderr of the solvers in the ``crash_list`` . If yinyang detects a bug this way, it subsequently matches the crash message against all strings in ``duplicate_list``. The ``duplicate_list`` is useful to filter out repeatedly occurring bugs from getting copied to ``./bugs``.  The ``ignore_list`` can be used to filter out errors occurring in a solver call.  By default yinyang detects mutants returning non-zero exit codes as crashes except those that match with the ``ignore_list``.        
 
 
 The below setup shows the three list in ``config/config.py`` that worked well in practice for Z3 and CVC4. 
@@ -90,62 +116,33 @@ Customizing mutations
 ...............................
 
 To customize ``opfuzz``'s mutations, you can edit ``config/operator_mutations.txt``.
-
-.. code-block:: bash 
-
-    =,distinct
-    exists,forall
-    not -> and,or
-    and,or,=> :arity 3+
-    and,or,=>,xor :arity 2
-    <=,>=,<,>
-    +,-,* :arity 2+
-    mod,div
-    abs,- :arity 1
-    re.++,re.union,re.inter,re.diff
-    str.<=,str.<,str.prefixof,str.suffixof,str.contains
-    str.replace,str.replace_all
-    str.replace_re,str.replace_re_all
-    re.comp,re.+,re.opt,re.*
-    re.none,re.all,re.allchar
-    str.to_code,str.to_int
-    str.from_code,str.from_int
-    union,intersection,setminus
-    bvnot,bvneg
-    bvand,bvor,bvnand,bvnor,bvxor,bvxnor,bvsub,bvsdiv,bvsmod,bvadd,bvmul,bvudiv,bvurem,bvshl,bvlshr,bvashr
-    bvule,bvugt,bvuge,bvslt,bvsle,bvsgt,bvsge
-    fp.abs,fp.neg
-    fp.add,fp.sub,fp.mul,fp.div
-    fp.min,fp.max
-    fp.leq,fp.lt,fp.geq,fp.gt,fp.eq
-    fp.isNormal,fp.isSubnormal,fp.isZero,fp.isInfinite,fp.isNaN,fp.isNegative,fp.isPositive
+An operator mutation can be bidirectional or unidirectional and may be conditioned   
+on the arity of the operator.
 
 **Format:**
 
-.. code-block:: bash
+.. code-block:: text 
 
-    op1, op2, ... ,op_n
+ [<op_name>, ..., <op_name> [arity: k[+,-]]]*
+ [<op_name> -> <op_name> [arity: k[+,-]]]*
 
-    Operators op_i in the same line form an equivalence class and can mutually 
-    replace each other. 
+    
+where ``k`` is positive integer, ``+`` indicates at least one and ``-`` indicates at most one.   
 
-    ; Example:
-     +, -, * 
-    ;
-    ; Operator mutations can be conditioned on operator's arity. 
-    ; 
-    ; Example: 
-    ; =,distinct: arity: 2+ 
-    ; -,abs: arity: 1- 
-    ;
-    ; This requires operators "=" and "distinct" to have at least two arguments to trigger the  
-    ; mutation, and "-","abs" to have at most one argument. At the moment, only the arities  
-    ; 2+ ("two or more") and 1- (one or less) are supported  
-    ; 
-    ; Unidirectional mutations can be specified as   
-    ; 
-    ; abs -> - 
-    ;
-    ; which corresponds to a one-way mutation from operator "abs" to operator "-" 
+**Example:**
 
+
+.. code-block:: text 
+    
+    +, -, * 
+    =,distinct: arity: 2+ 
+    -,abs: arity: 1- 
+    abs -> - 
+
+
+Line 1: Operators ``+, -, *`` in the same line form an equivalence class and can bidirectionally replace each other. 
+
+Line 2+3: Operator mutations conditioned on arity. This requires operators ``=`` and ``distinct`` to have at least two arguments to trigger the  mutation, and ``-``, ``abs`` to have at most one argument.
+
+Line 4:  Unidirectional from operator ``abs`` to operator ``-``.
 

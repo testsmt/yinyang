@@ -12,6 +12,6 @@ The following commands clone yinyang and install the the antlr4 python runtime.
 .. code-block:: bash
 
     $ git clone https://github.com/testsmt/yinyang.git 
-    $ pip3 install antlr4-python3-runtime  
+    $ pip3 install antlr4-python3-runtime==4.8  
 
 
