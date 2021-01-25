@@ -20,7 +20,7 @@ parser.add_argument(
 parser.add_argument(
     "-s","--strategy",
     choices=["opfuzz", "fusion", "typfuzz"],
-    default="opfuzz",
+    default="typfuzz",
     help="set fuzzing strategy"
 )
 parser.add_argument(
@@ -88,6 +88,13 @@ parser.add_argument(
     action='store_true',
     help="Do not delete the mutants generated in the scratchfolder."
 )
+
+parser.add_argument(
+    "-q", "--quiet",
+    action='store_true',
+    help="Do not output statistics and other output."
+)
+
 parser.add_argument(
     "-fl", "--file-size-limit",
     default=20000,
@@ -107,7 +114,7 @@ else: args.SOLVER_CLIS = args.SOLVER_CLIS.split(";") + solvers
 if args.timeout <= 0: exit("Error: timeout should not be a negative number or zero.")
 
 if not args.iterations:
-    if args.strategy == "opfuzz":
+    if args.strategy == "opfuzz" or args.strategy == 'typfuzz':
         args.iterations = 300
     else:
         args.iterations = 30

@@ -3,7 +3,7 @@ import time
 class Statistic:
 
     def __init__(self):
-        print("Yin-Yang is running:")
+        # print("Yin-Yang is running:")
         self.starttime = time.time()
         self.seeds = 0
         self.mutants = 0

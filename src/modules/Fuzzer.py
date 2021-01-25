@@ -25,6 +25,8 @@ class Fuzzer:
         self.runforever = True
         self.statistic = Statistic()
         self.generator = None
+        if not self.args.quiet:
+            print("Yin-Yang is running:")
 
 
     def run(self):
@@ -65,7 +67,8 @@ class Fuzzer:
                 break
 
             for _ in range(self.args.iterations):
-                self.statistic.printbar()
+                if not self.args.quiet:
+                    self.statistic.printbar()
                 formula, success = self.generator.generate()
                 if not success: continue
                 if not self.test(formula): break
@@ -195,13 +198,13 @@ class Fuzzer:
                         self.statistic.soundness += 1
                         self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
                         if reference:
-                            # Produce a diff bug report for soundness bugs in 
-                            # the opfuzz case 
+                            # Produce a diff bug report for soundness bugs in
+                            # the opfuzz case
                             ref_cli = reference[0]
                             ref_stdout = reference[1]
                             ref_stderr = reference[2]
-                            self.report_diff(scratchfile, "incorrect", 
-                                             ref_cli, ref_stdout, ref_stderr, 
+                            self.report_diff(scratchfile, "incorrect",
+                                             ref_cli, ref_stdout, ref_stderr,
                                              solver_cli, stdout, stderr,
                                              random_string())
                         return False # stop testing
@@ -233,8 +236,8 @@ class Fuzzer:
             log.write(stdout)
         return report_id
 
-    def report_diff(self, scratchfile, bugtype, 
-                    ref_cli, ref_stdout, ref_stderr, 
+    def report_diff(self, scratchfile, bugtype,
+                    ref_cli, ref_stdout, ref_stderr,
                     sol_cli, sol_stdout, sol_stderr,
                     report_id):
         plain_cli = plain(sol_cli)
@@ -266,4 +269,5 @@ class Fuzzer:
             for file in os.listdir(self.args.scratchfolder):
                 if self.args.name in file:
                     os.remove(os.path.join(self.args.scratchfolder, file))
-        self.statistic.printsum()
+        if not self.args.quiet:
+            self.statistic.printsum()

@@ -1,5 +1,15 @@
 # Solver configurations list to be used for fuzzing.
-solvers = []
+solvers = ["z3release model_validate=true",                                               
+           "z3release model_validate=true smt.arith.solver=2",                            
+           "z3release model_validate=true smt.arith.solver=3",                            
+           "z3release model_validate=true smt.arith.solver=6",                            
+           "z3release model_validate=true rewriter.flat=false",                           
+           "cvc4 --check-models --produce-models --incremental --strings-exp -q",         
+           "cvc4 --no-strings-lazy-pp --check-models --produce-models --incremental --strings-exp -q",
+           "cvc4 --strings-lazy-pp --check-models --produce-models --incremental --strings-exp -q",
+           "cvc4 --check-unsat-cores --check-models --produce-models --incremental --strings-exp -q",
+           "cvc4 --check-models --produce-models --incremental --strings-exp --ext-rewrite-quant -q"
+]
 
 # Crash list: crash messages emitted by solvers to consider as bugs.
 crash_list = [
