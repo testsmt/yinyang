@@ -70,6 +70,8 @@ class Fuzzer:
                 if not self.args.quiet:
                     self.statistic.printbar()
                 formula, success = self.generator.generate()
+                print("formula", formula)
+                print("success", success)
                 if not success: continue
                 if not self.test(formula): break
                 self.statistic.mutants += 1
@@ -139,7 +141,6 @@ class Fuzzer:
         oracle = self.init_oracle()
         testbook = self.create_testbook(formula)
         reference = None
-
         for testitem in testbook:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
