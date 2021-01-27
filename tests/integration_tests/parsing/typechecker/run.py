@@ -12,12 +12,12 @@ from src.parsing.SMTLIBv2Parser import *
 from src.parsing.ast_visitor import *
 
 os.system("rm -rf errors.txt timeouts.txt")
-BENCHMARK="/local/disk1/dominik-exp/yinyang_private/seeds"
-
+# BENCHMARK="/local/disk1/dominik-exp/benchmark"
+BENCHMARK="/local/disk1/dominik-exp/yinyang_private/buggy_benchmarks/"
 N=100
 
 def do_typechecking(fn):
-    cmd = "timeout -s 9 1 python3.7 check.py " + fn + ";echo $?"
+    cmd = "timeout -s 9 30 python3.7 check.py " + fn + ";echo $?"
     out = sp.getoutput(cmd)
     if "137" in out:
          return 137

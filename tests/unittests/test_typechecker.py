@@ -7,6 +7,28 @@ from src.parsing.parse import *
 from src.parsing.typechecker import *
 from src.parsing.types import *
 
+def check_type(expr):
+    """
+    recursive traversal of expressions to check whether none of them has unknown type.
+    """
+    if expr.type == UNKNOWN:
+        raise Expection(expr.__str__() + " has unknown type")
+
+    if expr.var_binders:
+        for i,_ in enumerate(expr.var_binders):
+            check_type(expr.let_terms[i])
+        for e in expr.subterms:
+            check_type(e)
+    else:
+        if expr.subterms:
+            for e in expr.subterms:
+                check_type(e)
+
+def oracle(formula):
+    for cmd in formula.commands:
+        if isinstance(cmd, Assert):
+            check_type(cmd.term)
+    return True
 
 class TypecheckerTestCase(unittest.TestCase):
     def test_core_theory(self):
@@ -20,15 +42,15 @@ class TypecheckerTestCase(unittest.TestCase):
         formula, globals = parse_str(formula_str)
         ctxt=Context(globals,{})
         equals=formula.commands[2].term
-        self.assertEquals(typecheck_expr(equals,ctxt), BOOLEAN_TYPE)
+        self.assertEqual(typecheck_expr(equals,ctxt), BOOLEAN_TYPE)
         v = equals.subterms[0]
-        self.assertEquals(typecheck_expr(v,ctxt),BOOLEAN_TYPE)
+        self.assertEqual(typecheck_expr(v,ctxt),BOOLEAN_TYPE)
         not_op = equals.subterms[1]
-        self.assertEquals(typecheck_expr(not_op,ctxt), BOOLEAN_TYPE)
+        self.assertEqual(typecheck_expr(not_op,ctxt), BOOLEAN_TYPE)
         y = equals.subterms[1].subterms[0].subterms[0]
-        self.assertEquals(typecheck_expr(y,ctxt), INTEGER_TYPE)
+        self.assertEqual(typecheck_expr(y,ctxt), INTEGER_TYPE)
         minusone= equals.subterms[1].subterms[0].subterms[1]
-        self.assertEquals(typecheck_expr(minusone,ctxt), INTEGER_TYPE)
+        self.assertEqual(typecheck_expr(minusone,ctxt), INTEGER_TYPE)
 
         formula_str=\
 """
@@ -113,19 +135,26 @@ class TypecheckerTestCase(unittest.TestCase):
         for i in range(1, 4):
             typecheck_expr(formula.commands[i].term,ctxt)
 
-    def test_let_expression(self):
+    def test_typechecking_formula_small(self):
         formula_str=\
 """
-(declare-sort S1 0)
-(declare-fun f1 () S1)
-(declare-fun f2 () S1)
-(declare-fun f3 () Int)
-(assert (not (= f1 f2)))
-(assert (let ((?v_0 (+ (* 4 f3) 1))) (let ((?v_1 (* ?v_0 (- ?v_0 1)))) (not (=> (< ?v_1 (+ (- ?v_1 ?v_0) 2)) (< ?v_0 2))))))
+(declare-fun x () Int)
+(declare-fun y () Int)
+(declare-fun z () Int)
+(assert (> (* (+ 3 x) (- y 2)) (/ 5 z)))
 (check-sat)
-(exit)
 """
-#TODO:
+        formula,glob = parse_str(formula_str)
+        typecheck(formula,glob)
+        self.assertEqual(oracle(formula),True)
+
+    def test_typechecking_formula_large(self):
+        formula, glob = parse_file("test.smt2", silent=False)
+        typecheck(formula,glob)
+        oracle(formula)
+        self.assertEqual(oracle(formula),True)
+
+
 
 if __name__ == '__main__':
     TypecheckerTestCase.test_typechecker()

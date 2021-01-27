@@ -703,59 +703,87 @@ def typecheck_to_fp(expr,ctxt):
 
     return FP_TYPE(eb,sb)
 
+
+def annotate(f,expr,ctxt):
+    """
+    :f: function argument
+    :expr: expression
+    :ctxt: context
+    :returns: type of expr
+    """
+    t = f(expr,ctxt)
+    expr.type = t
+    return t
+
+
 def typecheck_expr(expr, ctxt=Context({},{})):
     if expr.is_const:
         return expr.type
     if expr.is_var or expr.is_indexed_id:
         if expr.name in ctxt.locals:
-            return ctxt.locals[expr.name]
+            expr.type = ctxt.locals[expr.name]
+            return  ctxt.locals[expr.name]
         elif expr.name in ctxt.globals:
+            expr.type = ctxt.globals[expr.name]
             return ctxt.globals[expr.name]
         return UNKNOWN
     elif expr.op:
         if expr.op in CORE_OPS:
-            return typecheck_core(expr,ctxt)
+            return annotate(typecheck_core, expr,ctxt)
         if expr.op in NUMERICAL_OPS:
-            return typecheck_numeral(expr,ctxt)
+            return annotate(typecheck_numeral,expr,ctxt)
         if expr.op in INT_OPS:
-            return typecheck_int_ops(expr,ctxt)
+            return annotate(typecheck_int_ops,expr,ctxt)
         if expr.op in REAL_OPS:
-            return typecheck_real_ops(expr,ctxt)
+            return annotate(typecheck_real_ops,expr,ctxt)
         if expr.op in REAL_INTS:
-            return typecheck_real_ints_ops(expr,ctxt)
+            return annotate(typecheck_real_ints_ops,expr,ctxt)
         if expr.op in STRING_OPS:
-            return typecheck_string_ops(expr,ctxt)
+            return annotate(typecheck_string_ops,expr,ctxt)
         if expr.op in ARRAY_OPS:
-            return typecheck_array_ops(expr,ctxt)
+            return annotate(typecheck_array_ops,expr,ctxt)
         if expr.op in FP_OPS:
-            return typecheck_fp_ops(expr,ctxt)
+            return annotate(typecheck_fp_ops,expr,ctxt)
         if expr.op in BV_OPS:
-            return typecheck_bv_ops(expr,ctxt)
+            return annotate(typecheck_bv_ops,expr,ctxt)
 
         # FP infix ops
         if TO_FP in expr.op:
-            return typecheck_to_fp(expr,ctxt)
+            return annotate(typecheck_to_fp,expr,ctxt)
 
         if TO_FP_UNSIGNED in expr.op:
-            return typecheck_to_fp_unsigned(expr,ctxt)
+            return annotate(typecheck_to_fp_unsigned,expr,ctxt)
 
         # BV infix ops
         if BV_EXTRACT in expr.op\
             or BV_ZERO_EXTEND in expr.op\
             or BV_SIGN_EXTEND in expr.op:
-            return typecheck_bv_unary(expr,ctxt)
+            return annotate(typecheck_bv_unary,expr,ctxt)
 
         key = expr.op.__str__()
         if key in ctxt.globals:
             t = ctxt.globals[key].split(" ")[-1]
+            expr.type = t
             return t
-
         raise UnknownOperator(expr.op)
 
     elif expr.quantifier:
-        return typecheck_quantifiers(expr,ctxt)
+        return annotate(typecheck_quantifiers,expr,ctxt)
     elif expr.let_terms:
-        return typecheck_let_expression(expr,ctxt)
+        return annotate(typecheck_let_expression,expr,ctxt)
     elif expr.label:
-        return typecheck_label(expr,ctxt)
+        return annotate(typecheck_label,expr,ctxt)
     return UNKNOWN
+
+
+def typecheck(formula,glob):
+    """
+    :formula: Script object representing formula
+    :glob: glob variables for formula returned by parser
+    :returns: context object ctxt
+    """
+    ctxt=Context(glob,{})
+    for cmd in formula.commands:
+        if isinstance(cmd, Assert):
+            t = typecheck_expr(cmd.term,ctxt)
+    return ctxt
