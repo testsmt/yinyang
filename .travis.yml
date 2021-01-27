@@ -5,7 +5,7 @@ python:
   - "3.8"
   - "nightly"  
 install:
-  - pip install antlr4-python3-runtime 
+  - pip install antlr4-python3-runtime==4.8
 script:
   - python -m unittest tests/runtests.py
   - python tests/integration_tests/opfuzz/sanity_opfuzz.py 
