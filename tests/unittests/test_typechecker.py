@@ -149,7 +149,9 @@ class TypecheckerTestCase(unittest.TestCase):
         self.assertEqual(oracle(formula),True)
 
     def test_typechecking_formula_large(self):
-        formula, glob = parse_file("test.smt2", silent=False)
+        import pathlib
+        script_path = pathlib.Path(__file__).parent.absolute()
+        formula, glob = parse_file(str(script_path)+"/test.smt2", silent=False)
         typecheck(formula,glob)
         oracle(formula)
         self.assertEqual(oracle(formula),True)
