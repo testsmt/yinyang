@@ -460,15 +460,7 @@ class Term:
         if self.is_const or self.is_var or self.is_indexed_id:
             return self.name
 
-        s = ""
-        subs_str = ""
-        length=len(self.subterms)
-        for i in range(length):
-            sb = self.subterms[i]
-            if i == length - 1:
-                subs_str += sb.__str__()
-            else:
-                subs_str += sb.__str__()+" "
+
 
         if self.quantifier:
             n_vars = len(self.quantified_vars[0])
@@ -478,7 +470,7 @@ class Term:
                     s+= " ("+self.quantified_vars[0][i] + " " + self.quantified_vars[1][i]+")"
             return "("+ self.quantifier +" (" + s + ") "+ subs_str + ")"
 
-        if self.var_binders:
+        elif self.var_binders:
             s = "(let ("
             for i,var in enumerate(self.var_binders):
                 s += "(" + var + " " + self.let_terms[i].__str__() + ")"
@@ -487,9 +479,20 @@ class Term:
             for sub in self.subterms:
                 s+=" "+ sub.__str__()
             return s+")"
-        if self.label:
+
+        elif self.label:
             return "(! "+ subs_str +" " +self.label[0] + " "+self.label[1]+")"
-        return "("+self.op.__str__() +" "+ subs_str + ")"
+        else:
+            s = ""
+            subs_str = ""
+            length=len(self.subterms)
+            for i in range(length):
+                sb = self.subterms[i]
+                if i == length - 1:
+                    subs_str += sb.__str__()
+                else:
+                    subs_str += sb.__str__()+" "
+            return "("+self.op.__str__() +" "+ subs_str + ")"
 
     def __repr__(self):
         if self.is_const:
