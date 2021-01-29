@@ -13,6 +13,7 @@ from src.modules.Statistic import Statistic
 from config.config import crash_list, duplicate_list, ignore_list
 from src.utils import random_string, plain, escape, in_list
 
+from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
 
@@ -52,7 +53,7 @@ class Fuzzer:
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
                 
-                if not admissible_seed_size(seed):
+                if not self.admissible_seed_size(seed):
                     continue 
 
                 self.statistic.seeds += 1
@@ -69,7 +70,7 @@ class Fuzzer:
                 seed1 = seed[0]
                 seed2 = seed[1]
 
-                if not admissible_seed_size(seed1) or not admissible_seed_size(seed1):
+                if not self.admissible_seed_size(seed1) or not self.admissible_seed_size(seed1):
                     continue 
 
                 self.statistic.seeds += 2
