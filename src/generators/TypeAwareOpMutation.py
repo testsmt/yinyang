@@ -66,13 +66,14 @@ class TypeAwareOpMutation(Generator):
         return None
 
     def generate(self):
+        success = False 
         for _ in range(self.args.modulo):
             max_choices = len(self.formula.op_occs)
             for _ in range(max_choices):
                 op_occ = random.choice(self.formula.op_occs)
                 replacee = self.get_replacee(op_occ)
                 if replacee:
-                    # print(op_occ.op,"->",replacee)
+                    success = True
                     op_occ.op = replacee
                     break
-        return self.formula, True
+        return self.formula, success 
