@@ -53,14 +53,18 @@ class Fuzzer:
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
                 
+                self.statistic.seeds += 1
                 if not self.admissible_seed_size(seed):
+                    self.statistic.ignored += 1
                     continue 
 
-                self.statistic.seeds += 1
                 self.currentseeds = Path(seed).stem
                 script = parse_file(seed,silent=True)
+                print(seed)
 
                 if not script: # i.e. parsing was unsucessful
+                    print("DEBUG:empty")
+                    self.statistic.ignored += 1
                     continue 
 
                 self.generator = TypeAwareOpMutation(script, self.args)
@@ -69,16 +73,17 @@ class Fuzzer:
                 seed = seeds.pop(random.randrange(len(seeds)))
                 seed1 = seed[0]
                 seed2 = seed[1]
-
+                self.statistic.seeds += 2
                 if not self.admissible_seed_size(seed1) or not self.admissible_seed_size(seed1):
+                    self.statistic.ignored +=2
                     continue 
 
-                self.statistic.seeds += 2
                 self.currentseeds = Path(seed1).stem + "-" + Path(seed2).stem
                 script1 = parse_file(seed1,silent=True)
                 script2 = parse_file(seed2,silent=True)
 
                 if not script1 or not script2: # i.e. parsing was unsucessful
+                    self.statistic.ignored +=2
                     continue
 
                 self.generator = SemanticFusion(script1, script2, self.args)
