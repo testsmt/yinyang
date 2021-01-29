@@ -14,10 +14,10 @@ You can run yinyang with the ``opfuzz`` strategy using the following command:
    $ python3 yinyang.py "<solver_clis>" <seed_path>
 
 - ``<solver_clis>``: a sequence of command line interfaces SMT solvers commandlines separated by 
-  semicolons. At least two SMT solvers commandlines are necessary  
+  semicolons. At least two SMT solvers commandlines are necessary.  
 
 
-- ``<seed_path>``: path to directory containing the SMT-LIB seed files.   
+- ``<seed_path>``: path to single seed or directory containing the SMT-LIB seed files.   
 
 
 **Example:**
@@ -37,5 +37,3 @@ After finding a bug, it is useful to produce a minimal test case before reportin
 the bug to save the SMT solver developers' time and effort. For many test cases, 
 the C code reducer `creduce <https://embed.cs.utah.edu/creduce/>`_ does a great job. 
 In addition, SMT-LIB specific reducer `pyDelta <https://github.com/nafur/pydelta>`_ can be used.   
- 
-

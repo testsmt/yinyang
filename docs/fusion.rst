@@ -18,7 +18,8 @@ Usage
 
 .. code-block:: bash
 
-    $ python3 yinyang.py "<solver_clis>" -o <oracle> -s fusion <seed1> <seed2>
+    $ python3 yinyang.py "<solver_clis>" -o <oracle> -s fusion <seed_path1> <seed_path2>
+    $ python3 yinyang.py "<solver_clis>" -o <oracle> -s fusion <seed_path> 
 
 where
 
@@ -26,8 +27,11 @@ where
 
 * ``<oracle>``: desired test oracle result {sat, unsat}.
 
-* ``<seed1>, <seed2>``: SMT-LIB v2.6 file of the same satisfiability, i.e. both either sat or unsat in according with the oracle.
 
+* ``<seed_path1>, <seed_path2>``: SMT-LIB v2.6 file of the same satisfiability, i.e. both either sat or unsat in according with the oracle.
+
+* ``<seed_path>``: path to single seed or directory containing the SMT-LIB seed files, all of the same satisifiability.   
+ 
 
 **Examples:**
 
