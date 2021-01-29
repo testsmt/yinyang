@@ -112,53 +112,53 @@ class TermTestCase(unittest.TestCase):
 
 
         def free_vars_let():
-            script="""\
+            script_str="""\
 (declare-fun ?v_0 () Int)
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))
 (check-sat)
 (exit)
 """
-            script = parse_str(script)
+            script = parse_str(script_str)
             self.assertEqual(script.free_var_occs.__str__(),"[]")
 
-            script="""\
+            script_str="""\
 (declare-fun ?v_0 () Int)
 (assert (= ?v_0 0))
 (check-sat)
 (exit)
 """
-            script = parse_str(script)
+            script = parse_str(script_str)
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
         def free_vars_let2():
-            script="""\
+            script_str="""\
 (declare-fun ?v_0 () Int)                                                          
 (assert (= ?v_0 0))                                                                
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))                                  
 (check-sat)                                                                        
 (exit)                                                                             
 """                                                                                
-            script = parse_str(script,False)                                                    
+            script = parse_str(script_str,silent=False)                                                    
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
-            script="""\
+            script_str="""\
 (declare-fun ?v_0 () Int)                                                       
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))                               
 (assert (= ?v_0 0))                                                             
 (check-sat)                                                                     
 (exit)                                                                          
 """  
-            script = parse_str(script,False)                                                         
+            script = parse_str(script_str,silent=False)                                                         
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
-            script="""\
+            script_str="""\
 (declare-fun ?v_0 () Int)                                                       
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))                               
 (assert (= ?v_0 0))                                                             
 (check-sat)                                                                     
 (exit)                                                                          
 """  
-            script = parse_str(script,False)                                                         
+            script = parse_str(script_str,silent=False)                                                         
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
 

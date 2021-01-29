@@ -5,7 +5,9 @@ from src.parsing.parse import *
 
 
 class TypeAwareOpMutation(Generator):
-    def __init__(self, script, args):
+    def __init__(self, formula, args):
+        self.args = args
+        self.formula = formula
         self.bidirectional = []
         self.unidirectional = []
 

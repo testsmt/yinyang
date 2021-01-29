@@ -8,6 +8,9 @@ from src.generators.SemanticFusion.util import random_var_triplets, random_tuple
 
 class SemanticFusion(Generator):
     def __init__(self, formula1, formula2, args):
+        self.formula1 = formula1
+        self.formula2 = formula2
+        self.args = args
         self.config_file = self.args.fusionfun
         self.oracle = self.args.oracle
         self.templates = {}
@@ -82,10 +85,10 @@ class SemanticFusion(Generator):
 
         return formula
     
-    def _add_seedinfo(self,formula):
-        formula.commands = [Comment(self.seed2)] + formula.commands
-        formula.commands = [Comment(self.seed1)] + formula.commands
-        return formula
+#     def _add_seedinfo(self,formula):
+        # formula.commands = [Comment(self.seed2)] + formula.commands
+        # formula.commands = [Comment(self.seed1)] + formula.commands
+        # return formula
 
 
     def generate(self):
@@ -99,4 +102,4 @@ class SemanticFusion(Generator):
         if not triplets:
             is_fusion = False
         fused = self.fuse(formula1, formula2, triplets)
-        return self._add_seedinfo(fused), is_fusion
+        return fused, is_fusion

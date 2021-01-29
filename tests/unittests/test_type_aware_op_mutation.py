@@ -45,7 +45,8 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         args.name = formulafile.strip(".smt2")
         args.opconfig = configfile
         args.modulo = 2
-        gen = TypeAwareOpMutation([formulafile],args)
+        script= parse_file(formulafile,silent=True)
+        gen = TypeAwareOpMutation(script,args)
         gen.generate()
         os.system("rm -rf "+configfile+ " "+ formulafile)
 
