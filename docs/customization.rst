@@ -14,6 +14,10 @@ yinyang provides the following options. Please consult ``python3 yinyang.py --he
 * ``-scratch SCRATCHFOLDER``: specifies where the mutant formulas are temporarily stored. Note, if you run yinyang with several processes in parallel, each instance should have its own scratch folder. (default: ./scratch)      
 * ``-s --strategy {opfuzz,fusion}`` sets the mutation strategy. For more details on ``fusion``, see :doc:`fusion`  (default: opfuzz).
 * ``-km --keep-mutants``: do not delete the mutants from the scratch folder. Warning: beware that this can quickly exhaust your entire disk space.              
+* ``-q --quiet``: do not output statistics and other output.
+* ``-fl", "--file-size-limit``: file size limit on seed formula in bytes
+
+
                         
 
 Customize solvers configurations  
