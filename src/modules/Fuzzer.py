@@ -25,6 +25,8 @@ class Fuzzer:
         self.runforever = True
         self.statistic = Statistic()
         self.generator = None
+        if not self.args.quiet:
+            print("Yin-Yang is running:")
 
     def admissible_seed_size(self, seed): 
         """
@@ -91,7 +93,8 @@ class Fuzzer:
 
  
             for _ in range(self.args.iterations):
-                self.statistic.printbar()
+                if not self.args.quiet:
+                    self.statistic.printbar()
                 formula, success = self.generator.generate()
                 if not success: continue
                 if not self.test(formula): break
@@ -292,4 +295,6 @@ class Fuzzer:
             for file in os.listdir(self.args.scratchfolder):
                 if self.args.name in file:
                     os.remove(os.path.join(self.args.scratchfolder, file))
-        self.statistic.printsum()
+
+        if not self.args.quiet:
+            self.statistic.printsum()
