@@ -7,18 +7,18 @@ from src.parsing.parse import *
 
 class TermTestCase(unittest.TestCase): 
     def test_term(self): 
-        formula1="""
-                (declare-const y Int)
-                (declare-const v Bool)
-                (assert (= v (not (= y (- 1)))))
-                (assert (ite v false (= y (- 1))))
-                (check-sat)
-        """
-        formula2="""
-                (declare-const x Int)
-                (declare-const y Int)
-                (assert (= (+ x y) y))
-        """
+        formula1="""\
+(declare-const y Int)
+(declare-const v Bool)
+(assert (= v (not (= y (- 1)))))
+(assert (ite v false (= y (- 1))))
+(check-sat)
+"""
+        formula2="""\
+(declare-const x Int)
+(declare-const y Int)
+(assert (= (+ x y) y))
+"""
 
         def var2const():
             script=parse_str(formula1)
@@ -46,13 +46,12 @@ class TermTestCase(unittest.TestCase):
             self.assertEqual(assert_expr.__str__(), "(= (- z y) y)")
 
         def substitute1():
-            formula=\
-            """
-            (declare-const x String)
-            (declare-const y String)
-            (declare-const z String)
-            (declare-const c String)
-            (assert (= x (str.substr z 0 (str.len x))))
+            formula="""\
+(declare-const x String)
+(declare-const y String)
+(declare-const z String)
+(declare-const c String)
+(assert (= x (str.substr z 0 (str.len x))))
             """
             expr = parse_str(formula).commands[4].term
             x = Var("x","String")
@@ -62,12 +61,12 @@ class TermTestCase(unittest.TestCase):
         
         def substitute2():
             formula="""\
-            (declare-const x String)
-            (declare-const y String)
-            (declare-const z String)
-            (assert (= z (str.++ x y)))
-            (assert (= x (str.substr z 0 (str.len x))))
-            (assert (= y (str.replace z x (str.at z (str.len z)))))
+(declare-const x String)
+(declare-const y String)
+(declare-const z String)
+(assert (= z (str.++ x y)))
+(assert (= x (str.substr z 0 (str.len x))))
+(assert (= y (str.replace z x (str.at z (str.len z)))))
             """
             formula= parse_str(formula)
             expr = Expr(op="str++", subterms=[Var("x","String"), Var("y","String")])

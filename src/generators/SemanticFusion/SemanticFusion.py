@@ -7,13 +7,7 @@ from src.generators.SemanticFusion.VariableFusion import *
 from src.generators.SemanticFusion.util import random_var_triplets, random_tuple_list, disjunction, conjunction, cvars
 
 class SemanticFusion(Generator):
-    def __init__(self, seeds, args):
-        super().__init__(seeds,args)
-        assert(len(seeds) == 2)
-        self.seed1 = seeds[0]
-        self.seed2 = seeds[1]
-        self.formula1, self.formula2 = parse_file(self.seed1,silent=False), parse_file(self.seed2, silent=False)
-
+    def __init__(self, formula1, formula2, args):
         self.config_file = self.args.fusionfun
         self.oracle = self.args.oracle
         self.templates = {}

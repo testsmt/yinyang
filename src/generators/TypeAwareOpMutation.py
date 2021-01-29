@@ -5,11 +5,7 @@ from src.parsing.parse import *
 
 
 class TypeAwareOpMutation(Generator):
-    def __init__(self, seed_fns, args):
-        assert(len(seed_fns) == 1)
-        self.seed_fn = seed_fns[0]
-        self.args = args
-        self.formula = parse_file(seed_fns[0])
+    def __init__(self, script, args):
         self.bidirectional = []
         self.unidirectional = []
 

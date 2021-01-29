@@ -25,6 +25,16 @@ class Fuzzer:
         self.statistic = Statistic()
         self.generator = None
 
+    def admissible_seed_size(self, seed): 
+        """
+        Checks if seed size is below file_size_limit.
+        :returns: True if that is the case and False otherwise.  
+        """
+        seed_size_in_bytes = Path(seed).stat().st_size
+        if seed_size_in_bytes >= self.args.file_size_limit:
+            return False
+        return True
+
 
     def run(self):
         if (self.args.strategy == "opfuzz"):
@@ -41,23 +51,39 @@ class Fuzzer:
 
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
+                
+                if not admissible_seed_size(seed):
+                    continue 
+
                 self.statistic.seeds += 1
                 self.currentseeds = Path(seed).stem
-                self.generator = TypeAwareOpMutation([seed], self.args)
+                script = parse_file(seed,silent=True)
+
+                if not script: # i.e. parsing was unsucessful
+                    continue 
+
+                self.generator = TypeAwareOpMutation(script, self.args)
+
             elif (self.args.strategy == "fusion"):
                 seed = seeds.pop(random.randrange(len(seeds)))
                 seed1 = seed[0]
                 seed2 = seed[1]
+
+                if not admissible_seed_size(seed1) or not admissible_seed_size(seed1):
+                    continue 
+
                 self.statistic.seeds += 2
                 self.currentseeds = Path(seed1).stem + "-" + Path(seed2).stem
-                fusion_seeds = [seed1, seed2]
-                self.generator = SemanticFusion(fusion_seeds, self.args)
+                script1 = parse_file(seed1,silent=True)
+                script2 = parse_file(seed2,silent=True)
+
+                if not script1 or not script2: # i.e. parsing was unsucessful
+                    continue
+
+                self.generator = SemanticFusion(script1, script2, self.args)
             else: assert(False)
 
-            seed_size_in_bytes = Path(seed).stat().st_size
-            if seed_size_in_bytes >= self.args.file_size_limit:
-                break
-
+ 
             for _ in range(self.args.iterations):
                 self.statistic.printbar()
                 formula, success = self.generator.generate()
