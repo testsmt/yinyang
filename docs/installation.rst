@@ -7,7 +7,7 @@ Installation
 - antlr4 python runtime
 
 
-The following commands clone yinyang and install the the antlr4 python runtime.  
+The following commands clone yinyang and install the antlr4 python runtime.  
 
 .. code-block:: bash
 

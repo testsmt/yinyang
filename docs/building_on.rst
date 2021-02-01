@@ -48,7 +48,7 @@ description thereof.
 Devise a custom mutation strategy 
 ..................................
 
-1. Add a new generator class to ``src/generators``, e.g., ``CustomGenerator.py``. A generator takes path to a single SMT-LIB as in its constructor, parses the corresponding SMT-LIB file into a Script object and returns the mutated Script class. The mutation should usuallybe implemented in a separate generate method, e.g. ``CustomGenerator.py::generate()``. For an example, consider ``src/generators/TypeAwareOpMutation.py``.                
+1. Add a new generator class to ``src/generators``, e.g., ``CustomGenerator.py``. A generator takes a path to a single SMT-LIB as in its constructor, parses the corresponding SMT-LIB file into a Script object, and returns the mutated Script class. The mutation should usually be implemented in a separate generate method, e.g. ``CustomGenerator.py::generate()``. For an example, consider ``src/generators/TypeAwareOpMutation.py``.                
 
 2. Add strategy to commandline option argument ``--strategy`` in ``src/args.py``.    
 

@@ -1,6 +1,6 @@
 Fusion
 ===============
-Fusion is a metamorphic testing approach which can work with a single SMT solver.If multiple suitable SMT solvers are available for your use-case, we recommend using ``opfuzz`` instead.     
+Fusion is a metamorphic testing approach than can work with a single SMT solver.If multiple suitable SMT solvers are available for your use-case, we recommend using ``opfuzz`` instead.     
 
 
 Basic Idea
@@ -23,7 +23,7 @@ Usage
 
 where
 
-* ``<solver_clis>``: a sequence of command line interfaces to call SMT solvers separated by semicolons `;`. Note, since Fusion is a metamorphic testing approach, one SMT solver is sufficient.
+* ``<solver_clis>``: a sequence of commandline interfaces to call SMT solvers separated by semicolons `;`. Note, since Fusion is a metamorphic testing approach, one SMT solver is sufficient.
 
 * ``<oracle>``: desired test oracle result {sat, unsat}.
 
@@ -39,7 +39,7 @@ where
 
    $ python3 yinyang.py "z3" -o sat -s fusion examples/formulas/phi1.smt2 examples/formulas/phi2.smt2
 
-yinyang will test z3 by running fusion with 30 iterations on the two satisfiable seed formulas. The mutants generated yinyang will then be by construction satisfiable. In turn, with unsat as oracle and two unsatisfiable seed formulas, fusion will generate unsatisfiable formulas.   
+yinyang will test z3 by running fusion with 30 iterations on the two satisfiable seed formulas. The mutants generated yinyang will then be by construction satisfiable. In turn, with unsat as an oracle and two unsatisfiable seed formulas, fusion will generate unsatisfiable formulas.   
 
 
 .. code-block:: bash
@@ -49,7 +49,7 @@ yinyang will test z3 by running fusion with 30 iterations on the two satisfiable
 
 Seeds
 ......
-Fusion requires the seeds that are pre-categorized to be either sat or unsat. Pre-categorized are available in the `following repository <https://github.com/testsmt/semantic-fusion-seeds>`_. Fusion currently only supports non-incremental mode, e.g.  LIA, LRA, NRA, QF_LIA, QF_LRA, QF_NRA, QF_SLIA, QF_S etc. Fusion's applicability is constraint by the fusion function used.   
+Fusion requires the seeds that are pre-categorized to be either sat or unsat. Pre-categorized SMT-LIB scripts are available in the `following repository <https://github.com/testsmt/semantic-fusion-seeds>`_. Fusion currently only supports non-incremental mode, e.g.  LIA, LRA, NRA, QF_LIA, QF_LRA, QF_NRA, QF_SLIA, QF_S, etc. Fusion's applicability is constraint by the fusion function used.   
 
 
 Fusion functions
@@ -85,5 +85,5 @@ The following code shows schematically fusion and inversion are described in ``c
     #end
 
 
-The example realizes a fusion function for integer variables.  First the variables x,y,z are declared. Variable c will be substituted by a random but fixed integer constant. Then fusion function :math:`z = f(x,y) =  x + y + c` is defined in the first assert block. Its corresponding inversion functions for x and y are described in the second and third asserts.     
+The example realizes a fusion function for integer variables.  First, the variables x,y,z are declared. Variable c will be substituted by a random but fixed integer constant. Then fusion function :math:`z = f(x,y) =  x + y + c` is defined in the first assert block. Its corresponding inversion functions for x and y are described in the second and third asserts.     
 

@@ -36,4 +36,4 @@ yinyang will by default randomly select formulas from the folder ``./benchmarks`
 After finding a bug, it is useful to produce a minimal test case before reporting 
 the bug to save the SMT solver developers' time and effort. For many test cases, 
 the C code reducer `creduce <https://embed.cs.utah.edu/creduce/>`_ does a great job. 
-In addition, SMT-LIB specific reducer `pyDelta <https://github.com/nafur/pydelta>`_ can be used.   
+Besides, SMT-LIB specific reducer `pyDelta <https://github.com/nafur/pydelta>`_ can be used.   

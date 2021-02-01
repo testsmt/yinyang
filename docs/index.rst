@@ -13,9 +13,9 @@ yinyang is a `fuzzer <https://en.wikipedia.org/wiki/Fuzzing>`_ for SMT solvers. 
 
 2. *Mutation:* Next, yinyang will mutate the parsed formula(s) using a mutation strategy. By default, yinyang performs type-aware substitutions of operators and will by default generate 300 mutant formulas per parsed formula.    
 
-3. *Oracle Check:* Finally, yinyang will query the SMT solvers under test with the mutant formulas and compare the result against a test oracle. By default, such test oracle would be a second SMT solver. 
+3. *Oracle Check:* Finally, yinyang will query the SMT solvers under test with the mutant formulas and compare the result against a test oracle. By default, such a test oracle would be a second SMT solver. 
 
-yinyang is intended for use by (1) SMT solver developers testing existing solvers, (2) researchers inventing new decision procedures to test the robustness of their implementations and (3) practitioners developing applications based on SMT solvers.    
+yinyang is intended for use by (1) SMT solver developers testing existing solvers, (2) researchers inventing new decision procedures to test the robustness of their implementations, and (3) practitioners developing applications based on SMT solvers.    
 
 .. toctree::
    :maxdepth: 2

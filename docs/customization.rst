@@ -7,7 +7,7 @@ Options
 yinyang provides the following options. Please consult ``python3 yinyang.py --help`` for a full list.
 
 * ``-i --iterations ITERATIONS``: the number of iterations on each individual seed. (default: 300)  
-* ``-m --modulo MODULO``: specifies how often the mutants will be forwarded to the SMT solvers. For example, with 300 iterations and 2 as a modulo, 150 mutants per seed file will be passed to the SMT solvers. High modulo and iteration counts, prioritize deeper mutations. (default: 2) 
+* ``-m --modulo MODULO``: specifies how often the mutants will be forwarded to the SMT solvers. For example, with 300 iterations and 2 as a modulo, 150 mutants per seed file will be passed to the SMT solvers. High modulo and iteration counts prioritize deeper mutations. (default: 2) 
 * ``-t --timeout TIMEOUT``: imposes a timeout limit (in seconds) on each SMT solver for solving  mutant formula (default: 8) 
 * ``-d, --diagnose``: forwards solver outputs to stdout e.g. for solver command line diagnosis
 * ``-bugs BUGSFOLDER`` (default: ./bugs) 
@@ -22,7 +22,7 @@ yinyang provides the following options. Please consult ``python3 yinyang.py --he
 
 Customize solvers configurations  
 .................................
-If you want to test several SMT solver configuration at once the putting them  as a commandline argument like ``python3 yinyang.py "<solver_clis>" <seed_path>`` may be inconvenient to you. Instead you can modify the solver list in ``config/config.py``.  
+If you want to test several SMT solver configurations at once the putting them  as a commandline argument like ``python3 yinyang.py "<solver_clis>" <seed_path>`` may be inconvenient to you. Instead, you can modify the solver list in ``config/config.py``.  
 As an example consider:
 
 .. code-block:: python3
@@ -35,7 +35,7 @@ As an example consider:
         "cvc4 --check-models --produce-models --incremental --strings-exp -q",         
     ] 
 
-You can then use ``python3 yinyang.py "" <seed_path>`` to run run these five different solver configurations.    
+You can then use ``python3 yinyang.py "" <seed_path>`` to run these five different solver configurations.    
 
 Option fuzzing
 .......................
@@ -61,7 +61,7 @@ If you want to test many options of an SMT solver with yinyang, you turn on opti
 
 ``<option name>``: Name of the option item. 
 
-``[type|value]*``: Type or value of the option. The type can be either `bool` or `int`. The value can be either `true`, `false`, or an arbitrary integers. By default, i.e., by leaving this position empty, the option is assigned to be `bool`. yinyang will then generate a random value based on the type of the option.
+``[type|value]*``: Type or value of the option. The type can be either `bool` or `int`. The value can be either `true`, `false`, or an arbitrary integer. By default, i.e., by leaving this position empty, the option is assigned to be `bool`. yinyang will then generate a random value based on the type of the option.
 
 ``###``: Splits option blocks. The options in different blocks are independent.
 
@@ -71,7 +71,7 @@ Customize bug detection
 yinyang's bug detection logic is based on three lists: ``crash_list, duplicate_list, ignore_list`` of ``config/config.py`` which you can customize. yinyang detects crash bugs by matching the stdout and stderr of the solvers in the ``crash_list`` . If yinyang detects a bug this way, it subsequently matches the crash message against all strings in ``duplicate_list``. The ``duplicate_list`` is useful to filter out repeatedly occurring bugs from getting copied to ``./bugs``.  The ``ignore_list`` can be used to filter out errors occurring in a solver call.  By default yinyang detects mutants returning non-zero exit codes as crashes except those that match with the ``ignore_list``.        
 
 
-The below setup shows the three list in ``config/config.py`` that worked well in practice for Z3 and CVC4. 
+The below setup shows the three lists in ``config/config.py`` that worked well in practice for Z3 and CVC4. 
 
 .. code-block:: python3
 
@@ -131,7 +131,7 @@ on the arity of the operator.
  [<op_name> -> <op_name> [arity: k[+,-]]]*
 
     
-where ``k`` is positive integer, ``+`` indicates at least one and ``-`` indicates at most one.   
+where ``k`` is a positive integer, ``+`` indicates at least one and ``-`` indicates at most one.   
 
 **Example:**
 
