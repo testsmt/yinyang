@@ -33,7 +33,7 @@ def error(output):
 
     if "Traceback" in output: return True
     if "error" in output: return True
-    if ignored >= generated: return True # all of the mutants get ignored
+    # if ignored >= generated: return True # all of the mutants get ignored
     if used <= 1: return True # only a single seed is used
     if generated <= 1: return True # only one seed generated
     return False
@@ -162,13 +162,13 @@ os.system(cmd)
 print("-"*100)
 
 print("2. Get and build SMT solvers.",flush=True)
-get_z3()
-get_cvc4()
+z3=get_z3()
+cvc4=get_cvc4()
 print("-"*100)
 
 print("3. Run Yin-Yang on the benchmarks e.g. with Z3 and CVC4.", flush=True)
-first_config="z3 model_validate=true"
-second_config="cvc4 --check-models --produce-models --incremental -q"
+first_config=z3+" model_validate=true"
+second_config=cvc4+" --check-models --produce-models --incremental -q"
 output, cmd = run_opfuzz(first_config, second_config, get_dir(chosen_benchmark),"",TIME_LIMIT)
 print(output,flush=True)
 if error(output):
