@@ -11,7 +11,7 @@ sys.path.append(import_path)
 
 python=sys.executable
 
-TIME_LIMIT=360
+TIME_LIMIT=120
 def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
     timeout="timeout --signal=INT "+str(timeout_limit)+" "
     cmd = timeout+python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + directory
@@ -149,15 +149,14 @@ benchmarks=\
 # git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_UFLIA.git incremental-QF_UFLIA
 # git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_UFLRA.git incremental-QF_UFLRA
 # git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_UFNIA.git incremental-QF_UFNIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/UFLRA.git incremental-UFLRA
-"""
-
+# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/UFLRA.git incremental-UFLRA"""
 cleanup()
 
 print("1. Get SMT-LIB 2 benchmarks", flush=True)
 k = random.randint(0,len(benchmarks.split("\n")) -1)
 chosen_benchmark = benchmarks.split("\n")[k]
 cmd = chosen_benchmark[1:]
+print(cmd)
 os.system(cmd)
 print("-"*100)
 
