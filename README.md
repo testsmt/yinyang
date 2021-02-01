@@ -2,7 +2,6 @@
 
 ___________
 [![Build Status](https://github.com/testsmt/yinyang_private/workflows/ci/badge.svg)](https://github.com/testsmt/yinyang_private/actions)
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Twitter](https://img.shields.io/twitter/follow/testsmtsolvers?style=social)](https://twitter.com/testsmtsolvers)
 
