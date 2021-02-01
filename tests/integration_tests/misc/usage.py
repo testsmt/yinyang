@@ -176,4 +176,4 @@ if error(output):
     print("cmd="+cmd)
     exit(1)
 cleanup(chosen_benchmark)
-print("-"*100TIME_LIMIT)
+print("-"*100)
