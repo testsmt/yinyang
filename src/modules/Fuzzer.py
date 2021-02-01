@@ -28,10 +28,10 @@ class Fuzzer:
         if not self.args.quiet:
             print("Yin-Yang is running:")
 
-    def admissible_seed_size(self, seed): 
+    def admissible_seed_size(self, seed):
         """
         Checks if seed size is below file_size_limit.
-        :returns: True if that is the case and False otherwise.  
+        :returns: True if that is the case and False otherwise.
         """
         seed_size_in_bytes = Path(seed).stat().st_size
         if seed_size_in_bytes >= self.args.file_size_limit:
@@ -54,20 +54,18 @@ class Fuzzer:
 
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
-                
+
                 self.statistic.seeds += 1
                 if not self.admissible_seed_size(seed):
                     self.statistic.ignored += 1
-                    continue 
+                    continue
 
                 self.currentseeds = Path(seed).stem
                 script = parse_file(seed,silent=True)
-                print(seed)
 
                 if not script: # i.e. parsing was unsucessful
-                    print("DEBUG:empty")
                     self.statistic.ignored += 1
-                    continue 
+                    continue
 
                 self.generator = TypeAwareOpMutation(script, self.args)
 
@@ -78,7 +76,7 @@ class Fuzzer:
                 self.statistic.seeds += 2
                 if not self.admissible_seed_size(seed1) or not self.admissible_seed_size(seed1):
                     self.statistic.ignored +=2
-                    continue 
+                    continue
 
                 self.currentseeds = Path(seed1).stem + "-" + Path(seed2).stem
                 script1 = parse_file(seed1,silent=True)
@@ -91,7 +89,7 @@ class Fuzzer:
                 self.generator = SemanticFusion(script1, script2, self.args)
             else: assert(False)
 
- 
+
             for _ in range(self.args.iterations):
                 if not self.args.quiet:
                     self.statistic.printbar()
@@ -224,13 +222,13 @@ class Fuzzer:
                         self.statistic.soundness += 1
                         self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
                         if reference:
-                            # Produce a diff bug report for soundness bugs in 
-                            # the opfuzz case 
+                            # Produce a diff bug report for soundness bugs in
+                            # the opfuzz case
                             ref_cli = reference[0]
                             ref_stdout = reference[1]
                             ref_stderr = reference[2]
-                            self.report_diff(scratchfile, "incorrect", 
-                                             ref_cli, ref_stdout, ref_stderr, 
+                            self.report_diff(scratchfile, "incorrect",
+                                             ref_cli, ref_stdout, ref_stderr,
                                              solver_cli, stdout, stderr,
                                              random_string())
                         return False # stop testing
@@ -262,8 +260,8 @@ class Fuzzer:
             log.write(stdout)
         return report_id
 
-    def report_diff(self, scratchfile, bugtype, 
-                    ref_cli, ref_stdout, ref_stderr, 
+    def report_diff(self, scratchfile, bugtype,
+                    ref_cli, ref_stdout, ref_stderr,
                     sol_cli, sol_stdout, sol_stderr,
                     report_id):
         plain_cli = plain(sol_cli)
