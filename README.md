@@ -24,7 +24,7 @@ pip3 install antlr4-python3-runtime==4.8
 Usage
 -------------
 1. **Get SMT-LIB 2 benchmarks**. Edit `scripts/SMT-LIB-clone.sh` to select the logics for testing. Run `./scripts/SMT-LIB-clone.sh`
-to download the corresponding SMT-LIB 2 benchmarks. Alternatively you can download benchmarks directly from the [SMT-LIB website](http://smtlib.cs.uiowa.edu/benchmarks.shtml) or supply your own benchmarks. 
+to download the corresponding SMT-LIB 2 benchmarks. Alternatively, you can download benchmarks directly from the [SMT-LIB website](http://smtlib.cs.uiowa.edu/benchmarks.shtml) or supply your own benchmarks. 
 
 2. **Get and build SMT solvers** for testing. Install two or more [SMT solvers](http://smtlib.cs.uiowa.edu/solvers.shtml) that support the SMT-LIB 2 format. You may find it convenient to add them to your PATH. 
 
@@ -40,9 +40,9 @@ Yin-Yang will by default randomly select formulas from the folder `./benchmarks`
 Feedback
 ---------
 For bugs/issues/questions please file an issue. We are always happy to receive your feedback or help you adjust YinYang to the needs of your custom solver.
-Reach out for us [[Contact us]](docs/Contributors.md).
+Reach out to us [[Contact us]](docs/Contributors.md).
 
 Additional Ressources
 ----------
 - [Citing Yin-Yang](docs/Citation.md)
-- [Project website](https://testsmt.github.io/) with bug statistics, talk videos etc.
+- [Project website](https://testsmt.github.io/) with bug statistics, talk videos, etc.
