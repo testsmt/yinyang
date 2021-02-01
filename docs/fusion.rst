@@ -23,14 +23,14 @@ Usage
 
 where
 
-* ``<solver_clis>``: a sequence of SMT solver commandlines separated by semicolons `;`. Note, since Fusion is a metamorphic testing approach, one SMT solver is sufficient.
+* ``<solver_clis>`` a sequence of SMT solver commandlines separated by semicolons `;`. Note, since Fusion is a metamorphic testing approach, one SMT solver is sufficient.
 
-* ``<oracle>``: desired test oracle result {sat, unsat}.
+* ``<oracle>`` desired test oracle result {sat, unsat}.
 
 
-* ``<seed_path1>, <seed_path2>``: SMT-LIB v2.6 file of the same satisfiability, i.e. both either sat or unsat in accordance with the oracle.
+* ``<seed_path1>, <seed_path2>`` SMT-LIB v2.6 file of the same satisfiability, i.e. both either sat or unsat in accordance with the oracle.
 
-* ``<seed_path>``: path to single seed or directory containing the SMT-LIB seed files, all of the same satisifiability.   
+* ``<seed_path>`` path to single seed or directory containing the SMT-LIB seed files, all of the same satisifiability.   
  
 
 **Examples:**
