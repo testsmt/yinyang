@@ -1,7 +1,7 @@
 <p align="center"><a><img width="130" alt="portfolio_view" align="center" src="media/logo.png"></a></p>
 
 ___________
-![Travis](https://travis-ci.com/wintered/yinyang.svg?token=sgWHG8TT217zpf5KHHqh&branch=master) 
+[![Build Status](https://github.com/testsmt/yinyang_private/workflows/ci/badge.svg)](https://github.com/testsmt/yinyang_private/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Twitter](https://img.shields.io/twitter/follow/testsmtsolvers?style=social)](https://twitter.com/testsmtsolvers)
 
