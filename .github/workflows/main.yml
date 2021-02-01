@@ -3,12 +3,11 @@ name: ci
 on: [push]
 
 jobs:
-  unittests:
+  tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -22,3 +21,18 @@ jobs:
     - name: Run Unittests
       run: |
         python -m unittest tests/runtests.py
+    - name: Detection logic 
+      run: |
+        python tests/integration_tests/detection/test_detection.py
+        python tests/integration_tests/detection/test_crashes.py
+    - name: Misc
+      run: |
+        python tests/integration_tests/misc/file_size_limit.py
+    - name: opfuzz
+      run: |
+        python tests/integration_tests/opfuzz/sanity_opfuzz.py 
+        python tests/integration_tests/misc/usage.py
+
+ 
+
+     
