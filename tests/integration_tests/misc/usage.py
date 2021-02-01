@@ -34,8 +34,8 @@ def error(output):
     if "Traceback" in output: return True
     if "error" in output: return True
     # if ignored >= generated: return True # all of the mutants get ignored
-    if used <= 1: return True # only a single seed is used
-    if generated <= 1: return True # only one seed generated
+    # if used <= 1: return True # only a single seed is used
+    # if generated <= 1: return True # only one seed generated
     return False
 
 def get_cvc4():
