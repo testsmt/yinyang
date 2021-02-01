@@ -4,13 +4,13 @@ Fuzzing setup
 SMT-LIB seeds 
 ..............
 
-To select SMT-LIB seed files for fuzzing SMT solvers with yinyang, edit ``scripts/SMT-LIB-clone.sh`` to select the logics for testing. Then use the following command to download the corresponding SMT-LIB 2 benchmarks.
+To select SMT-LIB seed files for fuzzing SMT solvers with yinyang, edit ``scripts/SMT-LIB-clone.sh`` to select the logics for testing. Then use the following command to download the chosen benchmarks.
 
 .. code-block:: bash
 
     $ ./scripts/SMT-LIB-clone.sh 
 
-Alternatively, you can download benchmarks directly from the website of `SMT-LIB initiative <http://smtlib.cs.uiowa.edu/>`_ 
+Alternatively, you can download the benchmarks directly from the website of `SMT-LIB initiative <http://smtlib.cs.uiowa.edu/>`_ 
 or use your own benchmarks.
 
 

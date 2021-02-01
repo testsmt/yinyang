@@ -6,16 +6,16 @@ Options
 
 yinyang provides the following options. Please consult ``python3 yinyang.py --help`` for a full list.
 
-* ``-i --iterations ITERATIONS``: the number of iterations on each individual seed. (default: 300)  
-* ``-m --modulo MODULO``: specifies how often the mutants will be forwarded to the SMT solvers. For example, with 300 iterations and 2 as a modulo, 150 mutants per seed file will be passed to the SMT solvers. High modulo and iteration counts prioritize deeper mutations. (default: 2) 
-* ``-t --timeout TIMEOUT``: imposes a timeout limit (in seconds) on each SMT solver for solving  mutant formula (default: 8) 
-* ``-d, --diagnose``: forwards solver outputs to stdout e.g. for solver command line diagnosis
+* ``-i --iterations ITERATIONS`` the number of iterations on each seed. (default: 300)  
+* ``-m --modulo MODULO`` specifies how often the mutants will be forwarded to the SMT solvers. For example, with 300 iterations and 2 as a modulo, 150 mutants per seed file will be passed to the SMT solvers. High modulo and iteration counts prioritize deeper mutations. (default: 2) 
+* ``-t --timeout TIMEOUT`` imposes a timeout limit (in seconds) on each SMT solver for solving  mutant formula. (default: 8) 
+* ``-d, --diagnose`` forwards solver outputs to stdout e.g. for solver command line diagnosis. 
 * ``-bugs BUGSFOLDER`` (default: ./bugs) 
-* ``-scratch SCRATCHFOLDER``: specifies where the mutant formulas are temporarily stored. Note, if you run yinyang with several processes in parallel, each instance should have its own scratch folder. (default: ./scratch)      
-* ``-s --strategy {opfuzz,fusion}`` sets the mutation strategy. For more details on ``fusion``, see :doc:`fusion`  (default: opfuzz).
-* ``-km --keep-mutants``: do not delete the mutants from the scratch folder. Warning: beware that this can quickly exhaust your entire disk space.              
-* ``-q --quiet``: do not output statistics and other output.
-* ``-fl", "--file-size-limit``: file size limit on seed formula in bytes
+* ``-scratch SCRATCHFOLDER`` specifies where the mutant formulas are temporarily stored. Note, if you run yinyang with several processes in parallel, each instance should have its own scratch folder. (default: ./scratch)      
+* ``-s --strategy {opfuzz,fusion}`` sets the mutation strategy. For more details on fusion, see :doc:`fusion`.  (default: opfuzz)
+* ``-km --keep-mutants`` do not delete the mutants from the scratch folder. Warning: beware that this can quickly exhaust your entire disk space.
+* ``-q --quiet`` do not output statistics and other output.
+* ``-fl", "--file-size-limit`` file size limit on seed formula in bytes. (default: 20000)
 
 
                         
@@ -35,11 +35,11 @@ As an example consider:
         "cvc4 --check-models --produce-models --incremental --strings-exp -q",         
     ] 
 
-You can then use ``python3 yinyang.py "" <seed_path>`` to run these five different solver configurations.    
+You can then use ``python3 yinyang.py "" <seed_path>`` to run the above five solver configurations.    
 
 Option fuzzing
 .......................
-If you want to test many options of an SMT solver with yinyang, you turn on option fuzzing via ``-optfuzz <file>`` with config file specifying the options. This will randomly add options ``set-option`` commands to the mutants.    
+If you want to test many options of an SMT solver with yinyang, you can turn on option fuzzing via ``-optfuzz <file>`` with configuration file ``config/option_setting.txt`` specifying the options. This will randomly add ``set-option`` commands to the mutants.    
 
 **Format:**
 
@@ -57,21 +57,21 @@ If you want to test many options of an SMT solver with yinyang, you turn on opti
     <option name> [type|value]*
     <option name> [type|value]*
 
-``<solver keywords>`` : Keywords for matching the solver command-line interfaces. If the keywords are found in the command-line interfaces, Yin-Yang will generate a corresponding random option setting.
+- ``<solver keywords>``  Keywords for matching the solver command lines. If the keywords can be matched.
 
-``<option name>``: Name of the option item. 
+- ``<option name>``: Name of the option item. 
 
-``[type|value]*``: Type or value of the option. The type can be either `bool` or `int`. The value can be either `true`, `false`, or an arbitrary integer. By default, i.e., by leaving this position empty, the option is assigned to be `bool`. yinyang will then generate a random value based on the type of the option.
+- ``[type|value]*``: Type or value of the option. The type can be either `bool` or `int` and the value can be either `true`, `false`, or an integer. By default, i.e., by leaving this position empty, the option is assigned to be `bool`. 
 
-``###``: Splits option blocks. The options in different blocks are independent.
+- ``###``: Splits option blocks. The options in different blocks are independent.
 
 
 Customize bug detection  
 .........................
-yinyang's bug detection logic is based on three lists: ``crash_list, duplicate_list, ignore_list`` of ``config/config.py`` which you can customize. yinyang detects crash bugs by matching the stdout and stderr of the solvers in the ``crash_list`` . If yinyang detects a bug this way, it subsequently matches the crash message against all strings in ``duplicate_list``. The ``duplicate_list`` is useful to filter out repeatedly occurring bugs from getting copied to ``./bugs``.  The ``ignore_list`` can be used to filter out errors occurring in a solver call.  By default yinyang detects mutants returning non-zero exit codes as crashes except those that match with the ``ignore_list``.        
+yinyang's bug detection logic is based on three lists: ``crash_list, duplicate_list, ignore_list`` of ``config/config.py`` which you can customize. yinyang detects crash bugs by matching the stdout and stderr of the solvers in with the strings in the list``crash_list``. If yinyang detects a bug this way, it subsequently matches the crash message against all strings in ``duplicate_list``. The ``duplicate_list`` is useful to filter out repeatedly occurring bugs from getting copied to ``./bugs``.  The ``ignore_list`` can be used to filter out errors occurring in a solver call.  By default yinyang detects mutants returning non-zero exit codes as crashes except those that match with the ``ignore_list``.        
 
 
-The below setup shows the three lists in ``config/config.py`` that worked well in practice for Z3 and CVC4. 
+The below setup shows the three lists in ``config/config.py`` that worked well in practice with Z3 and CVC4. 
 
 .. code-block:: python3
 
@@ -119,9 +119,7 @@ The below setup shows the three lists in ``config/config.py`` that worked well i
 Customizing mutations 
 ...............................
 
-To customize ``opfuzz``'s mutations, you can edit ``config/operator_mutations.txt``.
-An operator mutation can be bidirectional or unidirectional and may be conditioned   
-on the arity of the operator.
+To customize ``opfuzz``'s mutations, you can edit ``config/operator_mutations.txt``. An operator mutation can be bidirectional or unidirectional and may be conditioned on the arity of the operator.
 
 **Format:**
 

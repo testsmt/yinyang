@@ -4,27 +4,26 @@ Building on yinyang
 Project structure
 ....................
 
-The following tree shows the *most important files* of the project and includes a   
-description thereof.
+The following tree shows the most important files of the project and includes a description thereof.
 
 .. code-block:: text
     
     .
     ├── config                                  
-    │   ├── config.py                   - solver cils, crash, duplicate and ignore lists 
+    │   ├── config.py                   - solver configurations, crash, duplicate, ignore lists 
     │   ├── fusion_functions.txt        - fusion functions 
     │   ├── operator_mutations.txt      - operators used by the opfuzz
-    │   └── option_setting.txt          - options to be used for option fuzzing    
-    ├── docs                            - sphnix documentation
+    │   └── option_setting.txt          - options used for option fuzzing   
+    ├── docs                            - documentation
     ├── examples                        - small SMT-LIB example formulas
     ├── scripts                         - third-party scripts 
     ├── src                                     
-    │   ├── args.py                     - commandline parser  
+    │   ├── args.py                     - commandline parser 
     │   ├── generators                      
     │   │   ├── Generator.py            - generic generator class 
     │   │   ├── SemanticFusion
     │   │   │   ├── SemanticFusion.py   - generator for fusion
-    │   │   │   ├── VariableFusion.py   - variable fusion, filling template        
+    │   │   │   ├── VariableFusion.py   - variable fusion, template filling         
     │   │   │   └── util.py             - conjunction and disjunction of formulas,etc.
     │   │   └── TypeAwareOpMutation.py  - generator for opfuzz 
     │   ├── modules
@@ -48,7 +47,7 @@ description thereof.
 Devise a custom mutation strategy 
 ..................................
 
-1. Add a new generator class to ``src/generators``, e.g., ``CustomGenerator.py``. A generator takes a path to a single SMT-LIB as in its constructor, parses the corresponding SMT-LIB file into a Script object, and returns the mutated Script class. The mutation should usually be implemented in a separate generate method, e.g. ``CustomGenerator.py::generate()``. For an example, consider ``src/generators/TypeAwareOpMutation.py``.                
+1. Add a new generator class to ``src/generators``, e.g., ``CustomGenerator.py``. A generator takes a path to a single SMT-LIB in its constructor, parses the corresponding SMT-LIB file into a Script object, and returns the mutated Script class. The mutation should usually be implemented in a separate generate method, e.g. ``CustomGenerator.py::generate()``. For an example, consider ``src/generators/TypeAwareOpMutation.py``.                
 
 2. Add strategy to commandline option argument ``--strategy`` in ``src/args.py``.    
 
@@ -58,8 +57,8 @@ Devise a custom mutation strategy
 Extend the input language 
 ................................
 1. Extend grammar ``src/parsing/SMTLIBv2.g4``.   
-
-2. Extend parse tree visitor ``src/parsing/ast_visitor.py`` and AST implementation ``src/parsing/ast.py``.  
+2. Regenerate the grammar using ``regenerate_grammar.sh``.
+3. Extend parse tree visitor ``src/parsing/ast_visitor.py`` and AST implementation ``src/parsing/ast.py``.  
 
 
 Use yinyang as an SMT-LIB parser 
