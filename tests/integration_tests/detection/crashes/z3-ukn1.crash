@@ -1,0 +1,15 @@
+sat
+(error "line 9 column 10: an invalid model was generated")
+(model 
+ (define-fun e () Real
+  (/ 9232379240400289791.0 4611686016279904256.0))
+ (define-fun a () Real
+  (- (/ 2143289343.0 2147483648.0)))
+ (define-fun c () Real
+  (/ 1.0 8.0))
+ (define-fun d () Real
+  (/ 50440315803061452800000000.0 631185189288030893469201889.0))
+ (define-fun b () Real
+  1.0)
+)
+

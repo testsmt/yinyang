@@ -1,0 +1,7 @@
+Fatal failure within void CVC4::theory::sep::TheorySep::computeLabelModel(CVC4::Node) at /home/CVC4/src/theory/sep/theory_sep.cpp:1677
+Check failure
+
+ !d_type_references_all[tn].empty()
+
+Aborted
+

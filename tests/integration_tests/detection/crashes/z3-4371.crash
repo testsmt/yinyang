@@ -1,0 +1,5 @@
+ASSERTION VIOLATION
+File: ../src/smt/theory_diff_logic_def.h
+Line: 977
+(asgn == l_true) == a->is_true()
+(C)ontinue, (A)bort, (S)top, (T)hrow exception, Invoke (G)DB

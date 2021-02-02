@@ -21,7 +21,7 @@ parser.add_argument(
     "-s","--strategy",
     choices=["opfuzz", "fusion"],
     default="opfuzz",
-    help="set fuzzing strategy"
+    help="sets the mutation strategy (default: opfuzz)."
 )
 parser.add_argument(
     "-o","--oracle",
@@ -32,20 +32,28 @@ parser.add_argument(
 parser.add_argument(
     "-i", "--iterations",
     type=int,
-    help="set mutating iterations for each seed/pair (default: 300 for Type-Aware Operator Mutation, 30 for SemanticFusion)"
+    help="the number of iterations on each individual seed. (default: 300 [opfuzz] / 30 [fusion])"
 )
 parser.add_argument(
     "-m", "--modulo",
     type=int,
     default=2,
-    help="determines when the mutant will be forwarded to the solvers for opfuzz"
+    help="specifies how often the mutants will be forwarded to the SMT solvers. For example, with 300 iterations\
+          and 2 as a modulo, 150 mutants per seed file will be passed to the SMT solvers. High modulo and iteration\
+          counts, prioritize deeper mutations. (default: 2)"
 )
 parser.add_argument(
     "-t", "--timeout",
     default=8,
     type=int,
-    help="set timeout for solving process (default: 8)"
+    help="imposes a timeout limit (in seconds) on each SMT solver for solving  mutant formula (default: 8)"
 )
+parser.add_argument(
+    "-d", "--diagnose",
+    action='store_true',
+    help="forwards solver outputs to stdout e.g. for solver command line diagnosis"
+)
+
 parser.add_argument(
     "-optfuzz","--optfuzz",
     default="",
@@ -64,23 +72,38 @@ parser.add_argument(
 parser.add_argument(
     "-scratch","--scratchfolder",
     default=rootpath+"/scratch",
-    help="set scratch folder (default: "+rootpath+"/scratch)"
+    help="specifies where the mutant formulas are temporarily stored.\
+         Note, if you run yinyang with several processes in parallel, each\
+         instance should have its own scratch folder. (default:"+rootpath+"/scratch)"
 )
 parser.add_argument(
     "-opconfig","--opconfig",
     default=rootpath+"/config/operator_mutations.txt",
     help="set operator mutation configuration (default: "+rootpath+"/config/operator_mutations.txt)"
 )
-# parser.add_argument(
-#     "-fusionfun","--fusionfun",
-#     default=rootpath+"/config/fusion_functions.txt",
-#     help="set fusion function configuration (default: "+rootpath+"/config/fusion_functions.txt)"
-# )
+parser.add_argument(
+    "-fusionfun","--fusionfun",
+    default=rootpath+"/config/fusion_functions.txt",
+    help="set fusion function configuration (default: "+rootpath+"/config/fusion_functions.txt)"
+)
 parser.add_argument(
     "-km", "--keep-mutants",
     action='store_true',
-    help="Do not delete the mutants generated in the scratchfolder."
+    help="do not delete the mutants from the scratch folder.\
+          Warning: beware that this can quickly exhaust your entire disk space."
 )
+parser.add_argument(
+    "-q", "--quiet",
+    action='store_true',
+    help="do not output statistics and other output"
+)
+parser.add_argument(
+    "-fl", "--file-size-limit",
+    default=20000,
+    type=int,
+    help="file size limit on seed formula in bytes"
+)
+
 args = parser.parse_args()
 
 # pre-processing
@@ -112,9 +135,6 @@ if not os.path.isdir(args.scratchfolder):
     except Exception as e:
         print(e)
         exit(0)
-
-# if not os.path.isfile(args.fusionfunctions) and (args.strategy == "fusion" or args.strategy == "mix"):
-#     exit("Error: File for fusion functions %s not exist" %(args.fusionfunctions))
 
 temp_seeds = []
 for path in args.PATH_TO_SEEDS:

@@ -1,3 +1,5 @@
+import copy
+
 class Script:
     def __init__(self, commands, global_vars):
         self.commands = commands
@@ -8,7 +10,9 @@ class Script:
 
         for cmd in self.commands:
             if isinstance(cmd, Assert):
-                self._get_free_var_occs(cmd.term)
+                globs_ = copy.deepcopy(self.global_vars)
+                self._get_free_var_occs(cmd.term, self.global_vars)
+                self.global_vars = globs_
                 self._get_op_occs(cmd.term)
 
     def _get_op_occs(self,e):
@@ -21,17 +25,29 @@ class Script:
         for sub in e.subterms:
             self._get_op_occs(sub)
 
-    def _get_free_var_occs(self,e):
+    def _get_free_var_occs(self,e, global_vars):
         if isinstance(e,str): return
         if e.is_const: return
         if e.label: return
+        if e.quantifier:
+            for var in list(global_vars):
+                for quantified_var in e.quantified_vars:
+                    if var == quantified_var[0]:
+                        global_vars.pop(var)
+
+        if e.var_binders:
+            for var in list(global_vars):
+                for let_var in e.var_binders:
+                     if var == let_var:
+                        global_vars.pop(var)
+
         if e.is_var:
-            if e.type != "Unknown" and e.name in self.global_vars:
+            if e.name in global_vars:
                 self.free_var_occs.append(e)
             return
 
         for sub in e.subterms:
-            self._get_free_var_occs(sub)
+            self._get_free_var_occs(sub, global_vars)
 
     def _decl_commands(self):
         vars, types = [], {}
@@ -69,6 +85,10 @@ class Script:
                     cmd.symbol = prefix+cmd.symbol
             if isinstance(cmd, Assert):
                 self._prefix_free_vars(prefix,cmd.term)
+        new_global_vars = {}
+        for global_var in self.global_vars:
+            new_global_vars[prefix+global_var] = self.global_vars[global_var]
+        self.global_vars = new_global_vars
         self.vars, self.types = self._decl_commands()
 
     def merge_asserts(self):
@@ -129,6 +149,13 @@ class AssertSoft:
         for a in self.attr:
             attr_s = " "+a[0] + " " +a[1]
         return "(assert-soft " + self.term.__str__()  +attr_s+")"
+
+class Comment:
+    def __init__(self, txt):
+        self.txt = txt
+
+    def __str__(self):
+        return "; "+ self.txt
 
 class Define:
     def __init__(self, symbol, term):
@@ -207,6 +234,7 @@ class Simplify:
         self.attr = attr
 
     def __str__(self):
+        attr_s = ""
         for a in self.attr:
             attr_s = " " + a[0] + " " + a[1]
         return "(simplify " + self.term.__str__() + attr_s + ")"
@@ -376,48 +404,41 @@ class Term:
         self.subterms = subterms
         self.is_indexed_id = is_indexed_id
 
-    def find_expr(self, e, eprime):
+    def find_all(self, e, occs):
         """
-        Find first occurence of expression e in expression eprime and return it
+        Find all expressions e in self and add to list occs.
         """
-        if e == eprime: return eprime
-        if eprime.subterms:  #i.e. e has no subterms and is also different from eprime
-            rets = []
-            for sub in eprime.subterms:
-                ret = self.find_expr(e,sub)
-                if ret:
-                    return ret
-        return None
+        if self == e:
+            return occs.append(e)
+        if self.subterms:
+            for sub in self.subterms:
+                if sub == e:
+                    occs.append(sub)
+                else:
+                    sub.find_all(e, occs)
 
 
     def substitute(self, e, repl):
         """
-        Substitute first occurrences of e in self by "repl"
+        Substitute all expressions e in self by repl.
         """
-        expr = self.find_expr(e,self)
-        if expr:
-            expr._initialize(name=repl.name,
-                             type=repl.type,
-                             is_const=repl.is_const,
-                             is_var=repl.is_var,
-                             label=repl.label,
-                             indices=repl.indices,
-                             quantifier=repl.quantifier,
-                             quantified_vars=repl.quantified_vars,
-                             var_binders=repl.var_binders,
-                             let_terms=repl.let_terms,
-                             op=repl.op,
-                             subterms=repl.subterms)
+        occs = []
+        self.find_all(e, occs)
+        for occ in occs:
+                occ._initialize(name=repl.name,
+                                 type=repl.type,
+                                 is_const=repl.is_const,
+                                 is_var=repl.is_var,
+                                 label=repl.label,
+                                 indices=repl.indices,
+                                 quantifier=repl.quantifier,
+                                 quantified_vars=repl.quantified_vars,
+                                 var_binders=repl.var_binders,
+                                 let_terms=repl.let_terms,
+                                 op=repl.op,
+                                 subterms=repl.subterms)
 
-    def substitute_all(self, e, repl):
-        """
-        Substitute all occurrences of e in self by "repl"
-        """
-        if e == repl: self.substitute(e, repl)
-        if self.subterms:
-            for sub in self.subterms: 
-                sub.substitute(e, repl)
-         
+
     def __eq__(self,other):
         if not isinstance(other,Term): return False
         if self.name != other.name: return False
@@ -435,11 +456,7 @@ class Term:
         if self.is_indexed_id != other.is_indexed_id: return False
         return True
 
-    def __str__(self):
-        if self.is_const or self.is_var or self.is_indexed_id:
-            return self.name
-
-        s = ""
+    def __get_subterm_str__(self):
         subs_str = ""
         length=len(self.subterms)
         for i in range(length):
@@ -448,8 +465,14 @@ class Term:
                 subs_str += sb.__str__()
             else:
                 subs_str += sb.__str__()+" "
+        return subs_str
+
+    def __str__(self):
+        if self.is_const or self.is_var or self.is_indexed_id:
+            return self.name
 
         if self.quantifier:
+            subs_str= self.__get_subterm_str__()
             n_vars = len(self.quantified_vars[0])
             s = "("+self.quantified_vars[0][0] + " "+ self.quantified_vars[1][0]+")"
             if len(self.quantified_vars[0]) > 1:
@@ -457,7 +480,7 @@ class Term:
                     s+= " ("+self.quantified_vars[0][i] + " " + self.quantified_vars[1][i]+")"
             return "("+ self.quantifier +" (" + s + ") "+ subs_str + ")"
 
-        if self.var_binders:
+        elif self.var_binders:
             s = "(let ("
             for i,var in enumerate(self.var_binders):
                 s += "(" + var + " " + self.let_terms[i].__str__() + ")"
@@ -466,9 +489,13 @@ class Term:
             for sub in self.subterms:
                 s+=" "+ sub.__str__()
             return s+")"
-        if self.label:
+
+        elif self.label:
+            subs_str = self.__get_subterm_str__()
             return "(! "+ subs_str +" " +self.label[0] + " "+self.label[1]+")"
-        return "("+self.op.__str__() +" "+ subs_str + ")"
+        else:
+            subs_str = self.__get_subterm_str__()
+            return "("+self.op.__str__() +" "+ subs_str + ")"
 
     def __repr__(self):
         if self.is_const:

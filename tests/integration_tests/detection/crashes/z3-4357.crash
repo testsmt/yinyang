@@ -1,0 +1,5 @@
+ASSERTION VIOLATION
+File: ../src/smt/theory_str.cpp
+Line: 9016
+UNREACHABLE CODE WAS REACHED.
+(C)ontinue, (A)bort, (S)top, (T)hrow exception, Invoke (G)DB

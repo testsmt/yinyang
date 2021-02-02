@@ -1,0 +1,9 @@
+Fatal failure within void CVC4::SmtEngine::checkModel(bool) at /home/CVC4-Release/src/smt/smt_engine.cpp:1677
+Internal error detectedSmtEngine::checkModel(): ERRORS SATISFYING ASSERTIONS WITH MODEL:
+model value for i17
+             is (/ (- 1) 2)
+value type is     Real
+should be of type Int
+Run with `--check-models -v' for additional diagnostics.
+Aborted
+

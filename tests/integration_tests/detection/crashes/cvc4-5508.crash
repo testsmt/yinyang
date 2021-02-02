@@ -1,0 +1,7 @@
+Fatal failure within void CVC4::theory::strings::InferenceManager::processConflict(const CVC4::theory::strings::InferInfo&) at /home/CVC4/src/theory/strings/inference_manager.cpp:301
+Check failure
+
+ !d_state.isInConflict()
+
+Aborted
+

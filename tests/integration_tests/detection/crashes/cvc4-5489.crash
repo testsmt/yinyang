@@ -1,0 +1,8 @@
+Fatal failure within void CVC4::SmtEngine::checkModel(bool) at /local/suz-local/software/CVC4/src/smt/smt_engine.cpp:1791
+Internal error detectedSmtEngine::checkModel(): ERRORS SATISFYING ASSERTIONS WITH MODEL:
+assertion:   (let ((_let_0 (b j d))) (and (= d _let_0) (= _let_0 a)))
+simplifies to: false
+expected `true'.
+Run with `--check-models -v' for additional diagnostics.
+Aborted
+

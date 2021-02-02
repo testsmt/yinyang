@@ -1,0 +1,7 @@
+Fatal failure within void CVC4::theory::strings::CoreSolver::processSimpleNEq(CVC4::theory::strings::NormalForm&, CVC4::theory::strings::NormalForm&, unsigned int&, bool, unsigned int, std::vector<CVC4::theory::strings::CoreInferInfo>&, CVC4::TypeNode) at /home/CVC4/src/theory/strings/core_solver.cpp:1374
+Check failure
+
+ nfiv.size() == nfjv.size()
+
+Aborted
+

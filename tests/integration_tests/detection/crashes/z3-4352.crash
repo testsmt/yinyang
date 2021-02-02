@@ -1,0 +1,7 @@
+ASSERTION VIOLATION
+File: ../src/smt/theory_str_regex.cpp
+Line: 1386
+new_lhs
+(C)ontinue, (A)bort, (S)top, (T)hrow exception, Invoke (G)DB
+a
+

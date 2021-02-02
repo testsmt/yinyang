@@ -1,0 +1,22 @@
+sat
+(error "line 10 column 44: an invalid model was generated")
+(
+ (define-fun h () Real
+  0.0)
+ (define-fun d () Real
+  (- 1.0))
+ (define-fun c () Real
+  2.0)
+ (define-fun e () Real
+  (- 1.0))
+ (define-fun b () Real
+  0.0)
+ (define-fun f () Real
+  0.0)
+ (define-fun a () Real
+  1.0)
+ (define-fun div0 ((x!0 Int) (x!1 Int)) Int
+  0)
+ (define-fun mod0 ((x!0 Int) (x!1 Int)) Int
+  0)
+)

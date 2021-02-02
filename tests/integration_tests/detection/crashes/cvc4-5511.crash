@@ -1,0 +1,5 @@
+Fatal failure within CVC4::symfpuLiteral::wrappedBitVector<isSigned> CVC4::symfpuLiteral::wrappedBitVector<T>::matchWidth(const CVC4::symfpuLiteral::wrappedBitVector<T>&) const [with bool isSigned = false] at src/util/floatingpoint_literal_symfpu.cpp:379
+Check failure
+ this->getWidth() <= op.getWidth()
+Aborted
+
