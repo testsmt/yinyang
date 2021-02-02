@@ -78,7 +78,7 @@ print("-"*100)
 
 print("3. Run Yin-Yang on the benchmarks e.g. with Z3 and CVC4.", flush=True)
 first_config=z3+" model_validate=true"
-second_config=cvc4+" --check-models --produce-models --incremental -q"
+second_config=cvc4+" --check-models -m -i -q"
 output, cmd = run_opfuzz(first_config, second_config, "QF_LIA","",TIME_LIMIT)
 print(output,flush=True)
 if error(output):
