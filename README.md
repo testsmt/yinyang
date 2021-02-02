@@ -3,6 +3,7 @@
 ___________
 [![Build Status](https://github.com/testsmt/yinyang_private/workflows/ci/badge.svg)](https://github.com/testsmt/yinyang_private/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Documentation Status](https://readthedocs.org/projects/yinyang/badge/?version=latest)](https://yinyang.readthedocs.io/en/latest/?badge=latest)
 [![Twitter](https://img.shields.io/twitter/follow/testsmtsolvers?style=social)](https://twitter.com/testsmtsolvers)
 
 
@@ -35,7 +36,7 @@ python3 yinyang.py "z3 model_validate=true;cvc4 --check-models -m -i -q" benchma
 
 Yin-Yang will by default randomly select formulas from the folder `./benchmarks` and generate 300 mutants per seed formula. If a bug has been found, the bug trigger is stored in `./bugs`. Yin-Yang will run in an infinite loop. You can use the shortcut CTRL+C to terminate Yin-Yang manually.
 
-:blue_book: [Documentation](docs/Documentation.md)
+:blue_book: [Documentation](https://yinyang.readthedocs.io/en/latest/)
 
 Feedback
 ---------
