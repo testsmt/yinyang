@@ -1,6 +1,6 @@
 <p align="center"><a><img width="130" alt="portfolio_view" align="center" src="media/logo.png"></a></p>
 
-
+<br>
 <p align="center">
     <a href="https://github.com/testsmt/yinyang_private/actions" alt="Build status">
         <img src="https://github.com/testsmt/yinyang_private/workflows/ci/badge.svg" /></a>
