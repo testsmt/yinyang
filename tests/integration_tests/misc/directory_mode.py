@@ -50,4 +50,7 @@ generated_seeds, used_seeds, ignored_issues, cmd = run_opfuzz(first_config, seco
 if not (generated_seeds == 300 and used_seeds == 3 and ignored_issues == 2):
     print("An error occurred.", flush=True)
     print("cmd", cmd)
+    print("generated_seeds", generated_seeds)
+    print("used_seeds", used_seeds)
+    print("ignored_issues", ignored_issues)
     exit(1)
