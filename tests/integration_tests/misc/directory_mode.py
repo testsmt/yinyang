@@ -11,7 +11,9 @@ def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
     timeout="timeout --signal=INT "+str(timeout_limit)+" "
     cmd = timeout+python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + directory
     output = subprocess.getoutput(cmd)
-
+    generated_seeds = 0
+    used_seeds = 0
+    ignored_issues = 0
     for line in output.split("\n"):
         if "Generated mutants" in line:
             generated_seeds = int(line.split()[-1])
@@ -48,3 +50,4 @@ generated_seeds, used_seeds, ignored_issues, cmd = run_opfuzz(first_config, seco
 if not (generated_seeds == 300 and used_seeds == 3 and ignored_issues == 2):
     print("An error occurred.", flush=True)
     print("cmd", cmd)
+    exit(1)
