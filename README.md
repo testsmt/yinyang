@@ -49,11 +49,11 @@ yinyang will by default randomly select formulas from the folder `./benchmarks` 
 
 Feedback
 ---------
-For bugs/issues/questions/feature requests please file an issue. We are always happy to receive your feedback or help you adjust yinyang to the needs of your custom solver.
+For bugs/issues/questions/feature requests please file an issue. We are always happy to receive your feedback or help you adjust yinyang to the needs of your custom solver, help you build on yinyang, etc.
  
- :memo: [Contact us](docs/Contributors.md)
+ :memo: [Contact us](https://yinyang.readthedocs.io/en/latest/building_on.html#contact)
 
 Additional Ressources
 ----------
-- [Citing yinyang](docs/Citation.md)
+- [Citing yinyang](https://yinyang.readthedocs.io/en/latest/building_on.html#citing-yinyang)
 - [Project website](https://testsmt.github.io/) with bug statistics, talk videos, etc.
