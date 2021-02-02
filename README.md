@@ -4,7 +4,20 @@ ___________
 [![Build Status](https://github.com/testsmt/yinyang_private/workflows/ci/badge.svg)](https://github.com/testsmt/yinyang_private/actions)
 [![Documentation Status](https://readthedocs.org/projects/yinyang/badge/?version=latest)](https://yinyang.readthedocs.io/en/latest/?badge=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Twitter](https://img.shields.io/twitter/follow/testsmtsolvers?style=social)](https://twitter.com/testsmtsolvers)
+[![Twitter](https://img.shields.io/twitter/follow/testsmtsolvers?style=social)](c)
+
+
+<p align="center">
+    <a href="https://github.com/testsmt/yinyang_private/actions" alt="Build status">
+        <img src="https://github.com/testsmt/yinyang_private/workflows/ci/badge.svg" /></a>
+    <a href="https://readthedocs.org/projects/yinyang/badge/?version=latest" alt="Documentation">
+        <img src="https://readthedocs.org/projects/yinyang/badge/?version=latest" /></a>
+    <a href="https://opensource.org/licenses/MIT" alt="License">
+        <img src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+    <a href="https://twitter.com/testsmtsolvers" alt="Social">
+        <img src="https://img.shields.io/twitter/follow/testsmtsolvers?style=social" /></a>
+</p>
+
 
 
 A fuzzer for SMT solvers. Given a set of seed SMT formulas, yinyang generates mutant formulas to stress-test SMT solvers. yinyang can be used to robustify SMT solvers. It already found **1,000+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
