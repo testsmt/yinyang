@@ -6,7 +6,7 @@ ___________
 [![Twitter](https://img.shields.io/twitter/follow/testsmtsolvers?style=social)](https://twitter.com/testsmtsolvers)
 
 
-A fuzzer for SMT solvers. Given a set of seed SMT formulas, Yin-Yang generates mutant formulas to stress-test SMT solvers. Yin-Yang can be used to robustify SMT solvers. It already found **1,000+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
+A fuzzer for SMT solvers. Given a set of seed SMT formulas, Yin-Yang generates mutant formulas to stress-test SMT solvers. yinyang can be used to robustify SMT solvers. It already found **1,000+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
 
 
 
@@ -33,7 +33,7 @@ to download the corresponding SMT-LIB 2 benchmarks. Alternatively, you can downl
 python3 yinyang.py "z3 model_validate=true;cvc4 --check-models -m -i -q" benchmarks 
 ```
 
-Yin-Yang will by default randomly select formulas from the folder `./benchmarks` and generate 300 mutants per seed formula. If a bug has been found, the bug trigger is stored in `./bugs`. Yin-Yang will run in an infinite loop. You can use the shortcut CTRL+C to terminate Yin-Yang manually.
+yinyang will by default randomly select formulas from the folder `./benchmarks` and generate 300 mutants per seed formula. If a bug has been found, the bug trigger is stored in `./bugs`. yinyang will run in an infinite loop. You can use the shortcut CTRL+C to terminate yinyang manually.
 
 :blue_book: [Documentation](docs/Documentation.md)
 
