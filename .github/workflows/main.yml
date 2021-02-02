@@ -28,6 +28,7 @@ jobs:
     - name: Misc
       run: |
         python tests/integration_tests/misc/file_size_limit.py
+        python tests/integration_tests/misc/directory_mode.py
     - name: opfuzz
       run: |
         python tests/integration_tests/opfuzz/sanity_opfuzz.py 

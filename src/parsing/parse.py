@@ -14,7 +14,7 @@ from .ast_visitor import *
 
 class ErrorListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        print("Parser error on line %d column %d." % (line, column))
+        print("Parser error on line %d column %d." % (line, column), flush=True)
 
 def remove_set_logic_status(formula):
     new_cmds = []
@@ -37,8 +37,8 @@ def generate_ast(stream):
     vis = ASTVisitor()
     formula = vis.visitStart(tree)
 
-    # empty file or parser preceding parser errror  
-    if len(formula.commands) == 0: 
+    # empty file or parser preceding parser errror
+    if len(formula.commands) == 0:
         return None
 
     return remove_set_logic_status(formula)
@@ -53,7 +53,7 @@ def parse_filestream(fn,timeout_limit):
     return _parse_filestream(fn)
 
 
-def parse_inputstream(s,timeout_limit): 
+def parse_inputstream(s,timeout_limit):
 
     @exit_after(timeout_limit)
     def _parse_inputstream(s):
@@ -65,46 +65,46 @@ def parse_inputstream(s,timeout_limit):
 
 def parse(parse_fct, arg, timeout_limit, silent=True):
     """
-    Parser helper function. 
+    Parser helper function.
 
-    :parse_fct: function to parse stream.  
+    :parse_fct: function to parse stream.
     :arg: first argument to parse_fct.
-    :returns: Script object representing AST of SMT-LIB file. None if timeout 
-              or crash occurred.  
+    :returns: Script object representing AST of SMT-LIB file. None if timeout
+              or crash occurred.
     """
     script = None
 
-    try: 
+    try:
         script = parse_fct(arg,timeout_limit)
-    except KeyboardInterrupt: 
+    except KeyboardInterrupt:
         print("Parser timed out or was interrupted.")
-    except Exception as e: 
-        print("Error generating the AST.")
-        print(e)
-        if not silent: 
+    except Exception as e:
+        if not silent:
+            print("Error generating the AST.")
+            print(e)
             traceback.print_exc(file=sys.stdout)
-    return script 
+    return script
 
 
 def parse_file(fn, timeout_limit=30, silent=True):
     """
-    Parse SMT-LIB file. 
+    Parse SMT-LIB file.
 
-    :fn: path to SMT-LIB file.  
-    :silent: if silent=True the parser will withhold stacktrace from user on crash.  
-    :returns: Script object representing AST of SMT-LIB file. None if timeout 
-              or crash occurred.  
+    :fn: path to SMT-LIB file.
+    :silent: if silent=True the parser will withhold stacktrace from user on crash.
+    :returns: Script object representing AST of SMT-LIB file. None if timeout
+              or crash occurred.
     """
-    return parse(parse_filestream, fn, timeout_limit, silent) 
+    return parse(parse_filestream, fn, timeout_limit, silent)
 
 
 def parse_str(s, timeout_limit=30, silent=True):
     """
-    Parse SMT-LIB from string. 
+    Parse SMT-LIB from string.
 
-    :fn: path to SMT-LIB file.  
-    :silent: if silent=True the parser will withhold stacktrace from user on crash.  
-    :returns: Script object representing AST of SMT-LIB file. None if timeout 
-              or crash occurred.  
+    :fn: path to SMT-LIB file.
+    :silent: if silent=True the parser will withhold stacktrace from user on crash.
+    :returns: Script object representing AST of SMT-LIB file. None if timeout
+              or crash occurred.
     """
     return parse(parse_inputstream, s, timeout_limit, silent)
