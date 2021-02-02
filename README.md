@@ -6,7 +6,7 @@ ___________
 [![Twitter](https://img.shields.io/twitter/follow/testsmtsolvers?style=social)](https://twitter.com/testsmtsolvers)
 
 
-A fuzzer for SMT solvers. Given a set of seed SMT formulas, Yin-Yang generates mutant formulas to stress-test SMT solvers. yinyang can be used to robustify SMT solvers. It already found **1,000+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
+A fuzzer for SMT solvers. Given a set of seed SMT formulas, yinyang generates mutant formulas to stress-test SMT solvers. yinyang can be used to robustify SMT solvers. It already found **1,000+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
 
 
 
@@ -28,7 +28,7 @@ to download the corresponding SMT-LIB 2 benchmarks. Alternatively, you can downl
 
 2. **Get and build SMT solvers** for testing. Install two or more [SMT solvers](http://smtlib.cs.uiowa.edu/solvers.shtml) that support the SMT-LIB 2 format. You may find it convenient to add them to your PATH. 
 
-3. **Run Yin-Yang** on the benchmarks e.g. with Z3 and CVC4.  
+3. **Run yinyang** on the benchmarks e.g. with Z3 and CVC4.  
 ```bash
 python3 yinyang.py "z3 model_validate=true;cvc4 --check-models -m -i -q" benchmarks 
 ```
@@ -45,5 +45,5 @@ For bugs/issues/questions/feature requests please file an issue. We are always h
 
 Additional Ressources
 ----------
-- [Citing Yin-Yang](docs/Citation.md)
+- [Citing yinyang](docs/Citation.md)
 - [Project website](https://testsmt.github.io/) with bug statistics, talk videos, etc.
