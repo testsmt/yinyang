@@ -2,8 +2,8 @@
 
 <br>
 <p align="center">
-    <a href="https://github.com/testsmt/yinyang_private/actions" alt="Build status">
-        <img src="https://github.com/testsmt/yinyang_private/workflows/ci/badge.svg" /></a>
+    <a href="https://github.com/testsmt/yinyang/actions" alt="Build status">
+        <img src="https://github.com/testsmt/yinyang/workflows/ci/badge.svg" /></a>
     <a href="https://readthedocs.org/projects/yinyang/badge/?version=latest" alt="Documentation">
         <img src="https://readthedocs.org/projects/yinyang/badge/?version=latest" /></a>
     <a href="https://opensource.org/licenses/MIT" alt="License">
