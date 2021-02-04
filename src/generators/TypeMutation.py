@@ -42,8 +42,15 @@ class TypeMutation(Generator):
         for i in range(6):
             if len(exprs[i]) >= 2:
                 types.append(i)
+        if len(exprs[1])+len(exprs[2])>=2:
+            types.append(7)
         if types:
             typ = random.choice(types)
+            # replacing int with real 
+            if typ == 7:
+                t1 = random.choice(exprs[1])
+                t2 = random.choice(exprs[2])
+                return t1, t2, 1
             t1, t2 = random.sample(exprs[typ], 2)
             while av_expr[t1] == av_expr[t2]:
                 if len(exprs[typ]) >= 3:
@@ -52,7 +59,7 @@ class TypeMutation(Generator):
                 else:
                     return False
             if av_expr[t1] != av_expr[t2]:
-                return t1, t2
+                return t1, t2, 0
         return False
 
     def generate(self):
@@ -64,10 +71,19 @@ class TypeMutation(Generator):
             expr_type += typ
         res = self.get_replacee(av_expr,expr_type)
         if res:
-            t1, t2 = res
-            t1_copy = copy.deepcopy(av_expr[t1])
-            t2_copy = copy.deepcopy(av_expr[t2])
-            av_expr[t1].substitute(av_expr[t1], t2_copy)
-            av_expr[t2].substitute(av_expr[t2], t1_copy)
-            return self.formula, True
+            t1, t2, typ = res
+            if typ == 0:
+                t1_copy = copy.deepcopy(av_expr[t1])
+                t2_copy = copy.deepcopy(av_expr[t2])
+                av_expr[t1].substitute(av_expr[t1], t2_copy)
+                av_expr[t2].substitute(av_expr[t2], t1_copy)
+                return self.formula, True
+            elif typ == 1:
+                t1_copy = copy.deepcopy(av_expr[t1])
+                t2_copy = copy.deepcopy(av_expr[t2])
+                t1_int = Term(op='to_int',subterms=[t1_copy])
+                t2_real = Term(op='to_real',subterms=[t2_copy])
+                av_expr[t1].substitute(av_expr[t1], t2_real)
+                av_expr[t2].substitute(av_expr[t2], t1_int)
+                return self.formula, True          
         return None, False
