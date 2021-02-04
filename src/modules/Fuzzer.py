@@ -81,18 +81,23 @@ class Fuzzer:
                 self.currentseeds = Path(seed1).stem + "-" + Path(seed2).stem
                 fusion_seeds = [seed1, seed2]
                 self.generator = SemanticFusion(fusion_seeds, self.args)
+
             elif (self.args.strategy == "typfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
+
                 self.statistic.seeds += 1
-                self.currentseeds = Path(seed).stem
-                self.generator = TypeMutation([seed], self.args)
-
-                script1 = parse_file(seed1,silent=True)
-                script2 = parse_file(seed2,silent=True)
-
-                if not script1 or not script2: # i.e. parsing was unsucessful
-                    self.statistic.ignored +=2
+                if not self.admissible_seed_size(seed):
+                    self.statistic.ignored += 1
                     continue
+
+                self.currentseeds = Path(seed).stem
+                script = parse_file(seed,silent=True)
+
+                if not script: # i.e. parsing was unsucessful
+                    self.statistic.ignored += 1
+                    continue
+
+                self.generator = TypeMutation(script, self.args)
 
             else: assert(False)
 
