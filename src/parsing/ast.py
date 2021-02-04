@@ -31,7 +31,7 @@ class Script:
         if isinstance(e,str): return
         if e.is_const: return
         if e.label: return
-        if e.quantifier: 
+        if e.quantifier:
             for var in list(global_vars):
                 for quantified_var in e.quantified_vars:
                     if var == quantified_var[0]:
@@ -154,10 +154,10 @@ class AssertSoft:
 
 class Comment:
     def __init__(self, txt):
-        self.txt = txt 
+        self.txt = txt
 
     def __str__(self):
-        return "; "+ self.txt       
+        return "; "+ self.txt
 
 class Define:
     def __init__(self, symbol, term):
@@ -408,13 +408,13 @@ class Term:
 
     def find_all(self, e, occs):
         """
-        Find all expressions e in self and add to list occs.  
+        Find all expressions e in self and add to list occs.
         """
         if self == e:
-            return occs.append(e) 
+            return occs.append(e)
         if self.subterms:
             for sub in self.subterms:
-                if sub == e: 
+                if sub == e:
                     occs.append(sub)
                 else:
                     sub.find_all(e, occs)
@@ -425,8 +425,8 @@ class Term:
         Substitute all expressions e in self by repl.
         """
         occs = []
-        self.find_all(e, occs) 
-        for occ in occs: 
+        self.find_all(e, occs)
+        for occ in occs:
                 occ._initialize(name=repl.name,
                                  type=repl.type,
                                  is_const=repl.is_const,
@@ -440,7 +440,7 @@ class Term:
                                  op=repl.op,
                                  subterms=repl.subterms)
 
-         
+
     def __eq__(self,other):
         if not isinstance(other,Term): return False
         if self.name != other.name: return False
