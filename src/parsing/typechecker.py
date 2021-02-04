@@ -156,7 +156,7 @@ def typecheck_comp_ops(expr, ctxt):
 
 def typecheck_to_real(expr, ctxt):
     """ (to_real Int Real) """
-    t = typecheck(expr,ctxt)
+    t = typecheck_expr(expr,ctxt)
     if t != INTEGER_TYPE:
          raise TypeCheckError(expr, expr, INTEGER_TYPE,t)
     return REAL_TYPE
