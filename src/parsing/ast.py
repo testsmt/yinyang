@@ -1,4 +1,4 @@
-import copy 
+import copy
 
 class Script:
     def __init__(self, commands, global_vars):
@@ -39,7 +39,7 @@ class Script:
 
         if e.var_binders:
             for var in list(global_vars):
-                for let_var in e.var_binders: 
+                for let_var in e.var_binders:
                      if var == let_var:
                         global_vars.pop(var)
 
@@ -458,11 +458,7 @@ class Term:
         if self.is_indexed_id != other.is_indexed_id: return False
         return True
 
-    def __str__(self):
-        if self.is_const or self.is_var or self.is_indexed_id:
-            return self.name
-
-        s = ""
+    def __get_subterm_str__(self):
         subs_str = ""
         length=len(self.subterms)
         for i in range(length):
@@ -471,8 +467,14 @@ class Term:
                 subs_str += sb.__str__()
             else:
                 subs_str += sb.__str__()+" "
+        return subs_str
+
+    def __str__(self):
+        if self.is_const or self.is_var or self.is_indexed_id:
+            return self.name
 
         if self.quantifier:
+            subs_str= self.__get_subterm_str__()
             n_vars = len(self.quantified_vars[0])
             s = "("+self.quantified_vars[0][0] + " "+ self.quantified_vars[1][0]+")"
             if len(self.quantified_vars[0]) > 1:
@@ -480,7 +482,7 @@ class Term:
                     s+= " ("+self.quantified_vars[0][i] + " " + self.quantified_vars[1][i]+")"
             return "("+ self.quantifier +" (" + s + ") "+ subs_str + ")"
 
-        if self.var_binders:
+        elif self.var_binders:
             s = "(let ("
             for i,var in enumerate(self.var_binders):
                 s += "(" + var + " " + self.let_terms[i].__str__() + ")"
@@ -489,9 +491,13 @@ class Term:
             for sub in self.subterms:
                 s+=" "+ sub.__str__()
             return s+")"
-        if self.label:
+
+        elif self.label:
+            subs_str = self.__get_subterm_str__()
             return "(! "+ subs_str +" " +self.label[0] + " "+self.label[1]+")"
-        return "("+self.op.__str__() +" "+ subs_str + ")"
+        else:
+            subs_str = self.__get_subterm_str__()
+            return "("+self.op.__str__() +" "+ subs_str + ")"
 
     def __repr__(self):
         if self.is_const:

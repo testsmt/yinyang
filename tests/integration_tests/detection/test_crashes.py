@@ -3,7 +3,6 @@ import subprocess
 import sys
 
 python=sys.executable
-ERRORS=False
 
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
@@ -29,7 +28,7 @@ def call_fuzzer(first_config, second_config, fn, opts):
     return crash_issues, soundness_issues, duplicate_issues, timeout_issues, ignored_issues, cmd
 
 def create_mocksmt2(fn):
-    open(fn,"w").write("")
+    open(fn,"w").write("(declare-fun x () Int)\n(declare-fun y () Int)\n(assert (= x y))")
 
 def create_mocksolver_msg(msg,script_fn):
     code= "#! /usr/bin/env python3\n"
@@ -63,5 +62,3 @@ if __name__ == "__main__":
         fn=crash_folder+"/"+fn
         msg = open(fn).read()
         test_crash_list(msg,fn)
-    if not ERRORS:
-        print("[SUCCESS] All tests passed.")

@@ -7,7 +7,7 @@ python=sys.executable
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
     output = subprocess.getoutput(cmd)
-    # print(output)
+    print(output)
     generated_seeds = None
     used_seeds = None
     crash_issues = None
@@ -16,9 +16,9 @@ def call_fuzzer(first_config, second_config, fn, opts):
     timeout_issues=None
     ignored_issues=None
     for line in output.split("\n"):
-        if "Generated mutants" in line:  
+        if "Generated mutants" in line:
             generated_seeds = int(line.split()[-1])
-        if "Used seeds" in line:  
+        if "Used seeds" in line:
             used_seeds = int(line.split()[-1])
         if "Crash" in line:
             crash_issues = int(line.split()[-1])
@@ -48,6 +48,6 @@ second_config=os.path.abspath(solver)
 opts='-i 1 -m 1'
 FN=os.path.dirname(os.path.realpath(__file__))+"/too_large.smt2"
 generated, used, crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(first_config, second_config, FN,opts)
-assert(generated == crash == soundness == duplicate == timeout == ignored == 0) 
-assert(used == 1)
+assert(generated == crash == soundness == duplicate == timeout == 0)
+assert(used == ignored == 1)
 

@@ -7,18 +7,18 @@ from src.parsing.parse import *
 
 class TermTestCase(unittest.TestCase): 
     def test_term(self): 
-        formula1="""
-                (declare-const y Int)
-                (declare-const v Bool)
-                (assert (= v (not (= y (- 1)))))
-                (assert (ite v false (= y (- 1))))
-                (check-sat)
-        """
-        formula2="""
-                (declare-const x Int)
-                (declare-const y Int)
-                (assert (= (+ x y) y))
-        """
+        formula1="""\
+(declare-const y Int)
+(declare-const v Bool)
+(assert (= v (not (= y (- 1)))))
+(assert (ite v false (= y (- 1))))
+(check-sat)
+"""
+        formula2="""\
+(declare-const x Int)
+(declare-const y Int)
+(assert (= (+ x y) y))
+"""
 
         def var2const():
             script, _ = parse_str(formula1)
@@ -48,13 +48,12 @@ class TermTestCase(unittest.TestCase):
             self.assertEqual(assert_expr.__str__(), "(= (- z y) y)")
 
         def substitute1():
-            formula=\
-            """
-            (declare-const x String)
-            (declare-const y String)
-            (declare-const z String)
-            (declare-const c String)
-            (assert (= x (str.substr z 0 (str.len x))))
+            formula="""\
+(declare-const x String)
+(declare-const y String)
+(declare-const z String)
+(declare-const c String)
+(assert (= x (str.substr z 0 (str.len x))))
             """
             script, _ = parse_str(formula)
             expr = script.commands[4].term
@@ -65,12 +64,12 @@ class TermTestCase(unittest.TestCase):
         
         def substitute2():
             formula="""\
-            (declare-const x String)
-            (declare-const y String)
-            (declare-const z String)
-            (assert (= z (str.++ x y)))
-            (assert (= x (str.substr z 0 (str.len x))))
-            (assert (= y (str.replace z x (str.at z (str.len z)))))
+(declare-const x String)
+(declare-const y String)
+(declare-const z String)
+(assert (= z (str.++ x y)))
+(assert (= x (str.substr z 0 (str.len x))))
+(assert (= y (str.replace z x (str.at z (str.len z)))))
             """
             formula, _ = parse_str(formula)
             expr = Expr(op="str++", subterms=[Var("x","String"), Var("y","String")])
@@ -116,7 +115,7 @@ class TermTestCase(unittest.TestCase):
 
 
         def free_vars_let():
-            script="""\
+            script_str="""\
 (declare-fun ?v_0 () Int)
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))
 (check-sat)
@@ -125,7 +124,7 @@ class TermTestCase(unittest.TestCase):
             script,_ = parse_str(script)
             self.assertEqual(script.free_var_occs.__str__(),"[]")
 
-            script="""\
+            script_str="""\
 (declare-fun ?v_0 () Int)
 (assert (= ?v_0 0))
 (check-sat)
@@ -135,7 +134,7 @@ class TermTestCase(unittest.TestCase):
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
         def free_vars_let2():
-            script="""\
+            script_str="""\
 (declare-fun ?v_0 () Int)                                                          
 (assert (= ?v_0 0))                                                                
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))                                  
@@ -145,7 +144,7 @@ class TermTestCase(unittest.TestCase):
             script,_ = parse_str(script,False)                                                    
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
-            script="""\
+            script_str="""\
 (declare-fun ?v_0 () Int)                                                       
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))                               
 (assert (= ?v_0 0))                                                             
@@ -155,7 +154,7 @@ class TermTestCase(unittest.TestCase):
             script,_ = parse_str(script,False)                                                         
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
-            script="""\
+            script_str="""\
 (declare-fun ?v_0 () Int)                                                       
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))                               
 (assert (= ?v_0 0))                                                             

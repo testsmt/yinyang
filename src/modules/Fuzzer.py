@@ -13,6 +13,7 @@ from src.modules.Statistic import Statistic
 from config.config import crash_list, duplicate_list, ignore_list
 from src.utils import random_string, plain, escape, in_list
 
+from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
 from src.generators.TypeMutation import TypeMutation
@@ -28,6 +29,15 @@ class Fuzzer:
         if not self.args.quiet:
             print("Yin-Yang is running:")
 
+    def admissible_seed_size(self, seed):
+        """
+        Checks if seed size is below file_size_limit.
+        :returns: True if that is the case and False otherwise.
+        """
+        seed_size_in_bytes = Path(seed).stat().st_size
+        if seed_size_in_bytes >= self.args.file_size_limit:
+            return False
+        return True
 
     def run(self):
         if (self.args.strategy == "opfuzz") or (self.args.strategy == "typfuzz"):
@@ -44,14 +54,30 @@ class Fuzzer:
 
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
+
                 self.statistic.seeds += 1
+                if not self.admissible_seed_size(seed):
+                    self.statistic.ignored += 1
+                    continue
+
                 self.currentseeds = Path(seed).stem
-                self.generator = TypeAwareOpMutation([seed], self.args)
+                script = parse_file(seed,silent=True)
+
+                if not script: # i.e. parsing was unsucessful
+                    self.statistic.ignored += 1
+                    continue
+
+                self.generator = TypeAwareOpMutation(script, self.args)
+
             elif (self.args.strategy == "fusion"):
                 seed = seeds.pop(random.randrange(len(seeds)))
                 seed1 = seed[0]
                 seed2 = seed[1]
                 self.statistic.seeds += 2
+                if not self.admissible_seed_size(seed1) or not self.admissible_seed_size(seed1):
+                    self.statistic.ignored +=2
+                    continue
+
                 self.currentseeds = Path(seed1).stem + "-" + Path(seed2).stem
                 fusion_seeds = [seed1, seed2]
                 self.generator = SemanticFusion(fusion_seeds, self.args)
@@ -60,18 +86,21 @@ class Fuzzer:
                 self.statistic.seeds += 1
                 self.currentseeds = Path(seed).stem
                 self.generator = TypeMutation([seed], self.args)
+
+                script1 = parse_file(seed1,silent=True)
+                script2 = parse_file(seed2,silent=True)
+
+                if not script1 or not script2: # i.e. parsing was unsucessful
+                    self.statistic.ignored +=2
+                    continue
+
             else: assert(False)
 
-            seed_size_in_bytes = Path(seed).stat().st_size
-            if seed_size_in_bytes >= self.args.file_size_limit:
-                break
 
             for _ in range(self.args.iterations):
                 if not self.args.quiet:
                     self.statistic.printbar()
                 formula, success = self.generator.generate()
-                print("formula", formula)
-                print("success", success)
                 if not success: continue
                 if not self.test(formula): break
                 self.statistic.mutants += 1
@@ -270,5 +299,9 @@ class Fuzzer:
             for file in os.listdir(self.args.scratchfolder):
                 if self.args.name in file:
                     os.remove(os.path.join(self.args.scratchfolder, file))
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0749507e59f545066659e072a6a7e262f0551f4a
         if not self.args.quiet:
             self.statistic.printsum()
