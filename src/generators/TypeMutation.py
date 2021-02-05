@@ -45,9 +45,12 @@ class TypeMutation(Generator):
             typ = random.choice(types)
             # replacing int with real 
             if typ == 7:
-                t1 = random.choice(exprs[1])
-                t2 = random.choice(exprs[2])
-                return t1, t2, 1 
+                if len(exprs[1])>= 1 and len(exprs[2])>=1:
+                    t1 = random.choice(exprs[1])
+                    t2 = random.choice(exprs[2])
+                    return t1, t2, 1 
+                else:
+                    return False
             t1, t2 = random.sample(exprs[typ], 2)
             while av_expr[t1] == av_expr[t2]:
                 if len(exprs[typ]) >= 3:
