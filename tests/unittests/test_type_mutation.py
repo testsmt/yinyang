@@ -32,7 +32,8 @@ class TypeAwareMutationTestCase(unittest.TestCase):
         ctxt = Context(glob,{})
         args = Mockargs()
         args.name = formulafile.strip(".smt2")
-        gen = TypeMutation([formulafile],args)
+        script, _ = parse_file(formulafile,silent=True)
+        gen = TypeMutation(script,args)
         gen.generate()
         os.system("rm "+formulafile)
 
@@ -62,7 +63,8 @@ class TypeAwareMutationTestCase(unittest.TestCase):
         print(formulafile)
         args.name = formulafile.strip(".smt2")
         for i in range(N):
-            gen = TypeMutation([formulafile],args)
+            script, _ = parse_file(formulafile,silent=True)
+            gen = TypeMutation(script,args)
             gen.generate()
             for cmd in gen.formula.assert_cmd:
                 if str(cmd) in possible_outcome:
@@ -75,6 +77,5 @@ class TypeAwareMutationTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    #TypeAwareOpMutationTestCase.test_ta()
     unittest.main()
 

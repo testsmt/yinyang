@@ -27,7 +27,7 @@ Generated mutants: %d
 Used seeds: %d
 Crash issues: %d
 Soundness issues: %d
-Duplicate issues %d
+Duplicate issues: %d
 Timeout cases: %d
 Ignored issues: %d
 """ \

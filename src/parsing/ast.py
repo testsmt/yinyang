@@ -1,4 +1,4 @@
-import copy 
+import copy
 
 class Script:
     def __init__(self, commands, global_vars):
@@ -31,7 +31,7 @@ class Script:
         if isinstance(e,str): return
         if e.is_const: return
         if e.label: return
-        if e.quantifier: 
+        if e.quantifier:
             for var in list(global_vars):
                 for quantified_var in e.quantified_vars:
                     if var == quantified_var[0]:
@@ -39,7 +39,7 @@ class Script:
 
         if e.var_binders:
             for var in list(global_vars):
-                for let_var in e.var_binders: 
+                for let_var in e.var_binders:
                      if var == let_var:
                         global_vars.pop(var)
 
@@ -154,10 +154,10 @@ class AssertSoft:
 
 class Comment:
     def __init__(self, txt):
-        self.txt = txt 
+        self.txt = txt
 
     def __str__(self):
-        return "; "+ self.txt       
+        return "; "+ self.txt
 
 class Define:
     def __init__(self, symbol, term):
@@ -408,13 +408,13 @@ class Term:
 
     def find_all(self, e, occs):
         """
-        Find all expressions e in self and add to list occs.  
+        Find all expressions e in self and add to list occs.
         """
         if self == e:
-            return occs.append(e) 
+            return occs.append(e)
         if self.subterms:
             for sub in self.subterms:
-                if sub == e: 
+                if sub == e:
                     occs.append(sub)
                 else:
                     sub.find_all(e, occs)
@@ -425,8 +425,8 @@ class Term:
         Substitute all expressions e in self by repl.
         """
         occs = []
-        self.find_all(e, occs) 
-        for occ in occs: 
+        self.find_all(e, occs)
+        for occ in occs:
                 occ._initialize(name=repl.name,
                                  type=repl.type,
                                  is_const=repl.is_const,
@@ -440,7 +440,7 @@ class Term:
                                  op=repl.op,
                                  subterms=repl.subterms)
 
-         
+
     def __eq__(self,other):
         if not isinstance(other,Term): return False
         if self.name != other.name: return False
@@ -458,11 +458,7 @@ class Term:
         if self.is_indexed_id != other.is_indexed_id: return False
         return True
 
-    def __str__(self):
-        if self.is_const or self.is_var or self.is_indexed_id:
-            return self.name
-
-        s = ""
+    def __get_subterm_str__(self):
         subs_str = ""
         length=len(self.subterms)
         for i in range(length):
@@ -471,8 +467,14 @@ class Term:
                 subs_str += sb.__str__()
             else:
                 subs_str += sb.__str__()+" "
+        return subs_str
+
+    def __str__(self):
+        if self.is_const or self.is_var or self.is_indexed_id:
+            return self.name
 
         if self.quantifier:
+            subs_str= self.__get_subterm_str__()
             n_vars = len(self.quantified_vars[0])
             s = "("+self.quantified_vars[0][0] + " "+ self.quantified_vars[1][0]+")"
             if len(self.quantified_vars[0]) > 1:
@@ -480,7 +482,7 @@ class Term:
                     s+= " ("+self.quantified_vars[0][i] + " " + self.quantified_vars[1][i]+")"
             return "("+ self.quantifier +" (" + s + ") "+ subs_str + ")"
 
-        if self.var_binders:
+        elif self.var_binders:
             s = "(let ("
             for i,var in enumerate(self.var_binders):
                 s += "(" + var + " " + self.let_terms[i].__str__() + ")"
@@ -489,9 +491,13 @@ class Term:
             for sub in self.subterms:
                 s+=" "+ sub.__str__()
             return s+")"
-        if self.label:
+
+        elif self.label:
+            subs_str = self.__get_subterm_str__()
             return "(! "+ subs_str +" " +self.label[0] + " "+self.label[1]+")"
-        return "("+self.op.__str__() +" "+ subs_str + ")"
+        else:
+            subs_str = self.__get_subterm_str__()
+            return "("+self.op.__str__() +" "+ subs_str + ")"
 
     def __repr__(self):
         if self.is_const:

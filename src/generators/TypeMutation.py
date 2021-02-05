@@ -9,12 +9,9 @@ type2num = {'Bool': 0, 'Real': 1, 'Int': 2, 'RoundingMode': 3, 'String': 4,
 'RegLan': 5, 'Unknown': 6}
 
 class TypeMutation(Generator):
-    def __init__(self, seed_fns, args):
-        assert(len(seed_fns) == 1)
-        self.seed_fn = seed_fns[0]
+    def __init__(self, formula, args):
         self.args = args 
-        self.formula, glob = parse_file(seed_fns[0])
-        self.ctxt = Context(glob, {})
+        self.formula = formula 
 
     def categorize(self, expr_type):
         # 0: Bool, 1: Real, 2: Int, 3: RoundingMode, 4: String, 5: Regex, 6: Unknown 
@@ -48,9 +45,10 @@ class TypeMutation(Generator):
             typ = random.choice(types)
             # replacing int with real 
             if typ == 7:
+                return False
                 t1 = random.choice(exprs[1])
                 t2 = random.choice(exprs[2])
-                return t1, t2, 1
+                # return t1, t2, 1 
             t1, t2 = random.sample(exprs[typ], 2)
             while av_expr[t1] == av_expr[t2]:
                 if len(exprs[typ]) >= 3:
@@ -66,21 +64,21 @@ class TypeMutation(Generator):
         av_expr = []
         expr_type = []
         for i in range(len(self.formula.assert_cmd)):
-            exp, typ = typecheck_recur(self.formula.assert_cmd[i], self.ctxt)
-            av_expr += exp
+            exps, typ = typecheck_recur(self.formula.assert_cmd[i]) 
+            av_expr += exps
             expr_type += typ
         res = self.get_replacee(av_expr,expr_type)
         if res:
             t1, t2, typ = res
             if typ == 0:
-                t1_copy = copy.deepcopy(av_expr[t1])
-                t2_copy = copy.deepcopy(av_expr[t2])
+                t1_copy = copy.deepcopy(av_expr[t1]) 
+                t2_copy = copy.deepcopy(av_expr[t2]) 
                 av_expr[t1].substitute(av_expr[t1], t2_copy)
                 av_expr[t2].substitute(av_expr[t2], t1_copy)
                 return self.formula, True
             elif typ == 1:
                 t1_copy = copy.deepcopy(av_expr[t1])
-                t2_copy = copy.deepcopy(av_expr[t2])
+                t2_copy = copy.deepcopy(av_expr[t2]) # redudant with if branch
                 t1_int = Term(op='to_int',subterms=[t1_copy])
                 t2_real = Term(op='to_real',subterms=[t2_copy])
                 av_expr[t1].substitute(av_expr[t1], t2_real)
