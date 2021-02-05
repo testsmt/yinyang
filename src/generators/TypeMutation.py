@@ -42,7 +42,7 @@ class TypeMutation(Generator):
         for i in range(6):
             if len(exprs[i]) >= 2:
                 types.append(i)
-        if len(exprs[1])+len(exprs[2])>=2:
+        if len(exprs[1])>= 1 and len(exprs[2])>=1:
             types.append(7)
         if types:
             typ = random.choice(types)
