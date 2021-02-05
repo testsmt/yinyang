@@ -13,6 +13,7 @@ from src.modules.Statistic import Statistic
 from config.config import crash_list, duplicate_list, ignore_list
 from src.utils import random_string, plain, escape, in_list
 
+from src.parsing.typechecker import typecheck
 from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
@@ -61,7 +62,7 @@ class Fuzzer:
                     continue
 
                 self.currentseeds = Path(seed).stem
-                script = parse_file(seed,silent=True)
+                script, _ = parse_file(seed,silent=True)
 
                 if not script: # i.e. parsing was unsucessful
                     self.statistic.ignored += 1
@@ -91,12 +92,13 @@ class Fuzzer:
                     continue
 
                 self.currentseeds = Path(seed).stem
-                script = parse_file(seed,silent=True)
+                script, glob = parse_file(seed,silent=True)
 
                 if not script: # i.e. parsing was unsucessful
                     self.statistic.ignored += 1
                     continue
 
+                typecheck(script, glob)
                 self.generator = TypeMutation(script, self.args)
 
             else: assert(False)
@@ -304,9 +306,5 @@ class Fuzzer:
             for file in os.listdir(self.args.scratchfolder):
                 if self.args.name in file:
                     os.remove(os.path.join(self.args.scratchfolder, file))
-<<<<<<< HEAD
-=======
-
->>>>>>> 0749507e59f545066659e072a6a7e262f0551f4a
         if not self.args.quiet:
             self.statistic.printsum()

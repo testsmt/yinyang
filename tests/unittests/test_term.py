@@ -80,7 +80,7 @@ class TermTestCase(unittest.TestCase):
             self.assertEqual(equals.__str__(),"(= y (str.replace (str.++ x y) x (str.at (str.++ x y) (str.len (str.++ x y)))))")
 
         def free_vars_quantifier():
-            script="""\
+            script_str="""\
 (set-info :category "industrial")
 (set-info :status unsat)
 (declare-fun a () Real)
@@ -88,10 +88,10 @@ class TermTestCase(unittest.TestCase):
 (assert (exists ((ts0uscore1 Real)) (> ts0uscore1 a)))
 (check-sat)
 """
-            script,_ = parse_str(script)
+            script,_ = parse_str(script_str)
             self.assertEqual(script.free_var_occs.__str__(), "[a:Real]")
 
-            script="""\
+            script_str="""\
 (set-info :category "industrial")
 (set-info :status unsat)
 (declare-fun a () Real)
@@ -99,10 +99,10 @@ class TermTestCase(unittest.TestCase):
 (assert (exists ((ts0uscore1 Real)) (> ts0uscore1 a)))
 (check-sat)
 """
-            script,_ = parse_str(script)
+            script,_ = parse_str(script_str)
             self.assertEqual(script.free_var_occs.__str__(), "[a:Real]")
 
-            script="""\
+            script_str="""\
 (set-info :category "industrial")
 (set-info :status unsat)
 (declare-fun a () Real)
@@ -110,7 +110,7 @@ class TermTestCase(unittest.TestCase):
 (assert (> ts0uscore1 a))
 (check-sat)
 """
-            script,_ = parse_str(script)
+            script,_ = parse_str(script_str)
             self.assertEqual(script.free_var_occs.__str__(),"[ts0uscore1:Real, a:Real]")
 
 
@@ -121,7 +121,7 @@ class TermTestCase(unittest.TestCase):
 (check-sat)
 (exit)
 """
-            script,_ = parse_str(script)
+            script,_ = parse_str(script_str)
             self.assertEqual(script.free_var_occs.__str__(),"[]")
 
             script_str="""\
@@ -130,7 +130,7 @@ class TermTestCase(unittest.TestCase):
 (check-sat)
 (exit)
 """
-            script,_ = parse_str(script)
+            script,_ = parse_str(script_str)
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
         def free_vars_let2():
@@ -141,7 +141,7 @@ class TermTestCase(unittest.TestCase):
 (check-sat)                                                                        
 (exit)                                                                             
 """                                                                                
-            script,_ = parse_str(script,False)                                                    
+            script,_ = parse_str(script_str)                                                    
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
             script_str="""\
@@ -151,7 +151,7 @@ class TermTestCase(unittest.TestCase):
 (check-sat)                                                                     
 (exit)                                                                          
 """  
-            script,_ = parse_str(script,False)                                                         
+            script,_ = parse_str(script_str)                                                         
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
             script_str="""\
@@ -161,7 +161,7 @@ class TermTestCase(unittest.TestCase):
 (check-sat)                                                                     
 (exit)                                                                          
 """  
-            script,_ = parse_str(script,False)                                                         
+            script,_ = parse_str(script_str)                                                         
             self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
 
 

@@ -99,12 +99,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-q", "--quiet",
-    action='store_true',
-    help="Do not output statistics and other output."
-)
-
-parser.add_argument(
     "-fl", "--file-size-limit",
     default=20000,
     type=int,
