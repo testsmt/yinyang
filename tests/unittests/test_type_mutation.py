@@ -10,6 +10,7 @@ from src.generators.TypeMutation import *
 
 class Mockargs:
     name = ""
+    modulo = 3
 
 N = 200
 
