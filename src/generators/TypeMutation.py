@@ -65,25 +65,26 @@ class TypeMutation(Generator):
     def generate(self):
         av_expr = []
         expr_type = []
-        for i in range(len(self.formula.assert_cmd)):
-            exps, typ = typecheck_recur(self.formula.assert_cmd[i]) 
-            av_expr += exps
-            expr_type += typ
-        res = self.get_replacee(av_expr,expr_type)
-        if res:
-            t1, t2, typ = res
-            if typ == 0:
-                t1_copy = copy.deepcopy(av_expr[t1]) 
-                t2_copy = copy.deepcopy(av_expr[t2]) 
-                av_expr[t1].substitute(av_expr[t1], t2_copy)
-                av_expr[t2].substitute(av_expr[t2], t1_copy)
-                return self.formula, True
-            elif typ == 1:
-                t1_copy = copy.deepcopy(av_expr[t1])
-                t2_copy = copy.deepcopy(av_expr[t2]) # redudant with if branch
-                t1_int = Term(op='to_int',subterms=[t1_copy])
-                t2_real = Term(op='to_real',subterms=[t2_copy])
-                av_expr[t1].substitute(av_expr[t1], t2_real)
-                av_expr[t2].substitute(av_expr[t2], t1_int)
-                return self.formula, True          
-        return None, False
+        for _ in range(self.args.modulo):
+            for i in range(len(self.formula.assert_cmd)):
+                exps, typ = typecheck_recur(self.formula.assert_cmd[i]) 
+                av_expr += exps
+                expr_type += typ
+            res = self.get_replacee(av_expr,expr_type)
+            if res:
+                t1, t2, typ = res
+                if typ == 0:
+                    t1_copy = copy.deepcopy(av_expr[t1]) 
+                    t2_copy = copy.deepcopy(av_expr[t2]) 
+                    av_expr[t1].substitute(av_expr[t1], t2_copy)
+                    av_expr[t2].substitute(av_expr[t2], t1_copy)
+                    return self.formula, True
+                elif typ == 1:
+                    t1_copy = copy.deepcopy(av_expr[t1])
+                    t2_copy = copy.deepcopy(av_expr[t2]) # redudant with if branch
+                    t1_int = Term(op='to_int',subterms=[t1_copy])
+                    t2_real = Term(op='to_real',subterms=[t2_copy])
+                    av_expr[t1].substitute(av_expr[t1], t2_real)
+                    av_expr[t2].substitute(av_expr[t2], t1_int)
+                    return self.formula, True          
+            return None, False
