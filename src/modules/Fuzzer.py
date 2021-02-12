@@ -90,10 +90,15 @@ class Fuzzer:
             else: assert(False)
 
 
-            for _ in range(self.args.iterations):
+            for i in range(self.args.iterations):
                 if not self.args.quiet:
                     self.statistic.printbar()
-                formula, success = self.generator.generate()
+
+                if i % self.args.modulo:
+                    formula, success = self.generator.generate()
+                else:
+                    continue
+
                 if not success: continue
                 if not self.test(formula): break
                 self.statistic.mutants += 1
