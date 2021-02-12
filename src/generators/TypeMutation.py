@@ -13,54 +13,49 @@ class TypeMutation(Generator):
         self.args = args 
         self.formula = formula 
 
-    def categorize(self, expr_type):
+    def categorize(self, av_expr, expr_type):
         # 0: Bool, 1: Real, 2: Int, 3: RoundingMode, 4: String, 5: Regex, 6: Unknown 
-        exprs = [[],[],[],[],[],[],[]]
+        unique_expr = [[],[],[],[],[],[]]
         for i in range(len(expr_type)):
             if expr_type[i] == BOOLEAN_TYPE:
-                exprs[0].append(i)
+                unique_expr[0].append(copy.deepcopy(av_expr[i]))
             elif expr_type[i] == REAL_TYPE:
-                exprs[1].append(i)
+                unique_expr[1].append(copy.deepcopy(av_expr[i]))
             elif expr_type[i] == INTEGER_TYPE:
-                exprs[2].append(i)
+                unique_expr[2].append(copy.deepcopy(av_expr[i]))
             elif expr_type[i] == ROUNDINGMODE_TYPE:
-                exprs[3].append(i)
+                unique_expr[3].append(copy.deepcopy(av_expr[i]))
             elif expr_type[i] == STRING_TYPE:
-                exprs[4].append(i)
+                unique_expr[4].append(copy.deepcopy(av_expr[i]))
             elif expr_type[i] == REGEXP_TYPE:
-                exprs[5].append(i)
-            else: 
-                exprs[6].append(i)
-        return exprs
+                unique_expr[5].append(copy.deepcopy(av_expr[i]))
+        for i in range(6):
+            if unique_expr[i]:
+                for j in range(1, len(unique_expr[i])):
+                    for k in range(j):
+                        if unique_expr[i][len(unique_expr[i])-j] == unique_expr[i][k]:
+                            unique_expr[i][len(unique_expr[i])-j]
+        return unique_expr
         
     def get_replacee(self, av_expr, expr_type):
-        exprs = self.categorize(expr_type)
-        types = []
-        for i in range(6):
-            if len(exprs[i]) >= 2:
-                types.append(i)
-        if len(exprs[1])>= 1 and len(exprs[2])>=1:
-            types.append(7)
-        if types:
-            typ = random.choice(types)
-            # replacing int with real 
-            if typ == 7:
-                if len(exprs[1])>= 1 and len(exprs[2])>=1:
-                    t1 = random.choice(exprs[1])
-                    t2 = random.choice(exprs[2])
-                    return t1, t2, 1 
+        unique_expr = self.categorize(av_expr, expr_type)
+        pool = [i for i in range(len(av_expr))]
+        counter = 0
+        while counter <= 10:
+            k = random.choice(pool)
+            t1 = av_expr[k]
+            typ = type2num[expr_type[k]]
+            if unique_expr[typ]:
+                t2 = random.choice(unique_expr[typ])
+                if t1 != t2:
+                    return t1, t2
                 else:
-                    return False
-            t1, t2 = random.sample(exprs[typ], 2)
-            while av_expr[t1] == av_expr[t2]:
-                if len(exprs[typ]) >= 3:
-                    exprs[typ].remove(t2)
-                    t2 = random.choice(exprs[typ])
-                else:
-                    return False
-            if av_expr[t1] != av_expr[t2]:
-                return t1, t2, 0
-        return False
+                    pool.remove(k)
+                    counter += 1 
+            else:
+                pool.remove(k)
+                counter += 1
+        return False 
 
     def generate(self):
         av_expr = []
@@ -72,19 +67,7 @@ class TypeMutation(Generator):
                 expr_type += typ
             res = self.get_replacee(av_expr,expr_type)
             if res:
-                t1, t2, typ = res
-                if typ == 0:
-                    t1_copy = copy.deepcopy(av_expr[t1]) 
-                    t2_copy = copy.deepcopy(av_expr[t2]) 
-                    av_expr[t1].substitute(av_expr[t1], t2_copy)
-                    av_expr[t2].substitute(av_expr[t2], t1_copy)
-                    return self.formula, True
-                elif typ == 1:
-                    t1_copy = copy.deepcopy(av_expr[t1])
-                    t2_copy = copy.deepcopy(av_expr[t2]) # redudant with if branch
-                    t1_int = Term(op='to_int',subterms=[t1_copy])
-                    t2_real = Term(op='to_real',subterms=[t2_copy])
-                    av_expr[t1].substitute(av_expr[t1], t2_real)
-                    av_expr[t2].substitute(av_expr[t2], t1_int)
-                    return self.formula, True          
+                t1, t2 = res
+                t1.substitute(t1, t2)
+                return self.formula, True      
         return None, False
