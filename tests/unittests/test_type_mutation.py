@@ -73,10 +73,8 @@ class TypeAwareMutationTestCase(unittest.TestCase):
                     possible_outcome.remove(str(cmd))
             if not possible_outcome:
                 os.system("rm "+formulafile)
-                print(i, "True")
                 return True
         os.system("rm "+formulafile)
-        print(i, "False")
         return False
 
 

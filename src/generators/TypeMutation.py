@@ -42,19 +42,22 @@ class TypeMutation(Generator):
         pool = [i for i in range(len(av_expr))]
         counter = 0
         while counter <= 10:
-            k = random.choice(pool)
-            t1 = av_expr[k]
-            typ = type2num[expr_type[k]]
-            if unique_expr[typ]:
-                t2 = random.choice(unique_expr[typ])
-                if t1 != t2:
-                    return t1, t2
+            if pool:
+                k = random.choice(pool)
+                t1 = av_expr[k]
+                typ = type2num[expr_type[k]]
+                if unique_expr[typ]:
+                    t2 = random.choice(unique_expr[typ])
+                    if t1 != t2:
+                        return t1, t2
+                    else:
+                        pool.remove(k)
+                        counter += 1 
                 else:
                     pool.remove(k)
-                    counter += 1 
+                    counter += 1
             else:
-                pool.remove(k)
-                counter += 1
+                return False
         return False 
 
     def generate(self):
