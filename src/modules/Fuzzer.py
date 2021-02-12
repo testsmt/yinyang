@@ -94,7 +94,7 @@ class Fuzzer:
                 if not self.args.quiet:
                     self.statistic.printbar()
 
-                if i % self.args.modulo:
+                if i % self.args.modulo == 0:
                     formula, success = self.generator.generate()
                 else:
                     continue
