@@ -713,6 +713,10 @@ keyword
     | Colon simpleSymbol
     ;
 
+re_none
+    : 're.none'
+    ;
+
 // S-expression
 
 spec_constant
@@ -722,6 +726,7 @@ spec_constant
     | binary
     | string
     | b_value
+    | re_none
     | ParOpen GRW_Underscore ' bv' numeral numeral ParClose
     ;
 s_expr

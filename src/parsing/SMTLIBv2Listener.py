@@ -134,6 +134,15 @@ class SMTLIBv2Listener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by SMTLIBv2Parser#re_none.
+    def enterRe_none(self, ctx:SMTLIBv2Parser.Re_noneContext):
+        pass
+
+    # Exit a parse tree produced by SMTLIBv2Parser#re_none.
+    def exitRe_none(self, ctx:SMTLIBv2Parser.Re_noneContext):
+        pass
+
+
     # Enter a parse tree produced by SMTLIBv2Parser#spec_constant.
     def enterSpec_constant(self, ctx:SMTLIBv2Parser.Spec_constantContext):
         pass
