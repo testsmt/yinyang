@@ -40,6 +40,9 @@ class Script:
                 for let_var in e.var_binders:
                      if var == let_var:
                         global_vars.pop(var)
+            for let_term in e.let_terms:
+                self._get_free_var_occs(let_term, global_vars)
+            
 
         if e.is_var:
             if e.name in global_vars:
@@ -64,15 +67,15 @@ class Script:
     def _prefix_free_vars(self, prefix, e):
         if isinstance(e,str): return
         if e.is_const: return
-        if e.is_var and e.type :
-            if e.name in self.global_vars:
+        if e.is_var and e.type:
+            if e in self.free_var_occs:
                 e.name = prefix+e.name
             return
 
         if e.var_binders:
             for i,var in enumerate(e.var_binders):
                 self._prefix_free_vars(prefix,e.let_terms[i])
-
+        
         for s in e.subterms:
             self._prefix_free_vars(prefix,s)
 
@@ -409,7 +412,7 @@ class Term:
         Find all expressions e in self and add to list occs.
         """
         if self == e:
-            return occs.append(e)
+            return occs.append(self)
         if self.subterms:
             for sub in self.subterms:
                 if sub == e:
