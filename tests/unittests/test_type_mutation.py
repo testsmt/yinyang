@@ -57,9 +57,10 @@ class TypeAwareMutationTestCase(unittest.TestCase):
                 unique_expr[5].append(copy.deepcopy(av_expr[i]))
         for i in range(6):
             if unique_expr[i]:
-                for j in range(len(unique_expr[i])-1, 0, -1):
-                    for exp in unique_expr[i][:j]:
-                        if unique_expr[i][j] == exp:
+                temp = copy.deepcopy(unique_expr[i])
+                for j in range(len(temp)-1, 0, -1):
+                    for exp in temp[:j]:
+                        if temp[j] == exp:
                             del unique_expr[i][j]
         gen = TypeMutation(script,args,unique_expr)
         gen.generate()
@@ -113,9 +114,10 @@ class TypeAwareMutationTestCase(unittest.TestCase):
                 unique_expr[5].append(copy.deepcopy(av_expr[i]))
         for i in range(6):
             if unique_expr[i]:
-                for j in range(len(unique_expr[i])-1, 0, -1):
-                    for exp in unique_expr[i][:j]:
-                        if unique_expr[i][j] == exp:
+                temp = copy.deepcopy(unique_expr[i])
+                for j in range(len(temp)-1, 0, -1):
+                    for exp in temp[:j]:
+                        if temp[j] == exp:
                             del unique_expr[i][j]
         for i in range(N):
             script, glob = parse_file(formulafile,silent=True)
@@ -127,6 +129,7 @@ class TypeAwareMutationTestCase(unittest.TestCase):
                     possible_outcome.remove(str(cmd))
             if not possible_outcome:
                 os.system("rm "+formulafile)
+                print("true")
                 return True
         os.system("rm "+formulafile)
         return False
