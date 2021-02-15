@@ -123,10 +123,10 @@ class Fuzzer:
                         unique_expr[5].append(copy.deepcopy(av_expr[i]))
                 for i in range(6):
                     if unique_expr[i]:
-                        for j in range(len(unique_expr[i])-1):
-                            for k in range(len(unique_expr[i])-j-1):
-                                if unique_expr[i][len(unique_expr[i])-j-1] == unique_expr[i][k]:
-                                    del unique_expr[i][len(unique_expr[i])-j-1]
+                        for j in range(len(unique_expr[i])-1, 0, -1):
+                            for exp in unique_expr[i][:j]:
+                                if unique_expr[i][j] == exp:
+                                    del unique_expr[i][j]
 
                 self.generator = TypeMutation(script, self.args, unique_expr)
 
