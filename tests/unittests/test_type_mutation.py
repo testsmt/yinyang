@@ -57,11 +57,17 @@ class TypeAwareMutationTestCase(unittest.TestCase):
                 unique_expr[5].append(copy.deepcopy(av_expr[i]))
         for i in range(6):
             if unique_expr[i]:
-                temp = copy.deepcopy(unique_expr[i])
-                for j in range(len(temp)-1, 0, -1):
-                    for exp in temp[:j]:
-                        if temp[j] == exp:
-                            del unique_expr[i][j]
+                temp = []
+                temp.append(unique_expr[i][0])
+                for j in range(1,len(unique_expr[i])):
+                    flag = 0
+                    for exp in temp:
+                        if unique_expr[i][j] == exp:
+                            flag = 1
+                            pass
+                    if flag == 0:
+                        temp.append(unique_expr[i][j])                                
+                unique_expr[i] = temp
         gen = TypeMutation(script,args,unique_expr)
         gen.generate()
         os.system("rm "+formulafile)
@@ -114,11 +120,17 @@ class TypeAwareMutationTestCase(unittest.TestCase):
                 unique_expr[5].append(copy.deepcopy(av_expr[i]))
         for i in range(6):
             if unique_expr[i]:
-                temp = copy.deepcopy(unique_expr[i])
-                for j in range(len(temp)-1, 0, -1):
-                    for exp in temp[:j]:
-                        if temp[j] == exp:
-                            del unique_expr[i][j]
+                temp = []
+                temp.append(unique_expr[i][0])
+                for j in range(1,len(unique_expr[i])):
+                    flag = 0
+                    for exp in temp:
+                        if unique_expr[i][j] == exp:
+                            flag = 1
+                            pass
+                    if flag == 0:
+                        temp.append(unique_expr[i][j])                                
+                unique_expr[i] = temp
         for i in range(N):
             script, glob = parse_file(formulafile,silent=True)
             typecheck(script, glob)
@@ -129,7 +141,6 @@ class TypeAwareMutationTestCase(unittest.TestCase):
                     possible_outcome.remove(str(cmd))
             if not possible_outcome:
                 os.system("rm "+formulafile)
-                print("true")
                 return True
         os.system("rm "+formulafile)
         return False
