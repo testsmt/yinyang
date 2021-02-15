@@ -35,7 +35,33 @@ class TypeAwareMutationTestCase(unittest.TestCase):
         args.name = formulafile.strip(".smt2")
         script, glob = parse_file(formulafile,silent=True)
         typecheck(script, glob)
-        gen = TypeMutation(script,args)
+        av_expr = []
+        expr_type = []
+        for i in range(len(script.assert_cmd)):
+            exps, typ = typecheck_recur(script.assert_cmd[i]) 
+            av_expr += exps
+            expr_type += typ
+        unique_expr = [[],[],[],[],[],[]]
+        for i in range(len(expr_type)):
+            if expr_type[i] == BOOLEAN_TYPE:
+                unique_expr[0].append(copy.deepcopy(av_expr[i]))
+            elif expr_type[i] == REAL_TYPE:
+                unique_expr[1].append(copy.deepcopy(av_expr[i]))
+            elif expr_type[i] == INTEGER_TYPE:
+                unique_expr[2].append(copy.deepcopy(av_expr[i]))
+            elif expr_type[i] == ROUNDINGMODE_TYPE:
+                unique_expr[3].append(copy.deepcopy(av_expr[i]))
+            elif expr_type[i] == STRING_TYPE:
+                unique_expr[4].append(copy.deepcopy(av_expr[i]))
+            elif expr_type[i] == REGEXP_TYPE:
+                unique_expr[5].append(copy.deepcopy(av_expr[i]))
+        for i in range(6):
+            if unique_expr[i]:
+                for j in range(len(unique_expr[i])-1):
+                    for k in range(len(unique_expr[i])-j-1):
+                        if unique_expr[i][len(unique_expr[i])-j-1] == unique_expr[i][k]:
+                            del unique_expr[i][len(unique_expr[i])-j-1]
+        gen = TypeMutation(script,args,unique_expr)
         gen.generate()
         os.system("rm "+formulafile)
 
@@ -63,16 +89,45 @@ class TypeAwareMutationTestCase(unittest.TestCase):
         args = Mockargs()
         print(formulafile)
         args.name = formulafile.strip(".smt2")
+        script, glob = parse_file(formulafile,silent=True)
+        typecheck(script, glob)
+        av_expr = []
+        expr_type = []
+        for i in range(len(script.assert_cmd)):
+            exps, typ = typecheck_recur(script.assert_cmd[i]) 
+            av_expr += exps
+            expr_type += typ
+        unique_expr = [[],[],[],[],[],[]]
+        for i in range(len(expr_type)):
+            if expr_type[i] == BOOLEAN_TYPE:
+                unique_expr[0].append(copy.deepcopy(av_expr[i]))
+            elif expr_type[i] == REAL_TYPE:
+                unique_expr[1].append(copy.deepcopy(av_expr[i]))
+            elif expr_type[i] == INTEGER_TYPE:
+                unique_expr[2].append(copy.deepcopy(av_expr[i]))
+            elif expr_type[i] == ROUNDINGMODE_TYPE:
+                unique_expr[3].append(copy.deepcopy(av_expr[i]))
+            elif expr_type[i] == STRING_TYPE:
+                unique_expr[4].append(copy.deepcopy(av_expr[i]))
+            elif expr_type[i] == REGEXP_TYPE:
+                unique_expr[5].append(copy.deepcopy(av_expr[i]))
+        for i in range(6):
+            if unique_expr[i]:
+                for j in range(len(unique_expr[i])-1):
+                    for k in range(len(unique_expr[i])-j-1):
+                        if unique_expr[i][len(unique_expr[i])-j-1] == unique_expr[i][k]:
+                            del unique_expr[i][len(unique_expr[i])-j-1]
         for i in range(N):
             script, glob = parse_file(formulafile,silent=True)
             typecheck(script, glob)
-            gen = TypeMutation(script,args)
+            gen = TypeMutation(script,args,unique_expr)
             gen.generate()
             for cmd in gen.formula.assert_cmd:
                 if str(cmd) in possible_outcome:
                     possible_outcome.remove(str(cmd))
             if not possible_outcome:
                 os.system("rm "+formulafile)
+                print("true")
                 return True
         os.system("rm "+formulafile)
         return False

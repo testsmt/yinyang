@@ -14,6 +14,7 @@ from config.config import crash_list, duplicate_list, ignore_list
 from src.utils import random_string, plain, escape, in_list
 
 from src.parsing.typechecker import typecheck
+from src.parsing.typechecker_recur import typecheck_recur
 from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
@@ -99,7 +100,35 @@ class Fuzzer:
                     continue
 
                 typecheck(script, glob)
-                self.generator = TypeMutation(script, self.args)
+                av_expr = []
+                expr_type = []
+                for i in range(len(script.assert_cmd)):
+                    exps, typ = typecheck_recur(script.assert_cmd[i]) 
+                    av_expr += exps
+                    expr_type += typ
+                # 0: Bool, 1: Real, 2: Int, 3: RoundingMode, 4: String, 5: Regex, 6: Unknown 
+                unique_expr = [[],[],[],[],[],[]]
+                for i in range(len(expr_type)):
+                    if expr_type[i] == BOOLEAN_TYPE:
+                        unique_expr[0].append(copy.deepcopy(av_expr[i]))
+                    elif expr_type[i] == REAL_TYPE:
+                        unique_expr[1].append(copy.deepcopy(av_expr[i]))
+                    elif expr_type[i] == INTEGER_TYPE:
+                        unique_expr[2].append(copy.deepcopy(av_expr[i]))
+                    elif expr_type[i] == ROUNDINGMODE_TYPE:
+                        unique_expr[3].append(copy.deepcopy(av_expr[i]))
+                    elif expr_type[i] == STRING_TYPE:
+                        unique_expr[4].append(copy.deepcopy(av_expr[i]))
+                    elif expr_type[i] == REGEXP_TYPE:
+                        unique_expr[5].append(copy.deepcopy(av_expr[i]))
+                for i in range(6):
+                    if unique_expr[i]:
+                        for j in range(len(unique_expr[i])-1):
+                            for k in range(len(unique_expr[i])-j-1):
+                                if unique_expr[i][len(unique_expr[i])-j-1] == unique_expr[i][k]:
+                                    del unique_expr[i][len(unique_expr[i])-j-1]
+
+                self.generator = TypeMutation(script, self.args, unique_expr)
 
             else: assert(False)
 
