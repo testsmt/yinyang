@@ -297,8 +297,8 @@ ignore_list = [
     second_config=os.path.abspath(solver)
     crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(first_config, second_config, FN,OPTS)
 
-    if duplicate != 1:
-        print("[ERROR] Duplicate crash cannot be captured.")
+    if duplicate < 1:
+        print("[ERROR] Duplicate cannot be captured.")
         exit(1)
     else:
         os.system("rm -rf "+solver)
