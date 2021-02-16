@@ -16,6 +16,8 @@ from src.utils import random_string, plain, escape, in_list
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
 
+TIMEOUT_LIMIT = 32
+
 class Fuzzer:
 
     def __init__(self, args):
@@ -24,7 +26,7 @@ class Fuzzer:
         self.runforever = True
         self.statistic = Statistic()
         self.generator = None
-
+        self.timeout_of_current_seed = 0
 
     def run(self):
         if (self.args.strategy == "opfuzz"):
@@ -38,7 +40,7 @@ class Fuzzer:
         else: assert(False)
 
         while len(seeds) != 0:
-
+            self.timeout_of_current_seed = 0
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
                 self.statistic.seeds += 1
@@ -121,6 +123,11 @@ class Fuzzer:
             return SolverResult(SolverQueryResult.UNSAT)
         assert(False)
 
+    def timeout_limit_reached(self):
+        if self.timeout_of_current_seed >= TIMEOUT_LIMIT:
+            return True
+        return False # stop testing if timeout limit is exceeded
+
 
     def test(self, formula):
         """
@@ -135,6 +142,9 @@ class Fuzzer:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
             stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout, debug=self.args.diagnose)
+
+            if self.timeout_limit_reached():
+                return False
 
             # (1) Detect crashes from a solver run including invalid models.
             if self.in_crash_list(stdout, stderr):
@@ -155,6 +165,7 @@ class Fuzzer:
 
                 elif exitcode == 137: #timeout
                     self.statistic.timeout += 1
+                    self.timeout_of_current_seed +=1
                     continue # continue with next solver (4)
 
                 elif exitcode == 127: #command not found
@@ -189,13 +200,13 @@ class Fuzzer:
                         self.statistic.soundness += 1
                         report_id = self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
                         if reference:
-                            # Produce a diff bug report for soundness bugs in 
-                            # the opfuzz case 
+                            # Produce a diff bug report for soundness bugs in
+                            # the opfuzz case
                             ref_cli = reference[0]
                             ref_stdout = reference[1]
                             ref_stderr = reference[2]
-                            self.report_diff(scratchfile, "incorrect", 
-                                             ref_cli, ref_stdout, ref_stderr, 
+                            self.report_diff(scratchfile, "incorrect",
+                                             ref_cli, ref_stdout, ref_stderr,
                                              solver_cli, stdout, stderr,
                                              random_string())
                         return False # stop testing
@@ -227,8 +238,8 @@ class Fuzzer:
             log.write(stdout)
         return report_id
 
-    def report_diff(self, scratchfile, bugtype, 
-                    ref_cli, ref_stdout, ref_stderr, 
+    def report_diff(self, scratchfile, bugtype,
+                    ref_cli, ref_stdout, ref_stderr,
                     sol_cli, sol_stdout, sol_stderr,
                     report_id):
         plain_cli = plain(sol_cli)
