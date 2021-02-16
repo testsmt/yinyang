@@ -26,7 +26,7 @@ class TypeMutation(Generator):
     def generate(self):
         success = False
         self.av_expr, self.expr_type = get_all_subterms(self.formula)
-        print("unique_expr", self.unique_expr)
+        # print("unique_expr", self.unique_expr)
         num_holes = len(self.av_expr)
         all_holes = self.av_expr
         for _ in range(num_holes):
@@ -34,10 +34,10 @@ class TypeMutation(Generator):
             t2 = self.get_replacee(t1)
             if t2:
                 success = True
-                print(t1, "->", t2)
+                # print(t1, "->", t2)
                 t1.substitute(t1, t2)
                 break
             all_holes.remove(t1)
-        print()
-        print(self.formula)
+        # print()
+        # print(self.formula)
         return self.formula, success

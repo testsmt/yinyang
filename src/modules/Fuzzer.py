@@ -110,8 +110,8 @@ class Fuzzer:
             for i in range(self.args.iterations):
                 if not self.args.quiet:
                     self.statistic.printbar()
-                print()
-                print("iteration", i)
+                # print()
+                # print("iteration", i)
                 formula, success = self.generator.generate()
                 if not success: continue
                 if not self.test(formula): break
