@@ -427,10 +427,7 @@ class Term:
         """
         occs = []
         self.find_all(e, occs)
-        print("len(occs)",len(occs)) 
         for occ in occs:
-                print("repl",repl)
-                print("occs", occs)
                 occ._initialize(name=repl.name,
                                  type=repl.type,
                                  is_const=repl.is_const,

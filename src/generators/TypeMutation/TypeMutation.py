@@ -40,18 +40,18 @@ class TypeMutation(Generator):
         res = self.get_replacee()
         if res:
             t1, t2 = res
-            print("change:",t1,"->", t2)
-            print("av_expr",self.av_expr)
-            print("unique_expr", self.unique_expr)
-            if t1.type == BOOLEAN_TYPE: 
-                print("-------------HERE--------------------------------")
-            print("seed")
-            print(self.formula)
-            print("t1 before",t1)
+            # print("change:",t1,"->", t2)
+            # print("av_expr",self.av_expr)
+            # print("unique_expr", self.unique_expr)
+            # if t1.type == BOOLEAN_TYPE: 
+                # print("-------------HERE--------------------------------")
+            # print("seed")
+            # print(self.formula)
+            # print("t1 before",t1)
             t1.substitute(t1, t2)
-            print("t1 after", t2) 
-            print()
-            print("mutant")
-            print(self.formula)
+            # print("t1 after", t2) 
+            # print()
+            # print("mutant")
+            # print(self.formula)
             return self.formula, True      
         return None, False

@@ -5,9 +5,10 @@ import os
 
 from src.parsing.parse import *
 from src.parsing.typechecker import Context, typecheck
-from src.parsing.typechecker_recur import typecheck_recur
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
-from src.generators.TypeMutation import *
+from src.generators.TypeMutation.TypeMutation import *
+from src.generators.TypeMutation.util import * 
+
 
 class Mockargs:
     name = ""
@@ -37,10 +38,7 @@ class TypeAwareMutationTestCase(unittest.TestCase):
         typecheck(script, glob)
         av_expr = []
         expr_type = []
-        for i in range(len(script.assert_cmd)):
-            exps, typ = typecheck_recur(script.assert_cmd[i]) 
-            av_expr += exps
-            expr_type += typ
+        self.av_expr, self.expr_type = get_all_subterms(script)
         unique_expr = [[],[],[],[],[],[]]
         for i in range(len(expr_type)):
             if expr_type[i] == BOOLEAN_TYPE:
@@ -100,10 +98,7 @@ class TypeAwareMutationTestCase(unittest.TestCase):
         typecheck(script, glob)
         av_expr = []
         expr_type = []
-        for i in range(len(script.assert_cmd)):
-            exps, typ = typecheck_recur(script.assert_cmd[i]) 
-            av_expr += exps
-            expr_type += typ
+        self.av_expr, self.expr_type = get_all_subterms(script)
         unique_expr = [[],[],[],[],[],[]]
         for i in range(len(expr_type)):
             if expr_type[i] == BOOLEAN_TYPE:
