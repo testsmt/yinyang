@@ -21,6 +21,7 @@ from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
 from src.generators.TypeMutation.TypeMutation import *
 from src.generators.TypeMutation.util import get_unique_subterms
 
+TIMEOUT_LIMIT = 32
 class Fuzzer:
 
     def __init__(self, args):
@@ -43,7 +44,6 @@ class Fuzzer:
         if seed_size_in_bytes >= self.args.file_size_limit:
             return False
         return True
->>>>>>> bf70f25e765095fd17f4fa8cac3496eb75e3dce5
 
     def run(self):
         if (self.args.strategy == "opfuzz") or (self.args.strategy == "typfuzz"):
@@ -210,22 +210,10 @@ class Fuzzer:
                     continue
                 return False # stop testing
             else:
-<<<<<<< HEAD
-                # (3b) Check whether the exit code is nonzero.
-                if exitcode == -signal.SIGSEGV or exitcode == 245: #segfault
-                    self.statistic.crashes += 1
-                    self.report(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
-                    return False # stop testing
-
-                elif exitcode == 137: #timeout
-                    self.statistic.timeout += 1
-                    self.timeout_of_current_seed +=1
-=======
                 # (3a) Check whether the solver run produces errors, by checking
                 # the ignore list.
                 if self.in_ignore_list(stdout, stderr):
                     self.statistic.ignored += 1
->>>>>>> bf70f25e765095fd17f4fa8cac3496eb75e3dce5
                     continue # continue with next solver (4)
 
                 # (3b) Check whether the exit code is nonzero.
@@ -237,6 +225,7 @@ class Fuzzer:
 
                     elif exitcode == 137: #timeout
                         self.statistic.timeout += 1
+                        self.timeout_of_current_seed +=1
                         continue # continue with next solver (4)
 
                     elif exitcode == 127: #command not found
