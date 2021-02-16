@@ -101,7 +101,8 @@ class Fuzzer:
                     continue
 
                 typecheck(script, glob)
-                unique_expr = get_unique_subterms(script)
+                script_cp = copy.deepcopy(script)
+                unique_expr = get_unique_subterms(script_cp)
                 self.generator = TypeMutation(script, self.args, unique_expr)
 
             else: assert(False)

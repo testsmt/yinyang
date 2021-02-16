@@ -428,19 +428,19 @@ class Term:
         occs = []
         self.find_all(e, occs)
         for occ in occs:
-                occ._initialize(name=repl.name,
-                                 type=repl.type,
-                                 is_const=repl.is_const,
-                                 is_var=repl.is_var,
-                                 label=repl.label,
-                                 indices=repl.indices,
-                                 quantifier=repl.quantifier,
-                                 quantified_vars=repl.quantified_vars,
-                                 var_binders=repl.var_binders,
-                                 let_terms=repl.let_terms,
-                                 op=repl.op,
-                                 subterms=repl.subterms,
-                                 is_indexed_id=repl.is_indexed_id
+                occ._initialize(name=copy.deepcopy(repl.name),
+                                 type=copy.deepcopy(repl.type),
+                                 is_const=copy.deepcopy(repl.is_const),
+                                 is_var=copy.deepcopy(repl.is_var),
+                                 label=copy.deepcopy(repl.label),
+                                 indices=copy.deepcopy(repl.indices),
+                                 quantifier=copy.deepcopy(repl.quantifier),
+                                 quantified_vars=copy.deepcopy(repl.quantified_vars),
+                                 var_binders=copy.deepcopy(repl.var_binders),
+                                 let_terms=copy.deepcopy(repl.let_terms),
+                                 op=copy.deepcopy(repl.op),
+                                 subterms=copy.deepcopy(repl.subterms),
+                                 is_indexed_id=copy.deepcopy(repl.is_indexed_id)
                                  )
 
 
@@ -509,4 +509,4 @@ class Term:
         if self.is_var:
             return self.name+":"+self.type
         return self.__str__()+":"+self.type
- 
+
