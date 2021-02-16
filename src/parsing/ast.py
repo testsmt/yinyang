@@ -438,7 +438,8 @@ class Term:
                                  var_binders=repl.var_binders,
                                  let_terms=repl.let_terms,
                                  op=repl.op,
-                                 subterms=repl.subterms)
+                                 subterms=repl.subterms,
+                                 is_indexed_id=repl.is_indexed_id)
 
 
     def __eq__(self,other):
