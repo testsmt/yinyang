@@ -1,24 +1,25 @@
 import copy
+from enum import Enum
 
 from src.parsing.ast import Term
-from src.parsing.types import * 
+from src.parsing.types import *
 
 type2num = {
-    'Bool': 0, 
-    'Real': 1, 
-    'Int': 2, 
-    'RoundingMode': 3, 
-    'String': 4, 
-    'RegLan': 5, 
+    'Bool': 0,
+    'Real': 1,
+    'Int': 2,
+    'RoundingMode': 3,
+    'String': 4,
+    'RegLan': 5,
     'Unknown': 6
 }
 
 def get_subterms(expr):
     """
-    Get all subexpression of term object expr. 
-    :returns: av_expr list of expressions 
-              expr_types list of types 
-              (s.t. expression e = av_expr[i] has type expr_types[i]) 
+    Get all subexpression of term object expr.
+    :returns: av_expr list of expressions
+              expr_types list of types
+              (s.t. expression e = av_expr[i] has type expr_types[i])
     """
     av_expr = []
     expr_types = []
@@ -28,7 +29,7 @@ def get_subterms(expr):
                 new_av, new_type = get_subterms(s)
                 av_expr += new_av
                 expr_types += new_type
-            new_type = expr.type 
+            new_type = expr.type
             expr_types.append(new_type)
             av_expr.append(expr)
         else:
@@ -44,24 +45,24 @@ def get_subterms(expr):
 
 def get_all_subterms(formula):
     """
-    Get all expressions within a formula and their types. 
-    :returns: av_expr list of expressions 
-              expr_types list of types 
-              (s.t. expression e = av_expr[i] has type expr_types[i]) 
+    Get all expressions within a formula and their types.
+    :returns: av_expr list of expressions
+              expr_types list of types
+              (s.t. expression e = av_expr[i] has type expr_types[i])
     """
     av_expr = []
     expr_type = []
     for i in range(len(formula.assert_cmd)):
-        exps, typ = get_subterms(formula.assert_cmd[i]) 
+        exps, typ = get_subterms(formula.assert_cmd[i])
         av_expr += exps
         expr_type += typ
-    return av_expr,expr_type 
+    return av_expr,expr_type
 
 
 def get_unique_subterms(formula):
-    av_expr, expr_type = get_all_subterms(formula) 
+    av_expr, expr_type = get_all_subterms(formula)
 
-    # 0: Bool, 1: Real, 2: Int, 3: RoundingMode, 4: String, 5: Regex, 6: Unknown 
+    # 0: Bool, 1: Real, 2: Int, 3: RoundingMode, 4: String, 5: Regex, 6: Unknown
     unique_expr = [[],[],[],[],[],[]]
     for i in range(len(expr_type)):
         if expr_type[i] == BOOLEAN_TYPE:
@@ -88,6 +89,6 @@ def get_unique_subterms(formula):
                         flag = 1
                         pass
                 if flag == 0:
-                    temp.append(unique_expr[i][j])                                
+                    temp.append(unique_expr[i][j])
             unique_expr[i] = temp
-    return unique_expr  
+    return unique_expr

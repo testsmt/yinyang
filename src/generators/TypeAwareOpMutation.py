@@ -66,7 +66,7 @@ class TypeAwareOpMutation(Generator):
         return None
 
     def generate(self):
-        success = False 
+        success = False
         for _ in range(self.args.modulo):
             max_choices = len(self.formula.op_occs)
             for _ in range(max_choices):
@@ -76,4 +76,4 @@ class TypeAwareOpMutation(Generator):
                     success = True
                     op_occ.op = replacee
                     break
-        return self.formula, success 
+        return self.formula, success
