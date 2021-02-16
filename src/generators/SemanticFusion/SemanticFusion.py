@@ -7,13 +7,10 @@ from src.generators.SemanticFusion.VariableFusion import *
 from src.generators.SemanticFusion.util import random_var_triplets, random_tuple_list, disjunction, conjunction, cvars
 
 class SemanticFusion(Generator):
-    def __init__(self, seeds, args):
-        super().__init__(seeds,args)
-        assert(len(seeds) == 2)
-        self.seed1 = seeds[0]
-        self.seed2 = seeds[1]
-        self.formula1, self.formula2 = parse_file(self.seed1,silent=False), parse_file(self.seed2, silent=False)
-
+    def __init__(self, formula1, formula2, args):
+        self.formula1 = formula1
+        self.formula2 = formula2
+        self.args = args
         self.config_file = self.args.fusionfun
         self.oracle = self.args.oracle
         self.templates = {}
@@ -45,7 +42,7 @@ class SemanticFusion(Generator):
                 curr.append(l)
 
         for i,mr in enumerate(_mrs):
-            template = parse_str(mr)
+            template,_ = parse_str(mr)
             sort = template.commands[0].sort
 
             if not sort in self.templates:
@@ -54,23 +51,8 @@ class SemanticFusion(Generator):
                 self.templates[sort].append(template)
 
 
-    def fuse(self, formula1, formula2):
-        # Generate random variable pairs from both formulas
-        triplets = random_var_triplets(formula1.global_vars, formula2.global_vars, self.templates)
-
-        # # For each variable pair choose a suitable template for fusion
-        # # and generate the corresponding triplet (x, y, template)
-        # triplets = []
-        # for pair in rand_var_pairs:
-        #     x, y = pair[0], pair[1]
-        #     if x.type == y.type:
-        #         if x.type in self.templates:
-        #             template = random.choice(self.templates[x.type])
-        #             triplets.append((x, y, template))
-
-        # For each triplet (x, y, template) get random variable occurrences occ_x, occ_y
-        # to form triplets (occ_x, occ_y, template). Replace occ_x and occ_y from
-        # these triplets by their respective inversion functions.
+    def fuse(self, formula1, formula2, triplets):
+        
         fusion_vars = []
         fusion_constr = []
         for triplet in triplets:
@@ -103,10 +85,10 @@ class SemanticFusion(Generator):
 
         return formula
     
-    def _add_seedinfo(self,formula):
-       formula.commands = [Comment(self.seed2)] + formula.commands
-       formula.commands = [Comment(self.seed1)] + formula.commands
-       return formula
+#     def _add_seedinfo(self,formula):
+        # formula.commands = [Comment(self.seed2)] + formula.commands
+        # formula.commands = [Comment(self.seed1)] + formula.commands
+        # return formula
 
 
     def generate(self):
@@ -119,5 +101,5 @@ class SemanticFusion(Generator):
         triplets = random_var_triplets(formula1.global_vars, formula2.global_vars, self.templates)
         if not triplets:
             is_fusion = False
-        fused = self.fuse(formula1, formula2)
-        return self._add_seedinfo(fused), is_fusion
+        fused = self.fuse(formula1, formula2, triplets)
+        return fused, is_fusion

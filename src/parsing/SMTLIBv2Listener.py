@@ -125,6 +125,15 @@ class SMTLIBv2Listener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by SMTLIBv2Parser#reg_const.
+    def enterReg_const(self, ctx:SMTLIBv2Parser.Reg_constContext):
+        pass
+
+    # Exit a parse tree produced by SMTLIBv2Parser#reg_const.
+    def exitReg_const(self, ctx:SMTLIBv2Parser.Reg_constContext):
+        pass
+
+
     # Enter a parse tree produced by SMTLIBv2Parser#keyword.
     def enterKeyword(self, ctx:SMTLIBv2Parser.KeywordContext):
         pass

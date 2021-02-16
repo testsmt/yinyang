@@ -1,6 +1,6 @@
 import unittest
-import sys
 import os
+import sys
 sys.path.append("../../")
 
 from src.parsing.ast import * 
@@ -12,9 +12,8 @@ class Mockargs:
     oracle = ""
     fusionfun = "."
 
-class SemanticFusionTestCase(unittest.TestCase): 
+class SemanticFusionTestCase(unittest.TestCase):
     def test_sf_sat(self):
-        pass
         fcts= """
         #begin
         (declare-const x Int)
@@ -47,9 +46,14 @@ class SemanticFusionTestCase(unittest.TestCase):
         args = Mockargs()
         args.oracle = "sat"
         args.fusionfun = "./config/fusion_functions.txt"
-        sf_sat = SemanticFusion([fn1, fn2], args)
+        script1, _ = parse_file(fn1,silent=True)
+        script2, _ = parse_file(fn2,silent=True)
+        sf_sat = SemanticFusion(script1, script2, args)
         args.oracle = "unsat"
-        sf_unsat = SemanticFusion([fn1, fn2], args)
+
+        script1, _ = parse_file(fn1,silent=True)
+        script2, _ = parse_file(fn2,silent=True)
+        sf_unsat = SemanticFusion(script1, script2, args)
         sf_sat.generate()
         os.system("rm -rf "+fn1+ " "+ fn2+" "+fn_fcts)
 

@@ -1,5 +1,5 @@
-import random
 import shutil
+import random
 import os
 import re
 import signal
@@ -13,8 +13,13 @@ from src.modules.Statistic import Statistic
 from config.config import crash_list, duplicate_list, ignore_list
 from src.utils import random_string, plain, escape, in_list
 
+from src.parsing.typechecker import typecheck
+from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
+
+from src.generators.TypeMutation.TypeMutation import *
+from src.generators.TypeMutation.util import get_unique_subterms
 
 class Fuzzer:
 
@@ -24,10 +29,21 @@ class Fuzzer:
         self.runforever = True
         self.statistic = Statistic()
         self.generator = None
+        if not self.args.quiet:
+            print("Yin-Yang is running:")
 
+    def admissible_seed_size(self, seed):
+        """
+        Checks if seed size is below file_size_limit.
+        :returns: True if that is the case and False otherwise.
+        """
+        seed_size_in_bytes = Path(seed).stat().st_size
+        if seed_size_in_bytes >= self.args.file_size_limit:
+            return False
+        return True
 
     def run(self):
-        if (self.args.strategy == "opfuzz"):
+        if (self.args.strategy == "opfuzz") or (self.args.strategy == "typfuzz"):
             seeds = self.args.PATH_TO_SEEDS
         elif (self.args.strategy == "fusion"):
             if len(self.args.PATH_TO_SEEDS) > 2:
@@ -41,27 +57,63 @@ class Fuzzer:
 
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
+
                 self.statistic.seeds += 1
+                if not self.admissible_seed_size(seed):
+                    self.statistic.ignored += 1
+                    continue
+
                 self.currentseeds = Path(seed).stem
-                self.generator = TypeAwareOpMutation([seed], self.args)
+                script, _ = parse_file(seed,silent=True)
+
+                if not script: # i.e. parsing was unsucessful
+                    self.statistic.ignored += 1
+                    continue
+
+                self.generator = TypeAwareOpMutation(script, self.args)
+
             elif (self.args.strategy == "fusion"):
                 seed = seeds.pop(random.randrange(len(seeds)))
                 seed1 = seed[0]
                 seed2 = seed[1]
                 self.statistic.seeds += 2
+                if not self.admissible_seed_size(seed1) or not self.admissible_seed_size(seed1):
+                    self.statistic.ignored +=2
+                    continue
+
                 self.currentseeds = Path(seed1).stem + "-" + Path(seed2).stem
                 fusion_seeds = [seed1, seed2]
                 self.generator = SemanticFusion(fusion_seeds, self.args)
+
+            elif (self.args.strategy == "typfuzz"):
+                seed = seeds.pop(random.randrange(len(seeds)))
+
+                self.statistic.seeds += 1
+                if not self.admissible_seed_size(seed):
+                    self.statistic.ignored += 1
+                    continue
+
+                self.currentseeds = Path(seed).stem
+                script, glob = parse_file(seed,silent=True)
+
+                if not script: # i.e. parsing was unsucessful
+                    self.statistic.ignored += 1
+                    continue
+
+                typecheck(script, glob)
+                script_cp = copy.deepcopy(script)
+                unique_expr = get_unique_subterms(script_cp)
+                self.generator = TypeMutation(script, self.args, unique_expr)
+
             else: assert(False)
 
-            for _ in range(self.args.iterations):
-                self.statistic.printbar()
+            for i in range(self.args.iterations):
+                if not self.args.quiet:
+                    self.statistic.printbar()
+                # print()
+                # print("iteration", i)
                 formula, success = self.generator.generate()
-                if not success:
-                    self.test(formula)
-                    self.statistic.mutants += 1
-                    break
-
+                if not success: continue
                 if not self.test(formula): break
                 self.statistic.mutants += 1
 
@@ -130,7 +182,6 @@ class Fuzzer:
         oracle = self.init_oracle()
         testbook = self.create_testbook(formula)
         reference = None
-
         for testitem in testbook:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
@@ -145,34 +196,35 @@ class Fuzzer:
                     self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
                 else:
                     self.statistic.duplicates += 1
+                    continue
                 return False # stop testing
             else:
+                # (3a) Check whether the solver run produces errors, by checking
+                # the ignore list.
+                if self.in_ignore_list(stdout, stderr):
+                    self.statistic.ignored += 1
+                    continue # continue with next solver (4)
+
                 # (3b) Check whether the exit code is nonzero.
-                if exitcode == -signal.SIGSEGV or exitcode == 245: #segfault
-                    self.statistic.crashes += 1
-                    self.report(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
-                    return False # stop testing
+                if exitcode != 0:
+                    if exitcode == -signal.SIGSEGV or exitcode == 245: #segfault
+                        self.statistic.crashes += 1
+                        self.report(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
+                        return False # stop testing
 
-                elif exitcode == 137: #timeout
-                    self.statistic.timeout += 1
-                    continue # continue with next solver (4)
+                    elif exitcode == 137: #timeout
+                        self.statistic.timeout += 1
+                        continue # continue with next solver (4)
 
-                elif exitcode == 127: #command not found
-                    print("\nPlease check your solver command-line interfaces.")
-                    continue # continue with next solver (4)
-
+                    elif exitcode == 127: #command not found
+                        print("\nPlease check your solver command-line interfaces.")
+                        continue # continue with next solver (4)
+                    self.statistic.ignored+=1
                 # (3c) if there is no '^sat$' or '^unsat$' in the output
                 elif not re.search("^unsat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^sat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^unknown$", stdout, flags=re.MULTILINE):
-                    # (3a) Check whether the solver run produces errors, by checking
-                    # the ignore list.
-                    if self.in_ignore_list(stdout, stderr):
-                        self.statistic.ignored += 1
-                        continue # continue with next solver (4)
-                    self.statistic.crashes += 1
-                    self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
-                    continue # continue with next solver (4)
+                    self.statistic.ignored += 1
                 else:
                     # (5) grep for '^sat$', '^unsat$', and '^unknown$' to produce
                     # the output (including '^unknown$' to also deal with incremental
@@ -187,15 +239,15 @@ class Fuzzer:
                     # non-erroneous solver runs (opfuzz) for soundness bugs.
                     if not oracle.equals(result):
                         self.statistic.soundness += 1
-                        report_id = self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
+                        self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
                         if reference:
-                            # Produce a diff bug report for soundness bugs in 
-                            # the opfuzz case 
+                            # Produce a diff bug report for soundness bugs in
+                            # the opfuzz case
                             ref_cli = reference[0]
                             ref_stdout = reference[1]
                             ref_stderr = reference[2]
-                            self.report_diff(scratchfile, "incorrect", 
-                                             ref_cli, ref_stdout, ref_stderr, 
+                            self.report_diff(scratchfile, "incorrect",
+                                             ref_cli, ref_stdout, ref_stderr,
                                              solver_cli, stdout, stderr,
                                              random_string())
                         return False # stop testing
@@ -227,8 +279,8 @@ class Fuzzer:
             log.write(stdout)
         return report_id
 
-    def report_diff(self, scratchfile, bugtype, 
-                    ref_cli, ref_stdout, ref_stderr, 
+    def report_diff(self, scratchfile, bugtype,
+                    ref_cli, ref_stdout, ref_stderr,
                     sol_cli, sol_stdout, sol_stderr,
                     report_id):
         plain_cli = plain(sol_cli)

@@ -1,13 +1,16 @@
 from antlr4 import *
+
 from .ast import *
 from .SMTLIBv2Parser import SMTLIBv2Parser
 from .SMTLIBv2Visitor import *
 from .util import *
+from .types import *
 
 class ASTVisitor(SMTLIBv2Visitor):
     def __init__(self, strict=True):
         self.strict = strict
-        self.global_vars = {}
+        self.globals = {}
+        self.sorts = {}
 
     def visitStart(self, ctx:SMTLIBv2Parser.StartContext):
         return self.visitScript(ctx.script())
@@ -16,40 +19,41 @@ class ASTVisitor(SMTLIBv2Visitor):
         cmds=[]
         for c in ctx.command():
             cmds.append(self.visitCommand(c))
-        return Script(cmds,self.global_vars)
+        return Script(cmds,self.globals)
 
     def add_to_globals(self, identifier, input_sorts, output_sort):
         if len(input_sorts) == 0:
-            self.global_vars[identifier] = output_sort
+            if output_sort in self.sorts:
+                output_sort = self.sorts[output_sort]
+            self.globals[identifier] = sort2type(output_sort)
         else:
-            self.global_vars[identifier] = input_sorts + " "+ output_sort
-
+            self.globals[identifier] = sort2type(input_sorts +" "+ output_sort)
 
     def handleCommand(self, ctx:SMTLIBv2Parser.CommandContext):
         if ctx.cmd_assert():
-            return Assert(self.visitTerm(ctx.term()[0]))
+            return Assert(self.visitTerm(ctx.term()[0],{}))
         if ctx.cmd_assertSoft():
             attr = []
             for a in ctx.attribute():
                 a = self.visitAttribute(a)
                 attr.append(a)
-            return AssertSoft(self.visitTerm(ctx.term()[0]),attr)
+            return AssertSoft(self.visitTerm(ctx.term()[0],{}),attr)
         if ctx.cmd_simplify():
             attr = []
             for a in ctx.attribute():
                 a = self.visitAttribute(a)
                 attr.append(a)
-            return Simplify(self.visitTerm(ctx.term()[0]), attr)
+            return Simplify(self.visitTerm(ctx.term()[0],{}), attr)
         if ctx.cmd_minimize():
-            return Minimize(self.visitTerm(ctx.term()[0]))
+            return Minimize(self.visitTerm(ctx.term()[0],{}))
         if ctx.cmd_maximize():
-            return Maximize(self.visitTerm(ctx.term()[0]))
+            return Maximize(self.visitTerm(ctx.term()[0],{}))
         if ctx.cmd_display():
-            return Display(self.visitTerm(ctx.term()[0]))
+            return Display(self.visitTerm(ctx.term()[0],{}))
         if ctx.cmd_eval():
-            return Eval(self.visitTerm(ctx.term()[0]))
+            return Eval(self.visitTerm(ctx.term()[0],{}))
         if ctx.cmd_declareConst():
-            self.global_vars[self.visitSymbol(ctx.symbol()[0])] = self.visitSort(ctx.sort()[0])
+            self.add_to_globals(self.visitSymbol(ctx.symbol()[0]),[], self.visitSort(ctx.sort()[0]))
             decl = DeclareConst(self.visitSymbol(ctx.symbol()[0]), self.visitSort(ctx.sort()[0]))
             return decl
         if ctx.cmd_declareFun():
@@ -63,12 +67,12 @@ class ASTVisitor(SMTLIBv2Visitor):
             return DeclareFun(identifier, input_sorts, output_sort)
 
         if ctx.cmd_define():
-            return Define(self.visitSymbol(ctx.symbol()[0]), self.visitTerm(ctx.term()[0]))
+            return Define(self.visitSymbol(ctx.symbol()[0]), self.visitTerm(ctx.term()[0],{}))
 
         if ctx.cmd_defineConst():
             return DefineConst(self.visitSymbol(ctx.symbol()[0]),
                              self.visitSort(ctx.sort()[0]),
-                             self.visitTerm(ctx.term()[0]))
+                             self.visitTerm(ctx.term()[0],{}))
 
         if ctx.cmd_defineFun():
             sorted_vars =  []
@@ -80,7 +84,7 @@ class ASTVisitor(SMTLIBv2Visitor):
             return DefineFun(identifier,
                              sorted_vars,
                              self.visitSort(ctx.function_def().sort()),
-                             self.visitTerm(ctx.function_def().term()))
+                             self.visitTerm(ctx.function_def().term(),{}))
 
         if ctx.cmd_defineFunRec():
             sorted_vars = []
@@ -89,7 +93,7 @@ class ASTVisitor(SMTLIBv2Visitor):
             return DefineFunRec(self.visitSymbol(ctx.function_def().symbol()),
                              sorted_vars,
                              self.visitSort(ctx.function_def().sort()),
-                             self.visitTerm(ctx.function_def().term()))
+                             self.visitTerm(ctx.function_def().term()),{})
 
         if ctx.cmd_defineFunsRec():
             decls = []
@@ -97,13 +101,13 @@ class ASTVisitor(SMTLIBv2Visitor):
                 decls.append(self.visitFunction_dec(decl))
             terms = []
             for term in ctx.term():
-                terms.append(self.visitTerm(term))
+                terms.append(self.visitTerm(term,{}))
             return DefineFunsRec(decls,terms)
 
         if ctx.cmd_checkSat():
             terms = []
             for t in ctx.term():
-                terms.append(self.visitTerm(t))
+                terms.append(self.visitTerm(t,{}))
             if len(terms) > 0:
                 return CheckSat(terms)
             return CheckSat()
@@ -111,14 +115,21 @@ class ASTVisitor(SMTLIBv2Visitor):
         if ctx.cmd_checkSatAssuming():
             terms = []
             for t in ctx.term():
-                terms.append(self.visitTerm(t))
+                terms.append(self.visitTerm(t,{}))
             return CheckSatAssuming(terms)
 
         if ctx.cmd_getValue():
             terms = []
             for t in ctx.term():
-                terms.append(self.visitTerm(t))
+                terms.append(self.visitTerm(t,{}))
             return GetValue(terms)
+
+        # Dominik: We do not need an explicit represention of the (define-sort
+        # statements in the AST but need to add the defined sorts to the context.
+        if ctx.cmd_defineSort():
+            symbol = self.visitSymbol(ctx.symbol()[0])
+            sort = self.visitSort(ctx.sort()[0])
+            self.sort_ctxt[symbol] = sort
 
     def visitFunction_dec(self, ctx:SMTLIBv2Parser.Function_decContext):
         sorted_vars = []
@@ -159,7 +170,7 @@ class ASTVisitor(SMTLIBv2Visitor):
         return (ctx.keyword().getText(),ctx.attribute_value().getText())
 
 
-    def handle_quantifier(self,ctx:SMTLIBv2Parser.TermContext, quant, local_vars={}):
+    def handle_quantifier(self,ctx:SMTLIBv2Parser.TermContext, quant, local_vars):
         subterms = []
         qvars = []
         qtypes = []
@@ -181,15 +192,29 @@ class ASTVisitor(SMTLIBv2Visitor):
     | binary
     | string
     | b_value
-    | ParOpen GRW_Underscore ' bv' numeral numeral  ParClose
+    | ParOpen GRW_Underscore ' bv' numeral numeral ParClose
     ;
     """
-
     def visitSpec_constant(self, ctx:SMTLIBv2Parser.Spec_constantContext):
         if ctx.ParOpen():
             X,n = ctx.numeral()[0].getText(), ctx.numeral()[1].getText()
-            return "(_ bv"+X+" "+n+")"
-        return ctx.getText()
+            return "(_ bv"+X+" "+n+")", BITVECTOR_TYPE(int(n))
+        if ctx.numeral():
+            return ctx.getText(),INTEGER_TYPE
+        if ctx.decimal():
+            return ctx.getText(),REAL_TYPE
+        if ctx.hexadecimal():
+            return ctx.getText(),INTEGER_TYPE
+        if ctx.binary():
+             return ctx.getText(),INTEGER_TYPE
+        if ctx.string():
+            return ctx.getText(),STRING_TYPE
+        if ctx.b_value():
+            return ctx.getText(),BOOLEAN_TYPE
+        if ctx.reg_const():
+            return ctx.getText(),REGEXP_TYPE
+
+
 
     """
         term
@@ -203,7 +228,7 @@ class ASTVisitor(SMTLIBv2Visitor):
             | ParOpen GRW_Exclamation term attribute+ ParClose
             ;
         """
-    def visitTerm(self, ctx:SMTLIBv2Parser.TermContext, local_vars={}):
+    def visitTerm(self, ctx:SMTLIBv2Parser.TermContext, local_vars):
         if ctx.ParOpen() and ctx.GRW_Exclamation() and ctx.term()\
            and len(ctx.attribute()) >= 1 and ctx.ParClose():
             term,label = self.visitTerm(ctx.term()[0]),self.visitAttribute(ctx.attribute()[0])
@@ -226,7 +251,7 @@ class ASTVisitor(SMTLIBv2Visitor):
             terms = []
             var_list = []
             for b in ctx.var_binding():
-               local_vars[self.visitSymbol(b.symbol())] = "Unknown"
+               local_vars[self.visitSymbol(b.symbol())] = UNKNOWN
                var_list.append(self.visitSymbol(b.symbol()))
                terms.append(self.visitTerm(b.term(),local_vars))
             subterms = []
@@ -235,15 +260,15 @@ class ASTVisitor(SMTLIBv2Visitor):
             return LetBinding(var_list, terms, subterms=subterms)
 
         if ctx.ParOpen() and ctx.qual_identifier() and len(ctx.term()) >= 1 and ctx.ParClose():
-            op = self.visitQual_identifier(ctx.qual_identifier())
+            op = self.visitQual_identifier(ctx.qual_identifier(),local_vars)
             subterms = []
             for term in ctx.term():
                 subterms.append(self.visitTerm(term, local_vars))
             return Expr(op=op,subterms=subterms)
 
         if ctx.spec_constant():
-            name=self.visitSpec_constant(ctx.spec_constant())
-            return Const(name=name)
+            name,type=self.visitSpec_constant(ctx.spec_constant())
+            return Const(name=name,type=type)
 
         if ctx.qual_identifier():
             return self.visitQual_identifier(ctx.qual_identifier(),local_vars)
@@ -256,7 +281,7 @@ class ASTVisitor(SMTLIBv2Visitor):
     | ParOpen GRW_As identifier sort ParClose [OK]
     ;
     """
-    def visitQual_identifier(self,ctx:SMTLIBv2Parser.Qual_identifierContext, local_vars={}):
+    def visitQual_identifier(self,ctx:SMTLIBv2Parser.Qual_identifierContext, local_vars):
         if ctx.ParOpen() and ctx.GRW_As() and ctx.identifier() and ctx.sort() and\
             ctx.ParClose():
             raise ASTException("ParOpen GRW_As identifier sort ParClose")
@@ -293,7 +318,7 @@ class ASTVisitor(SMTLIBv2Visitor):
     | ParOpen GRW_Underscore symbol index+ ParClose
     ;
     """
-    def visitIdentifier(self,ctx:SMTLIBv2Parser.IdentifierContext, local_vars=[]):
+    def visitIdentifier(self,ctx:SMTLIBv2Parser.IdentifierContext, local_vars):
         if ctx.ParOpen() and ctx.GRW_Underscore() and ctx.symbol() and len(ctx.index()) >= 1 and\
            ctx.ParClose():
             symbol = self.visitSymbol(ctx.symbol())
@@ -302,9 +327,9 @@ class ASTVisitor(SMTLIBv2Visitor):
                 index+= " "+ ind.getText()
             name = "(_ "+symbol +" "+ index+")"
             if name in local_vars:
-                return Var(name=name, type=local_vars[name],is_indexed_id=True)
-            elif name in self.global_vars:
-                return Var(name=name, type=self.global_vars[name],is_indexed_id=True)
+                return Var(name=name, type=local_vars[name], is_indexed_id=True)
+            elif name in self.globals:
+                return Var(name=name, type=self.globals[name], is_indexed_id=True)
             else:
                 return name
 
@@ -312,8 +337,8 @@ class ASTVisitor(SMTLIBv2Visitor):
             name = self.visitSymbol(ctx.symbol())
             if name in local_vars:
                 return Var(name=name, type=local_vars[name])
-            elif name in self.global_vars:
-                return Var(name=name, type=self.global_vars[name])
+            elif name in self.globals:
+                return Var(name=name, type=self.globals[name])
             else:
                 return self.visitSymbol(ctx.symbol())
         raise ASTException("No match for identifier: ... |... |... ")
@@ -323,8 +348,8 @@ class ASTVisitor(SMTLIBv2Visitor):
 
     def visitSort(self, ctx:SMTLIBv2Parser.SortContext):
         if len(ctx.sort()) >= 1:
-            s = "("+ self.visitIdentifier(ctx.identifier())
+            s = "("+ self.visitIdentifier(ctx.identifier(),{})
             for sort in ctx.sort():
                 s += " "+ self.visitSort(sort)
             return s+")"
-        return self.visitIdentifier(ctx.identifier())
+        return self.visitIdentifier(ctx.identifier(),{})
