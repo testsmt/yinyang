@@ -1,7 +1,5 @@
-# Solver configurations list to be used for fuzzing.
-solvers = []
 
-# Crash list: crash messages emitted by solvers to consider as bugs.
+solvers = []
 crash_list = [
     "Exception",
     "lang.AssertionError",
@@ -24,15 +22,12 @@ crash_list = [
     "Aborted"
 ]
 
-# Duplicate list: crash messages emitted by solvers to be considered duplicates,
-# i.e. will be ignored during fuzzing.
 duplicate_list = [
-
+    "src/smt/smt_mock.cpp:1489"
 ]
 
-# Ignore list: error messages emitted by solvers to be ignored.
 ignore_list = [
-   "(error ",
+    "(error ",
     "unsupport",
     "unexpected char",
     "failed to open file",
@@ -44,3 +39,4 @@ ignore_list = [
     "Symbol 'str.to.re' not declared as a variable",
     "Unimplemented code encountered",
 ]
+

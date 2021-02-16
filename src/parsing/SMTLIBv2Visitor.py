@@ -17,7 +17,7 @@ class SMTLIBv2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SMTLIBv2Parser#simpleSymbol.
     def visitSimpleSymbol(self, ctx:SMTLIBv2Parser.SimpleSymbolContext):
-        return ctx.getText() 
+        return ctx.getText()
 
     # Visit a parse tree produced by SMTLIBv2Parser#quotedSymbol.
     def visitQuotedSymbol(self, ctx:SMTLIBv2Parser.QuotedSymbolContext):
@@ -26,7 +26,7 @@ class SMTLIBv2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SMTLIBv2Parser#predefSymbol.
     def visitPredefSymbol(self, ctx:SMTLIBv2Parser.PredefSymbolContext):
-        return ctx.getText() 
+        return ctx.getText()
 
 
     # Visit a parse tree produced by SMTLIBv2Parser#predefKeyword.
@@ -349,7 +349,7 @@ class SMTLIBv2Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    
+
     # Visit a parse tree produced by SMTLIBv2Parser#b_value.
     def visitB_value(self, ctx:SMTLIBv2Parser.B_valueContext):
         return self.visitChildren(ctx)

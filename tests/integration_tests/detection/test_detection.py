@@ -38,7 +38,7 @@ def call_fuzzer(first_config, second_config, fn, opts):
     return crash_issues, soundness_issues, duplicate_issues, timeout_issues, ignored_issues, cmd
 
 def create_mocksmt2(fn):
-    open(fn,"w").write("")
+    open(fn,"w").write("(declare-fun x () Int)\n(declare-fun y () Int)\n(assert (= x y))")
 
 def create_mocksolver_msg(msg,script_fn):
     code= "#! /usr/bin/env python3\n"
@@ -75,7 +75,7 @@ def test_crash_list():
     if crash != 1:
         print("[ERROR] Crash cannot be captured.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver)
 
@@ -100,7 +100,7 @@ def test_ignore_list():
     if ignored != 2:
         print("[ERROR] Ignore list incorrect.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver)
 
@@ -115,7 +115,7 @@ def test_segfault():
     if crash != 1:
         print("[ERROR] Segfault undetected.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver)
 
@@ -126,7 +126,7 @@ def test_timeout():
     create_mocksolver_timeout(timeout_solver)
     msg="sat"
     create_mocksolver_msg(msg,sat_solver)
-    opts=" -t 2 -i 1 -m 1"
+    opts=" -t 2 -i 1 -m 10"
     first_config=os.path.abspath(timeout_solver)
     second_config=os.path.abspath(sat_solver)
     crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(first_config, second_config, FN,OPTS)
@@ -134,7 +134,7 @@ def test_timeout():
     if timeout != 1:
         print("[ERROR] Timeout undetected.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+timeout_solver)
         os.system("rm -rf "+sat_solver)
@@ -155,13 +155,34 @@ def test_empty_output():
     if ignored != 1:
         print("[ERROR] Empty output undetected.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+sat_solver)
         os.system("rm -rf "+empty_solver)
 
+def test_get_value():
+    print("6. Test get-value ")
+    empty_solver = "empty_solver.py"
+    sat_solver = "sat_solver.py"
+    msg="(= 1.0 x)"
+    create_mocksolver_msg(msg,empty_solver)
+    msg="sat"
+    create_mocksolver_msg(msg,sat_solver)
+    first_config=os.path.abspath(empty_solver)
+    second_config=os.path.abspath(sat_solver)
+    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(first_config, second_config, FN,OPTS)
+
+    if ignored != 1:
+        print("[ERROR] Empty output undetected.")
+        print(cmd)
+        exit(1)
+    else:
+        os.system("rm -rf "+sat_solver)
+        os.system("rm -rf "+empty_solver)
+
+
 def test_unsoundness():
-    print("6. Unsoundness")
+    print("7. Unsoundness")
     values = ["sat", "unsat", "unknown"]
     k = random.randint(1,20)
     res1 = random.choices(values, k=k)
@@ -181,7 +202,7 @@ def test_unsoundness():
     if soundness != 1:
         print("[ERROR] Unsundness undetected.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver1)
         os.system("rm -rf "+solver2)
@@ -209,7 +230,7 @@ def test_soundness():
     if soundness != 0:
         print("[ERROR] False positive.")
         print(cmd)
-        ERRORS=True
+        exit(1)
     else:
         os.system("rm -rf "+solver1)
         os.system("rm -rf "+solver2)
@@ -276,10 +297,9 @@ ignore_list = [
     second_config=os.path.abspath(solver)
     crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(first_config, second_config, FN,OPTS)
 
-    if duplicate != 1:
-        print("[ERROR] Duplicate crash cannot be captured.")
-        print(cmd)
-        ERRORS=True
+    if duplicate < 1:
+        print("[ERROR] Duplicate cannot be captured.")
+        exit(1)
     else:
         os.system("rm -rf "+solver)
     os.system("mv config/config.py.orig config/config.py")
@@ -295,9 +315,7 @@ if __name__ == "__main__":
     test_segfault()
     test_timeout()
     test_empty_output()
+    test_get_value()
     test_unsoundness()
     test_soundness()
     test_duplicate_list()
-    if not ERRORS:
-        print("[SUCCESS] All tests passed.")
-
