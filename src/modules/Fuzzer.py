@@ -109,8 +109,8 @@ class Fuzzer:
             for i in range(self.args.iterations):
                 if not self.args.quiet:
                     self.statistic.printbar()
-                # print()
-                # print("iteration", i)
+                print()
+                print("iteration", i)
                 formula, success = self.generator.generate()
                 if not success: continue
                 if not self.test(formula): break
@@ -195,6 +195,7 @@ class Fuzzer:
                     self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
                 else:
                     self.statistic.duplicates += 1
+                    continue
                 return False # stop testing
             else:
                 # (3a) Check whether the solver run produces errors, by checking

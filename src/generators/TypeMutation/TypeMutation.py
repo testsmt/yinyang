@@ -34,7 +34,10 @@ class TypeMutation(Generator):
             t2 = self.get_replacee(t1)
             if t2:
                 success = True
+                print(t1, "->", t2)
                 t1.substitute(t1, t2)
                 break
             all_holes.remove(t1)
+        print()
+        print(self.formula)
         return self.formula, success

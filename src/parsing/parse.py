@@ -37,13 +37,13 @@ def generate_ast(stream):
     tree = parser.start()
     vis = ASTVisitor()
     formula = vis.visitStart(tree)
-    return formula, vis.globals
 
     # empty file or parser preceding parser errror
     if len(formula.commands) == 0:
         return None
 
-    return remove_set_logic_status(formula)
+    return remove_set_logic_status(formula), vis.globals
+
 
 
 def parse_filestream(fn,timeout_limit):

@@ -27,7 +27,7 @@ crash_list = [
 # Duplicate list: crash messages emitted by solvers to be considered duplicates,
 # i.e. will be ignored during fuzzing.
 duplicate_list = [
-
+    "Expected result sat but got unsat",
 ]
 
 # Ignore list: error messages emitted by solvers to be ignored.
