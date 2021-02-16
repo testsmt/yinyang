@@ -126,7 +126,7 @@ def test_timeout():
     create_mocksolver_timeout(timeout_solver)
     msg="sat"
     create_mocksolver_msg(msg,sat_solver)
-    opts=" -t 2 -i 1 -m 1"
+    opts=" -t 2 -i 1 -m 10"
     first_config=os.path.abspath(timeout_solver)
     second_config=os.path.abspath(sat_solver)
     crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(first_config, second_config, FN,OPTS)

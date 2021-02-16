@@ -26,14 +26,15 @@ class TypeMutation(Generator):
     def generate(self):
         success = False
         self.av_expr, self.expr_type = get_all_subterms(self.formula)
-        num_holes = len(self.av_expr)
 
-        for _ in range(num_holes): # Intuition try at most number of holes
-            t1 = random.choice(self.av_expr)
+        num_holes = len(self.av_expr)
+        all_holes = self.av_expr
+        for _ in range(num_holes):
+            t1 = random.choice(all_holes)
             t2 = self.get_replacee(t1)
             if t2:
                 success = True
                 t1.substitute(t1, t2)
                 break
-
+            all_holes.remove(t1)
         return self.formula, success

@@ -18,8 +18,8 @@ from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
 
-from src.generators.TypeMutation.TypeMutation import * 
-from src.generators.TypeMutation.util import get_unique_subterms 
+from src.generators.TypeMutation.TypeMutation import *
+from src.generators.TypeMutation.util import get_unique_subterms
 
 class Fuzzer:
 
@@ -101,7 +101,7 @@ class Fuzzer:
                     continue
 
                 typecheck(script, glob)
-                unique_expr = get_unique_subterms(script) 
+                unique_expr = get_unique_subterms(script)
                 self.generator = TypeMutation(script, self.args, unique_expr)
 
             else: assert(False)
@@ -310,5 +310,4 @@ class Fuzzer:
             for file in os.listdir(self.args.scratchfolder):
                 if self.args.name in file:
                     os.remove(os.path.join(self.args.scratchfolder, file))
-        if not self.args.quiet:
-            self.statistic.printsum()
+        self.statistic.printsum()
