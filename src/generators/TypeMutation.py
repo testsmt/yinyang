@@ -49,8 +49,6 @@ class TypeMutation(Generator):
             res = self.get_replacee()
             if res:
                 t1, t2 = res
-                print("{} -> {}".format(t1,t2))
                 t1.substitute(t1, t2)
-                print(self.formula)
                 return self.formula, True      
         return None, False
