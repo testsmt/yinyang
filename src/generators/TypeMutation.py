@@ -13,23 +13,21 @@ class TypeMutation(Generator):
         self.args = args 
         self.formula = formula 
         self.unique_expr = unique_expr
-        self.av_expr = []
-        self.expr_type = []
         
     def get_replacee(self):
-        self.av_expr = []
-        self.expr_type = []
+        av_expr = []
+        expr_type = []
         for i in range(len(self.formula.assert_cmd)):
             exps, typ = typecheck_recur(self.formula.assert_cmd[i]) 
-            self.av_expr += exps
-            self.expr_type += typ
-        pool = [i for i in range(len(self.av_expr))]
+            av_expr += exps
+            expr_type += typ
+        pool = [i for i in range(len(av_expr))]
         counter = 0
         while counter <= 5:
             if pool:
                 k = random.choice(pool)
-                t1 = self.av_expr[k]
-                typ = type2num[self.expr_type[k]]
+                t1 = av_expr[k]
+                typ = type2num[expr_type[k]]
                 if self.unique_expr[typ]:
                     t2 = random.choice(self.unique_expr[typ])
                     if t1 == t2:
