@@ -181,6 +181,7 @@ class Fuzzer:
                 if not self.in_duplicate_list(stdout, stderr):
                     self.statistic.crashes += 1
                     self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
+                    continue
                 else:
                     self.statistic.duplicates += 1
                 return False # stop testing
