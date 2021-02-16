@@ -105,6 +105,7 @@ class Script:
             new_cmds.append(cmd)
         self.commands = new_cmds
 
+
     def __str__(self):
         s = ""
         for i,c in enumerate(self.commands):
@@ -426,7 +427,10 @@ class Term:
         """
         occs = []
         self.find_all(e, occs)
+        print("len(occs)",len(occs)) 
         for occ in occs:
+                print("repl",repl)
+                print("occs", occs)
                 occ._initialize(name=repl.name,
                                  type=repl.type,
                                  is_const=repl.is_const,
@@ -438,7 +442,9 @@ class Term:
                                  var_binders=repl.var_binders,
                                  let_terms=repl.let_terms,
                                  op=repl.op,
-                                 subterms=repl.subterms)
+                                 subterms=repl.subterms,
+                                 is_indexed_id=repl.is_indexed_id
+                                 )
 
 
     def __eq__(self,other):
@@ -505,3 +511,5 @@ class Term:
 
         if self.is_var:
             return self.name+":"+self.type
+        return self.__str__()+":"+self.type
+ 

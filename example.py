@@ -8,29 +8,24 @@ from src.parsing.parse import *
 from src.parsing.typechecker import *  
 from src.parsing.typechecker_recur import *
 
-formula=\
+formula1=\
 """
 (declare-fun x () Int)
 (declare-fun y () Int)
-(declare-fun z () Int)
-(assert (> (* (+ 3 x) (- y 2)) (/ 5 z)))
-(check-sat)
+(assert (= x y))
 """
 
-formula, glob = parse_str(formula,silent=False)
+formula1, _ = parse_str(formula1,silent=False)
 
-print(formula)
-print(glob)
+formula2=\
+"""
+(declare-fun x () Int)
+(declare-fun y () Int)
+(assert (= y y))
+"""
+formula2, _ = parse_str(formula1,silent=False)
 
-# # 2. Typecheck the terms inside the first assert.  
-# ctxt=Context(glob,{}) # carries locals and globals see src/ast/typechecker.py 
-# first_assert=formula.commands[3]
+# Emulation of issue 
 
-# start_time = time.time()
-# av_expr, expr_type = typecheck_recur(first_assert,ctxt)
-# print("execution time for list: {}".format(time.time()-start_time))
-# print("number of available expressions: {}".format(len(av_expr)))
-# str_expr = []
-# for i in range(len(av_expr)):
-    # str_expr.append((str(av_expr[i]),expr_type[i]))
-# print(str_expr)
+
+

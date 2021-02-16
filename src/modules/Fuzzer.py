@@ -1,5 +1,5 @@
-import random
 import shutil
+import random
 import os
 import re
 import signal
@@ -14,11 +14,12 @@ from config.config import crash_list, duplicate_list, ignore_list
 from src.utils import random_string, plain, escape, in_list
 
 from src.parsing.typechecker import typecheck
-from src.parsing.typechecker_recur import typecheck_recur
 from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
-from src.generators.TypeMutation import TypeMutation
+
+from src.generators.TypeMutation.TypeMutation import * 
+from src.generators.TypeMutation.util import get_unique_subterms 
 
 class Fuzzer:
 
@@ -100,49 +101,17 @@ class Fuzzer:
                     continue
 
                 typecheck(script, glob)
-                av_expr = []
-                expr_type = []
-                for i in range(len(script.assert_cmd)):
-                    exps, typ = typecheck_recur(script.assert_cmd[i]) 
-                    av_expr += exps
-                    expr_type += typ
-                # 0: Bool, 1: Real, 2: Int, 3: RoundingMode, 4: String, 5: Regex, 6: Unknown 
-                unique_expr = [[],[],[],[],[],[]]
-                for i in range(len(expr_type)):
-                    if expr_type[i] == BOOLEAN_TYPE:
-                        unique_expr[0].append(copy.deepcopy(av_expr[i]))
-                    elif expr_type[i] == REAL_TYPE:
-                        unique_expr[1].append(copy.deepcopy(av_expr[i]))
-                    elif expr_type[i] == INTEGER_TYPE:
-                        unique_expr[2].append(copy.deepcopy(av_expr[i]))
-                    elif expr_type[i] == ROUNDINGMODE_TYPE:
-                        unique_expr[3].append(copy.deepcopy(av_expr[i]))
-                    elif expr_type[i] == STRING_TYPE:
-                        unique_expr[4].append(copy.deepcopy(av_expr[i]))
-                    elif expr_type[i] == REGEXP_TYPE:
-                        unique_expr[5].append(copy.deepcopy(av_expr[i]))
-                for i in range(6):
-                    if unique_expr[i]:
-                        temp = []
-                        temp.append(unique_expr[i][0])
-                        for j in range(1,len(unique_expr[i])):
-                            flag = 0
-                            for exp in temp:
-                                if unique_expr[i][j] == exp:
-                                    flag = 1
-                                    pass
-                            if flag == 0:
-                                temp.append(unique_expr[i][j])                                
-                        unique_expr[i] = temp
 
+                unique_expr = get_unique_subterms(script) 
                 self.generator = TypeMutation(script, self.args, unique_expr)
 
             else: assert(False)
 
-
-            for _ in range(self.args.iterations):
+            for i in range(self.args.iterations):
                 if not self.args.quiet:
                     self.statistic.printbar()
+                print()
+                print("iteration", i)
                 formula, success = self.generator.generate()
                 if not success: continue
                 if not self.test(formula): break

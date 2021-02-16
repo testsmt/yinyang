@@ -3,22 +3,15 @@ import copy
 
 from src.generators.Generator import Generator
 from src.parsing.parse import *
-from src.parsing.typechecker_recur import *
+from src.generators.TypeMutation.util import * 
 
-type2num = {'Bool': 0, 'Real': 1, 'Int': 2, 'RoundingMode': 3, 'String': 4, 
-'RegLan': 5, 'Unknown': 6}
 
 class TypeMutation(Generator):
     def __init__(self, formula, args, unique_expr):
         self.args = args 
         self.formula = formula 
         self.unique_expr = unique_expr
-        self.av_expr = []
-        self.expr_type = []
-        for i in range(len(self.formula.assert_cmd)):
-            exps, typ = typecheck_recur(self.formula.assert_cmd[i]) 
-            self.av_expr += exps
-            self.expr_type += typ
+
         
     def get_replacee(self):
         pool = [i for i in range(len(self.av_expr))]
@@ -43,10 +36,22 @@ class TypeMutation(Generator):
         return False 
 
     def generate(self):
-        for _ in range(self.args.modulo):
-            res = self.get_replacee()
-            if res:
-                t1, t2 = res
-                t1.substitute(t1, t2)
-                return self.formula, True      
+        self.av_expr, self.expr_type = get_all_subterms(self.formula)
+        res = self.get_replacee()
+        if res:
+            t1, t2 = res
+            print("change:",t1,"->", t2)
+            print("av_expr",self.av_expr)
+            print("unique_expr", self.unique_expr)
+            if t1.type == BOOLEAN_TYPE: 
+                print("-------------HERE--------------------------------")
+            print("seed")
+            print(self.formula)
+            print("t1 before",t1)
+            t1.substitute(t1, t2)
+            print("t1 after", t2) 
+            print()
+            print("mutant")
+            print(self.formula)
+            return self.formula, True      
         return None, False
