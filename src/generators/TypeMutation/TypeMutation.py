@@ -11,7 +11,6 @@ class TypeMutation(Generator):
         self.args = args 
         self.formula = formula 
         self.unique_expr = unique_expr
-
         
     def get_replacee(self):
         pool = [i for i in range(len(self.av_expr))]
@@ -23,11 +22,11 @@ class TypeMutation(Generator):
                 typ = type2num[self.expr_type[k]]
                 if self.unique_expr[typ]:
                     t2 = random.choice(self.unique_expr[typ])
-                    if t1 != t2:
-                        return t1, t2
-                    else:
+                    if t1 == t2:
                         pool.remove(k)
                         counter += 1 
+                    else:
+                        return t1, t2
                 else:
                     pool.remove(k)
                     counter += 1
