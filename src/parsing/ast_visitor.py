@@ -119,6 +119,22 @@ class ASTVisitor(SMTLIBv2Visitor):
             for t in ctx.term():
                 terms.append(self.visitTerm(t,{}))
             return GetValue(terms)
+        
+        if ctx.cmd_push():
+            terms = []
+            for t in ctx.term():
+                terms.append(self.visitTerm(t,{}))
+            if len(terms) > 0:
+                return Push(terms)
+            return Push()
+        
+        if ctx.cmd_pop():
+            terms = []
+            for t in ctx.term():
+                terms.append(self.visitTerm(t,{}))
+            if len(terms) > 0:
+                return Pop(terms)
+            return Pop()
 
     def visitFunction_dec(self, ctx:SMTLIBv2Parser.Function_decContext):
         sorted_vars = []

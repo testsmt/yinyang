@@ -94,8 +94,18 @@ class Script:
         self.global_vars = new_global_vars
         self.vars, self.types = self._decl_commands()
 
+    '''
+    TODO: add incremental supports.
+    '''
     def merge_asserts(self):
-        terms = [cmd.term for cmd in self.commands if isinstance(cmd,Assert)]
+        terms = []
+        for cmd in self.commands:
+            if isinstance(cmd,Assert):
+                terms.append(cmd.term)
+            if isinstance(cmd,SMTLIBCommand):
+                if cmd.cmd_str == "(exit)": break
+                if cmd.cmd_str == "(reset)": break
+                if cmd.cmd_str == "(reset-assertions)": break
         conjunction = Assert(Term(op="and",subterms=terms))
         new_cmds, first_found=[],False
         for cmd in self.commands:
@@ -103,6 +113,10 @@ class Script:
                 new_cmds.append(conjunction)
                 first_found=True
             if isinstance(cmd,Assert): continue
+            if isinstance(cmd,SMTLIBCommand):
+                if cmd.cmd_str == "(exit)": break
+                if cmd.cmd_str == "(reset)": break
+                if cmd.cmd_str == "(reset-assertions)": break
             new_cmds.append(cmd)
         self.commands = new_cmds
 
@@ -312,6 +326,32 @@ class GetValue:
         for t in self.terms:
             t_str += t.__str__()
         return "(get-value ("+ t_str + "))"
+
+class Push:
+    def __init__(self,terms=None):
+        self.terms = terms
+
+    def __str__(self):
+        t_str = ""
+        if self.terms:
+            t_str=""
+            for t in self.terms:
+                t_str += " "+t.__str__()
+            return "(push" + t_str+")"
+        return "(push)"
+
+class Pop:
+    def __init__(self,terms=None):
+        self.terms = terms
+
+    def __str__(self):
+        t_str = ""
+        if self.terms:
+            t_str=""
+            for t in self.terms:
+                t_str += " "+t.__str__()
+            return "(pop" + t_str+")"
+        return "(pop)"
 
 class SMTLIBCommand:
     def __init__(self, cmd_str):
