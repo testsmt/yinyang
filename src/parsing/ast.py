@@ -104,8 +104,8 @@ class Script:
                 terms.append(cmd.term)
             if isinstance(cmd,SMTLIBCommand):
                 if cmd.cmd_str == "(exit)": break
-                if cmd.cmd_str == "(reset)": break
-                if cmd.cmd_str == "(reset-assertions)": break
+                if cmd.cmd_str == "(reset)": terms=[]
+                if cmd.cmd_str == "(reset-assertions)": terms=[]
         conjunction = Assert(Term(op="and",subterms=terms))
         new_cmds, first_found=[],False
         for cmd in self.commands:
@@ -115,8 +115,8 @@ class Script:
             if isinstance(cmd,Assert): continue
             if isinstance(cmd,SMTLIBCommand):
                 if cmd.cmd_str == "(exit)": break
-                if cmd.cmd_str == "(reset)": break
-                if cmd.cmd_str == "(reset-assertions)": break
+                if cmd.cmd_str == "(reset)": continue
+                if cmd.cmd_str == "(reset-assertions)": continue
             new_cmds.append(cmd)
         self.commands = new_cmds
 
