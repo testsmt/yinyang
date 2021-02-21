@@ -115,8 +115,10 @@ class Script:
             if isinstance(cmd,Assert): continue
             if isinstance(cmd,SMTLIBCommand):
                 if cmd.cmd_str == "(exit)": break
-                if cmd.cmd_str == "(reset)": continue
                 if cmd.cmd_str == "(reset-assertions)": continue
+                if cmd.cmd_str == "(reset)":
+                    new_cmds, first_found=[],False
+                    continue
             new_cmds.append(cmd)
         self.commands = new_cmds
 
