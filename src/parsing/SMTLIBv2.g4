@@ -60,6 +60,10 @@ QuotedSymbol:
     '|' (PrintableCharNoBackslash | WhiteSpaceChar)* '|'
     ;
 
+RegConst
+    : 
+    're.none'|'re.all'|'re.allchar'
+    ; 
 
 // Predefined Symbols
 
@@ -708,13 +712,13 @@ string
     : String
     ;
 
+reg_const
+    : RegConst
+    ;
+
 keyword
     : predefKeyword
     | Colon simpleSymbol
-    ;
-
-re_none
-    : 're.none'
     ;
 
 // S-expression
@@ -726,7 +730,7 @@ spec_constant
     | binary
     | string
     | b_value
-    | re_none
+    | reg_const
     | ParOpen GRW_Underscore ' bv' numeral numeral ParClose
     ;
 s_expr
