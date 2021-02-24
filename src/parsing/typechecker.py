@@ -713,6 +713,8 @@ def annotate(f,expr,ctxt):
     """
     t = f(expr,ctxt)
     expr.type = t
+    c = copy.deepcopy(ctxt)
+    expr.ctxt = c
     return t
 
 

@@ -16,11 +16,19 @@ class TypeMutation(Generator):
         typ_id = type2num[t.type]
         if self.unique_expr[typ_id]:
             choices = [tPrime for tPrime in self.unique_expr[typ_id] if tPrime != t]
-
             if len(choices) == 0:
                 return None
-
-            return random.choice(choices)
+            choice = random.choice(choices)
+            if choice.ctxt:
+                if not choice.ctxt.locals:
+                    pass
+                else:
+                    if t.ctxt:
+                        if t.ctxt.locals:
+                            for var in choice.ctxt.locals:
+                                if var not in t.ctxt.locals:
+                                    return None
+            return choice
         return None
 
     def generate(self):
@@ -34,7 +42,9 @@ class TypeMutation(Generator):
             t2 = self.get_replacee(t1)
             if t2:
                 success = True
-                # print(t1, "->", t2)
+                print('################')
+                print(t2, "->", t1)
+                print('################')
                 t1.substitute(t1, t2)
                 break
             all_holes.remove(t1)
