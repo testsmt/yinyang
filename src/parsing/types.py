@@ -5,6 +5,7 @@ ROUNDINGMODE_TYPE="RoundingMode"
 STRING_TYPE="String"
 REGEXP_TYPE="RegLan"
 UNKNOWN="Unknown"
+ALL="A" #Dominik: added to support opfuzz-typfuzz generalization
 
 def sort2type(sort):
     if "FloatingPoint" in sort:
@@ -15,7 +16,6 @@ def sort2type(sort):
     if "BitVec" in sort:
         bitwith = int(sort.split(" ")[2][:-1])
         return BITVECTOR_TYPE(bitwith)
-
     return sort
 
 class ARRAY_TYPE:

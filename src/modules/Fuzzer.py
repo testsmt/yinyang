@@ -21,6 +21,8 @@ from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
 from src.generators.TypeMutation.TypeMutation import *
 from src.generators.TypeMutation.util import get_unique_subterms
 
+from src.generators.Generalization.Generalization import *  
+
 TIMEOUT_LIMIT = 32
 class Fuzzer:
 
@@ -46,7 +48,7 @@ class Fuzzer:
         return True
 
     def run(self):
-        if (self.args.strategy == "opfuzz") or (self.args.strategy == "typfuzz"):
+        if self.args.strategy in ["opfuzz","typfuzz","generalization"]:
             seeds = self.args.PATH_TO_SEEDS
         elif (self.args.strategy == "fusion"):
             if len(self.args.PATH_TO_SEEDS) > 2:
@@ -108,11 +110,31 @@ class Fuzzer:
                 unique_expr = get_unique_subterms(script_cp)
                 self.generator = TypeMutation(script, self.args, unique_expr)
 
+            elif (self.args.strategy == "generalization"):
+                seed = seeds.pop(random.randrange(len(seeds)))
+
+                self.statistic.seeds += 1
+                if not self.admissible_seed_size(seed):
+                    self.statistic.ignored += 1
+                    continue
+
+                self.currentseeds = Path(seed).stem
+                script, glob = parse_file(seed,silent=True)
+
+                if not script: # i.e. parsing was unsucessful
+                    self.statistic.ignored += 1
+                    continue
+
+                typecheck(script, glob)
+                script_cp = copy.deepcopy(script)
+                unique_expr = get_unique_subterms(script_cp)
+                self.generator = Generalization(script, self.args, unique_expr)
+
             else: assert(False)
 
             for i in range(self.args.iterations):
-                if not self.args.quiet:
-                    self.statistic.printbar()
+                # if not self.args.quiet:
+                    # self.statistic.printbar()
                 # print()
                 # print("iteration", i)
                 formula, success = self.generator.generate()

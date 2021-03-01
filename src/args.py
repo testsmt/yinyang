@@ -19,7 +19,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-s","--strategy",
-    choices=["opfuzz", "fusion", "typfuzz"],
+    choices=["opfuzz", "fusion", "typfuzz", "generalization"],
     default="typfuzz",
     help="sets the mutation strategy (default: opfuzz)."
 )
@@ -78,8 +78,8 @@ parser.add_argument(
 )
 parser.add_argument(
     "-opconfig","--opconfig",
-    default=rootpath+"/config/operator_mutations.txt",
-    help="set operator mutation configuration (default: "+rootpath+"/config/operator_mutations.txt)"
+    default=rootpath+"/config/generalization.txt", 
+    help="set operator mutation configuration (default: "+rootpath+"/config/generalization.txt)"
 )
 parser.add_argument(
     "-fusionfun","--fusionfun",
@@ -116,7 +116,7 @@ else: args.SOLVER_CLIS = args.SOLVER_CLIS.split(";") + solvers
 if args.timeout <= 0: exit("Error: timeout should not be a negative number or zero.")
 
 if not args.iterations:
-    if args.strategy == "opfuzz" or args.strategy == 'typfuzz':
+    if args.strategy in ["opfuzz", "typfuzz", "generalization"]:
         args.iterations = 300
     else:
         args.iterations = 30
@@ -159,6 +159,9 @@ if (args.strategy == "fusion" and len(args.PATH_TO_SEEDS) < 2):
     exit("Error: please provide at least two seeds for fusion strategy.")
 if (args.strategy == "typfuzz" and len(args.PATH_TO_SEEDS) < 1):
     exit("Error: please provide at least one seed for typfuzz strategy.")
+if (args.strategy == "generalization" and len(args.PATH_TO_SEEDS) < 1):
+    exit("Error: please provide at least one seed for typfuzz strategy.")
+
 
 if args.optfuzz == "": args.optfuzz = None
 else: args.optfuzz = OptionGenerator(args.optfuzz)
