@@ -363,7 +363,8 @@ class Term:
                  op=None,
                  subterms=None,
                  is_indexed_id=False,
-                 ctxt=None
+                 ctxt=None,
+                 depth='0'
                  ):
 
         self._initialize(
@@ -380,7 +381,8 @@ class Term:
                 op=op,
                 subterms=subterms,
                 is_indexed_id=is_indexed_id,
-                ctxt=ctxt
+                ctxt=ctxt,
+                depth=depth
         )
     def _initialize(self, name=None,
                  type=None,
@@ -395,7 +397,8 @@ class Term:
                  op=None,
                  subterms=None,
                  is_indexed_id=None,
-                 ctxt=None):
+                 ctxt=None,
+                 depth='0'):
         self.name = name
         self.type = type
         self.is_const = is_const
@@ -410,6 +413,7 @@ class Term:
         self.subterms = subterms
         self.is_indexed_id = is_indexed_id
         self.ctxt = ctxt
+        self.depth = depth
 
     def find_all(self, e, occs):
         """
@@ -445,7 +449,8 @@ class Term:
                                  op=copy.deepcopy(repl.op),
                                  subterms=copy.deepcopy(repl.subterms),
                                  is_indexed_id=copy.deepcopy(repl.is_indexed_id),
-                                 ctxt=copy.deepcopy(repl.ctxt)
+                                 ctxt=copy.deepcopy(repl.ctxt),
+                                 depth=occ.depth
                                  )
 
 

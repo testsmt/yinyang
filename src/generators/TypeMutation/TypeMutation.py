@@ -20,15 +20,15 @@ class TypeMutation(Generator):
                 return None
             choice = random.choice(choices)
             if choice.ctxt:
-                if not choice.ctxt.locals:
-                    pass
-                else:
-                    if t.ctxt:
-                        if t.ctxt.locals:
-                            for var in choice.ctxt.locals:
-                                if var not in t.ctxt.locals:
-                                    return None
-            return choice
+                if choice.ctxt.locals:
+                    for _ in range(5):
+                        choice = random.choice(choices)
+                        if t.depth[:len(choice.depth)] == choice.depth:
+                            if not t.let_terms:
+                                return choice
+                        choices.remove(choice)
+                    return None
+                return choice
         return None
 
     def generate(self):
@@ -43,7 +43,7 @@ class TypeMutation(Generator):
             if t2:
                 success = True
                 print('################')
-                print(t2, "->", t1)
+                print(t1, "->", t2)
                 print('################')
                 t1.substitute(t1, t2)
                 break

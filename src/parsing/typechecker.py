@@ -719,6 +719,9 @@ def annotate(f,expr,ctxt):
 
 
 def typecheck_expr(expr, ctxt=Context({},{})):
+    if expr.subterms:
+        for i, t in enumerate(expr.subterms):
+            t.depth = expr.depth + str(i)
     if expr.is_const:
         return expr.type
     if expr.is_var or expr.is_indexed_id:
@@ -750,10 +753,10 @@ def typecheck_expr(expr, ctxt=Context({},{})):
             return annotate(typecheck_bv_ops,expr,ctxt)
 
         # FP infix ops
-        if TO_FP in expr.op:
+        if expr.op == TO_FP:
             return annotate(typecheck_to_fp,expr,ctxt)
 
-        if TO_FP_UNSIGNED in expr.op:
+        if expr.op == TO_FP_UNSIGNED:
             return annotate(typecheck_to_fp_unsigned,expr,ctxt)
 
         # BV infix ops
