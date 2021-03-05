@@ -363,8 +363,6 @@ class Term:
                  op=None,
                  subterms=None,
                  is_indexed_id=False,
-                 ctxt=None,
-                 depth='0'
                  ):
 
         self._initialize(
@@ -381,8 +379,6 @@ class Term:
                 op=op,
                 subterms=subterms,
                 is_indexed_id=is_indexed_id,
-                ctxt=ctxt,
-                depth=depth
         )
     def _initialize(self, name=None,
                  type=None,
@@ -396,9 +392,7 @@ class Term:
                  let_terms=None,
                  op=None,
                  subterms=None,
-                 is_indexed_id=None,
-                 ctxt=None,
-                 depth='0'):
+                 is_indexed_id=None):
         self.name = name
         self.type = type
         self.is_const = is_const
@@ -412,8 +406,6 @@ class Term:
         self.op = op
         self.subterms = subterms
         self.is_indexed_id = is_indexed_id
-        self.ctxt = ctxt
-        self.depth = depth
 
     def find_all(self, e, occs):
         """
@@ -448,9 +440,7 @@ class Term:
                                  let_terms=copy.deepcopy(repl.let_terms),
                                  op=copy.deepcopy(repl.op),
                                  subterms=copy.deepcopy(repl.subterms),
-                                 is_indexed_id=copy.deepcopy(repl.is_indexed_id),
-                                 ctxt=copy.deepcopy(repl.ctxt),
-                                 depth=occ.depth
+                                 is_indexed_id=copy.deepcopy(repl.is_indexed_id)
                                  )
 
 
@@ -469,7 +459,6 @@ class Term:
         if self.op != other.op: return False
         if self.subterms != other.subterms: return False
         if self.is_indexed_id != other.is_indexed_id: return False
-        if self.ctxt != other.ctxt: return False
         return True
 
     def __get_subterm_str__(self):

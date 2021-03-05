@@ -713,15 +713,10 @@ def annotate(f,expr,ctxt):
     """
     t = f(expr,ctxt)
     expr.type = t
-    c = copy.deepcopy(ctxt)
-    expr.ctxt = c
     return t
 
 
 def typecheck_expr(expr, ctxt=Context({},{})):
-    if expr.subterms:
-        for i, t in enumerate(expr.subterms):
-            t.depth = expr.depth + str(i)
     if expr.is_const:
         return expr.type
     if expr.is_var or expr.is_indexed_id:
@@ -753,10 +748,10 @@ def typecheck_expr(expr, ctxt=Context({},{})):
             return annotate(typecheck_bv_ops,expr,ctxt)
 
         # FP infix ops
-        if expr.op == TO_FP:
+        if TO_FP in expr.op:
             return annotate(typecheck_to_fp,expr,ctxt)
 
-        if expr.op == TO_FP_UNSIGNED:
+        if TO_FP_UNSIGNED in expr.op:
             return annotate(typecheck_to_fp_unsigned,expr,ctxt)
 
         # BV infix ops
