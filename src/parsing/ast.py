@@ -459,7 +459,7 @@ class Term:
                                  op=copy.deepcopy(repl.op),
                                  subterms=copy.deepcopy(repl.subterms),
                                  is_indexed_id=copy.deepcopy(repl.is_indexed_id),
-                                 parent=parent,
+                                 parent=occ.parent,
                                  )
 
 

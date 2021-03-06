@@ -15,12 +15,14 @@ class TypeMutation(Generator):
     def get_replacee(self,t):
         typ_id = type2num[t.type]
         if self.unique_expr[typ_id]:
-            choices = [tPrime for tPrime in self.unique_expr[typ_id] if tPrime != t]
-
-            if len(choices) == 0:
-                return None
-
-            return random.choice(choices)
+            for _ in range(5):
+                choices = [tPrime for tPrime in self.unique_expr[typ_id] if tPrime != t]
+                if len(choices) == 0:
+                    return None
+                choice = random.choice(choices)
+                if local_compatible(t, choice):
+                    return choice
+                choices.remove(choice)
         return None
 
     def generate(self):
@@ -34,10 +36,12 @@ class TypeMutation(Generator):
             t2 = self.get_replacee(t1)
             if t2:
                 success = True
+                # print("############################")
                 # print(t1, "->", t2)
+                # print("############################")
                 t1.substitute(t1, t2)
                 break
             all_holes.remove(t1)
-        # print()
+        # print("mutated formula")
         # print(self.formula)
         return self.formula, success
