@@ -93,20 +93,21 @@ def get_unique_subterms(formula):
             unique_expr[i] = temp
     return unique_expr
 
-def local_defs(term, local = []):
+def local_defs(term, local):
     term = term.parent
     if term:
         if term.quantifier:
             for q_var in term.quantified_vars[0]:
-                local.append(q_var)
+                local.add(q_var)
         if term.let_terms:
-            local = local + term.var_binders
+            for var in term.var_binders:
+                local.add(var)
         if term.parent:
             local_defs(term, local)
-    return set(local)       
+    return local     
 
 def local_compatible(t1, t2):
-    loc_t1 = local_defs(t1)
-    loc_t2 = local_defs(t2)
+    loc_t1 = local_defs(t1, set())
+    loc_t2 = local_defs(t2, set())
     a = loc_t2.issubset(loc_t1)
     return loc_t2.issubset(loc_t1)

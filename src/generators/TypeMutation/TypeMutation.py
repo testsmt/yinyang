@@ -15,14 +15,10 @@ class TypeMutation(Generator):
     def get_replacee(self,t):
         typ_id = type2num[t.type]
         if self.unique_expr[typ_id]:
-            for _ in range(5):
-                choices = [tPrime for tPrime in self.unique_expr[typ_id] if tPrime != t]
-                if len(choices) == 0:
-                    return None
-                choice = random.choice(choices)
-                if local_compatible(t, choice):
-                    return choice
-                choices.remove(choice)
+            choices = [tPrime for tPrime in self.unique_expr[typ_id] if tPrime != t and local_compatible(t, tPrime)]
+            if len(choices) == 0:
+                return None
+            return random.choice(choices)
         return None
 
     def generate(self):
