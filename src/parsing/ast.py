@@ -40,6 +40,9 @@ class Script:
                 for let_var in e.var_binders:
                      if var == let_var:
                         global_vars.pop(var)
+            for let_term in e.let_terms:
+                self._get_free_var_occs(let_term, global_vars)
+            
 
         if e.is_var:
             if e.name in global_vars:
@@ -64,15 +67,15 @@ class Script:
     def _prefix_free_vars(self, prefix, e):
         if isinstance(e,str): return
         if e.is_const: return
-        if e.is_var and e.type :
-            if e.name in self.global_vars:
+        if e.is_var and e.type:
+            if e in self.free_var_occs:
                 e.name = prefix+e.name
             return
 
         if e.var_binders:
             for i,var in enumerate(e.var_binders):
                 self._prefix_free_vars(prefix,e.let_terms[i])
-
+        
         for s in e.subterms:
             self._prefix_free_vars(prefix,s)
 
@@ -91,8 +94,18 @@ class Script:
         self.global_vars = new_global_vars
         self.vars, self.types = self._decl_commands()
 
+    '''
+    TODO: add incremental supports.
+    '''
     def merge_asserts(self):
-        terms = [cmd.term for cmd in self.commands if isinstance(cmd,Assert)]
+        terms = []
+        for cmd in self.commands:
+            if isinstance(cmd,Assert):
+                terms.append(cmd.term)
+            if isinstance(cmd,SMTLIBCommand):
+                if cmd.cmd_str == "(exit)": break
+                if cmd.cmd_str == "(reset)": terms=[]
+                if cmd.cmd_str == "(reset-assertions)": terms=[]
         conjunction = Assert(Term(op="and",subterms=terms))
         new_cmds, first_found=[],False
         for cmd in self.commands:
@@ -100,6 +113,12 @@ class Script:
                 new_cmds.append(conjunction)
                 first_found=True
             if isinstance(cmd,Assert): continue
+            if isinstance(cmd,SMTLIBCommand):
+                if cmd.cmd_str == "(exit)": break
+                if cmd.cmd_str == "(reset-assertions)": continue
+                if cmd.cmd_str == "(reset)":
+                    new_cmds, first_found=[],False
+                    continue
             new_cmds.append(cmd)
         self.commands = new_cmds
 
@@ -310,6 +329,32 @@ class GetValue:
             t_str += t.__str__()
         return "(get-value ("+ t_str + "))"
 
+class Push:
+    def __init__(self,terms=None):
+        self.terms = terms
+
+    def __str__(self):
+        t_str = ""
+        if self.terms:
+            t_str=""
+            for t in self.terms:
+                t_str += " "+t.__str__()
+            return "(push" + t_str+")"
+        return "(push)"
+
+class Pop:
+    def __init__(self,terms=None):
+        self.terms = terms
+
+    def __str__(self):
+        t_str = ""
+        if self.terms:
+            t_str=""
+            for t in self.terms:
+                t_str += " "+t.__str__()
+            return "(pop" + t_str+")"
+        return "(pop)"
+
 class SMTLIBCommand:
     def __init__(self, cmd_str):
         self.cmd_str = cmd_str
@@ -409,7 +454,7 @@ class Term:
         Find all expressions e in self and add to list occs.
         """
         if self == e:
-            return occs.append(e)
+            return occs.append(self)
         if self.subterms:
             for sub in self.subterms:
                 if sub == e:

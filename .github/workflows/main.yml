@@ -33,6 +33,9 @@ jobs:
       run: |
         python tests/integration_tests/opfuzz/sanity_opfuzz.py 
         python tests/integration_tests/misc/usage.py
+    - name: semanticfusion
+      run: |
+        python tests/integration_tests/semanticfusion/sanity_semanticfusion.py
 
  
 
