@@ -79,11 +79,11 @@ class Generalization(Generator):
         candidate_ops = self.get_candidate_ops(term)
         op = random.choice(candidate_ops)
         args = [] 
-        # TODO: arity  
         if op.name == "id":
             typ_id = type2num[term.type]
             if self.unique_expr[typ_id]:
-                choices = [termPrime for termPrime in self.unique_expr[typ_id] if termPrime != term]
+                choices = [termPrime for termPrime in self.unique_expr[typ_id] if\
+                           termPrime != term and local_compatible(term, termPrime)]
 
             if len(choices) == 0:
                 return None
