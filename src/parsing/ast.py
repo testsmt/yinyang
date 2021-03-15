@@ -327,6 +327,8 @@ class SMTLIBCommand:
     def __hash__(self):
         return self.cmd_str.__hash__()
 
+
+
 def Var(name,type, is_indexed_id=False):
     return Term(name=name,type=type, is_var=True, is_indexed_id=is_indexed_id)
 
@@ -348,6 +350,8 @@ def LetBinding(var_binders, let_terms, subterms):
 def LabeledTerm(label, subterms):
     return Term(label=label, subterms=subterms)
 
+
+
 class Term:
     def __init__(self,
                  name=None,
@@ -363,6 +367,7 @@ class Term:
                  op=None,
                  subterms=None,
                  is_indexed_id=False,
+                 parent=None
                  ):
 
         self._initialize(
@@ -379,7 +384,10 @@ class Term:
                 op=op,
                 subterms=subterms,
                 is_indexed_id=is_indexed_id,
+                parent=parent
         )
+        self._add_parent_pointer()
+
     def _initialize(self, name=None,
                  type=None,
                  is_const=None,
@@ -392,7 +400,8 @@ class Term:
                  let_terms=None,
                  op=None,
                  subterms=None,
-                 is_indexed_id=None):
+                 is_indexed_id=None,
+                 parent=None):
         self.name = name
         self.type = type
         self.is_const = is_const
@@ -406,6 +415,15 @@ class Term:
         self.op = op
         self.subterms = subterms
         self.is_indexed_id = is_indexed_id
+        self.parent = parent
+
+    def _add_parent_pointer(self):
+        """
+        Adds pointer from each element in subterm to expr
+        """
+        if self.subterms:
+            for term in self.subterms: 
+                term.parent = self 
 
     def find_all(self, e, occs):
         """
@@ -440,7 +458,8 @@ class Term:
                                  let_terms=copy.deepcopy(repl.let_terms),
                                  op=copy.deepcopy(repl.op),
                                  subterms=copy.deepcopy(repl.subterms),
-                                 is_indexed_id=copy.deepcopy(repl.is_indexed_id)
+                                 is_indexed_id=copy.deepcopy(repl.is_indexed_id),
+                                 parent=occ.parent,
                                  )
 
 
