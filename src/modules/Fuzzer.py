@@ -93,10 +93,11 @@ class Fuzzer:
             for _ in range(self.args.iterations):
                 if not self.args.quiet:
                     self.statistic.printbar()
-                formula, success = self.generator.generate()
+                formula, success, skip_seed = self.generator.generate()
                 if not success: continue
                 if not self.test(formula): break
                 self.statistic.mutants += 1
+                if skip_seed: break
 
 
     def create_testbook(self, formula):

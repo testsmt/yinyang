@@ -14,7 +14,9 @@ class SemanticFusion(Generator):
         self.config_file = self.args.fusionfun
         self.oracle = self.args.oracle
         self.templates = {}
+        # print("Parsing mrs...",flush=True)
         self._parse_mrs()
+        # print("Parsing mrs...[DONE]",flush=True)
 
         if not self.oracle:
             print("ERROR: No oracle {sat,unsat} specified")
@@ -85,21 +87,18 @@ class SemanticFusion(Generator):
 
         return formula
     
-#     def _add_seedinfo(self,formula):
-        # formula.commands = [Comment(self.seed2)] + formula.commands
-        # formula.commands = [Comment(self.seed1)] + formula.commands
-        # return formula
-
 
     def generate(self):
-        is_fusion = True
+        skip_seed = True
         if self.formula1.free_var_occs == [] and self.formula2.free_var_occs == []:
-            is_fusion = False
+            skip_seed = True 
+
         formula1, formula2 = copy.deepcopy(self.formula1), copy.deepcopy(self.formula2)
         formula1.prefix_vars("scr1_")
         formula2.prefix_vars("scr2_")
+
         triplets = random_var_triplets(formula1.global_vars, formula2.global_vars, self.templates)
         if not triplets:
             is_fusion = False
         fused = self.fuse(formula1, formula2, triplets)
-        return fused, is_fusion
+        return fused, True, skip_seed 

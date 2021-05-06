@@ -76,4 +76,4 @@ class TypeAwareOpMutation(Generator):
                     success = True
                     op_occ.op = replacee
                     break
-        return self.formula, success 
+        return self.formula, success, False
