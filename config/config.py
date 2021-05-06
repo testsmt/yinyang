@@ -1,5 +1,8 @@
+solvers = [
+    "cvc5 --check-models --strings-exp",
+    "z3release model.validate=true"
+]
 
-solvers = []
 crash_list = [
     "Exception",
     "lang.AssertionError",
