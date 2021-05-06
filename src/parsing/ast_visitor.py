@@ -119,6 +119,22 @@ class ASTVisitor(SMTLIBv2Visitor):
             for t in ctx.term():
                 terms.append(self.visitTerm(t,{}))
             return GetValue(terms)
+        
+        if ctx.cmd_push():
+            terms = []
+            for t in ctx.term():
+                terms.append(self.visitTerm(t,{}))
+            if len(terms) > 0:
+                return Push(terms)
+            return Push()
+        
+        if ctx.cmd_pop():
+            terms = []
+            for t in ctx.term():
+                terms.append(self.visitTerm(t,{}))
+            if len(terms) > 0:
+                return Pop(terms)
+            return Pop()
 
     def visitFunction_dec(self, ctx:SMTLIBv2Parser.Function_decContext):
         sorted_vars = []
@@ -173,6 +189,7 @@ class ASTVisitor(SMTLIBv2Visitor):
         for t in ctx.term():
             subterms.append(self.visitTerm(t, local_vars))
         return Quantifier(quant, (qvars, qtypes), subterms)
+    
     """
     spec_constant
     : numeral
@@ -184,12 +201,11 @@ class ASTVisitor(SMTLIBv2Visitor):
     | ParOpen GRW_Underscore ' bv' numeral numeral  ParClose
     ;
     """
-
     def visitSpec_constant(self, ctx:SMTLIBv2Parser.Spec_constantContext):
         if ctx.ParOpen():
             X,n = ctx.numeral()[0].getText(), ctx.numeral()[1].getText()
             return "(_ bv"+X+" "+n+")"
-        return ctx.getText()
+        return ctx.getText().encode('utf-8').decode("utf-8")
 
     """
         term
