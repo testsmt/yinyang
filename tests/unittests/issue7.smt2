@@ -1,0 +1,5 @@
+(define-const a String "\x0a")                                                     
+(define-const c String "\n")                                                       
+(simplify (= a b))                                                                 
+(simplify (str.++ a b))
+(check-sat)
