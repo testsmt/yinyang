@@ -17,7 +17,7 @@ def is_sound(res1, res2):
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
     output = subprocess.getoutput(cmd)
-    print(output)
+    print(output,flush=True)
     crash_issues = None
     soundness_issues=None
     duplicate_issues=None
@@ -311,11 +311,11 @@ if __name__ == "__main__":
     create_mocksmt2(FN)
     OPTS='-i 1 -m 1'
     test_crash_list()
-    test_ignore_list()
-    test_segfault()
-    test_timeout()
-    test_empty_output()
-    test_get_value()
-    test_unsoundness()
-    test_soundness()
-    test_duplicate_list()
+    # test_ignore_list()
+    # test_segfault()
+    # test_timeout()
+    # test_empty_output()
+    # test_get_value()
+    # test_unsoundness()
+    # test_soundness()
+    # test_duplicate_list()

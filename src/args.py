@@ -110,8 +110,9 @@ args = parser.parse_args()
 
 # Parse CLI
 if args.SOLVER_CLIS == "": 
-    if len(solvers) == 0:
-        exit("Error: no solver specified. Either change the commandline or edit config/config.py.")
+    # if len(solvers) == 0:
+        # print("well")
+        # exit("Error: no solver specified. Either change the commandline or edit config/config.py.")
     args.SOLVER_CLIS = solvers
 else: args.SOLVER_CLIS = args.SOLVER_CLIS.split(";") + solvers
 
