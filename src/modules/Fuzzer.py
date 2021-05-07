@@ -90,7 +90,7 @@ class Fuzzer:
             else: assert(False)
 
 
-            for i in range(self.args.iterations):
+            for _ in range(self.args.iterations):
                 if not self.args.quiet:
                     self.statistic.printbar()
                 formula, success, skip_seed = self.generator.generate()
@@ -177,7 +177,6 @@ class Fuzzer:
                 if not self.in_duplicate_list(stdout, stderr):
                     self.statistic.crashes += 1
                     self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
-                    continue
                 else:
                     self.statistic.duplicates += 1
                 return False # stop testing
