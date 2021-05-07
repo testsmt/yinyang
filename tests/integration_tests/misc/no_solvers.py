@@ -6,7 +6,6 @@ python=sys.executable
 
 def call_fuzzer(fn):
     cmd = python+' yinyang.py "" ' + fn 
-    print(cmd)
     output = subprocess.getoutput(cmd)
     return output
 
