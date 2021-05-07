@@ -17,7 +17,7 @@ def is_sound(res1, res2):
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
     output = subprocess.getoutput(cmd)
-    print(output)
+    print(output,flush=True)
     crash_issues = None
     soundness_issues=None
     duplicate_issues=None
