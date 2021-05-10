@@ -601,7 +601,6 @@ generalReservedWord
     | GRW_Binary
     | GRW_Decimal
     | GRW_Exists
-    /*| GRW_Lambda*/
     | GRW_Hexadecimal
     | GRW_Forall
     | GRW_Let
@@ -922,9 +921,6 @@ cmd_checkSatAssuming
 cmd_checkSatUsing
     : CMD_CheckSatUsing
     ;
-/*cmd_apply*/
-    /*: CMD_Apply*/
-    /*;*/
 
 cmd_minimize
     : CMD_Minimize
@@ -1103,9 +1099,6 @@ par_or_else
 par_or
     : TAC_ParOr
     ;
-/*repeat*/
-    /*: TAC_Repeat*/
-    /*;*/
 
 tryFor
     : TAC_TryFor

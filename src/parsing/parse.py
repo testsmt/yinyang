@@ -18,25 +18,25 @@ class ErrorListener(ErrorListener):
 
 def prepare_seed(formula):
     """
-    Prepare seed script for fuzzing. Remove set-logic, set-info and output-producing 
-    commands. Set-logic and set-info may raise warning messages from SMT solvers. 
-    Output-producing commands may cause errors, e.g., get-model, get-proof etc.   
-    Errors such as 
+    Prepare seed script for fuzzing. Remove set-logic, set-info and output-producing
+    commands. Set-logic and set-info may raise warning messages from SMT solvers.
+    Output-producing commands may cause errors, e.g., get-model, get-proof etc.
+    Errors such as
 
-                (error "line X column Y: msg") 
+                (error "line X column Y: msg")
 
-    are ignored to avoid false positives in the bug detection logic. As the bug  
-    detection logic is based on string matching such errors may lead to soundness   
-    issues being ignored, e.g. if the error occurred after a faulty check-sat result. 
-    Hence, we remove all output-producing SMT-LIB commands from the script.  
-    """ 
+    are ignored to avoid false positives in the bug detection logic. As the bug
+    detection logic is based on string matching such errors may lead to soundness
+    issues being ignored, e.g. if the error occurred after a faulty check-sat result.
+    Hence, we remove all output-producing SMT-LIB commands from the script.
+    """
     new_cmds = []
     for cmd in formula.commands:
         if "set-info" in cmd.__str__():continue
         if "set-logic" in cmd.__str__(): continue
-        
-        # Ignore output-producing commands to make sure the detection logic won't be mislead  
-        # by the other SMT-LIB commands which produce output.   
+
+        # Ignore output-producing commands to make sure the detection logic won't be mislead
+        # by the other SMT-LIB commands which produce output.
         #
         if "get-model" in cmd.__str__(): continue
         if "get-assertions" in cmd.__str__(): continue
@@ -66,8 +66,8 @@ def generate_ast(stream, prep_seed=True):
     # empty file or parser preceding parser errror
     if len(formula.commands) == 0:
         return None
-    
-    return prepare_seed(formula) if prep_seed else formula 
+
+    return prepare_seed(formula) if prep_seed else formula
 
 
 def parse_filestream(fn,timeout_limit):
