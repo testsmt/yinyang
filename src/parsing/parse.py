@@ -5,6 +5,7 @@ import traceback
 
 from antlr4 import *
 from antlr4.error.ErrorListener import ErrorListener
+from antlr4.error.ErrorStrategy import BailErrorStrategy
 
 from src.parsing.timeout_decorator import *
 
@@ -59,6 +60,7 @@ def generate_ast(stream, prep_seed=True):
     stream = CommonTokenStream(lexer)
     parser = SMTLIBv2Parser(stream)
     parser.removeErrorListeners()
+    parser._errHandler = BailErrorStrategy()
     tree = parser.start()
     vis = ASTVisitor()
     formula = vis.visitStart(tree)
