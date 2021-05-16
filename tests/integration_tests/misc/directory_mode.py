@@ -46,7 +46,7 @@ z3 = get_z3()
 first_config=z3+" model_validate=true"
 second_config=cvc4+" --check-models --produce-models --incremental -q"
 mock_benchmarks=str(os.path.dirname(os.path.realpath(__file__)))+"/mock_benchmarks"
-generated_seeds, used_seeds, ignored_issues, cmd = run_opfuzz(first_config, second_config, mock_benchmarks ,"",TIME_LIMIT)
+generated_seeds, used_seeds, ignored_issues, cmd = run_opfuzz(first_config, second_config, mock_benchmarks ,"-m 1",TIME_LIMIT)
 if not (generated_seeds == 300 and used_seeds == 3 and ignored_issues == 2):
     print("An error occurred.", flush=True)
     print("cmd", cmd)
