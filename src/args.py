@@ -99,7 +99,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-fl", "--file-size-limit",
-    default=20000,
+    default=100000,
     type=int,
     help="file size limit on seed formula in bytes"
 )

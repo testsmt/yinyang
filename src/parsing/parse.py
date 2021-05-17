@@ -60,7 +60,7 @@ def generate_ast(stream, prep_seed=True):
     stream = CommonTokenStream(lexer)
     parser = SMTLIBv2Parser(stream)
     parser.removeErrorListeners()
-    parser._errHandler = BailErrorStrategy()
+    # parser._errHandler = BailErrorStrategy()
     tree = parser.start()
     vis = ASTVisitor()
     formula = vis.visitStart(tree)
