@@ -109,7 +109,10 @@ args = parser.parse_args()
 # pre-processing
 
 # Parse CLI
-if args.SOLVER_CLIS == "": args.SOLVER_CLIS = solvers
+if args.SOLVER_CLIS == "": 
+    if len(solvers) == 0:
+         exit("Error: no solver specified. Either change the commandline or edit config/config.py.")
+    args.SOLVER_CLIS = solvers
 else: args.SOLVER_CLIS = args.SOLVER_CLIS.split(";") + solvers
 
 if args.timeout <= 0: exit("Error: timeout should not be a negative number or zero.")
