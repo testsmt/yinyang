@@ -1,4 +1,4 @@
-# Generated from SMTLIBv2.g4 by ANTLR 4.8
+# Generated from SMTLIBv2.g4 by ANTLR 4.9.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .SMTLIBv2Parser import SMTLIBv2Parser
@@ -125,21 +125,21 @@ class SMTLIBv2Listener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by SMTLIBv2Parser#reg_const.
+    def enterReg_const(self, ctx:SMTLIBv2Parser.Reg_constContext):
+        pass
+
+    # Exit a parse tree produced by SMTLIBv2Parser#reg_const.
+    def exitReg_const(self, ctx:SMTLIBv2Parser.Reg_constContext):
+        pass
+
+
     # Enter a parse tree produced by SMTLIBv2Parser#keyword.
     def enterKeyword(self, ctx:SMTLIBv2Parser.KeywordContext):
         pass
 
     # Exit a parse tree produced by SMTLIBv2Parser#keyword.
     def exitKeyword(self, ctx:SMTLIBv2Parser.KeywordContext):
-        pass
-
-
-    # Enter a parse tree produced by SMTLIBv2Parser#re_none.
-    def enterRe_none(self, ctx:SMTLIBv2Parser.Re_noneContext):
-        pass
-
-    # Exit a parse tree produced by SMTLIBv2Parser#re_none.
-    def exitRe_none(self, ctx:SMTLIBv2Parser.Re_noneContext):
         pass
 
 
