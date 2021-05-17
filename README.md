@@ -57,4 +57,4 @@ Additional Ressources
 ----------
 - [Citing yinyang](https://yinyang.readthedocs.io/en/latest/building_on.html#citing-yinyang)
 - [Project website](https://testsmt.github.io/) with bug statistics, talk videos, etc.
-- [Google OSS Bonus](https://opensource.googleblog.com/2021/04/announcing-first-group-of-google-open-source-peer-bonus-winners.html#:~:text=The%20Google%20Open%20Source%20Peer,exceptional%20contributions%20to%20open%20source.) 
+- [Google Open Source Peer Bonus](https://opensource.googleblog.com/2021/04/announcing-first-group-of-google-open-source-peer-bonus-winners.html#:~:text=The%20Google%20Open%20Source%20Peer,exceptional%20contributions%20to%20open%20source.) 
