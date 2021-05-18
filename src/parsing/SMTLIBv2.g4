@@ -791,7 +791,8 @@ match_case
 
 term
     : spec_constant
-    |qual_identifier
+    | ParOpen GRW_Underscore symbol numeral ParClose
+    | qual_identifier
     | ParOpen qual_identifier term+ ParClose
     | ParOpen ParOpen GRW_Underscore qual_identifier term+ ParClose ParClose
     | ParOpen GRW_Let ParOpen var_binding+ ParClose term ParClose
@@ -854,7 +855,6 @@ logic_attribue
 logic
     : ParOpen PS_Logic symbol logic_attribue+ ParClose
     ;
-
 
 // Scripts
 

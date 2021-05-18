@@ -53,14 +53,12 @@ class ASTVisitor(SMTLIBv2Visitor):
             decl = DeclareConst(self.visitSymbol(ctx.symbol()[0]), self.visitSort(ctx.sort()[0]))
             return decl
         if ctx.cmd_declareFun():
-            print("Debug 1",flush=True)
             input_sorts = []
             for sort in ctx.sort()[:-1]:
                 input_sorts.append(self.visitSort(sort))
             output_sort = self.visitSort(ctx.sort()[-1])
             input_sorts = " ".join(input_sorts)
             identifier = self.visitSymbol(ctx.symbol()[0])
-            print("Debug 2 id=", identifier, flush=True)
             self.add_to_globals(identifier, input_sorts, output_sort)
             return DeclareFun(identifier, input_sorts, output_sort)
 
@@ -200,7 +198,6 @@ class ASTVisitor(SMTLIBv2Visitor):
     | binary
     | string
     | b_value
-    | ParOpen GRW_Underscore ' bv' numeral numeral  ParClose
     ;
     """
     def visitSpec_constant(self, ctx:SMTLIBv2Parser.Spec_constantContext):
@@ -211,25 +208,32 @@ class ASTVisitor(SMTLIBv2Visitor):
 
     """
         term
-            : spec_constant
-            | qual_identifier
-            | ParOpen qual_identifier term+ ParClose
-            | ParOpen GRW_Let ParOpen var_binding+ ParClose term ParClose
-            | ParOpen GRW_Forall ParOpen sorted_var+ ParClose term ParClose
-            | ParOpen GRW_Exists ParOpen sorted_var+ ParClose term ParClose
-            | ParOpen GRW_Match term ParOpen match_case+ ParClose ParClose
-            | ParOpen GRW_Exclamation term attribute+ ParClose
-            ;
-        """
+        : spec_constant
+        | qual_identifier
+        | ParOpen qual_identifier term+ ParClose
+        | ParOpen GRW_Underscore ' bv' numeral numeral ParClose
+        | ParOpen ParOpen GRW_Underscore qual_identifier term+ ParClose ParClose
+        | ParOpen GRW_Let ParOpen var_binding+ ParClose term ParClose
+        | ParOpen GRW_Forall ParOpen sorted_var+ ParClose term ParClose
+        | ParOpen GRW_Exists ParOpen sorted_var+ ParClose term ParClose
+        | ParOpen GRW_Match term ParOpen match_case+ ParClose ParClose
+        | ParOpen GRW_Exclamation term attribute+ ParClose
+        ;
+
+    """
     def visitTerm(self, ctx:SMTLIBv2Parser.TermContext, local_vars):
         if ctx.ParOpen() and ctx.GRW_Exclamation() and ctx.term()\
            and len(ctx.attribute()) >= 1 and ctx.ParClose():
             term,label = self.visitTerm(ctx.term()[0]),self.visitAttribute(ctx.attribute()[0])
             return LabeledTerm(label, [term])
 
-        if len(ctx.ParOpen()) == 2 and ctx.GRW_Match() and ctx.term() and len(ctx.match_case()) >= 1 and\
-            len(ctx.ParClose()) == 2:
+        if len(ctx.ParOpen()) == 2 and ctx.GRW_Match() and ctx.term() and len(ctx.match_case()) >= 1:
             raise ASTException("ParOpen GRW_Match term ParOpen match_case+ ParClose ParClose")
+
+        if len(ctx.ParOpen()) == 1 and ctx.GRW_Underscore() and ctx.numeral():
+            bitwidth = ctx.symbol().getText().strip("bv")
+            value = ctx.numeral().getText()
+            return Const(name="(_ bv"+bitwidth+" "+ value+")")
 
         if len(ctx.ParOpen()) == 2 and ctx.GRW_Exists() and len(ctx.sorted_var()) >= 1 and\
             len(ctx.ParClose()) == 2 and ctx.term():
@@ -299,13 +303,11 @@ class ASTVisitor(SMTLIBv2Visitor):
     ;
     """
     def visitSymbol(self, ctx:SMTLIBv2Parser.SymbolContext):
-        print("DEBUG 4",ctx.getText())
         if ctx.simpleSymbol():
             return self.visitSimpleSymbol(ctx.simpleSymbol())
 
         if ctx.quotedSymbol():
             return self.visitQuotedSymbol(ctx.quotedSymbol())
-        print("no case applies", flush=True)
 
     """
     identifier
