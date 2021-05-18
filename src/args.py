@@ -76,19 +76,10 @@ parser.add_argument(
          Note, if you run yinyang with several processes in parallel, each\
          instance should have its own scratch folder. (default:"+rootpath+"/scratch)"
 )
-# parser.add_argument(
-    # "-opconfig","--opconfig",
-    # default=rootpath+"/config/generalization.txt",
-    # help="set operator mutation configuration (default: "+rootpath+"/config/generalization.txt)"
-# )
-# parser.add_argument(
-    # "-fusionfun","--fusionfun",
-    # default=rootpath+"/config/fusion_functions.txt",
-    # help="set fusion function configuration (default: "+rootpath+"/config/fusion_functions.txt)"
-# )
+
 parser.add_argument(
     "-c","--config-file",
-    help="Config-file for the mutation strategy."
+    help="Config-file for the chosen mutation strategy."
 )
 
 parser.add_argument(
@@ -179,4 +170,4 @@ if not args.config_file:
     elif args.strategy == "fusion":
         args.config_file = rootpath+"/config/fusion_functions.txt"
 
-
+print(args.config_file)

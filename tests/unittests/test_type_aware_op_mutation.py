@@ -29,28 +29,28 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
             f.write(ops)
 
         formula = """
-        (declare-const x Int)                                                      
-        (declare-const y Int)                                                     
+        (declare-const x Int)
+        (declare-const y Int)
         (declare-const w Bool)
-        (assert (= x (- x)))                                                       
-        (assert (distinct w (= x (- y))))                                          
-        (assert w)                                                                 
-        (check-sat) 
+        (assert (= x (- x)))
+        (assert (distinct w (= x (- y))))
+        (assert w)
+        (check-sat)
         """
-        with open(formulafile,"w") as f: 
+        with open(formulafile,"w") as f:
             f.write(formula)
         script = parse_str(formula)
         args = Mockargs()
         print(formulafile)
         args.name = formulafile.strip(".smt2")
-        args.opconfig = configfile
+        args.config_file = configfile
         args.modulo = 2
         script, _= parse_file(formulafile,silent=True)
         gen = TypeAwareOpMutation(script,args)
         gen.generate()
         os.system("rm -rf "+configfile+ " "+ formulafile)
 
-        
+
 
 if __name__ == '__main__':
     #TypeAwareOpMutationTestCase.test_ta()

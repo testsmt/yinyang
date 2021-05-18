@@ -20,7 +20,7 @@ class SemanticFusion(Generator):
             exit(1)
 
     def _parse_mrs(self):
-        with open(self.config_file) as f:
+        with open(self.args.config_file) as f:
             lines = f.readlines()
         started=False
         curr = []

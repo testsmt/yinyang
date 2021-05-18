@@ -3,10 +3,10 @@ import os
 import sys
 sys.path.append("../../")
 
-from src.parsing.ast import * 
+from src.parsing.ast import *
 from src.parsing.parse import *
 from src.generators.SemanticFusion.SemanticFusion import *
-from src.generators.SemanticFusion.VariableFusion import * 
+from src.generators.SemanticFusion.VariableFusion import *
 
 class Mockargs:
     oracle = ""
@@ -45,7 +45,7 @@ class SemanticFusionTestCase(unittest.TestCase):
             f2.write(formula2)
         args = Mockargs()
         args.oracle = "sat"
-        args.fusionfun = "./config/fusion_functions.txt"
+        args.config_file = "./config/fusion_functions.txt"
         script1, _ = parse_file(fn1,silent=True)
         script2, _ = parse_file(fn2,silent=True)
         sf_sat = SemanticFusion(script1, script2, args)
