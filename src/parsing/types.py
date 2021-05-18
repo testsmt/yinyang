@@ -5,7 +5,7 @@ ROUNDINGMODE_TYPE="RoundingMode"
 STRING_TYPE="String"
 REGEXP_TYPE="RegLan"
 UNKNOWN="Unknown"
-ALL="A" #Dominik: added to support opfuzz-typfuzz generalization
+ALL="A"
 
 TYPES = [
     BOOLEAN_TYPE,

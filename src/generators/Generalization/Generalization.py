@@ -1,7 +1,7 @@
 import random
 
 from src.generators.Generator import Generator
-from src.generators.Generalization.Operator import * 
+from src.generators.Generalization.Operator import *
 from src.generators.TypeMutation.util import *
 from src.parsing.parse import *
 
@@ -15,36 +15,36 @@ class Generalization(Generator):
         self.parse_config_file()
 
     def parse_config_file(self):
-        with open(self.args.opconfig) as f:
+        with open(self.args.config_file) as f:
             lines = f.readlines()
 
-        for line in lines: 
-            line = line.strip("\n") # remove linebreaks 
+        for line in lines:
+            line = line.strip("\n") # remove linebreaks
             if ";" in line: # ignore comments
                 line = line[:line.index(";")]
             if line.strip() == "": # skip empty lines
                 continue
             line = line.strip() # remove trailing whitespaces
             tokens = line.split(" ")
-            
-            if not "par" in tokens[0]: 
+
+            if not "par" in tokens[0]:
                 op_name, type_strings, attributes = handle_non_parametric_op(tokens)
                 op = Operator(op_name,type_strings,attributes)
             else:
                 op_name, type_strings, attributes, parameters = handle_parametric_op(tokens)
                 op = Operator(op_name,type_strings,attributes,parameters)
-            self.operators.append(op) 
+            self.operators.append(op)
 
     def has_types(self,types):
         """
-        types: list of types (possibly redundant)  
+        types: list of types (possibly redundant)
 
-        :returns: True if the seed formula supports the types  
+        :returns: True if the seed formula supports the types
         """
         for t in set(types):
             if t == ALL: continue
             type_id = type2num[t]
-            if len(self.unique_expr[type_id]) == 0: 
+            if len(self.unique_expr[type_id]) == 0:
                 return False
         return True
 
@@ -52,16 +52,16 @@ class Generalization(Generator):
 
     def get_candidate_ops(self,term):
         """
-        term: term object 
+        term: term object
 
         An operator op is a candidate (op arg1 ... argk ret)
-        (1) if its return type matches the type of t or has polymorphic return type 
+        (1) if its return type matches the type of t or has polymorphic return type
             (i.e. ret == ALL) and
-        (2) if the seed formula has terms t1...tn such that tk.type = argk.type.  
+        (2) if the seed formula has terms t1...tn such that tk.type = argk.type.
 
-        :returns: a list of candidate operators 
+        :returns: a list of candidate operators
         """
-        candidate_ops = [] 
+        candidate_ops = []
         for op in self.operators:
 
             # Debugging
@@ -69,16 +69,16 @@ class Generalization(Generator):
             #     print("term=",term,"type",term.type)
             #     assert(False)
 
-            if op.rtype != ALL and op.rtype != term.type: 
+            if op.rtype != ALL and op.rtype != term.type:
                 continue
             if self.has_types(op.arg_types):
                 candidate_ops.append(op)
-        return candidate_ops 
+        return candidate_ops
 
     def get_replacee(self,term):
         candidate_ops = self.get_candidate_ops(term)
         op = random.choice(candidate_ops)
-        args = [] 
+        args = []
         if op.name == "id":
             typ_id = type2num[term.type]
             if self.unique_expr[typ_id]:
@@ -90,16 +90,16 @@ class Generalization(Generator):
             return random.choice(choices)
         else:
             for t in op.arg_types:
-                typ_id =  type2num[t]  
-                choices = [tPrime for tPrime in self.unique_expr[typ_id]]  
+                typ_id =  type2num[t]
+                choices = [tPrime for tPrime in self.unique_expr[typ_id]]
                 arg = random.choice(choices)
                 args.append(arg)
 
             exp = Expr(op=op.name, subterms=args)
             exp.type = op.rtype
-            return exp 
+            return exp
         return None
-            
+
 
     def generate(self):
         success = False

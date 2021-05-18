@@ -14,7 +14,7 @@ class TypeAwareOpMutation(Generator):
         self.parse_config_file()
 
     def parse_config_file(self):
-        with open(self.args.opconfig) as f:
+        with open(self.args.config_file) as f:
             lines = f.readlines()
         for l in lines:
             if ";" in l: continue

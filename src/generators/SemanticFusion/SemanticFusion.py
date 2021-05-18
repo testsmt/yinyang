@@ -11,7 +11,6 @@ class SemanticFusion(Generator):
         self.formula1 = formula1
         self.formula2 = formula2
         self.args = args
-        self.config_file = self.args.fusionfun
         self.oracle = self.args.oracle
         self.templates = {}
         self._parse_mrs()
@@ -52,7 +51,7 @@ class SemanticFusion(Generator):
 
 
     def fuse(self, formula1, formula2, triplets):
-        
+
         fusion_vars = []
         fusion_constr = []
         for triplet in triplets:
@@ -61,7 +60,7 @@ class SemanticFusion(Generator):
             fusion_vars.append(z)
             template = fill_template(x, y, template, var_type)
             fusion_constr += fusion_contraints(template,var_type)
-            
+
             occs_x = [occ for occ in formula1.free_var_occs if occ.name == x]
             occs_y = [occ for occ in formula2.free_var_occs if occ.name == y]
             # Fusion step
@@ -84,7 +83,7 @@ class SemanticFusion(Generator):
         add_var_decls(formula, fusion_vars)
 
         return formula
-    
+
 #     def _add_seedinfo(self,formula):
         # formula.commands = [Comment(self.seed2)] + formula.commands
         # formula.commands = [Comment(self.seed1)] + formula.commands

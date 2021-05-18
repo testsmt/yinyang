@@ -21,7 +21,7 @@ from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
 from src.generators.TypeMutation.TypeMutation import *
 from src.generators.TypeMutation.util import get_unique_subterms
 
-from src.generators.Generalization.Generalization import *  
+from src.generators.Generalization.Generalization import *
 
 TIMEOUT_LIMIT = 32
 class Fuzzer:

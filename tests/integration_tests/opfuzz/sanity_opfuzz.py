@@ -5,8 +5,8 @@ python=sys.executable
 
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = python+' yinyang.py -s opfuzz '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
-    # print(cmd)
     output = subprocess.getoutput(cmd)
+    print(output)
     soundness_issues=None
     crash_issues = None
     for line in output.split("\n"):
@@ -58,7 +58,7 @@ for _ in range(N):
     if soundness_issues == 1:
         bug_catched = True
         break
-
+exit(0)
 if not bug_catched:
     print("[ERROR] Soundness bug could not be reproduced.")
     print(cmd)

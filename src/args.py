@@ -76,16 +76,21 @@ parser.add_argument(
          Note, if you run yinyang with several processes in parallel, each\
          instance should have its own scratch folder. (default:"+rootpath+"/scratch)"
 )
+# parser.add_argument(
+    # "-opconfig","--opconfig",
+    # default=rootpath+"/config/generalization.txt",
+    # help="set operator mutation configuration (default: "+rootpath+"/config/generalization.txt)"
+# )
+# parser.add_argument(
+    # "-fusionfun","--fusionfun",
+    # default=rootpath+"/config/fusion_functions.txt",
+    # help="set fusion function configuration (default: "+rootpath+"/config/fusion_functions.txt)"
+# )
 parser.add_argument(
-    "-opconfig","--opconfig",
-    default=rootpath+"/config/generalization.txt", 
-    help="set operator mutation configuration (default: "+rootpath+"/config/generalization.txt)"
+    "-c","--config-file",
+    help="Config-file for the mutation strategy."
 )
-parser.add_argument(
-    "-fusionfun","--fusionfun",
-    default=rootpath+"/config/fusion_functions.txt",
-    help="set fusion function configuration (default: "+rootpath+"/config/fusion_functions.txt)"
-)
+
 parser.add_argument(
     "-km", "--keep-mutants",
     action='store_true',
@@ -165,3 +170,13 @@ if (args.strategy == "generalization" and len(args.PATH_TO_SEEDS) < 1):
 
 if args.optfuzz == "": args.optfuzz = None
 else: args.optfuzz = OptionGenerator(args.optfuzz)
+
+if not args.config_file:
+    if args.strategy == "opfuzz":
+        args.config_file = rootpath+"/config/operator_mutations.txt"
+    elif args.strategy == "generalization":
+        args.config_file = rootpath+"/config/generalization.txt"
+    elif args.strategy == "fusion":
+        args.config_file = rootpath+"/config/fusion_functions.txt"
+
+
