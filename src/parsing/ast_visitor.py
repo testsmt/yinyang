@@ -53,12 +53,14 @@ class ASTVisitor(SMTLIBv2Visitor):
             decl = DeclareConst(self.visitSymbol(ctx.symbol()[0]), self.visitSort(ctx.sort()[0]))
             return decl
         if ctx.cmd_declareFun():
+            print("Debug 1",flush=True)
             input_sorts = []
             for sort in ctx.sort()[:-1]:
                 input_sorts.append(self.visitSort(sort))
             output_sort = self.visitSort(ctx.sort()[-1])
             input_sorts = " ".join(input_sorts)
             identifier = self.visitSymbol(ctx.symbol()[0])
+            print("Debug 2 id=", identifier, flush=True)
             self.add_to_globals(identifier, input_sorts, output_sort)
             return DeclareFun(identifier, input_sorts, output_sort)
 
@@ -119,7 +121,7 @@ class ASTVisitor(SMTLIBv2Visitor):
             for t in ctx.term():
                 terms.append(self.visitTerm(t,{}))
             return GetValue(terms)
-        
+
         if ctx.cmd_push():
             terms = []
             for t in ctx.term():
@@ -127,7 +129,7 @@ class ASTVisitor(SMTLIBv2Visitor):
             if len(terms) > 0:
                 return Push(terms)
             return Push()
-        
+
         if ctx.cmd_pop():
             terms = []
             for t in ctx.term():
@@ -189,7 +191,7 @@ class ASTVisitor(SMTLIBv2Visitor):
         for t in ctx.term():
             subterms.append(self.visitTerm(t, local_vars))
         return Quantifier(quant, (qvars, qtypes), subterms)
-    
+
     """
     spec_constant
     : numeral
@@ -297,11 +299,13 @@ class ASTVisitor(SMTLIBv2Visitor):
     ;
     """
     def visitSymbol(self, ctx:SMTLIBv2Parser.SymbolContext):
+        print("DEBUG 4",ctx.getText())
         if ctx.simpleSymbol():
             return self.visitSimpleSymbol(ctx.simpleSymbol())
 
         if ctx.quotedSymbol():
             return self.visitQuotedSymbol(ctx.quotedSymbol())
+        print("no case applies", flush=True)
 
     """
     identifier
