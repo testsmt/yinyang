@@ -1,6 +1,6 @@
 solvers = [
-    "cvc5 --check-models --strings-exp",
-    "z3release model.validate=true"
+    "cvc5 --check-models --strings-exp -q",
+    "z3release model_validate=true"
 ]
 
 crash_list = [

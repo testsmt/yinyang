@@ -422,12 +422,12 @@ class Term:
         Adds pointer from each element in subterm to expr
         """
         if self.subterms:
-            for term in self.subterms: 
-                term.parent = self 
+            for term in self.subterms:
+                term.parent = self
 
     def find_all(self, e, occs):
         """
-        Find all expressions e in self and add to list occs.
+        Find all expressions e in self and add to list occs
         """
         if self == e:
             return occs.append(e)

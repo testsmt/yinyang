@@ -7,6 +7,15 @@ REGEXP_TYPE="RegLan"
 UNKNOWN="Unknown"
 ALL="A" #Dominik: added to support opfuzz-typfuzz generalization
 
+TYPES = [
+    BOOLEAN_TYPE,
+    REAL_TYPE,
+    INTEGER_TYPE,
+    STRING_TYPE,
+    REGEXP_TYPE,
+    ROUNDINGMODE_TYPE
+]
+
 def sort2type(sort):
     if "FloatingPoint" in sort:
         eb = int(sort.split(" ")[2])

@@ -184,6 +184,7 @@ class ASTVisitor(SMTLIBv2Visitor):
         for t in ctx.term():
             subterms.append(self.visitTerm(t, local_vars))
         return Quantifier(quant, (qvars, qtypes), subterms)
+
     """
     spec_constant
     : numeral
@@ -213,7 +214,6 @@ class ASTVisitor(SMTLIBv2Visitor):
             return ctx.getText(),BOOLEAN_TYPE
         if ctx.reg_const():
             return ctx.getText(),REGEXP_TYPE
-
 
 
     """
