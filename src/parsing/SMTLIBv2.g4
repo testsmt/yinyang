@@ -7,8 +7,7 @@
  * The MIT License (MIT)
  *
  * Copyright (c) 2017 Julian Thome <julian.thome.de@gmail.com>
- *
- * Modified by Dominik Winterer <dominik.winterer@inf.ethz.ch> 
+ *               2020 Dominik Winterer <dominik.winterer@inf.ethz.ch> 
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -145,9 +144,6 @@ CMD_CheckSatAssuming
 CMD_CheckSatUsing
     : 'check-sat-using'
     ;
-/*CMD_Apply*/
-    /*: 'apply'*/
-    /*;*/
 
 CMD_Labels
     : 'labels'
@@ -327,9 +323,6 @@ GRW_Decimal
 GRW_Exists
     : 'exists'
     ;
-/*GRW_Lambda*/
-    /*: 'lambda'*/
-    /*;*/
 GRW_Hexadecimal
     : 'HEXADECIMAL'
     ;
@@ -730,8 +723,8 @@ spec_constant
     | string
     | b_value
     | reg_const
-    | ParOpen GRW_Underscore ' bv' numeral numeral ParClose
     ;
+
 s_expr
     : spec_constant
     | symbol
@@ -798,6 +791,7 @@ match_case
 
 term
     : spec_constant
+    | ParOpen GRW_Underscore symbol numeral ParClose
     | qual_identifier
     | ParOpen qual_identifier term+ ParClose
     | ParOpen ParOpen GRW_Underscore qual_identifier term+ ParClose ParClose
@@ -861,7 +855,6 @@ logic_attribue
 logic
     : ParOpen PS_Logic symbol logic_attribue+ ParClose
     ;
-
 
 // Scripts
 

@@ -42,7 +42,7 @@ class Script:
                         global_vars.pop(var)
             for let_term in e.let_terms:
                 self._get_free_var_occs(let_term, global_vars)
-            
+
 
         if e.is_var:
             if e.name in global_vars:
@@ -75,7 +75,7 @@ class Script:
         if e.var_binders:
             for i,var in enumerate(e.var_binders):
                 self._prefix_free_vars(prefix,e.let_terms[i])
-        
+
         for s in e.subterms:
             self._prefix_free_vars(prefix,s)
 
@@ -374,6 +374,7 @@ def Var(name,type, is_indexed_id=False):
 
 def Const(name, is_indexed_id=False,type="Unknown"):
     return Term(name=name,type=type, is_const=True,is_indexed_id=is_indexed_id)
+
 
 def Expr(op,subterms, is_indexed_id=False):
     return Term(op=op,subterms=subterms)
