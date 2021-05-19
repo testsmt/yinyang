@@ -24,22 +24,21 @@ class ParsingTestCase(unittest.TestCase):
         self.assertEqual(oracle, formula.__str__())
 
     def test_issue25(self):
-    script="""\
+        script="""\
 (declare-fun a () Bool)
 (assert (= ((_ extract 5 3) (_ bv96 8))))
 (check-sat)"""
-    script = parse_str(script, silent=False)
-    self.assertTrue("Term" in str(type(script.commands[1].term.subterms[0].subterms[0])))
-
-    script="""\
+        script = parse_str(script, silent=False)
+        self.assertTrue("Term" in str(type(script.commands[1].term.subterms[0].subterms[0])))
+        script="""\
 (declare-fun bv () (_ BitVec 10))
 (declare-fun a () Bool)
 (assert (not (and (= ((_ extract 5 3) (_ bv96 8)) ((_ extract 4 2) (concat (_ bv121 7)
 ((_ extract 0 0) bv)))) (= (concat (_ bv1 1) (ite a (_ bv0 1) (_ bv1 1))) ((_ extract 1 0)
 (ite a (_ bv6 3) (_ bv3 3)))))))
 (check-sat)"""
-    script = parse_str(script, silent=False)
-    self.assertTrue(script != None)
+        script = parse_str(script, silent=False)
+        self.assertTrue(script != None)
 
 if __name__ == '__main__':
     unittest.main()

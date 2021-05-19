@@ -201,9 +201,9 @@ class ASTVisitor(SMTLIBv2Visitor):
     ;
     """
     def visitSpec_constant(self, ctx:SMTLIBv2Parser.Spec_constantContext):
-        if ctx.ParOpen():
-            X,n = ctx.numeral()[0].getText(), ctx.numeral()[1].getText()
-            return "(_ bv"+X+" "+n+")"
+        # if ctx.ParOpen():
+            # X,n = ctx.numeral()[0].getText(), ctx.numeral()[1].getText()
+            # return "(_ bv"+X+" "+n+")"
         return ctx.getText().encode('utf-8').decode("utf-8")
 
     """
