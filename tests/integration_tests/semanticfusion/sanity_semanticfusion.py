@@ -7,6 +7,7 @@ def call_fuzzer(first_config, fn, opts):
     cmd = python+' yinyang.py '+ '"'+ first_config+ '" ' + opts + ' ' + fn
     # print(cmd)
     output = subprocess.getoutput(cmd)
+    print(output)
     soundness_issues=None
     crash_issues = None
     for line in output.split("\n"):
