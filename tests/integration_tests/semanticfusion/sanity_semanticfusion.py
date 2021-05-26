@@ -101,6 +101,25 @@ if not bug_catched:
     print(cmd)
     exit(1)
 
+# 4. retrigger bug with unsat fusion
+#
+print("Trying to retrigger bug with sat fusion...")
+first_config=z3
+fn='tests/integration_tests/semanticfusion/5jby0_z3_bug_incorrect_script1.smt2 tests/integration_tests/semanticfusion/5jby0_z3_bug_incorrect_script2.smt2'
+opts='-o sat -s fusion'
+
+for _ in range(1000):
+    soundness_issues, crash_issues, ignored_issues, cmd = call_fuzzer(first_config, fn, opts)
+    if soundness_issues != 0:
+        bug_catched = True
+        break
+
+if not bug_catched:
+    print("[ERROR] Bug not found by sat fusion.")
+    print(cmd)
+    exit(1)
+
+
 
 cleanup()
 
