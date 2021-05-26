@@ -57,7 +57,7 @@ class Solver:
         try:
             cmd = list(filter(None, self.cil.split(" "))) + [file]
             if debug:
-                print(" ".join(cmd), flush=True)
+                print("cmd: "+" ".join(cmd), flush=True)
             output = subprocess.run(cmd, timeout=timeout,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
@@ -73,22 +73,22 @@ class Solver:
         except KeyboardInterrupt:
             print("Accepted keyboard interrupt. Stop.", end="\r", flush=True)
             exit(0)
-        except ValueError as e: 
+        except ValueError as e:
             print("Subprocess bug.")
             stdout = ""
             stderr = ""
-            return stdout, stderr, 0 
+            return stdout, stderr, 0
         except Exception as e:
             print("Exception rises when running solver:")
             print(e, '\n')
             exit(1)
-       
+
 
         stdout = output.stdout.decode()
         stderr = output.stderr.decode()
         returncode = output.returncode
 
         if debug:
-            print(stdout+"\n"+stderr)
+            print("output: "+ stdout+"\n"+stderr)
 
         return stdout, stderr, returncode

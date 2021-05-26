@@ -5,7 +5,6 @@ python=sys.executable
 
 def call_fuzzer(first_config, fn, opts):
     cmd = python+' yinyang.py '+ '"'+ first_config+ '" ' + opts + ' ' + fn
-    # print(cmd)
     output = subprocess.getoutput(cmd)
     soundness_issues=None
     crash_issues = None
@@ -25,8 +24,16 @@ def get_z3():
     subprocess.getoutput("unzip z3-4.8.6-x64-ubuntu-16.04.zip")
     return os.path.abspath("z3-4.8.6-x64-ubuntu-16.04/bin/z3")
 
+def get_cvc4():
+    cvc4_link = "http://cvc4.cs.stanford.edu/downloads/builds/x86_64-linux-opt/cvc4-1.6-x86_64-linux-opt"
+    subprocess.getoutput("wget "+cvc4_link)
+    subprocess.getoutput("chmod +x cvc4-1.6-x86_64-linux-opt")
+    return os.path.abspath("cvc4-1.6-x86_64-linux-opt")
+
+
 def cleanup():
     subprocess.getoutput("rm -rf z3*")
+    subprocess.getoutput("rm -rf cvc4*")
 
 cleanup()
 #
@@ -35,6 +42,9 @@ cleanup()
 print("Downloading solvers...")
 print("Get z3")
 z3 = get_z3()
+
+print("Get cvc4")
+cvc4 = get_cvc4()
 
 # 2. ensure no soundness bugs in Semantic Fusion.
 #
@@ -72,6 +82,45 @@ if bug_catched:
     print(cmd)
     exit(1)
 
+
+# 3. retrigger bug with unsat fusion
+#
+print("Trying to retrigger bug with unsat fusion...")
+first_config=cvc4 + " --strings-exp -q"
+fn='tests/integration_tests/semanticfusion/gIxXB_cvc4_bug_incorrect_script1.smt2 tests/integration_tests/semanticfusion/gIxXB_cvc4_bug_incorrect_script2.smt2'
+opts='-o unsat -s fusion'
+
+for _ in range(1000):
+    soundness_issues, crash_issues, ignored_issues, cmd = call_fuzzer(first_config, fn, opts)
+    if soundness_issues != 0:
+        bug_catched = True
+        break
+
+if not bug_catched:
+    print("[ERROR] Bug not found by unsat fusion.")
+    print(cmd)
+    exit(1)
+
+# 4. retrigger bug with unsat fusion
+#
+print("Trying to retrigger bug with sat fusion...")
+first_config=z3
+fn='tests/integration_tests/semanticfusion/5jby0_z3_bug_incorrect_script1.smt2 tests/integration_tests/semanticfusion/5jby0_z3_bug_incorrect_script2.smt2'
+opts='-o sat -s fusion'
+
+for _ in range(1000):
+    soundness_issues, crash_issues, ignored_issues, cmd = call_fuzzer(first_config, fn, opts)
+    if soundness_issues != 0:
+        bug_catched = True
+        break
+
+if not bug_catched:
+    print("[ERROR] Bug not found by sat fusion.")
+    print(cmd)
+    exit(1)
+
+
+
 cleanup()
 
-print("[SUCCESS] All sanitizer passed .")
+print("[SUCCESS] All sanitizer passed.")
