@@ -27,7 +27,7 @@ Requirements:
 - antlr4 python runtime  
 ``` bash
 git clone https://github.com/testsmt/yinyang.git 
-pip3 install antlr4-python3-runtime==4.8  
+pip3 install antlr4-python3-runtime==4.9.2  
 ```
 
 
@@ -57,3 +57,4 @@ Additional Ressources
 ----------
 - [Citing yinyang](https://yinyang.readthedocs.io/en/latest/building_on.html#citing-yinyang)
 - [Project website](https://testsmt.github.io/) with bug statistics, talk videos, etc.
+- [Google Open Source Peer Bonus](https://opensource.googleblog.com/2021/04/announcing-first-group-of-google-open-source-peer-bonus-winners.html#:~:text=The%20Google%20Open%20Source%20Peer,exceptional%20contributions%20to%20open%20source.) 
