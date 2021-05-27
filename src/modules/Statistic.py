@@ -1,4 +1,5 @@
 import time
+import logging
 
 class Statistic:
 
@@ -12,11 +13,13 @@ class Statistic:
         self.duplicates = 0
         self.timeout = 0
         self.ignored = 0
+        self.solver_calls = 0
+        self.effective_calls = 0
 
-    def printbar(self):
-        bar = "[time:%ds, #mutant:%d, #seed:%d, #crash:%d, #unsound:%d, #dups:%d, #timeout:%d, #ignored:%d]" \
-              % (time.time()-self.starttime, self.mutants, self.seeds, self.crashes, self.soundness, self.duplicates, self.timeout, self.ignored)
-        print(bar, end="\r", flush=True)
+    def printbar(self, start_time):
+        total_time = time.time() - start_time
+        bar="Performed %d solver calls (%d calls/s, eff: %d, %d mutants/s)" %(self.solver_calls, self.solver_calls / total_time, float(self.effective_calls // self.solver_calls),self.mutants/total_time)
+        logging.warning(bar)
 
     def printsum(self):
         summary = """
@@ -32,4 +35,4 @@ Timeout cases: %d
 Ignored issues: %d
 """ \
         % (time.time()-self.starttime, self.mutants, self.seeds,  self.crashes, self.soundness, self.duplicates, self.timeout, self.ignored)
-        print(summary, end="\n", flush=True)
+        # print(summary, end="\n", flush=True)

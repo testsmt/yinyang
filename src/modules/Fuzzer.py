@@ -3,10 +3,14 @@ import shutil
 import os
 import re
 import signal
+import logging
+import time
+
 
 from pathlib import Path
 from antlr4 import *
 
+from config.config import solvers
 from src.modules.Solver import Solver, SolverQueryResult,  SolverResult
 from src.modules.Statistic import Statistic
 
@@ -25,8 +29,18 @@ class Fuzzer:
         self.runforever = True
         self.statistic = Statistic()
         self.generator = None
-        if not self.args.quiet:
-            print("Yin-Yang is running:")
+        self.old_time = time.time()
+        self.start_time = time.time()
+
+        # Init logging
+        log_fn = self.args.logfolder+"/"+str(self.args.name)
+        logging.basicConfig(filename=log_fn,format='%(asctime)s %(message)s', datefmt='[%Y/%m/%d %I:%M:%S %p]',level=logging.DEBUG)
+        console = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s %(message)s',datefmt='[%Y/%m/%d %I:%M:%S %p]')
+        console.setLevel(logging.INFO)
+        console.setFormatter(formatter)
+        logging.getLogger().addHandler(console)
+
 
     def admissible_seed_size(self, seed):
         """
@@ -50,13 +64,18 @@ class Fuzzer:
             else: assert(False)
         else: assert(False)
 
-        while len(seeds) != 0:
+        num_targets = len(self.args.SOLVER_CLIS)
+        logging.info("Strategy: "+self.args.strategy+ ", "+ str(num_targets) + " testing targets, "+ str(len(seeds))+" seeds")
 
+        while len(seeds) != 0:
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
 
+                logging.debug("Processing seed "+seed)
+
                 self.statistic.seeds += 1
                 if not self.admissible_seed_size(seed):
+                    logging.debug("Skipping invalid seed: exceeds max file size")
                     self.statistic.ignored += 1
                     continue
 
@@ -65,17 +84,23 @@ class Fuzzer:
 
                 if not script: # i.e. parsing was unsucessful
                     self.statistic.ignored += 1
+                    logging.debug("Skipping invalid seed: error in parsing")
                     continue
 
                 self.generator = TypeAwareOpMutation(script, self.args)
 
+
             elif (self.args.strategy == "fusion"):
                 seed = seeds.pop(random.randrange(len(seeds)))
+
                 seed1 = seed[0]
                 seed2 = seed[1]
+
+                logging.debug("Processing seeds "+seed1+" "+seed2)
                 self.statistic.seeds += 2
                 if not self.admissible_seed_size(seed1) or not self.admissible_seed_size(seed1):
                     self.statistic.ignored +=2
+                    logging.debug("Skipping invalid seed: exceeds max file size")
                     continue
 
                 self.currentseeds = Path(seed1).stem + "-" + Path(seed2).stem
@@ -84,21 +109,32 @@ class Fuzzer:
 
                 if not script1 or not script2: # i.e. parsing was unsucessful
                     self.statistic.ignored +=2
+                    logging.debug("Skipping invalid seed: error in parsing")
                     continue
 
                 self.generator = SemanticFusion(script1, script2, self.args)
             else: assert(False)
 
 
-            for _ in range(self.args.iterations):
+            logging.debug("Attempting to generate "+ str(self.args.iterations)+ " mutants")
+            unsuccessful=0
+            for i in range(self.args.iterations):
                 if not self.args.quiet:
-                    self.statistic.printbar()
+                    if time.time() - self.old_time >= 5.0:
+                        self.statistic.printbar(self.start_time)
+                        self.old_time = time.time()
+
                 formula, success, skip_seed = self.generator.generate()
-                if not success: continue
-                if not self.test(formula): break
+                if not success:
+                    unsuccessful+=1
+                    continue
+
+                if not self.test(formula,i): break
                 self.statistic.mutants += 1
                 if skip_seed: break
 
+            successful= self.args.iterations - unsuccessful
+            logging.debug("Finished generations: "+ str(successful)+" successful, "+ str(unsuccessful)+ " unsuccessful")
 
     def create_testbook(self, formula):
         testbook = []
@@ -156,7 +192,7 @@ class Fuzzer:
         assert(False)
 
 
-    def test(self, formula):
+    def test(self, formula,i):
         """
         Tests the solvers with the formula returning "False" if the testing on
         formula should be stopped and "True" otherwise.
@@ -168,6 +204,7 @@ class Fuzzer:
         for testitem in testbook:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
+            self.statistic.solver_calls += 1
             stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout, debug=self.args.diagnose)
 
             # (1) Detect crashes from a solver run including invalid models.
@@ -175,43 +212,53 @@ class Fuzzer:
 
                 # (2) Match against the duplicate list to avoid reporting duplicate bugs.
                 if not self.in_duplicate_list(stdout, stderr):
+                    self.statistic.effective_call += 1
                     self.statistic.crashes += 1
                     self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
+                    logging.debug("Crash! Stop testing on this seed.")
                 else:
                     self.statistic.duplicates += 1
+                    logging.debug("Duplicate. Stop testing on this seed.")
                 return False # stop testing
             else:
                 # (3a) Check whether the solver run produces errors, by checking
                 # the ignore list.
                 if self.in_ignore_list(stdout, stderr):
+                    logging.debug("Invalid mutant:ignore_list. solver="+str(solver_cli))
                     self.statistic.ignored += 1
                     continue # continue with next solver (4)
 
                 # (3b) Check whether the exit code is nonzero.
                 if exitcode != 0:
                     if exitcode == -signal.SIGSEGV or exitcode == 245: #segfault
+                        self.statistic.effective_call += 1
                         self.statistic.crashes += 1
-                        self.report(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
+                        self.debug(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
+                        logging.info(str(i)+"/"+str(self.args.iterations)+ " Segfault! Stop testing on this seed.")
                         return False # stop testing
 
                     elif exitcode == 137: #timeout
                         self.statistic.timeout += 1
+                        logging.debug(str(i)+"/"+str(self.args.iterations)+ " Solver timeout occured. sol="+str(solver_cli))
                         continue # continue with next solver (4)
 
                     elif exitcode == 127: #command not found
                         print("\nPlease check your solver command-line interfaces.")
                         continue # continue with next solver (4)
                     self.statistic.ignored+=1
+
                 # (3c) if there is no '^sat$' or '^unsat$' in the output
                 elif not re.search("^unsat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^sat$", stdout, flags=re.MULTILINE) and \
                      not re.search("^unknown$", stdout, flags=re.MULTILINE):
                     self.statistic.ignored += 1
+                    logging.debug(str(i)+"/"+str(self.args.iterations)+ " Invalid mutant:no '^sat$' or '^unsat$' in the output.")
                 else:
                     # (5) grep for '^sat$', '^unsat$', and '^unknown$' to produce
                     # the output (including '^unknown$' to also deal with incremental
                     # benchmarks) for comparing with the oracle (semantic fusion) or
                     # with other non-erroneous solver runs (opfuzz) for soundness bugs
+                    self.statistic.effective_calls += 1
                     result = self.grep_result(stdout)
                     if oracle.equals(SolverQueryResult.UNKNOWN):
                         oracle = result
@@ -222,6 +269,8 @@ class Fuzzer:
                     if not oracle.equals(result):
                         self.statistic.soundness += 1
                         self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
+                        logging.debug(str(i)+"/"+str(self.args.iterations)+ " Soundness bug! Stop testing on this seed.")
+
                         if reference:
                             # Produce a diff bug report for soundness bugs in
                             # the opfuzz case

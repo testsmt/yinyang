@@ -71,7 +71,6 @@ class Solver:
                 stderr = ""
             return stdout, stderr, 137
         except KeyboardInterrupt:
-            print("Accepted keyboard interrupt. Stop.", end="\r", flush=True)
             exit(0)
         except ValueError as e:
             print("Subprocess bug.")

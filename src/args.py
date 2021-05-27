@@ -42,6 +42,14 @@ parser.add_argument(
           and 2 as a modulo, 150 mutants per seed file will be passed to the SMT solvers. High modulo and iteration\
           counts, prioritize deeper mutations. (default: 2)"
 )
+
+parser.add_argument(
+    "-logs","--logfolder",
+    default=rootpath+"/logs",
+    help="set logs folder (default: "+rootpath+"/logs)"
+)
+
+
 parser.add_argument(
     "-t", "--timeout",
     default=8,
@@ -109,7 +117,7 @@ args = parser.parse_args()
 # pre-processing
 
 # Parse CLI
-if args.SOLVER_CLIS == "": 
+if args.SOLVER_CLIS == "":
     if len(solvers) == 0:
          exit("Error: no solver specified. Either change the commandline or edit config/config.py.")
     args.SOLVER_CLIS = solvers
@@ -128,6 +136,13 @@ if args.iterations <= 0: exit("Error: iterations should not be a negative number
 if not os.path.isdir(args.bugsfolder):
     try:
         os.mkdir(args.bugsfolder)
+    except Exception as e:
+        print(e)
+        exit(0)
+
+if not os.path.isdir(args.logfolder):
+    try:
+        os.mkdir(args.logfolder)
     except Exception as e:
         print(e)
         exit(0)
