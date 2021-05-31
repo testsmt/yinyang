@@ -21,6 +21,17 @@ from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[91m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 class Fuzzer:
 
     def __init__(self, args):
@@ -31,6 +42,7 @@ class Fuzzer:
         self.generator = None
         self.old_time = time.time()
         self.start_time = time.time()
+        self.first_status_bar_printed = False
 
         # Init logging
         log_fn = self.args.logfolder+"/"+str(self.args.name)
@@ -72,18 +84,19 @@ class Fuzzer:
                 seed = seeds.pop(random.randrange(len(seeds)))
 
                 logging.debug("Processing seed "+seed)
+                self.statistic.total_seeds += 1
 
-                self.statistic.seeds += 1
                 if not self.admissible_seed_size(seed):
+                    self.statistic.invalid_seeds += 1
+
                     logging.debug("Skipping invalid seed: exceeds max file size")
-                    self.statistic.ignored += 1
                     continue
 
                 self.currentseeds = Path(seed).stem
                 script = parse_file(seed,silent=True)
 
                 if not script: # i.e. parsing was unsucessful
-                    self.statistic.ignored += 1
+                    self.statistic.invalid_seeds += 1
                     logging.debug("Skipping invalid seed: error in parsing")
                     continue
 
@@ -120,21 +133,30 @@ class Fuzzer:
             unsuccessful=0
             for i in range(self.args.iterations):
                 if not self.args.quiet:
+                    if not self.first_status_bar_printed and time.time() - self.old_time >= 1:
+                        self.statistic.printbar(self.start_time)
+                        self.old_time = time.time()
+                        self.first_status_bar_printed = True
+
+
                     if time.time() - self.old_time >= 5.0:
                         self.statistic.printbar(self.start_time)
                         self.old_time = time.time()
 
                 formula, success, skip_seed = self.generator.generate()
                 if not success:
+                    self.statistic.unsuccessful_generations += 1
                     unsuccessful+=1
                     continue
 
-                if not self.test(formula,i): break
+                if not self.test(formula,i+1): break
                 self.statistic.mutants += 1
                 if skip_seed: break
 
-            successful= self.args.iterations - unsuccessful
+            successful = self.args.iterations - unsuccessful
             logging.debug("Finished generations: "+ str(successful)+" successful, "+ str(unsuccessful)+ " unsuccessful")
+        print("All seeds processed")
+        self.statistic.printsum()
 
     def create_testbook(self, formula):
         testbook = []
@@ -192,7 +214,7 @@ class Fuzzer:
         assert(False)
 
 
-    def test(self, formula,i):
+    def test(self, formula, i):
         """
         Tests the solvers with the formula returning "False" if the testing on
         formula should be stopped and "True" otherwise.
@@ -212,10 +234,11 @@ class Fuzzer:
 
                 # (2) Match against the duplicate list to avoid reporting duplicate bugs.
                 if not self.in_duplicate_list(stdout, stderr):
-                    self.statistic.effective_call += 1
+                    self.statistic.effective_calls += 1
                     self.statistic.crashes += 1
-                    self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
+                    _,path = self.report(scratchfile, "crash", solver_cli, stdout, stderr, random_string())
                     logging.debug("Crash! Stop testing on this seed.")
+                    logging.info(bcolors.BOLD+bcolors.WARNING+"Detected crash bug: "+ path+bcolors.ENDC)
                 else:
                     self.statistic.duplicates += 1
                     logging.debug("Duplicate. Stop testing on this seed.")
@@ -225,16 +248,17 @@ class Fuzzer:
                 # the ignore list.
                 if self.in_ignore_list(stdout, stderr):
                     logging.debug("Invalid mutant:ignore_list. solver="+str(solver_cli))
-                    self.statistic.ignored += 1
+                    self.statistic.invalid_mutants+= 1
                     continue # continue with next solver (4)
 
                 # (3b) Check whether the exit code is nonzero.
                 if exitcode != 0:
                     if exitcode == -signal.SIGSEGV or exitcode == 245: #segfault
-                        self.statistic.effective_call += 1
+                        self.statistic.effective_calls += 1
                         self.statistic.crashes += 1
-                        self.debug(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
-                        logging.info(str(i)+"/"+str(self.args.iterations)+ " Segfault! Stop testing on this seed.")
+                        _,path = self.report(scratchfile, "segfault", solver_cli, stdout, stderr, random_string())
+                        logging.debug(str(i)+"/"+str(self.args.iterations)+ " Segfault! Stop testing on this seed.")
+                        logging.info(bcolors.BOLD+bcolors.WARNING+"Detected segfault: "+ path+bcolors.ENDC)
                         return False # stop testing
 
                     elif exitcode == 137: #timeout
@@ -268,8 +292,9 @@ class Fuzzer:
                     # non-erroneous solver runs (opfuzz) for soundness bugs.
                     if not oracle.equals(result):
                         self.statistic.soundness += 1
-                        self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
+                        _,path = self.report(scratchfile, "incorrect", solver_cli, stdout, stderr, random_string())
                         logging.debug(str(i)+"/"+str(self.args.iterations)+ " Soundness bug! Stop testing on this seed.")
+                        logging.info(bcolors.BOLD+bcolors.WARNING+"Detected soundness bug! "+path+bcolors.ENDC)
 
                         if reference:
                             # Produce a diff bug report for soundness bugs in
@@ -277,7 +302,7 @@ class Fuzzer:
                             ref_cli = reference[0]
                             ref_stdout = reference[1]
                             ref_stderr = reference[2]
-                            self.report_diff(scratchfile, "incorrect",
+                            path = self.report_diff(scratchfile, "incorrect",
                                              ref_cli, ref_stdout, ref_stderr,
                                              solver_cli, stdout, stderr,
                                              random_string())
@@ -308,7 +333,7 @@ class Fuzzer:
             log.write(stderr)
             log.write("stdout:\n")
             log.write(stdout)
-        return report_id
+        return report_id, report
 
     def report_diff(self, scratchfile, bugtype,
                     ref_cli, ref_stdout, ref_stderr,
@@ -335,7 +360,7 @@ class Fuzzer:
             log.write(sol_stderr)
             log.write("stdout:\n")
             log.write(sol_stdout)
-        return report_id
+        return report_id, report
 
 
     def __del__(self):
@@ -344,5 +369,5 @@ class Fuzzer:
                 if self.args.name in file:
                     os.remove(os.path.join(self.args.scratchfolder, file))
 
-        if not self.args.quiet:
-            self.statistic.printsum()
+        # if not self.args.quiet:
+            # self.statistic.printsum()

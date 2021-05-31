@@ -70,8 +70,8 @@ class Solver:
                 stdout = ""
                 stderr = ""
             return stdout, stderr, 137
-        except KeyboardInterrupt:
-            exit(0)
+        # except KeyboardInterrupt:
+            # exit(0)
         except ValueError as e:
             print("Subprocess bug.")
             stdout = ""
