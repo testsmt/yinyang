@@ -5,6 +5,7 @@ from src.parsing.parse import *
 from src.generators.Generator import Generator
 from src.generators.SemanticFusion.VariableFusion import *
 from src.generators.SemanticFusion.util import random_var_triplets, random_tuple_list, disjunction, conjunction, cvars
+from src.modules.exitcodes import *
 
 class SemanticFusion(Generator):
     def __init__(self, formula1, formula2, args):
@@ -14,13 +15,12 @@ class SemanticFusion(Generator):
         self.config_file = self.args.fusionfun
         self.oracle = self.args.oracle
         self.templates = {}
-        # print("Parsing mrs...",flush=True)
         self._parse_mrs()
-        # print("Parsing mrs...[DONE]",flush=True)
 
+        #TODO: move this out of here
         if not self.oracle:
-            print("ERROR: No oracle {sat,unsat} specified")
-            exit(1)
+            print("Error: No oracle {sat,unsat} specified")
+            exit(ERR_USAGE)
 
     def _parse_mrs(self):
         with open(self.config_file) as f:
@@ -54,7 +54,7 @@ class SemanticFusion(Generator):
 
 
     def fuse(self, formula1, formula2, triplets):
-        
+
         fusion_vars = []
         fusion_constr = []
         for triplet in triplets:
@@ -63,10 +63,9 @@ class SemanticFusion(Generator):
             fusion_vars.append(z)
             template = fill_template(x, y, template, var_type)
             fusion_constr += fusion_contraints(template,var_type)
-            
+
             occs_x = [occ for occ in formula1.free_var_occs if occ.name == x]
             occs_y = [occ for occ in formula2.free_var_occs if occ.name == y]
-            # Fusion step
 
             k = random.randint(0, len(occs_x))
             occs_x = random.sample(occs_x, k)
@@ -86,12 +85,12 @@ class SemanticFusion(Generator):
         add_var_decls(formula, fusion_vars)
 
         return formula
-    
+
 
     def generate(self):
         skip_seed = True
         if self.formula1.free_var_occs == [] and self.formula2.free_var_occs == []:
-            skip_seed = True 
+            skip_seed = True
 
         formula1, formula2 = copy.deepcopy(self.formula1), copy.deepcopy(self.formula2)
         formula1.prefix_vars("scr1_")
@@ -101,4 +100,4 @@ class SemanticFusion(Generator):
         if not triplets:
             is_fusion = False
         fused = self.fuse(formula1, formula2, triplets)
-        return fused, True, skip_seed 
+        return fused, True, skip_seed

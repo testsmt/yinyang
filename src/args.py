@@ -4,6 +4,7 @@ import os
 from src.utils import random_string
 from src.modules.OptionGenerator import OptionGenerator
 from config.config import solvers
+from src.modules.exitcodes import *
 
 rootpath = "/".join(__file__.split('/')[:-2])
 
@@ -119,11 +120,16 @@ args = parser.parse_args()
 # Parse CLI
 if args.SOLVER_CLIS == "":
     if len(solvers) == 0:
-         exit("Error: no solver specified. Either change the commandline or edit config/config.py.")
+         print("Error: no solver specified. Either change the commandline or edit solver config file")
+         exit(ERR_USAGE)
+
     args.SOLVER_CLIS = solvers
 else: args.SOLVER_CLIS = args.SOLVER_CLIS.split(";") + solvers
 
-if args.timeout <= 0: exit("Error: timeout should not be a negative number or zero.")
+if args.timeout <= 0:
+    print("Error: timeout should not be a negative number or zero")
+    exit(ERR_USAGE)
+
 
 if not args.iterations:
     if args.strategy == "opfuzz":
@@ -131,33 +137,37 @@ if not args.iterations:
     else:
         args.iterations = 30
 
-if args.iterations <= 0: exit("Error: iterations should not be a negative number zero.")
+if args.iterations <= 0:
+    print("Error: iterations should not be a negative number zero")
+    exit(ERR_USAGE)
 
 if not os.path.isdir(args.bugsfolder):
     try:
         os.mkdir(args.bugsfolder)
     except Exception as e:
-        print(e)
-        exit(0)
+        print("Error: bug folder cannot be created")
+        exit(ERR_EXHAUSTED_DISK)
+
 
 if not os.path.isdir(args.logfolder):
     try:
         os.mkdir(args.logfolder)
     except Exception as e:
-        print(e)
-        exit(0)
+        print("Error: log folder cannot be created")
+        exit(ERR_EXHAUSTED_DISK)
 
 if not os.path.isdir(args.scratchfolder):
     try:
         os.mkdir(args.scratchfolder)
     except Exception as e:
-        print(e)
-        exit(0)
+        print("Error: scratch folder cannot be created")
+        exit(ERR_EXHAUSTED_DISK)
 
 temp_seeds = []
 for path in args.PATH_TO_SEEDS:
     if not os.path.exists(path):
-        exit("Error: %s does not exist" % (path))
+        print("Error: %s does not exist" % (path))
+        exit(ERR_USAGE)
     if os.path.isfile(path):
         temp_seeds.append(path)
     elif os.path.isdir(path):
@@ -167,13 +177,17 @@ for path in args.PATH_TO_SEEDS:
                 if filepath.endswith(".smt2"):
                     temp_seeds.append(filepath)
     else:
-        exit("Error: %s is neither a file nor a directory")
+        print("Error: %s is neither a file nor a directory")
+        exit(ERR_USAGE)
+
 args.PATH_TO_SEEDS = temp_seeds
 
 if (args.strategy == "opfuzz" and len(args.PATH_TO_SEEDS) < 1):
-    exit("Error: please provide at least one seed for opfuzz strategy.")
+    print("Error: please provide at least one seed for opfuzz strategy.")
+    exit(ERR_USAGE)
 if (args.strategy == "fusion" and len(args.PATH_TO_SEEDS) < 2):
-    exit("Error: please provide at least two seeds for fusion strategy.")
+    print("Error: please provide at least two seeds for fusion strategy.")
+    exit(ERR_USAGE)
 
 if args.optfuzz == "": args.optfuzz = None
 else: args.optfuzz = OptionGenerator(args.optfuzz)

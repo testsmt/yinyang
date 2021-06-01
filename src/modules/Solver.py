@@ -2,6 +2,7 @@ import subprocess
 import re
 
 from enum import Enum
+from src.modules.exitcodes import *
 
 class SolverQueryResult(Enum):
     """
@@ -70,17 +71,13 @@ class Solver:
                 stdout = ""
                 stderr = ""
             return stdout, stderr, 137
-        # except KeyboardInterrupt:
-            # exit(0)
         except ValueError as e:
-            print("Subprocess bug.")
             stdout = ""
             stderr = ""
             return stdout, stderr, 0
         except Exception as e:
-            print("Exception rises when running solver:")
-            print(e, '\n')
-            exit(1)
+            print("Solver " + cmd[0]+ " not found.")
+            exit(ERR_USAGE)
 
 
         stdout = output.stdout.decode()

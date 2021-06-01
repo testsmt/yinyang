@@ -13,6 +13,7 @@ from antlr4 import *
 from config.config import solvers
 from src.modules.Solver import Solver, SolverQueryResult,  SolverResult
 from src.modules.Statistic import Statistic
+from src.modules.exitcodes import *
 
 from config.config import crash_list, duplicate_list, ignore_list
 from src.utils import random_string, plain, escape, in_list
@@ -157,6 +158,10 @@ class Fuzzer:
             logging.debug("Finished generations: "+ str(successful)+" successful, "+ str(unsuccessful)+ " unsuccessful")
         print("All seeds processed")
         self.statistic.printsum()
+        if self.statistic.crashes + self.statistic.soundness == 0:
+            exit(OK_NOBUGS)
+        exit(OK_BUGS)
+
 
     def create_testbook(self, formula):
         testbook = []
@@ -269,7 +274,8 @@ class Fuzzer:
                     elif exitcode == 127: #command not found
                         print("\nPlease check your solver command-line interfaces.")
                         continue # continue with next solver (4)
-                    self.statistic.ignored+=1
+                    # TODO: there is some problem here
+                    # self.statistic.ignored+=1
 
                 # (3c) if there is no '^sat$' or '^unsat$' in the output
                 elif not re.search("^unsat$", stdout, flags=re.MULTILINE) and \
@@ -324,8 +330,8 @@ class Fuzzer:
         report = "%s/%s-%s-%s-%s.smt2" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
         try: shutil.copy(scratchfile, report)
         except Exception as e:
-            print(e)
-            exit(0)
+            logging.error("Could not copy scratchfile to bugfolder. Disk space seems exhausted.")
+            exit(ERR_EXHAUSTED_DISK)
         logpath = "%s/%s-%s-%s-%s.output" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
         with open(logpath, 'w') as log:
             log.write("command: "+ cli+"\n")
@@ -344,8 +350,9 @@ class Fuzzer:
         report = "%s/%s-%s-%s-%s.smt2" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
         try: shutil.copy(scratchfile, report)
         except Exception as e:
-            print(e)
-            exit(0)
+            logging.error("Could not copy scratchfile to bugfolder. Disk space seems exhausted.")
+            exit(ERR_EXHAUSTED_DISK)
+
         logpath = "%s/%s-%s-%s-%s.output" %(self.args.bugsfolder, bugtype, plain_cli, escape(self.currentseeds), report_id)
         with open(logpath, 'w') as log:
             log.write("*** REFERENCE \n")
