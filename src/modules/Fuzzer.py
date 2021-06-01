@@ -2,8 +2,10 @@ import random
 import shutil
 import os
 import re
+import datetime
 import signal
 import logging
+from logging.handlers import RotatingFileHandler
 import time
 
 
@@ -46,8 +48,14 @@ class Fuzzer:
         self.first_status_bar_printed = False
 
         # Init logging
-        log_fn = self.args.logfolder+"/"+str(self.args.name)
-        logging.basicConfig(filename=log_fn,format='%(asctime)s %(message)s', datefmt='[%Y/%m/%d %I:%M:%S %p]',level=logging.DEBUG)
+        fn = datetime.datetime.now().strftime('yinyang-%Y-%m-%d-%M:%S-%p') + "-" + str(self.args.name) +".log"
+        log_fn = self.args.logfolder+"/"+ fn
+
+
+        logging.basicConfig(
+                handlers=[RotatingFileHandler(filename=log_fn, maxBytes=1024*1024, backupCount=5)],
+                format='%(asctime)s %(message)s', datefmt='[%Y/%m/%d %I:%M:%S %p]',level=logging.DEBUG
+        )
         console = logging.StreamHandler()
         formatter = logging.Formatter('%(asctime)s %(message)s',datefmt='[%Y/%m/%d %I:%M:%S %p]')
         console.setLevel(logging.INFO)
@@ -272,7 +280,7 @@ class Fuzzer:
                         continue # continue with next solver (4)
 
                     elif exitcode == 127: #command not found
-                        print("\nPlease check your solver command-line interfaces.")
+                        # print("\nPlease check your solver command-line interfaces.")
                         continue # continue with next solver (4)
                     # TODO: there is some problem here
                     # self.statistic.ignored+=1

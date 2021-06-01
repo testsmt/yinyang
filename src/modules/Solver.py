@@ -76,7 +76,7 @@ class Solver:
             stderr = ""
             return stdout, stderr, 0
         except Exception as e:
-            print("Solver " + cmd[0]+ " not found.")
+            print("Error: solver \"" + cmd[0]+ "\" not found")
             exit(ERR_USAGE)
 
 
