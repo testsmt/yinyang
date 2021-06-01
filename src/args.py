@@ -183,10 +183,10 @@ for path in args.PATH_TO_SEEDS:
 args.PATH_TO_SEEDS = temp_seeds
 
 if (args.strategy == "opfuzz" and len(args.PATH_TO_SEEDS) < 1):
-    print("Error: please provide at least one seed for opfuzz strategy.")
+    print("Error: please provide at least one seed for the opfuzz strategy")
     exit(ERR_USAGE)
 if (args.strategy == "fusion" and len(args.PATH_TO_SEEDS) < 2):
-    print("Error: please provide at least two seeds for fusion strategy.")
+    print("Error: please provide at least two seeds for the fusion strategy")
     exit(ERR_USAGE)
 
 if args.optfuzz == "": args.optfuzz = None

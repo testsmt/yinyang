@@ -2,6 +2,7 @@ import sys
 sys.setrecursionlimit(100000)
 
 import traceback
+import logging
 
 from antlr4 import *
 from antlr4.error.ErrorListener import ErrorListener
@@ -14,11 +15,11 @@ from .ast_visitor import *
 
 class ErrorListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        print("Parser error on line %d column %d." % (line, column), flush=True)
+        logging.debug("Parser error on line %d column %d." % (line, column), flush=True)
 
 def prepare_seed(formula):
     """
-    Prepare seed script for fuzzing. Remove set-logic, set-info and output-producing
+    Prepare seed script for fuzzing. Remove set-logic, set-info and other output-producing
     commands. Set-logic and set-info may raise warning messages from SMT solvers.
     Output-producing commands may cause errors, e.g., get-model, get-proof etc.
     Errors such as

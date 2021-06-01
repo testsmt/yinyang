@@ -89,6 +89,7 @@ class Fuzzer:
         logging.info("Strategy: "+self.args.strategy+ ", "+ str(num_targets) + " testing targets, "+ str(len(seeds))+" seeds")
 
         while len(seeds) != 0:
+            print(x)
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
 
@@ -379,10 +380,8 @@ class Fuzzer:
 
 
     def __del__(self):
+        # TODO: move elsewhere
         if not self.args.keep_mutants:
             for file in os.listdir(self.args.scratchfolder):
                 if self.args.name in file:
                     os.remove(os.path.join(self.args.scratchfolder, file))
-
-        # if not self.args.quiet:
-            # self.statistic.printsum()
