@@ -27,12 +27,11 @@ try:
     fuzzer = Fuzzer(args)
     fuzzer.run()
 except Exception as e:
-    # # ex_type, ex, tb = sys.exc_info()
     fn = inspect.trace()[-1].filename
     lineno = inspect.trace()[-1].lineno
     print("Runtime error at %s:%s" %(fn,lineno))
     print("msg: "+str(e))
-    print("cmd: "+ ' '.join(sys.argv))
+    print("cmd: "+ ' '.join(sys.argv[:-2])+" "+'"'+ sys.argv[-2] +'"'+" "+sys.argv[-1])
     print("version: yinyang v0.2.0") #TODO: Do not hardcode
     print("Please file an issue: https://github.com/testsmt/yinyang/issues")
     exit(ERR_INTERNAL)

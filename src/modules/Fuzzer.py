@@ -89,7 +89,6 @@ class Fuzzer:
         logging.info("Strategy: "+self.args.strategy+ ", "+ str(num_targets) + " testing targets, "+ str(len(seeds))+" seeds")
 
         while len(seeds) != 0:
-            print(x)
             if (self.args.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
 
