@@ -1,5 +1,50 @@
-# This file is about option fuzzer support. 
-# OptionGenerator reads a options setting file to generate a random option configuration for the corresponding solvers. 
+# MIT License
+#
+# Copyright (c) [2020 - 2021] The yinyang authors
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# MIT License
+#
+# Copyright (c) [2020 - 2020] The yinyang authors
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+
+# This file is about option fuzzer support.
+# OptionGenerator reads a options setting file to generate a random option configuration for the corresponding solvers.
 # The format of the options setting file is as follow:
 
 # ```
@@ -16,20 +61,20 @@
 # <option name> [type|value]*
 # ```
 
-# `<solver keywords>` : Keywords for matching the solver command-line interfaces. 
-#                       If the keywords are found in the command-line interfaces, 
+# `<solver keywords>` : Keywords for matching the solver command-line interfaces.
+#                       If the keywords are found in the command-line interfaces,
 #                       Yin-Yang will generate a corresponding random option setting.
 
-# `<option name>`: Name of the option item. 
+# `<option name>`: Name of the option item.
 
-# `[type|value]*`: Type or value of the option. 
-#                  The type can be either `bool` or `int`. 
-#                  The value can be either `true`, `false`, or arbitrary integers. 
-#                  In default, i.e., leaving this position empty, the option is assigned to `bool` type. 
+# `[type|value]*`: Type or value of the option.
+#                  The type can be either `bool` or `int`.
+#                  The value can be either `true`, `false`, or arbitrary integers.
+#                  In default, i.e., leaving this position empty, the option is assigned to `bool` type.
 #                  Optfuzz will generate a random value according to the type of the option.
 
-# `###`: Mark for splitting the option setting blocks. 
-#        The options in different blocks are independent.              
+# `###`: Mark for splitting the option setting blocks.
+#        The options in different blocks are independent.
 
 
 import os
@@ -40,7 +85,7 @@ from enum import Enum
 
 class OptionType(Enum):
     BOOL = 0
-    INT = 1  
+    INT = 1
 
 class Option:
     def __init__(self, name, type, min=0, max=1000):
@@ -60,7 +105,7 @@ class OptionGenerator:
             text = reader.read()
         self.configBlocks = []
         self.parse(text)
-    
+
     def generate(self, cli):
         ret = ""
         for block in self.configBlocks:

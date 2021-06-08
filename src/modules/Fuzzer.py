@@ -1,3 +1,25 @@
+# MIT License
+#
+# Copyright (c) [2020 - 2021] The yinyang authors
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 import random
 import shutil
 import os
@@ -37,18 +59,20 @@ class bcolors:
 
 class Fuzzer:
 
-    def __init__(self, args):
+    def __init__(self, args, strategy):
         self.args = args
         self.currentseeds = ""
+        self.strategy = strategy
         self.runforever = True
         self.statistic = Statistic()
         self.generator = None
         self.old_time = time.time()
         self.start_time = time.time()
         self.first_status_bar_printed = False
+        self.name = random_string()
 
         # Init logging
-        fn = datetime.datetime.now().strftime('yinyang-%Y-%m-%d-%M:%S-%p') + "-" + str(self.args.name) +".log"
+        fn = datetime.datetime.now().strftime('yinyang-%Y-%m-%d-%M:%S-%p') + "-" + str(self.name) +".log"
         log_fn = self.args.logfolder+"/"+ fn
 
 
@@ -75,9 +99,9 @@ class Fuzzer:
 
 
     def run(self):
-        if (self.args.strategy == "opfuzz"):
+        if (self.strategy == "opfuzz"):
             seeds = self.args.PATH_TO_SEEDS
-        elif (self.args.strategy == "fusion"):
+        elif (self.strategy == "fusion"):
             if len(self.args.PATH_TO_SEEDS) > 2:
                 seeds = [(a, b) for a in self.args.PATH_TO_SEEDS for b in self.args.PATH_TO_SEEDS]
             elif len(self.args.PATH_TO_SEEDS) == 2:
@@ -86,10 +110,10 @@ class Fuzzer:
         else: assert(False)
 
         num_targets = len(self.args.SOLVER_CLIS)
-        logging.info("Strategy: "+self.args.strategy+ ", "+ str(num_targets) + " testing targets, "+ str(len(seeds))+" seeds")
+        logging.info("Strategy: "+self.strategy+ ", "+ str(num_targets) + " testing targets, "+ str(len(seeds))+" seeds")
 
         while len(seeds) != 0:
-            if (self.args.strategy == "opfuzz"):
+            if (self.strategy == "opfuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
 
                 logging.debug("Processing seed "+seed)
@@ -112,7 +136,7 @@ class Fuzzer:
                 self.generator = TypeAwareOpMutation(script, self.args)
 
 
-            elif (self.args.strategy == "fusion"):
+            elif (self.strategy == "fusion"):
                 seed = seeds.pop(random.randrange(len(seeds)))
 
                 seed1 = seed[0]
@@ -173,27 +197,27 @@ class Fuzzer:
 
     def create_testbook(self, formula):
         testbook = []
-        if not self.args.keep_mutants:
-            testcase = "%s/%s.smt2" % (self.args.scratchfolder, self.args.name)
-        else:
-            testcase = "%s/%s-%s-%s.smt2" % (self.args.scratchfolder,
+#         if not self.args.keep_mutants:
+            # testcase = "%s/%s.smt2" % (self.args.scratchfolder, self.args.name)
+        # else:
+        testcase = "%s/%s-%s-%s.smt2" % (self.args.scratchfolder,
                                              escape(self.currentseeds),
-                                             self.args.name,random_string())
+                                             self.name,random_string())
         with open(testcase, 'w') as testcase_writer:
             testcase_writer.write(formula.__str__())
         for cli in self.args.SOLVER_CLIS:
-            if self.args.optfuzz != None:
-                if not self.args.keep_mutants:
-                    testcase = "%s/%s-%s" % (self.args.scratchfolder,
-                                             plain(cli),
-                                             self.args.name)
-                else:
-                    testcase = "%s/%s-%s-%s-%s.smt2" % (self.args.scratchfolder,
-                                                        plain(cli),
-                                                        escape(self.currentseeds),
-                                                        self.args.name,random_string())
-                with open(testcase, 'w') as testcase_writer:
-                    testcase_writer.write(self.args.optfuzz.generate(cli) + formula.__str__())
+#             if self.args.optfuzz != None:
+                # if not self.args.keep_mutants:
+                    # testcase = "%s/%s-%s" % (self.args.scratchfolder,
+                                             # plain(cli),
+                                             # self.args.name)
+                # else:
+                    # testcase = "%s/%s-%s-%s-%s.smt2" % (self.args.scratchfolder,
+                                                        # plain(cli),
+                                                        # escape(self.currentseeds),
+                                                        # self.args.name,random_string())
+                # with open(testcase, 'w') as testcase_writer:
+                    # testcase_writer.write(self.args.optfuzz.generate(cli) + formula.__str__())
             testbook.append((cli,testcase))
         return testbook
 
@@ -232,7 +256,11 @@ class Fuzzer:
         Tests the solvers with the formula returning "False" if the testing on
         formula should be stopped and "True" otherwise.
         """
-        oracle = self.init_oracle()
+        if self.strategy == "opfuzz":
+            oracle = SolverResult(SolverQueryResult.UNKNOWN)
+        else:
+            oracle = self.init_oracle()
+
         testbook = self.create_testbook(formula)
         reference = None
 
@@ -240,7 +268,8 @@ class Fuzzer:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
             self.statistic.solver_calls += 1
-            stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout, debug=self.args.diagnose)
+            # stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout, debug=self.args.diagnose)
+            stdout, stderr, exitcode = solver.solve(scratchfile, self.args.timeout, debug=False)
 
             # (1) Detect crashes from a solver run including invalid models.
             if self.in_crash_list(stdout, stderr):
@@ -379,8 +408,9 @@ class Fuzzer:
 
 
     def __del__(self):
+        pass
         # TODO: move elsewhere
-        if not self.args.keep_mutants:
-            for file in os.listdir(self.args.scratchfolder):
-                if self.args.name in file:
-                    os.remove(os.path.join(self.args.scratchfolder, file))
+#         if not self.args.keep_mutants:
+            # for file in os.listdir(self.args.scratchfolder):
+                # if self.args.name in file:
+                    # os.remove(os.path.join(self.args.scratchfolder, file))
