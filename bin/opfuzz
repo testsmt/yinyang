@@ -123,9 +123,14 @@ def print_stats():
     exit(OK_BUGS)
 
 
-def control_c(sig, frame):
+def stats_control_c(sig, frame):
     print("\b\b\rUser interrupt", flush=True)
     print_stats()
+
+def silent_control_c(sig, frame):
+    if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
+        exit(OK_NOBUGS)
+    exit(OK_BUGS)
 
 
 if __name__ == "__main__":
@@ -134,7 +139,7 @@ if __name__ == "__main__":
     class ArgumentParser(argparse.ArgumentParser):
         def error(self, message):
             print("usage:"+usage,flush=True)
-            self.exit(ERR_USAGE,'error: %s\nFor a listing of options, use %s --help\n' % (message,self.prog))
+            self.exit(ERR_USAGE,'error: %s\nFor a listing of options, use %s --help.\n' % (message,self.prog))
             
 
     parser = ArgumentParser(
@@ -222,7 +227,11 @@ if __name__ == "__main__":
         exit(OK_NOBUGS)
     else:
         args = run_checks(parser, "opfuzz")
-        signal.signal(signal.SIGINT, control_c)
+
+        if not args.quiet:
+            signal.signal(signal.SIGINT, stats_control_c)
+        else:
+            signal.signal(signal.SIGINT, silent_control_c)
 
         try:
             fuzzer = Fuzzer(args, "opfuzz")

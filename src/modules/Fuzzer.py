@@ -80,11 +80,12 @@ class Fuzzer:
                 handlers=[RotatingFileHandler(filename=log_fn, maxBytes=1024*1024, backupCount=5)],
                 format='%(asctime)s %(message)s', datefmt='[%Y/%m/%d %I:%M:%S %p]',level=logging.DEBUG
         )
-        console = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s %(message)s',datefmt='[%Y/%m/%d %I:%M:%S %p]')
-        console.setLevel(logging.INFO)
-        console.setFormatter(formatter)
-        logging.getLogger().addHandler(console)
+        if not self.args.quiet:
+            console = logging.StreamHandler()
+            formatter = logging.Formatter('%(asctime)s %(message)s',datefmt='[%Y/%m/%d %I:%M:%S %p]')
+            console.setLevel(logging.INFO)
+            console.setFormatter(formatter)
+            logging.getLogger().addHandler(console)
 
 
     def admissible_seed_size(self, seed):
@@ -165,11 +166,10 @@ class Fuzzer:
             logging.debug("Attempting to generate "+ str(self.args.iterations)+ " mutants")
             unsuccessful=0
             for i in range(self.args.iterations):
-                if not self.args.quiet:
-                    if not self.first_status_bar_printed and time.time() - self.old_time >= 1:
-                        self.statistic.printbar(self.start_time)
-                        self.old_time = time.time()
-                        self.first_status_bar_printed = True
+                if not self.first_status_bar_printed and time.time() - self.old_time >= 1:
+                    self.statistic.printbar(self.start_time)
+                    self.old_time = time.time()
+                    self.first_status_bar_printed = True
 
 
                     if time.time() - self.old_time >= 5.0:
@@ -189,7 +189,10 @@ class Fuzzer:
             successful = self.args.iterations - unsuccessful
             logging.debug("Finished generations: "+ str(successful)+" successful, "+ str(unsuccessful)+ " unsuccessful")
         print("All seeds processed")
-        self.statistic.printsum()
+
+        if not self.args.quiet:
+            self.statistic.printsum()
+
         if self.statistic.crashes + self.statistic.soundness == 0:
             exit(OK_NOBUGS)
         exit(OK_BUGS)

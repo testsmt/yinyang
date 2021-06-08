@@ -108,7 +108,7 @@ def check_fusion():
 def run_checks(parser, strategy):
     global args
     args = parser.parse_args()
-    if args.PATH_TO_SEEDS:
+    if not args.PATH_TO_SEEDS:
         parser.error("no seed-file/seed folder specified")
 
     check_solver_clis()
