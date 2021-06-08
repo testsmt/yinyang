@@ -5,7 +5,7 @@ import sys
 python=sys.executable
 
 def call_fuzzer(first_config, second_config, fn, opts):
-    cmd = python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
+    cmd = './bin/yinyang '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + fn
     output = subprocess.getoutput(cmd)
     # print(output)
     crash_issues = None

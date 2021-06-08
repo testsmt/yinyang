@@ -9,7 +9,7 @@ TIME_LIMIT=180
 
 def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
     timeout="timeout --signal=INT "+str(timeout_limit)+" "
-    cmd = timeout+python+' yinyang.py '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + directory
+    cmd = timeout+'./bin/yinyang '+ '"'+ first_config+ ";" + second_config + '" ' + opts + ' ' + directory
     output = subprocess.getoutput(cmd)
     generated_seeds = 0
     used_seeds = 0
