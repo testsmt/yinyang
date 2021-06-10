@@ -97,7 +97,11 @@ def get_seeds():
 
 def check_opfuzz():
     if len(args.PATH_TO_SEEDS) < 1:
-        print("error: please provide at least one seed for the opfuzz strategy",flush=True)
+        print("error: please provide at least one seed",flush=True)
+        exit(ERR_USAGE)
+
+    if len(args.SOLVER_CLIS) < 2:
+        print("error: please provide at least two SMT solvers",flush=True)
         exit(ERR_USAGE)
 
 def check_fusion():

@@ -20,45 +20,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# MIT License
-#
-# Copyright (c) [2020 - 2021] The yinyang authors
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
 import random
 import itertools
 
 from src.parsing.ast import *
 from src.generators.SemanticFusion.VariableFusion import *
 
-def cvars(occs): 
+def cvars(occs):
     """
-    Return a single representative occurrence for each variable.  
+    Return a single representative occurrence for each variable.
     """
     names = []
-    canonicals = [] 
-    for occ in occs: 
+    canonicals = []
+    for occ in occs:
         if occ.name in names:
-            continue 
+            continue
         canonicals.append(occ)
-    return canonicals 
+    return canonicals
 
 
 def debug_formula(formula,name="formula"):
@@ -107,14 +85,14 @@ def disjunction(script1, script2):
     return concat("or", script1, script2)
 
 def type_var_map(global_vars):
-    mapping = {} 
-    for var in global_vars: 
-        if global_vars[var] not in mapping: 
+    mapping = {}
+    for var in global_vars:
+        if global_vars[var] not in mapping:
             mapping[global_vars[var]] = [var]
-        else: 
+        else:
             if not var in mapping[global_vars[var]]:
                 mapping[global_vars[var]].append(var)
-    return mapping 
+    return mapping
 
 def random_tuple_list(lst1, lst2, lb=1):
     """
@@ -141,7 +119,7 @@ def random_tuple_list(lst1, lst2, lb=1):
 
 def random_var_triplets(global_vars1, global_vars2, templates):
     """
-    Create a random variable mapping of variables with same type      
+    Create a random variable mapping of variables with same type
     """
     m1, m2 = type_var_map(global_vars1), type_var_map(global_vars2)
     mapping=[]
@@ -151,4 +129,4 @@ def random_var_triplets(global_vars1, global_vars2, templates):
         random_tuples = random_tuple_list(m1[t],m2[t])
         for tup in random_tuples:
             mapping.append((tup[0], tup[1], random.choice(templates[t]), t))
-    return mapping 
+    return mapping

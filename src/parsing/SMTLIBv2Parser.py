@@ -20,28 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# MIT License
-#
-# Copyright (c) [2020 - 2021] The yinyang authors
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
 # Generated from SMTLIBv2.g4 by ANTLR 4.9.2
 # encoding: utf-8
 from antlr4 import *
@@ -755,82 +733,82 @@ class SMTLIBv2Parser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "<INVALID>", "'('", "')'", "';'", "<INVALID>", 
-                     "<INVALID>", "<INVALID>", "'not'", "'Bool'", "'Int'", 
-                     "'Real'", "'continued-execution'", "'error'", "'false'", 
-                     "'immediate-exit'", "'incomplete'", "'logic'", "'memout'", 
-                     "'sat'", "'success'", "'theory'", "'true'", "'unknown'", 
-                     "'unsupported'", "'unsat'", "'assert'", "'assert-soft'", 
-                     "'simplify'", "'check-sat'", "'check-sat-assuming'", 
-                     "'check-sat-using'", "'labels'", "'minimize'", "'maximize'", 
-                     "'declare-const'", "'declare-datatype'", "'declare-codatatype'", 
-                     "'declare-datatypes'", "'declare-codatatypes'", "'declare-fun'", 
-                     "'declare-sort'", "'define'", "'define-fun'", "'define-const'", 
-                     "'define-fun-rec'", "'define-funs-rec'", "'define-sort'", 
-                     "'display'", "'echo'", "'eval'", "'exit'", "'get-objectives'", 
-                     "'get-assertions'", "'get-assignment'", "'get-info'", 
-                     "'get-model'", "'block-model'", "'get-option'", "'poly/factor'", 
-                     "'get-proof'", "'get-unsat-assumptions'", "'get-unsat-core'", 
-                     "'get-value'", "'pop'", "'push'", "'reset'", "'reset-assertions'", 
-                     "'set-info'", "'set-logic'", "'set-option'", "'then'", 
-                     "'and-then'", "'par-then'", "'or-else'", "'par-or-else'", 
-                     "'par-or'", "'try-for'", "'using-params'", "'!'", "'_'", 
-                     "'as'", "'BINARY'", "'DECIMAL'", "'exists'", "'HEXADECIMAL'", 
-                     "'forall'", "'let'", "'match'", "'NUMERAL'", "'par'", 
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                     "':'", "':all-statistics'", "':assertion-stack-levels'", 
-                     "':authors'", "':category'", "':chainable'", "':definition'", 
-                     "':diagnostic-output-channel'", "':error-behavior'", 
-                     "':extensions'", "':funs'", "':funs-description'", 
-                     "':global-declarations'", "':interactive-mode'", "':language'", 
-                     "':left-assoc'", "':license'", "':named'", "':name'", 
-                     "':notes'", "':pattern'", "':print-success'", "':produce-assertions'", 
-                     "':produce-assignments'", "':produce-models'", "':produce-proofs'", 
-                     "':produce-unsat-assumptions'", "':produce-unsat-cores'", 
-                     "':random-seed'", "':reason-unknown'", "':regular-output-channel'", 
-                     "':reproducible-resource-limit'", "':right-assoc'", 
-                     "':smt-lib-version'", "':sorts'", "':sorts-description'", 
-                     "':source'", "':status'", "':theories'", "':values'", 
+    literalNames = [ "<INVALID>", "<INVALID>", "'('", "')'", "';'", "<INVALID>",
+                     "<INVALID>", "<INVALID>", "'not'", "'Bool'", "'Int'",
+                     "'Real'", "'continued-execution'", "'error'", "'false'",
+                     "'immediate-exit'", "'incomplete'", "'logic'", "'memout'",
+                     "'sat'", "'success'", "'theory'", "'true'", "'unknown'",
+                     "'unsupported'", "'unsat'", "'assert'", "'assert-soft'",
+                     "'simplify'", "'check-sat'", "'check-sat-assuming'",
+                     "'check-sat-using'", "'labels'", "'minimize'", "'maximize'",
+                     "'declare-const'", "'declare-datatype'", "'declare-codatatype'",
+                     "'declare-datatypes'", "'declare-codatatypes'", "'declare-fun'",
+                     "'declare-sort'", "'define'", "'define-fun'", "'define-const'",
+                     "'define-fun-rec'", "'define-funs-rec'", "'define-sort'",
+                     "'display'", "'echo'", "'eval'", "'exit'", "'get-objectives'",
+                     "'get-assertions'", "'get-assignment'", "'get-info'",
+                     "'get-model'", "'block-model'", "'get-option'", "'poly/factor'",
+                     "'get-proof'", "'get-unsat-assumptions'", "'get-unsat-core'",
+                     "'get-value'", "'pop'", "'push'", "'reset'", "'reset-assertions'",
+                     "'set-info'", "'set-logic'", "'set-option'", "'then'",
+                     "'and-then'", "'par-then'", "'or-else'", "'par-or-else'",
+                     "'par-or'", "'try-for'", "'using-params'", "'!'", "'_'",
+                     "'as'", "'BINARY'", "'DECIMAL'", "'exists'", "'HEXADECIMAL'",
+                     "'forall'", "'let'", "'match'", "'NUMERAL'", "'par'",
+                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>",
+                     "':'", "':all-statistics'", "':assertion-stack-levels'",
+                     "':authors'", "':category'", "':chainable'", "':definition'",
+                     "':diagnostic-output-channel'", "':error-behavior'",
+                     "':extensions'", "':funs'", "':funs-description'",
+                     "':global-declarations'", "':interactive-mode'", "':language'",
+                     "':left-assoc'", "':license'", "':named'", "':name'",
+                     "':notes'", "':pattern'", "':print-success'", "':produce-assertions'",
+                     "':produce-assignments'", "':produce-models'", "':produce-proofs'",
+                     "':produce-unsat-assumptions'", "':produce-unsat-cores'",
+                     "':random-seed'", "':reason-unknown'", "':regular-output-channel'",
+                     "':reproducible-resource-limit'", "':right-assoc'",
+                     "':smt-lib-version'", "':sorts'", "':sorts-description'",
+                     "':source'", "':status'", "':theories'", "':values'",
                      "':verbosity'", "':version'" ]
 
-    symbolicNames = [ "<INVALID>", "Comment", "ParOpen", "ParClose", "Semicolon", 
-                      "String", "QuotedSymbol", "RegConst", "PS_Not", "PS_Bool", 
-                      "PS_Int", "PS_Real", "PS_ContinuedExecution", "PS_Error", 
-                      "PS_False", "PS_ImmediateExit", "PS_Incomplete", "PS_Logic", 
-                      "PS_Memout", "PS_Sat", "PS_Success", "PS_Theory", 
-                      "PS_True", "PS_Unknown", "PS_Unsupported", "PS_Unsat", 
-                      "CMD_Assert", "CMD_AssertSoft", "Simplify", "CMD_CheckSat", 
-                      "CMD_CheckSatAssuming", "CMD_CheckSatUsing", "CMD_Labels", 
-                      "CMD_Minimize", "CMD_Maximize", "CMD_DeclareConst", 
-                      "CMD_DeclareDatatype", "CMD_DeclareCodatatype", "CMD_DeclareDatatypes", 
-                      "CMD_DeclareCodatatypes", "CMD_DeclareFun", "CMD_DeclareSort", 
-                      "CMD_Define", "CMD_DefineFun", "CMD_DefineConst", 
-                      "CMD_DefineFunRec", "CMD_DefineFunsRec", "CMD_DefineSort", 
-                      "CMD_Display", "CMD_Echo", "CMD_Eval", "CMD_Exit", 
-                      "CMD_GetObjectives", "CMD_GetAssertions", "CMD_GetAssignment", 
-                      "CMD_GetInfo", "CMD_GetModel", "CMD_BlockModel", "CMD_GetOption", 
-                      "CMD_PolyFactor", "CMD_GetProof", "CMD_GetUnsatAssumptions", 
-                      "CMD_GetUnsatCore", "CMD_GetValue", "CMD_Pop", "CMD_Push", 
-                      "CMD_Reset", "CMD_ResetAssertions", "CMD_SetInfo", 
-                      "CMD_SetLogic", "CMD_SetOption", "TAC_Then", "TAC_AndThen", 
-                      "TAC_ParThen", "TAC_OrElse", "TAC_ParOrElse", "TAC_ParOr", 
-                      "TAC_TryFor", "TAC_UsingParams", "GRW_Exclamation", 
-                      "GRW_Underscore", "GRW_As", "GRW_Binary", "GRW_Decimal", 
-                      "GRW_Exists", "GRW_Hexadecimal", "GRW_Forall", "GRW_Let", 
-                      "GRW_Match", "GRW_Numeral", "GRW_Par", "Numeral", 
-                      "Binary", "HexDecimal", "Decimal", "Colon", "PK_AllStatistics", 
-                      "PK_AssertionStackLevels", "PK_Authors", "PK_Category", 
-                      "PK_Chainable", "PK_Definition", "PK_DiagnosticOutputChannel", 
-                      "PK_ErrorBehaviour", "PK_Extension", "PK_Funs", "PK_FunsDescription", 
-                      "PK_GlobalDeclarations", "PK_InteractiveMode", "PK_Language", 
-                      "PK_LeftAssoc", "PK_License", "PK_Named", "PK_Name", 
-                      "PK_Notes", "PK_Pattern", "PK_PrintSuccess", "PK_ProduceAssertions", 
-                      "PK_ProduceAssignments", "PK_ProduceModels", "PK_ProduceProofs", 
-                      "PK_ProduceUnsatAssumptions", "PK_ProduceUnsatCores", 
-                      "PK_RandomSeed", "PK_ReasonUnknown", "PK_RegularOutputChannel", 
-                      "PK_ReproducibleResourceLimit", "PK_RightAssoc", "PK_SmtLibVersion", 
-                      "PK_Sorts", "PK_SortsDescription", "PK_Source", "PK_Status", 
-                      "PK_Theories", "PK_Values", "PK_Verbosity", "PK_Version", 
+    symbolicNames = [ "<INVALID>", "Comment", "ParOpen", "ParClose", "Semicolon",
+                      "String", "QuotedSymbol", "RegConst", "PS_Not", "PS_Bool",
+                      "PS_Int", "PS_Real", "PS_ContinuedExecution", "PS_Error",
+                      "PS_False", "PS_ImmediateExit", "PS_Incomplete", "PS_Logic",
+                      "PS_Memout", "PS_Sat", "PS_Success", "PS_Theory",
+                      "PS_True", "PS_Unknown", "PS_Unsupported", "PS_Unsat",
+                      "CMD_Assert", "CMD_AssertSoft", "Simplify", "CMD_CheckSat",
+                      "CMD_CheckSatAssuming", "CMD_CheckSatUsing", "CMD_Labels",
+                      "CMD_Minimize", "CMD_Maximize", "CMD_DeclareConst",
+                      "CMD_DeclareDatatype", "CMD_DeclareCodatatype", "CMD_DeclareDatatypes",
+                      "CMD_DeclareCodatatypes", "CMD_DeclareFun", "CMD_DeclareSort",
+                      "CMD_Define", "CMD_DefineFun", "CMD_DefineConst",
+                      "CMD_DefineFunRec", "CMD_DefineFunsRec", "CMD_DefineSort",
+                      "CMD_Display", "CMD_Echo", "CMD_Eval", "CMD_Exit",
+                      "CMD_GetObjectives", "CMD_GetAssertions", "CMD_GetAssignment",
+                      "CMD_GetInfo", "CMD_GetModel", "CMD_BlockModel", "CMD_GetOption",
+                      "CMD_PolyFactor", "CMD_GetProof", "CMD_GetUnsatAssumptions",
+                      "CMD_GetUnsatCore", "CMD_GetValue", "CMD_Pop", "CMD_Push",
+                      "CMD_Reset", "CMD_ResetAssertions", "CMD_SetInfo",
+                      "CMD_SetLogic", "CMD_SetOption", "TAC_Then", "TAC_AndThen",
+                      "TAC_ParThen", "TAC_OrElse", "TAC_ParOrElse", "TAC_ParOr",
+                      "TAC_TryFor", "TAC_UsingParams", "GRW_Exclamation",
+                      "GRW_Underscore", "GRW_As", "GRW_Binary", "GRW_Decimal",
+                      "GRW_Exists", "GRW_Hexadecimal", "GRW_Forall", "GRW_Let",
+                      "GRW_Match", "GRW_Numeral", "GRW_Par", "Numeral",
+                      "Binary", "HexDecimal", "Decimal", "Colon", "PK_AllStatistics",
+                      "PK_AssertionStackLevels", "PK_Authors", "PK_Category",
+                      "PK_Chainable", "PK_Definition", "PK_DiagnosticOutputChannel",
+                      "PK_ErrorBehaviour", "PK_Extension", "PK_Funs", "PK_FunsDescription",
+                      "PK_GlobalDeclarations", "PK_InteractiveMode", "PK_Language",
+                      "PK_LeftAssoc", "PK_License", "PK_Named", "PK_Name",
+                      "PK_Notes", "PK_Pattern", "PK_PrintSuccess", "PK_ProduceAssertions",
+                      "PK_ProduceAssignments", "PK_ProduceModels", "PK_ProduceProofs",
+                      "PK_ProduceUnsatAssumptions", "PK_ProduceUnsatCores",
+                      "PK_RandomSeed", "PK_ReasonUnknown", "PK_RegularOutputChannel",
+                      "PK_ReproducibleResourceLimit", "PK_RightAssoc", "PK_SmtLibVersion",
+                      "PK_Sorts", "PK_SortsDescription", "PK_Source", "PK_Status",
+                      "PK_Theories", "PK_Values", "PK_Verbosity", "PK_Version",
                       "UndefinedSymbol", "WS" ]
 
     RULE_start = 0
@@ -955,38 +933,38 @@ class SMTLIBv2Parser ( Parser ):
     RULE_specific_success_response = 119
     RULE_general_response = 120
 
-    ruleNames =  [ "start", "response", "generalReservedWord", "simpleSymbol", 
-                   "quotedSymbol", "predefSymbol", "predefKeyword", "symbol", 
-                   "numeral", "decimal", "hexadecimal", "binary", "string", 
-                   "reg_const", "keyword", "spec_constant", "s_expr", "index", 
-                   "identifier", "attribute_value", "attribute", "sort", 
-                   "qual_identifier", "var_binding", "sorted_var", "pattern", 
-                   "match_case", "term", "sort_symbol_decl", "meta_spec_constant", 
-                   "fun_symbol_decl", "par_fun_symbol_decl", "theory_attribute", 
-                   "theory_decl", "logic_attribue", "logic", "sort_dec", 
-                   "selector_dec", "constructor_dec", "datatype_dec", "function_dec", 
-                   "function_def", "prop_literal", "script", "cmd_assert", 
-                   "cmd_assertSoft", "cmd_simplify", "cmd_checkSat", "cmd_checkSatAssuming", 
-                   "cmd_checkSatUsing", "cmd_minimize", "cmd_maximize", 
-                   "cmd_declareConst", "cmd_declareDatatype", "cmd_declareCodatatype", 
-                   "cmd_declareDatatypes", "cmd_declareCodatatypes", "cmd_declareFun", 
-                   "cmd_declareSort", "cmd_define", "cmd_defineFun", "cmd_defineConst", 
-                   "cmd_defineFunRec", "cmd_defineFunsRec", "cmd_defineSort", 
-                   "cmd_display", "cmd_echo", "cmd_eval", "cmd_exit", "cmd_GetObjectives", 
-                   "cmd_getAssertions", "cmd_getAssignment", "cmd_getInfo", 
-                   "cmd_getModel", "cmd_blockModel", "cmd_getOption", "cmd_getProof", 
-                   "cmd_getUnsatAssumptions", "cmd_labels", "cmd_getUnsatCore", 
-                   "cmd_getValue", "cmd_pop", "cmd_poly_factor", "cmd_push", 
-                   "cmd_reset", "cmd_resetAssertions", "cmd_setInfo", "cmd_setLogic", 
-                   "cmd_setOption", "tac_then", "tac_and_then", "par_then", 
-                   "or_else", "par_or_else", "par_or", "tryFor", "usingParams", 
-                   "tactical", "command", "b_value", "option", "info_flag", 
-                   "error_behaviour", "reason_unknown", "model_response", 
-                   "info_response", "valuation_pair", "t_valuation_pair", 
-                   "check_sat_response", "echo_response", "get_assertions_response", 
-                   "get_assignment_response", "get_info_response", "get_model_response", 
-                   "get_option_response", "get_proof_response", "get_unsat_assump_response", 
-                   "get_unsat_core_response", "get_value_response", "specific_success_response", 
+    ruleNames =  [ "start", "response", "generalReservedWord", "simpleSymbol",
+                   "quotedSymbol", "predefSymbol", "predefKeyword", "symbol",
+                   "numeral", "decimal", "hexadecimal", "binary", "string",
+                   "reg_const", "keyword", "spec_constant", "s_expr", "index",
+                   "identifier", "attribute_value", "attribute", "sort",
+                   "qual_identifier", "var_binding", "sorted_var", "pattern",
+                   "match_case", "term", "sort_symbol_decl", "meta_spec_constant",
+                   "fun_symbol_decl", "par_fun_symbol_decl", "theory_attribute",
+                   "theory_decl", "logic_attribue", "logic", "sort_dec",
+                   "selector_dec", "constructor_dec", "datatype_dec", "function_dec",
+                   "function_def", "prop_literal", "script", "cmd_assert",
+                   "cmd_assertSoft", "cmd_simplify", "cmd_checkSat", "cmd_checkSatAssuming",
+                   "cmd_checkSatUsing", "cmd_minimize", "cmd_maximize",
+                   "cmd_declareConst", "cmd_declareDatatype", "cmd_declareCodatatype",
+                   "cmd_declareDatatypes", "cmd_declareCodatatypes", "cmd_declareFun",
+                   "cmd_declareSort", "cmd_define", "cmd_defineFun", "cmd_defineConst",
+                   "cmd_defineFunRec", "cmd_defineFunsRec", "cmd_defineSort",
+                   "cmd_display", "cmd_echo", "cmd_eval", "cmd_exit", "cmd_GetObjectives",
+                   "cmd_getAssertions", "cmd_getAssignment", "cmd_getInfo",
+                   "cmd_getModel", "cmd_blockModel", "cmd_getOption", "cmd_getProof",
+                   "cmd_getUnsatAssumptions", "cmd_labels", "cmd_getUnsatCore",
+                   "cmd_getValue", "cmd_pop", "cmd_poly_factor", "cmd_push",
+                   "cmd_reset", "cmd_resetAssertions", "cmd_setInfo", "cmd_setLogic",
+                   "cmd_setOption", "tac_then", "tac_and_then", "par_then",
+                   "or_else", "par_or_else", "par_or", "tryFor", "usingParams",
+                   "tactical", "command", "b_value", "option", "info_flag",
+                   "error_behaviour", "reason_unknown", "model_response",
+                   "info_response", "valuation_pair", "t_valuation_pair",
+                   "check_sat_response", "echo_response", "get_assertions_response",
+                   "get_assignment_response", "get_info_response", "get_model_response",
+                   "get_option_response", "get_proof_response", "get_unsat_assump_response",
+                   "get_unsat_core_response", "get_value_response", "specific_success_response",
                    "general_response" ]
 
     EOF = Token.EOF
@@ -2372,13 +2350,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Underscore)
                 self.state = 310
                 self.symbol()
-                self.state = 312 
+                self.state = 312
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 311
                     self.index()
-                    self.state = 314 
+                    self.state = 314
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.Numeral or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -2610,13 +2588,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 340
                 self.identifier()
-                self.state = 342 
+                self.state = 342
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 341
                     self.sort()
-                    self.state = 344 
+                    self.state = 344
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -2882,13 +2860,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 371
                 self.symbol()
-                self.state = 373 
+                self.state = 373
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 372
                     self.symbol()
-                    self.state = 375 
+                    self.state = 375
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -3110,13 +3088,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 395
                 self.qual_identifier()
-                self.state = 397 
+                self.state = 397
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 396
                     self.term()
-                    self.state = 399 
+                    self.state = 399
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 91)) & ~0x3f) == 0 and ((1 << (_la - 91)) & ((1 << (SMTLIBv2Parser.Numeral - 91)) | (1 << (SMTLIBv2Parser.Binary - 91)) | (1 << (SMTLIBv2Parser.HexDecimal - 91)) | (1 << (SMTLIBv2Parser.Decimal - 91)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 91)))) != 0)):
@@ -3136,13 +3114,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Underscore)
                 self.state = 406
                 self.qual_identifier()
-                self.state = 408 
+                self.state = 408
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 407
                     self.term()
-                    self.state = 410 
+                    self.state = 410
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 91)) & ~0x3f) == 0 and ((1 << (_la - 91)) & ((1 << (SMTLIBv2Parser.Numeral - 91)) | (1 << (SMTLIBv2Parser.Binary - 91)) | (1 << (SMTLIBv2Parser.HexDecimal - 91)) | (1 << (SMTLIBv2Parser.Decimal - 91)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 91)))) != 0)):
@@ -3162,13 +3140,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Let)
                 self.state = 417
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 419 
+                self.state = 419
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 418
                     self.var_binding()
-                    self.state = 421 
+                    self.state = 421
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -3190,13 +3168,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Forall)
                 self.state = 429
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 431 
+                self.state = 431
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 430
                     self.sorted_var()
-                    self.state = 433 
+                    self.state = 433
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -3218,13 +3196,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Exists)
                 self.state = 441
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 443 
+                self.state = 443
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 442
                     self.sorted_var()
-                    self.state = 445 
+                    self.state = 445
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -3248,13 +3226,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.term()
                 self.state = 454
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 456 
+                self.state = 456
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 455
                     self.match_case()
-                    self.state = 458 
+                    self.state = 458
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -3274,13 +3252,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Exclamation)
                 self.state = 465
                 self.term()
-                self.state = 467 
+                self.state = 467
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 466
                     self.attribute()
-                    self.state = 469 
+                    self.state = 469
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (((((_la - 95)) & ~0x3f) == 0 and ((1 << (_la - 95)) & ((1 << (SMTLIBv2Parser.Colon - 95)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 95)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 95)) | (1 << (SMTLIBv2Parser.PK_Authors - 95)) | (1 << (SMTLIBv2Parser.PK_Category - 95)) | (1 << (SMTLIBv2Parser.PK_Chainable - 95)) | (1 << (SMTLIBv2Parser.PK_Definition - 95)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 95)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 95)) | (1 << (SMTLIBv2Parser.PK_Extension - 95)) | (1 << (SMTLIBv2Parser.PK_Funs - 95)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 95)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 95)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 95)) | (1 << (SMTLIBv2Parser.PK_Language - 95)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 95)) | (1 << (SMTLIBv2Parser.PK_License - 95)) | (1 << (SMTLIBv2Parser.PK_Named - 95)) | (1 << (SMTLIBv2Parser.PK_Name - 95)) | (1 << (SMTLIBv2Parser.PK_Notes - 95)) | (1 << (SMTLIBv2Parser.PK_Pattern - 95)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 95)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 95)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 95)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 95)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 95)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 95)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 95)) | (1 << (SMTLIBv2Parser.PK_Sorts - 95)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 95)) | (1 << (SMTLIBv2Parser.PK_Source - 95)) | (1 << (SMTLIBv2Parser.PK_Status - 95)) | (1 << (SMTLIBv2Parser.PK_Theories - 95)) | (1 << (SMTLIBv2Parser.PK_Values - 95)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 95)) | (1 << (SMTLIBv2Parser.PK_Version - 95)))) != 0)):
@@ -3538,13 +3516,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 511
                 self.identifier()
-                self.state = 513 
+                self.state = 513
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 512
                     self.sort()
-                    self.state = 515 
+                    self.state = 515
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -3662,13 +3640,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Par)
                 self.state = 530
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 532 
+                self.state = 532
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 531
                     self.symbol()
-                    self.state = 534 
+                    self.state = 534
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -3680,13 +3658,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 538
                 self.identifier()
-                self.state = 540 
+                self.state = 540
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 539
                     self.sort()
-                    self.state = 542 
+                    self.state = 542
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -3803,13 +3781,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.PK_Sorts)
                 self.state = 556
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 558 
+                self.state = 558
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 557
                     self.sort_symbol_decl()
-                    self.state = 560 
+                    self.state = 560
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -3825,13 +3803,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.PK_Funs)
                 self.state = 565
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 567 
+                self.state = 567
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 566
                     self.par_fun_symbol_decl()
-                    self.state = 569 
+                    self.state = 569
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -3951,13 +3929,13 @@ class SMTLIBv2Parser ( Parser ):
             self.match(SMTLIBv2Parser.PS_Theory)
             self.state = 588
             self.symbol()
-            self.state = 590 
+            self.state = 590
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
                 self.state = 589
                 self.theory_attribute()
-                self.state = 592 
+                self.state = 592
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if not (((((_la - 95)) & ~0x3f) == 0 and ((1 << (_la - 95)) & ((1 << (SMTLIBv2Parser.Colon - 95)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 95)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 95)) | (1 << (SMTLIBv2Parser.PK_Authors - 95)) | (1 << (SMTLIBv2Parser.PK_Category - 95)) | (1 << (SMTLIBv2Parser.PK_Chainable - 95)) | (1 << (SMTLIBv2Parser.PK_Definition - 95)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 95)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 95)) | (1 << (SMTLIBv2Parser.PK_Extension - 95)) | (1 << (SMTLIBv2Parser.PK_Funs - 95)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 95)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 95)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 95)) | (1 << (SMTLIBv2Parser.PK_Language - 95)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 95)) | (1 << (SMTLIBv2Parser.PK_License - 95)) | (1 << (SMTLIBv2Parser.PK_Named - 95)) | (1 << (SMTLIBv2Parser.PK_Name - 95)) | (1 << (SMTLIBv2Parser.PK_Notes - 95)) | (1 << (SMTLIBv2Parser.PK_Pattern - 95)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 95)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 95)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 95)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 95)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 95)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 95)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 95)) | (1 << (SMTLIBv2Parser.PK_Sorts - 95)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 95)) | (1 << (SMTLIBv2Parser.PK_Source - 95)) | (1 << (SMTLIBv2Parser.PK_Status - 95)) | (1 << (SMTLIBv2Parser.PK_Theories - 95)) | (1 << (SMTLIBv2Parser.PK_Values - 95)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 95)) | (1 << (SMTLIBv2Parser.PK_Version - 95)))) != 0)):
@@ -4046,13 +4024,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.PK_Theories)
                 self.state = 597
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 599 
+                self.state = 599
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 598
                     self.symbol()
-                    self.state = 601 
+                    self.state = 601
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -4164,13 +4142,13 @@ class SMTLIBv2Parser ( Parser ):
             self.match(SMTLIBv2Parser.PS_Logic)
             self.state = 618
             self.symbol()
-            self.state = 620 
+            self.state = 620
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
                 self.state = 619
                 self.logic_attribue()
-                self.state = 622 
+                self.state = 622
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if not (((((_la - 95)) & ~0x3f) == 0 and ((1 << (_la - 95)) & ((1 << (SMTLIBv2Parser.Colon - 95)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 95)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 95)) | (1 << (SMTLIBv2Parser.PK_Authors - 95)) | (1 << (SMTLIBv2Parser.PK_Category - 95)) | (1 << (SMTLIBv2Parser.PK_Chainable - 95)) | (1 << (SMTLIBv2Parser.PK_Definition - 95)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 95)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 95)) | (1 << (SMTLIBv2Parser.PK_Extension - 95)) | (1 << (SMTLIBv2Parser.PK_Funs - 95)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 95)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 95)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 95)) | (1 << (SMTLIBv2Parser.PK_Language - 95)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 95)) | (1 << (SMTLIBv2Parser.PK_License - 95)) | (1 << (SMTLIBv2Parser.PK_Named - 95)) | (1 << (SMTLIBv2Parser.PK_Name - 95)) | (1 << (SMTLIBv2Parser.PK_Notes - 95)) | (1 << (SMTLIBv2Parser.PK_Pattern - 95)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 95)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 95)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 95)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 95)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 95)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 95)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 95)) | (1 << (SMTLIBv2Parser.PK_Sorts - 95)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 95)) | (1 << (SMTLIBv2Parser.PK_Source - 95)) | (1 << (SMTLIBv2Parser.PK_Status - 95)) | (1 << (SMTLIBv2Parser.PK_Theories - 95)) | (1 << (SMTLIBv2Parser.PK_Values - 95)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 95)) | (1 << (SMTLIBv2Parser.PK_Version - 95)))) != 0)):
@@ -4436,13 +4414,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.enterOuterAlt(localctx, 1)
                 self.state = 646
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 648 
+                self.state = 648
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 647
                     self.constructor_dec()
-                    self.state = 650 
+                    self.state = 650
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -4460,13 +4438,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Par)
                 self.state = 656
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 658 
+                self.state = 658
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 657
                     self.symbol()
-                    self.state = 660 
+                    self.state = 660
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -4476,13 +4454,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 self.state = 663
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 665 
+                self.state = 665
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 664
                     self.constructor_dec()
-                    self.state = 667 
+                    self.state = 667
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -7118,13 +7096,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 830
                 self.tac_then()
-                self.state = 832 
+                self.state = 832
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 831
                     self.tactical()
-                    self.state = 834 
+                    self.state = 834
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat) | (1 << SMTLIBv2Parser.Simplify))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -7140,13 +7118,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 839
                 self.tac_and_then()
-                self.state = 841 
+                self.state = 841
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 840
                     self.tactical()
-                    self.state = 843 
+                    self.state = 843
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat) | (1 << SMTLIBv2Parser.Simplify))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -7162,7 +7140,7 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 848
                 self.par_then()
-                self.state = 850 
+                self.state = 850
                 self._errHandler.sync(self)
                 _alt = 1
                 while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -7172,7 +7150,7 @@ class SMTLIBv2Parser ( Parser ):
 
                     else:
                         raise NoViableAltException(self)
-                    self.state = 852 
+                    self.state = 852
                     self._errHandler.sync(self)
                     _alt = self._interp.adaptivePredict(self._input,54,self._ctx)
 
@@ -7188,7 +7166,7 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 858
                 self.or_else()
-                self.state = 860 
+                self.state = 860
                 self._errHandler.sync(self)
                 _alt = 1
                 while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -7198,7 +7176,7 @@ class SMTLIBv2Parser ( Parser ):
 
                     else:
                         raise NoViableAltException(self)
-                    self.state = 862 
+                    self.state = 862
                     self._errHandler.sync(self)
                     _alt = self._interp.adaptivePredict(self._input,55,self._ctx)
 
@@ -7214,13 +7192,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 868
                 self.par_or_else()
-                self.state = 870 
+                self.state = 870
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 869
                     self.tactical()
-                    self.state = 872 
+                    self.state = 872
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat) | (1 << SMTLIBv2Parser.Simplify))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -7236,13 +7214,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 877
                 self.par_or()
-                self.state = 879 
+                self.state = 879
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 878
                     self.tactical()
-                    self.state = 881 
+                    self.state = 881
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat) | (1 << SMTLIBv2Parser.Simplify))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -7258,13 +7236,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 886
                 self.tryFor()
-                self.state = 888 
+                self.state = 888
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 887
                     self.tactical()
-                    self.state = 890 
+                    self.state = 890
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat) | (1 << SMTLIBv2Parser.Simplify))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -7296,7 +7274,7 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 902
                 self.cmd_echo()
-                self.state = 905 
+                self.state = 905
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
@@ -7314,7 +7292,7 @@ class SMTLIBv2Parser ( Parser ):
                     else:
                         raise NoViableAltException(self)
 
-                    self.state = 907 
+                    self.state = 907
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -7810,13 +7788,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.cmd_declareDatatypes()
                 self.state = 992
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 994 
+                self.state = 994
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 993
                     self.sort_dec()
-                    self.state = 996 
+                    self.state = 996
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -7826,13 +7804,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 self.state = 999
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1001 
+                self.state = 1001
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1000
                     self.datatype_dec()
-                    self.state = 1003 
+                    self.state = 1003
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -7852,13 +7830,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.cmd_declareCodatatypes()
                 self.state = 1010
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1012 
+                self.state = 1012
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1011
                     self.sort_dec()
-                    self.state = 1014 
+                    self.state = 1014
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -7872,13 +7850,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 self.state = 1019
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1021 
+                self.state = 1021
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1020
                     self.datatype_dec()
-                    self.state = 1023 
+                    self.state = 1023
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -8000,13 +7978,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.cmd_defineFunsRec()
                 self.state = 1075
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1077 
+                self.state = 1077
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1076
                     self.function_dec()
-                    self.state = 1079 
+                    self.state = 1079
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -8016,13 +7994,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 self.state = 1082
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1084 
+                self.state = 1084
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1083
                     self.term()
-                    self.state = 1086 
+                    self.state = 1086
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 91)) & ~0x3f) == 0 and ((1 << (_la - 91)) & ((1 << (SMTLIBv2Parser.Numeral - 91)) | (1 << (SMTLIBv2Parser.Binary - 91)) | (1 << (SMTLIBv2Parser.HexDecimal - 91)) | (1 << (SMTLIBv2Parser.Decimal - 91)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 91)))) != 0)):
@@ -8080,7 +8058,7 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 1111
                 self.cmd_echo()
-                self.state = 1114 
+                self.state = 1114
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
@@ -8098,7 +8076,7 @@ class SMTLIBv2Parser ( Parser ):
                     else:
                         raise NoViableAltException(self)
 
-                    self.state = 1116 
+                    self.state = 1116
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
@@ -8242,13 +8220,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.cmd_getValue()
                 self.state = 1173
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1175 
+                self.state = 1175
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1174
                     self.term()
-                    self.state = 1177 
+                    self.state = 1177
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 91)) & ~0x3f) == 0 and ((1 << (_la - 91)) & ((1 << (SMTLIBv2Parser.Numeral - 91)) | (1 << (SMTLIBv2Parser.Binary - 91)) | (1 << (SMTLIBv2Parser.HexDecimal - 91)) | (1 << (SMTLIBv2Parser.Decimal - 91)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 91)))) != 0)):
@@ -8999,13 +8977,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.CMD_DefineFunsRec)
                 self.state = 1301
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1303 
+                self.state = 1303
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1302
                     self.function_dec()
-                    self.state = 1305 
+                    self.state = 1305
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not (_la==SMTLIBv2Parser.ParOpen):
@@ -9015,13 +8993,13 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 self.state = 1308
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1310 
+                self.state = 1310
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1309
                     self.term()
-                    self.state = 1312 
+                    self.state = 1312
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
                     if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 91)) & ~0x3f) == 0 and ((1 << (_la - 91)) & ((1 << (SMTLIBv2Parser.Numeral - 91)) | (1 << (SMTLIBv2Parser.Binary - 91)) | (1 << (SMTLIBv2Parser.HexDecimal - 91)) | (1 << (SMTLIBv2Parser.Decimal - 91)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 91)))) != 0)):
@@ -9555,13 +9533,13 @@ class SMTLIBv2Parser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 1366
             self.match(SMTLIBv2Parser.ParOpen)
-            self.state = 1368 
+            self.state = 1368
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
                 self.state = 1367
                 self.info_response()
-                self.state = 1370 
+                self.state = 1370
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if not (((((_la - 95)) & ~0x3f) == 0 and ((1 << (_la - 95)) & ((1 << (SMTLIBv2Parser.Colon - 95)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 95)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 95)) | (1 << (SMTLIBv2Parser.PK_Authors - 95)) | (1 << (SMTLIBv2Parser.PK_Category - 95)) | (1 << (SMTLIBv2Parser.PK_Chainable - 95)) | (1 << (SMTLIBv2Parser.PK_Definition - 95)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 95)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 95)) | (1 << (SMTLIBv2Parser.PK_Extension - 95)) | (1 << (SMTLIBv2Parser.PK_Funs - 95)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 95)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 95)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 95)) | (1 << (SMTLIBv2Parser.PK_Language - 95)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 95)) | (1 << (SMTLIBv2Parser.PK_License - 95)) | (1 << (SMTLIBv2Parser.PK_Named - 95)) | (1 << (SMTLIBv2Parser.PK_Name - 95)) | (1 << (SMTLIBv2Parser.PK_Notes - 95)) | (1 << (SMTLIBv2Parser.PK_Pattern - 95)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 95)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 95)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 95)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 95)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 95)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 95)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 95)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 95)) | (1 << (SMTLIBv2Parser.PK_Sorts - 95)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 95)) | (1 << (SMTLIBv2Parser.PK_Source - 95)) | (1 << (SMTLIBv2Parser.PK_Status - 95)) | (1 << (SMTLIBv2Parser.PK_Theories - 95)) | (1 << (SMTLIBv2Parser.PK_Values - 95)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 95)) | (1 << (SMTLIBv2Parser.PK_Version - 95)))) != 0)):
@@ -9897,13 +9875,13 @@ class SMTLIBv2Parser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 1405
             self.match(SMTLIBv2Parser.ParOpen)
-            self.state = 1407 
+            self.state = 1407
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
                 self.state = 1406
                 self.valuation_pair()
-                self.state = 1409 
+                self.state = 1409
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if not (_la==SMTLIBv2Parser.ParOpen):

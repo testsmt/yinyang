@@ -45,7 +45,6 @@ from src.utils import random_string, plain, escape, in_list
 from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
-
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -72,9 +71,8 @@ class Fuzzer:
         self.name = random_string()
 
         # Init logging
-        fn = datetime.datetime.now().strftime('yinyang-%Y-%m-%d-%M:%S-%p') + "-" + str(self.name) +".log"
+        fn = datetime.datetime.now().strftime(self.strategy+'-%Y-%m-%d-%M:%S-%p') + "-" + str(self.name) +".log"
         log_fn = self.args.logfolder+"/"+ fn
-
 
         logging.basicConfig(
                 handlers=[RotatingFileHandler(filename=log_fn, maxBytes=1024*1024, backupCount=5)],
@@ -86,7 +84,6 @@ class Fuzzer:
             console.setLevel(logging.INFO)
             console.setFormatter(formatter)
             logging.getLogger().addHandler(console)
-
 
     def admissible_seed_size(self, seed):
         """
@@ -171,10 +168,9 @@ class Fuzzer:
                     self.old_time = time.time()
                     self.first_status_bar_printed = True
 
-
-                    if time.time() - self.old_time >= 5.0:
-                        self.statistic.printbar(self.start_time)
-                        self.old_time = time.time()
+                if time.time() - self.old_time >= 5.0:
+                    self.statistic.printbar(self.start_time)
+                    self.old_time = time.time()
 
                 formula, success, skip_seed = self.generator.generate()
                 if not success:
@@ -188,7 +184,7 @@ class Fuzzer:
 
             successful = self.args.iterations - unsuccessful
             logging.debug("Finished generations: "+ str(successful)+" successful, "+ str(unsuccessful)+ " unsuccessful")
-        print("All seeds processed")
+        print("All seeds processed", flush=True)
 
         if not self.args.quiet:
             self.statistic.printsum()
@@ -409,11 +405,8 @@ class Fuzzer:
             log.write(sol_stdout)
         return report_id, report
 
-
     def __del__(self):
-        pass
-        # TODO: move elsewhere
-#         if not self.args.keep_mutants:
-            # for file in os.listdir(self.args.scratchfolder):
-                # if self.args.name in file:
-                    # os.remove(os.path.join(self.args.scratchfolder, file))
+        # remove files in scratchfolder
+        for fn in os.listdir(self.args.scratchfolder):
+            if self.name in fn:
+                os.remove(os.path.join(self.args.scratchfolder, fn))
