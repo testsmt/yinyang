@@ -99,13 +99,14 @@ class Fuzzer:
     def run(self):
         if (self.strategy == "opfuzz"):
             seeds = self.args.PATH_TO_SEEDS
-        elif (self.strategy == "fusion"):
+        elif (self.strategy == "yinyang"):
             if len(self.args.PATH_TO_SEEDS) > 2:
                 seeds = [(a, b) for a in self.args.PATH_TO_SEEDS for b in self.args.PATH_TO_SEEDS]
             elif len(self.args.PATH_TO_SEEDS) == 2:
                 seeds = [(self.args.PATH_TO_SEEDS[0],self.args.PATH_TO_SEEDS[1])]
             else: assert(False)
-        else: assert(False)
+        else:
+            assert(False)
 
         num_targets = len(self.args.SOLVER_CLIS)
         logging.info("Strategy: "+self.strategy+ ", "+ str(num_targets) + " testing targets, "+ str(len(seeds))+" seeds")
@@ -134,16 +135,16 @@ class Fuzzer:
                 self.generator = TypeAwareOpMutation(script, self.args)
 
 
-            elif (self.strategy == "fusion"):
+            elif (self.strategy == "yinyang"):
                 seed = seeds.pop(random.randrange(len(seeds)))
 
                 seed1 = seed[0]
                 seed2 = seed[1]
 
                 logging.debug("Processing seeds "+seed1+" "+seed2)
-                self.statistic.seeds += 2
+                self.statistic.total_seeds += 2
                 if not self.admissible_seed_size(seed1) or not self.admissible_seed_size(seed1):
-                    self.statistic.ignored +=2
+                    self.statistic.invalid_seeds+=2
                     logging.debug("Skipping invalid seed: exceeds max file size")
                     continue
 
@@ -152,7 +153,7 @@ class Fuzzer:
                 script2 = parse_file(seed2,silent=True)
 
                 if not script1 or not script2: # i.e. parsing was unsucessful
-                    self.statistic.ignored +=2
+                    self.statistic.invalid_seeds+=2
                     logging.debug("Skipping invalid seed: error in parsing")
                     continue
 

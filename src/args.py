@@ -77,7 +77,7 @@ def create_scratch_folder():
 
 def get_seeds():
     temp_seeds = []
-    for path in args.PATH_TO_SEEDS.split(" "):
+    for path in args.PATH_TO_SEEDS:
         if not os.path.exists(path):
             print('error: folder/file "%s" does not exist' % (path), flush=True)
             exit(ERR_USAGE)
@@ -105,8 +105,12 @@ def check_opfuzz():
         exit(ERR_USAGE)
 
 def check_fusion():
-    if (args.strategy == "fusion" and len(args.PATH_TO_SEEDS) < 2):
+    if len(args.PATH_TO_SEEDS) < 2:
         print("error: please provide at least two seeds for the fusion strategy",flush=True)
+        exit(ERR_USAGE)
+
+    if len(args.SOLVER_CLIS) < 1:
+        print("error: please provide at one SMT solvers",flush=True)
         exit(ERR_USAGE)
 
 def run_checks(parser, strategy):

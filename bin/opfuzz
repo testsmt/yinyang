@@ -43,7 +43,7 @@ try:
     import subprocess
     label = subprocess.getoutput(["cd " + rootpath +" && git describe --tags"]).strip()
 
-    VERSION = str(label).split("-")[0][3:] 
+    VERSION = str(label).split("-")[0][1:] 
     COMMIT  = str(label).split("-")[2][:-1]
 except:
     VERSION = "0.2.0"
@@ -159,22 +159,40 @@ throw an error message.
 
 
 *** Example 2 (finding a bug with opfuzz) ***
-The following command sequence will showcase the bug finding process with opfuzz   
-We will first download the neccessary solvers and the seed.  
+The following command sequence will let you find a soundness bug in cvc4-1.7.  
 
-    1. Download seed
-    $ wget 
+** 1. Get cvc4-1.7 **
+For linux, execute: 
 
-    2. Get cvc4-1.7 
-
-    Linux:
     $ wget https://github.com/cvc5/cvc5/releases/download/1.7/cvc4-1.7-x86_64-linux-opt 
+    $ chmod + x cvc4-1.7-x86_64-linux-opt
 
-    OSX: 
-    build cvc4 from tarball https://github.com/cvc5/cvc5/releases/tag/1.7  
+For OSX and windows, you can build cvc4 from tarball available on GitHub: 
+https://github.com/cvc5/cvc5/releases/tag/1.7.   
 
-    3. Run opfuzz 
-    $ opfuzz 
+** 2. Seed ** 
+Create a file seed.smt2 with the following content
+
+    $ cat seed.smt2
+    (assert (and (< 60.3 (exp 4.1) 60.4) (< (exp 5.1) 164.1)))
+    (check-sat)
+
+** 3. Run opfuzz **
+Now, run opfuzz with the following configurations on the fabricated seed.
+
+    $ opfuzz "./cvc4-1.7-x86_64-linux-opt -q --sygus-inference;./cvc4-1.7-x86_64-linux-opt -q" seed.smt2 
+    [2021/06/10 02:47:49 PM] Strategy: opfuzz, 2 testing targets, 1 seeds
+    [2021/06/10 02:47:49 PM] Detected soundness bug! bugs/incorrect-cvc4-17-x86_64-linux-opt-q-seed-5yCdH.smt2
+    All seeds processed
+    1 seeds processed, 1 valid, 0 invalid 
+    1 bug triggers found    
+
+You can now observe the corresponding bug by executing     
+
+    $ ./cvc4-1.7-x86_64-linux-opt -q --sygus-inference bugs/incorrect-cvc4-17-x86_64-linux-opt-q-seed-5yCdH.smt2
+    unsat
+    $ ./cvc4-1.7-x86_64-linux-opt -q bugs/incorrect-cvc4-17-x86_64-linux-opt-q-seed-5yCdH.smt2
+    sat
 
 """
 def print_stats():

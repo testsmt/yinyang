@@ -34,7 +34,7 @@ class SemanticFusion(Generator):
         self.formula1 = formula1
         self.formula2 = formula2
         self.args = args
-        self.config_file = self.args.fusionfun
+        self.config = self.args.config
         self.oracle = self.args.oracle
         self.templates = {}
         self._parse_mrs()
@@ -45,7 +45,7 @@ class SemanticFusion(Generator):
             exit(ERR_USAGE)
 
     def _parse_mrs(self):
-        with open(self.config_file) as f:
+        with open(self.config) as f:
             lines = f.readlines()
         started=False
         curr = []
