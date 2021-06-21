@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -23,6 +23,6 @@
 OK_NOBUGS = 0           # no error and no bugs
 OK_BUGS = 1             # no error and bugs
 ERR_USAGE = 2           # commandline usage error
-ERR_INTERNAL = 3        # error within the tool
+ERR_INTERNAL = 3        # internal error within the tool
 ERR_SOLVER_CFG = 4      # usage error of one or more solver configurations
-ERR_EXHAUSTED_DISK = 5  # disk space seems exhausted
+ERR_EXHAUSTED_DISK = 5  # disk space exhaustion error

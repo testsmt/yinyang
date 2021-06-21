@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -20,55 +20,55 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import unittest
 import sys
+import unittest
+
+from src.parsing.ast import Const, Var, Expr
+from src.parsing.parse import parse_str
+
 sys.path.append("../../")
 
-from src.parsing.ast import *
-from src.parsing.parse import *
 
 class TermTestCase(unittest.TestCase):
     def test_term(self):
-        formula1="""\
+        formula1 = """\
 (declare-const y Int)
 (declare-const v Bool)
 (assert (= v (not (= y (- 1)))))
 (assert (ite v false (= y (- 1))))
 (check-sat)
 """
-        formula2="""\
+        formula2 = """\
 (declare-const x Int)
 (declare-const y Int)
 (assert (= (+ x y) y))
 """
 
         def var2const():
-            script=parse_str(formula1)
+            script = parse_str(formula1)
             script.commands[2].term.substitute(
-                    Var(name="v",type="Bool"),
-                    Const(name="true",type="Bool")
+                Var(name="v", type="Bool"), Const(name="true", type="Bool")
             )
             self.assertEqual(
-                    script.commands[2].term.__str__(),
-                    "(= true (not (= y (- 1))))"
+                script.commands[2].term.__str__(), "(= true (not (= y (- 1))))"
             )
 
         def entire_expr():
             assert_expr = parse_str(formula2).commands[2].term
-            z = Var("z","Int")
-            y = Var("y","Int")
-            assert_expr.substitute(assert_expr, Expr("-",[z,y]))
+            z = Var("z", "Int")
+            y = Var("y", "Int")
+            assert_expr.substitute(assert_expr, Expr("-", [z, y]))
             self.assertEqual(assert_expr.__str__(), "(- z y)")
 
         def subexpr():
-            z = Var("z","Int")
-            y = Var("y","Int")
+            z = Var("z", "Int")
+            y = Var("y", "Int")
             assert_expr = parse_str(formula2).commands[2].term
-            assert_expr.substitute(assert_expr.subterms[0], Expr("-",[z,y]))
+            assert_expr.substitute(assert_expr.subterms[0], Expr("-", [z, y]))
             self.assertEqual(assert_expr.__str__(), "(= (- z y) y)")
 
         def substitute1():
-            formula="""\
+            formula = """\
 (declare-const x String)
 (declare-const y String)
 (declare-const z String)
@@ -76,13 +76,16 @@ class TermTestCase(unittest.TestCase):
 (assert (= x (str.substr z 0 (str.len x))))
             """
             expr = parse_str(formula).commands[4].term
-            x = Var("x","String")
-            var1 = Var("var1","String")
-            expr.substitute(x,var1)
-            self.assertEqual(expr.__str__(),"(= var1 (str.substr z 0 (str.len var1)))")
+            x = Var("x", "String")
+            var1 = Var("var1", "String")
+            expr.substitute(x, var1)
+            self.assertEqual(
+                    expr.__str__(),
+                    "(= var1 (str.substr z 0 (str.len var1)))"
+            )
 
         def substitute2():
-            formula="""\
+            formula = """\
 (declare-const x String)
 (declare-const y String)
 (declare-const z String)
@@ -90,16 +93,21 @@ class TermTestCase(unittest.TestCase):
 (assert (= x (str.substr z 0 (str.len x))))
 (assert (= y (str.replace z x (str.at z (str.len z)))))
             """
-            formula= parse_str(formula)
-            expr = Expr(op="str++", subterms=[Var("x","String"), Var("y","String")])
+            formula = parse_str(formula)
+            # expr = Expr(op="str++",
+            # subterms=[Var("x", "String"), Var("y", "String")])
             equals = formula.commands[5].term
             replacee = formula.commands[3].term.subterms[1]
-            z = Var("z","String")
+            z = Var("z", "String")
             equals.substitute(z, replacee)
-            self.assertEqual(equals.__str__(),"(= y (str.replace (str.++ x y) x (str.at (str.++ x y) (str.len (str.++ x y)))))")
+            self.assertEqual(
+                equals.__str__(),
+                "(= y (str.replace (str.++ x y) x\
+                 (str.at (str.++ x y) (str.len (str.++ x y)))))",
+            )
 
         def free_vars_quantifier():
-            script="""\
+            script = """\
 (set-info :category "industrial")
 (set-info :status unsat)
 (declare-fun a () Real)
@@ -110,7 +118,7 @@ class TermTestCase(unittest.TestCase):
             script = parse_str(script)
             self.assertEqual(script.free_var_occs.__str__(), "[a:Real]")
 
-            script="""\
+            script = """\
 (set-info :category "industrial")
 (set-info :status unsat)
 (declare-fun a () Real)
@@ -121,7 +129,7 @@ class TermTestCase(unittest.TestCase):
             script = parse_str(script)
             self.assertEqual(script.free_var_occs.__str__(), "[a:Real]")
 
-            script="""\
+            script = """\
 (set-info :category "industrial")
 (set-info :status unsat)
 (declare-fun a () Real)
@@ -130,59 +138,59 @@ class TermTestCase(unittest.TestCase):
 (check-sat)
 """
             script = parse_str(script)
-            self.assertEqual(script.free_var_occs.__str__(),"[ts0uscore1:Real, a:Real]")
-
+            self.assertEqual(
+                script.free_var_occs.__str__(), "[ts0uscore1:Real, a:Real]"
+            )
 
         def free_vars_let():
-            script_str="""\
+            script_str = """\
 (declare-fun ?v_0 () Int)
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))
 (check-sat)
 (exit)
 """
             script = parse_str(script_str)
-            self.assertEqual(script.free_var_occs.__str__(),"[]")
+            self.assertEqual(script.free_var_occs.__str__(), "[]")
 
-            script_str="""\
+            script_str = """\
 (declare-fun ?v_0 () Int)
 (assert (= ?v_0 0))
 (check-sat)
 (exit)
 """
             script = parse_str(script_str)
-            self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
+            self.assertEqual(script.free_var_occs.__str__(), "[?v_0:Int]")
 
         def free_vars_let2():
-            script_str="""\
+            script_str = """\
 (declare-fun ?v_0 () Int)
 (assert (= ?v_0 0))
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))
 (check-sat)
 (exit)
 """
-            script = parse_str(script_str,silent=False)
-            self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
+            script = parse_str(script_str, silent=False)
+            self.assertEqual(script.free_var_occs.__str__(), "[?v_0:Int]")
 
-            script_str="""\
+            script_str = """\
 (declare-fun ?v_0 () Int)
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))
 (assert (= ?v_0 0))
 (check-sat)
 (exit)
 """
-            script = parse_str(script_str,silent=False)
-            self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
+            script = parse_str(script_str, silent=False)
+            self.assertEqual(script.free_var_occs.__str__(), "[?v_0:Int]")
 
-            script_str="""\
+            script_str = """\
 (declare-fun ?v_0 () Int)
 (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))
 (assert (= ?v_0 0))
 (check-sat)
 (exit)
 """
-            script = parse_str(script_str,silent=False)
-            self.assertEqual(script.free_var_occs.__str__(),"[?v_0:Int]")
-
+            script = parse_str(script_str, silent=False)
+            self.assertEqual(script.free_var_occs.__str__(), "[?v_0:Int]")
 
         var2const()
         entire_expr()
@@ -194,7 +202,5 @@ class TermTestCase(unittest.TestCase):
         free_vars_let2()
 
 
-
-if __name__ == '__main__':
-    # unittest.main()
+if __name__ == "__main__":
     TermTestCase().test_term()

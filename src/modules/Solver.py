@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -21,32 +21,40 @@
 # SOFTWARE.
 
 import subprocess
-import re
 
 from enum import Enum
-from src.modules.exitcodes import *
+from src.modules.exitcodes import ERR_USAGE
+
 
 class SolverQueryResult(Enum):
     """
-    Enum to store the result of a single solver query through "(check-sat)" query.
+    Enum storing the result of a single solver check-sat query.
     """
-    SAT = 0         # solver query reports SAT
-    UNSAT = 1       # solver query reports UNSAT
-    UNKNOWN = 2     # solver query reports UNKNOWN
+
+    SAT = 0         # solver query returns "sat"
+    UNSAT = 1       # solver query returns "unsat"
+    UNKNOWN = 2     # solver query reports "unknown"
+
 
 def sr2str(sol_res):
-    if sol_res == SolverQueryResult.SAT: return "sat"
-    if sol_res == SolverQueryResult.UNSAT: return "unsat"
-    if sol_res == SolverQueryResult.UNKNOWN: return "unknown"
+    if sol_res == SolverQueryResult.SAT:
+        return "sat"
+    if sol_res == SolverQueryResult.UNSAT:
+        return "unsat"
+    if sol_res == SolverQueryResult.UNKNOWN:
+        return "unknown"
+
 
 class SolverResult:
     """
-    Class to store the result of multiple solver querys throught "(check-sat)" query.
+    Class to store the result of multiple solver check-sat queries.
     :lst a list of multiple "SolverQueryResult" items
     """
+
     def __init__(self, result=None):
         self.lst = []
-        if result != None: self.lst.append(result)
+        if result:
+            self.lst.append(result)
 
     def append(self, result):
         self.lst.append(result)
@@ -55,12 +63,15 @@ class SolverResult:
         if type(rhs) == SolverQueryResult:
             return len(self.lst) == 1 and self.lst[0] == rhs
         elif type(rhs) == SolverResult:
-            if len(self.lst) != len(rhs.lst): return False
-            for index in range(0,len(self.lst)):
-                if self.lst[index] != SolverQueryResult.UNKNOWN and \
-                   rhs.lst[index] != SolverQueryResult.UNKNOWN and \
-                   self.lst[index] != rhs.lst[index]:
-                   return False
+            if len(self.lst) != len(rhs.lst):
+                return False
+            for index in range(0, len(self.lst)):
+                if (
+                    self.lst[index] != SolverQueryResult.UNKNOWN
+                    and rhs.lst[index] != SolverQueryResult.UNKNOWN
+                    and self.lst[index] != rhs.lst[index]
+                ):
+                    return False
             return True
         else:
             return False
@@ -68,45 +79,50 @@ class SolverResult:
     def __str__(self):
         s = sr2str(self.lst[0])
         for res in self.lst[1:]:
-           s+= "\n" + sr2str(res)
+            s += "\n" + sr2str(res)
         return s
 
 
 class Solver:
-    def __init__ (self, cil):
+    def __init__(self, cil):
         self.cil = cil
 
     def solve(self, file, timeout, debug=False):
         try:
             cmd = list(filter(None, self.cil.split(" "))) + [file]
             if debug:
-                print("cmd: "+" ".join(cmd), flush=True)
-            output = subprocess.run(cmd, timeout=timeout,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE,
-                                    shell=False)
+                print("cmd: " + " ".join(cmd), flush=True)
+            output = subprocess.run(
+                cmd,
+                timeout=timeout,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                shell=False,
+            )
+
         except subprocess.TimeoutExpired as te:
-            if te.stdout != None and te.stderr != None:
+            if te.stdout and te.stderr:
                 stdout = te.stdout.decode()
                 stderr = te.stderr.decode()
             else:
                 stdout = ""
                 stderr = ""
             return stdout, stderr, 137
-        except ValueError as e:
+
+        except ValueError:
             stdout = ""
             stderr = ""
             return stdout, stderr, 0
-        except Exception as e:
-            print("Error: solver \"" + cmd[0]+ "\" not found")
-            exit(ERR_USAGE)
 
+        except Exception:
+            print('error: solver "' + cmd[0] + '" not found')
+            exit(ERR_USAGE)
 
         stdout = output.stdout.decode()
         stderr = output.stderr.decode()
         returncode = output.returncode
 
         if debug:
-            print("output: "+ stdout+"\n"+stderr)
+            print("output: " + stdout + "\n" + stderr)
 
         return stdout, stderr, returncode

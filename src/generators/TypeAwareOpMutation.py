@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -23,7 +23,6 @@
 import random
 
 from src.generators.Generator import Generator
-from src.parsing.parse import *
 
 
 class TypeAwareOpMutation(Generator):
@@ -38,33 +37,37 @@ class TypeAwareOpMutation(Generator):
     def parse_config_file(self):
         with open(self.args.config) as f:
             lines = f.readlines()
-        for l in lines:
-            if ";" in l: continue
-            if not l.strip(): continue
+
+        for line in lines:
+            if ";" in line:
+                continue
+            if not line.strip():
+                continue
             arity = -1
-            if ":arity" in l:
-                arity = l.split(":arity")[-1].split(" ")[-1].strip()
-                l =  " ".join(l.split(" ")[:-2])
-            if "->" in l:
-                op_from,op_to = l.split("->")[0].strip(), l.split("->")[1].strip()
-                self.unidirectional.append((arity,op_from,op_to))
+            if ":arity" in line:
+                arity = line.split(":arity")[-1].split(" ")[-1].strip()
+                line = " ".join(line.split(" ")[:-2])
+            if "->" in line:
+                op_from = line.split("->")[0].strip()
+                op_to = line.split("->")[1].strip()
+                self.unidirectional.append((arity, op_from, op_to))
                 continue
 
-            op_class = [op.strip() for op in l.split(",")]
+            op_class = [op.strip() for op in line.split(",")]
             self.bidirectional.append((arity, op_class))
 
     def arities_mismatch(self, arity, op_occ):
         if arity == "2+" and len(op_occ.subterms) < 2:
-           return True
+            return True
 
         if arity == "1-" and len(op_occ.subterms) > 2:
             return True
         return False
 
-    def get_replacee(self,op_occ):
+    def get_replacee(self, op_occ):
         for b in self.bidirectional:
             arity, op_class = b[0], b[1]
-            if self.arities_mismatch(arity,op_occ):
+            if self.arities_mismatch(arity, op_occ):
                 continue
 
             if op_occ.op in op_class:
@@ -81,7 +84,8 @@ class TypeAwareOpMutation(Generator):
 
         for u in self.unidirectional:
             arity, op, replacee = u[0], u[1], u[2]
-            if op_occ.op != op or op_occ.quantifier != op: continue
+            if op_occ.op != op or op_occ.quantifier != op:
+                continue
             if self.arities_mismatch(arity, op_occ):
                 continue
             return replacee

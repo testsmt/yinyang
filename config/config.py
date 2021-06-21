@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -43,18 +43,16 @@ crash_list = [
     "failed to verify",
     "ERROR: AddressSanitizer:",
     "invalid expression",
-    "Aborted"
+    "Aborted",
 ]
 
-# Duplicate list: crash messages emitted by solvers to be considered duplicates,
-# i.e. will be ignored during fuzzing.
-duplicate_list = [
-
-]
+# Duplicate list: crash messages emitted by solvers considered duplicates,
+# i.e., will be ignored during fuzzing.
+duplicate_list = []
 
 # Ignore list: error messages emitted by solvers to be ignored.
 ignore_list = [
-   "(error ",
+    "(error ",
     "unsupport",
     "unexpected char",
     "failed to open file",

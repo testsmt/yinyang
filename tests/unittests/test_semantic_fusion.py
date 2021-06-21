@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -20,23 +20,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import unittest
 import os
 import sys
+import unittest
+
+from src.parsing.parse import parse_file
+from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
+
 sys.path.append("../../")
 
-from src.parsing.ast import *
-from src.parsing.parse import *
-from src.generators.SemanticFusion.SemanticFusion import *
-from src.generators.SemanticFusion.VariableFusion import *
 
 class Mockargs:
     oracle = ""
     fusionfun = "."
 
+
 class SemanticFusionTestCase(unittest.TestCase):
     def test_sf_sat(self):
-        fcts= """
+        fcts = """
         #begin
         (declare-const x Int)
         (declare-const y Int)
@@ -47,7 +48,7 @@ class SemanticFusionTestCase(unittest.TestCase):
         (assert (= y (- (- z c) x)))
         #end
         """
-        formula1="""
+        formula1 = """
         (declare-const x Int)
         (assert (= x (- 1)))
         """
@@ -58,7 +59,7 @@ class SemanticFusionTestCase(unittest.TestCase):
         (assert (ite v false (= y (- 1))))
         (check-sat)
         """
-        fn1, fn2, fn_fcts = "formula1.smt2","formula2.smt2","fcts.txt"
+        fn1, fn2, fn_fcts = "formula1.smt2", "formula2.smt2", "fcts.txt"
         with open(fn_fcts, "w") as f1:
             f1.write(fcts)
         with open(fn1, "w") as f1:
@@ -68,19 +69,17 @@ class SemanticFusionTestCase(unittest.TestCase):
         args = Mockargs()
         args.oracle = "sat"
         args.fusionfun = "./config/fusion_functions.txt"
-        script1 = parse_file(fn1,silent=True)
-        script2 = parse_file(fn2,silent=True)
+        script1 = parse_file(fn1, silent=True)
+        script2 = parse_file(fn2, silent=True)
         sf_sat = SemanticFusion(script1, script2, args)
         args.oracle = "unsat"
 
-        script1 = parse_file(fn1,silent=True)
-        script2 = parse_file(fn2,silent=True)
-        sf_unsat = SemanticFusion(script1, script2, args)
+        script1 = parse_file(fn1, silent=True)
+        script2 = parse_file(fn2, silent=True)
         sf_sat.generate()
-        os.system("rm -rf "+fn1+ " "+ fn2+" "+fn_fcts)
+        os.system("rm -rf " + fn1 + " " + fn2 + " " + fn_fcts)
 
 
-if __name__ == '__main__':
-    #SemanticFusionTestCase().test_sf_sat()
+if __name__ == "__main__":
+    # SemanticFusionTestCase().test_sf_sat()
     unittest.main()
-

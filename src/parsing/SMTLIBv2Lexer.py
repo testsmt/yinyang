@@ -24,11 +24,11 @@
 from antlr4 import *
 from io import StringIO
 import sys
+
 if sys.version_info[1] > 5:
     from typing import TextIO
 else:
     from typing.io import TextIO
-
 
 
 def serializedATN():
@@ -39,8 +39,8 @@ def serializedATN():
         buf.write("\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23")
         buf.write("\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30")
         buf.write("\4\31\t\31\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36")
-        buf.write("\t\36\4\37\t\37\4 \t \4!\t!\4\"\t\"\4#\t#\4$\t$\4%\t%")
-        buf.write("\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4,\t,\4-\t-\4.")
+        buf.write('\t\36\4\37\t\37\4 \t \4!\t!\4"\t"\4#\t#\4$\t$\4%\t%')
+        buf.write("\4&\t&\4'\t'\4(\t(\4)\t)\4*\t*\4+\t+\4,\t,\4-\t-\4.")
         buf.write("\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\4\64")
         buf.write("\t\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\4:\t:")
         buf.write("\4;\t;\4<\t<\4=\t=\4>\t>\4?\t?\4@\t@\4A\tA\4B\tB\4C\t")
@@ -80,13 +80,13 @@ def serializedATN():
         buf.write("\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\37\3\37")
         buf.write("\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37")
         buf.write("\3\37\3\37\3\37\3\37\3\37\3\37\3 \3 \3 \3 \3 \3 \3 \3")
-        buf.write(" \3 \3 \3 \3 \3 \3 \3 \3 \3!\3!\3!\3!\3!\3!\3!\3\"\3\"")
-        buf.write("\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3#\3#\3#\3#\3#\3#\3#\3#\3")
+        buf.write(' \3 \3 \3 \3 \3 \3 \3 \3 \3!\3!\3!\3!\3!\3!\3!\3"\3"')
+        buf.write('\3"\3"\3"\3"\3"\3"\3"\3#\3#\3#\3#\3#\3#\3#\3#\3')
         buf.write("#\3$\3$\3$\3$\3$\3$\3$\3$\3$\3$\3$\3$\3$\3$\3%\3%\3%\3")
         buf.write("%\3%\3%\3%\3%\3%\3%\3%\3%\3%\3%\3%\3%\3%\3&\3&\3&\3&\3")
-        buf.write("&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3\'\3\'\3")
-        buf.write("\'\3\'\3\'\3\'\3\'\3\'\3\'\3\'\3\'\3\'\3\'\3\'\3\'\3\'")
-        buf.write("\3\'\3\'\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(")
+        buf.write("&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3'\3'\3")
+        buf.write("'\3'\3'\3'\3'\3'\3'\3'\3'\3'\3'\3'\3'\3'")
+        buf.write("\3'\3'\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(\3(")
         buf.write("\3(\3(\3(\3(\3(\3)\3)\3)\3)\3)\3)\3)\3)\3)\3)\3)\3)\3")
         buf.write("*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3+\3+\3+\3+\3+\3")
         buf.write("+\3+\3,\3,\3,\3,\3,\3,\3,\3,\3,\3,\3,\3-\3-\3-\3-\3-\3")
@@ -185,9 +185,9 @@ def serializedATN():
         buf.write("\u071a\n\u0093\f\u0093\16\u0093\u071d\13\u0093\3\u0094")
         buf.write("\6\u0094\u0720\n\u0094\r\u0094\16\u0094\u0721\3\u0094")
         buf.write("\3\u0094\2\2\u0095\3\3\5\4\7\5\t\6\13\7\r\b\17\t\21\n")
-        buf.write("\23\13\25\f\27\r\31\16\33\17\35\20\37\21!\22#\23%\24\'")
+        buf.write("\23\13\25\f\27\r\31\16\33\17\35\20\37\21!\22#\23%\24'")
         buf.write("\25)\26+\27-\30/\31\61\32\63\33\65\34\67\359\36;\37= ")
-        buf.write("?!A\"C#E$G%I&K\'M(O)Q*S+U,W-Y.[/]\60_\61a\62c\63e\64g")
+        buf.write("?!A\"C#E$G%I&K'M(O)Q*S+U,W-Y.[/]\60_\61a\62c\63e\64g")
         buf.write("\65i\66k\67m8o9q:s;u<w=y>{?}@\177A\u0081B\u0083C\u0085")
         buf.write("D\u0087E\u0089F\u008bG\u008dH\u008fI\u0091J\u0093K\u0095")
         buf.write("L\u0097M\u0099N\u009bO\u009dP\u009fQ\u00a1R\u00a3S\u00a5")
@@ -203,13 +203,13 @@ def serializedATN():
         buf.write("\u0123\u008a\u0125\u008b\u0127\u008c\3\2\f\4\2\f\f\17")
         buf.write("\17\3\2\63;\5\2\62;CHch\3\2\62;\20\2##&(,-/\61>\\`ac|")
         buf.write("\u0080\u0080\u00c6\u00c6\u00d8\u00d8\u00de\u00de\u00e6")
-        buf.write("\u00e6\u00f8\u00f8\u00fe\u00fe\3\2\62\63\4\2\"\u0080\u0082")
-        buf.write("\1\5\2\"#%\u0080\u0082\1\6\2\"]_}\177\u0080\u0082\1\5")
-        buf.write("\2\13\f\17\17\"\"\2\u072d\2\3\3\2\2\2\2\5\3\2\2\2\2\7")
+        buf.write('\u00e6\u00f8\u00f8\u00fe\u00fe\3\2\62\63\4\2"\u0080\u0082')
+        buf.write('\1\5\2"#%\u0080\u0082\1\6\2"]_}\177\u0080\u0082\1\5')
+        buf.write('\2\13\f\17\17""\2\u072d\2\3\3\2\2\2\2\5\3\2\2\2\2\7')
         buf.write("\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2")
         buf.write("\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2")
         buf.write("\2\2\31\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2")
-        buf.write("\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2\'\3\2\2\2\2)\3\2\2")
+        buf.write("\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2'\3\2\2\2\2)\3\2\2")
         buf.write("\2\2+\3\2\2\2\2-\3\2\2\2\2/\3\2\2\2\2\61\3\2\2\2\2\63")
         buf.write("\3\2\2\2\2\65\3\2\2\2\2\67\3\2\2\2\29\3\2\2\2\2;\3\2\2")
         buf.write("\2\2=\3\2\2\2\2?\3\2\2\2\2A\3\2\2\2\2C\3\2\2\2\2E\3\2")
@@ -246,7 +246,7 @@ def serializedATN():
         buf.write("\23\u0169\3\2\2\2\25\u016e\3\2\2\2\27\u0172\3\2\2\2\31")
         buf.write("\u0177\3\2\2\2\33\u018b\3\2\2\2\35\u0191\3\2\2\2\37\u0197")
         buf.write("\3\2\2\2!\u01a6\3\2\2\2#\u01b1\3\2\2\2%\u01b7\3\2\2\2")
-        buf.write("\'\u01be\3\2\2\2)\u01c2\3\2\2\2+\u01ca\3\2\2\2-\u01d1")
+        buf.write("'\u01be\3\2\2\2)\u01c2\3\2\2\2+\u01ca\3\2\2\2-\u01d1")
         buf.write("\3\2\2\2/\u01d6\3\2\2\2\61\u01de\3\2\2\2\63\u01ea\3\2")
         buf.write("\2\2\65\u01f0\3\2\2\2\67\u01f7\3\2\2\29\u0203\3\2\2\2")
         buf.write(";\u020c\3\2\2\2=\u0216\3\2\2\2?\u0229\3\2\2\2A\u0239\3")
@@ -338,7 +338,7 @@ def serializedATN():
         buf.write("\u01a7\7k\2\2\u01a7\u01a8\7p\2\2\u01a8\u01a9\7e\2\2\u01a9")
         buf.write("\u01aa\7q\2\2\u01aa\u01ab\7o\2\2\u01ab\u01ac\7r\2\2\u01ac")
         buf.write("\u01ad\7n\2\2\u01ad\u01ae\7g\2\2\u01ae\u01af\7v\2\2\u01af")
-        buf.write("\u01b0\7g\2\2\u01b0\"\3\2\2\2\u01b1\u01b2\7n\2\2\u01b2")
+        buf.write('\u01b0\7g\2\2\u01b0"\3\2\2\2\u01b1\u01b2\7n\2\2\u01b2')
         buf.write("\u01b3\7q\2\2\u01b3\u01b4\7i\2\2\u01b4\u01b5\7k\2\2\u01b5")
         buf.write("\u01b6\7e\2\2\u01b6$\3\2\2\2\u01b7\u01b8\7o\2\2\u01b8")
         buf.write("\u01b9\7g\2\2\u01b9\u01ba\7o\2\2\u01ba\u01bb\7q\2\2\u01bb")
@@ -821,7 +821,7 @@ class SMTLIBv2Lexer(Lexer):
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
-    decisionsToDFA = [ DFA(ds, i) for i, ds in enumerate(atn.decisionToState) ]
+    decisionsToDFA = [DFA(ds, i) for i, ds in enumerate(atn.decisionToState)]
 
     Comment = 1
     ParOpen = 2
@@ -962,124 +962,441 @@ class SMTLIBv2Lexer(Lexer):
     UndefinedSymbol = 137
     WS = 138
 
-    channelNames = [ u"DEFAULT_TOKEN_CHANNEL", u"HIDDEN" ]
+    channelNames = [u"DEFAULT_TOKEN_CHANNEL", u"HIDDEN"]
 
-    modeNames = [ "DEFAULT_MODE" ]
+    modeNames = ["DEFAULT_MODE"]
 
-    literalNames = [ "<INVALID>",
-            "'('", "')'", "';'", "'not'", "'Bool'", "'Int'", "'Real'", "'continued-execution'",
-            "'error'", "'false'", "'immediate-exit'", "'incomplete'", "'logic'",
-            "'memout'", "'sat'", "'success'", "'theory'", "'true'", "'unknown'",
-            "'unsupported'", "'unsat'", "'assert'", "'assert-soft'", "'simplify'",
-            "'check-sat'", "'check-sat-assuming'", "'check-sat-using'",
-            "'labels'", "'minimize'", "'maximize'", "'declare-const'", "'declare-datatype'",
-            "'declare-codatatype'", "'declare-datatypes'", "'declare-codatatypes'",
-            "'declare-fun'", "'declare-sort'", "'define'", "'define-fun'",
-            "'define-const'", "'define-fun-rec'", "'define-funs-rec'", "'define-sort'",
-            "'display'", "'echo'", "'eval'", "'exit'", "'get-objectives'",
-            "'get-assertions'", "'get-assignment'", "'get-info'", "'get-model'",
-            "'block-model'", "'get-option'", "'poly/factor'", "'get-proof'",
-            "'get-unsat-assumptions'", "'get-unsat-core'", "'get-value'",
-            "'pop'", "'push'", "'reset'", "'reset-assertions'", "'set-info'",
-            "'set-logic'", "'set-option'", "'then'", "'and-then'", "'par-then'",
-            "'or-else'", "'par-or-else'", "'par-or'", "'try-for'", "'using-params'",
-            "'!'", "'_'", "'as'", "'BINARY'", "'DECIMAL'", "'exists'", "'HEXADECIMAL'",
-            "'forall'", "'let'", "'match'", "'NUMERAL'", "'par'", "':'",
-            "':all-statistics'", "':assertion-stack-levels'", "':authors'",
-            "':category'", "':chainable'", "':definition'", "':diagnostic-output-channel'",
-            "':error-behavior'", "':extensions'", "':funs'", "':funs-description'",
-            "':global-declarations'", "':interactive-mode'", "':language'",
-            "':left-assoc'", "':license'", "':named'", "':name'", "':notes'",
-            "':pattern'", "':print-success'", "':produce-assertions'", "':produce-assignments'",
-            "':produce-models'", "':produce-proofs'", "':produce-unsat-assumptions'",
-            "':produce-unsat-cores'", "':random-seed'", "':reason-unknown'",
-            "':regular-output-channel'", "':reproducible-resource-limit'",
-            "':right-assoc'", "':smt-lib-version'", "':sorts'", "':sorts-description'",
-            "':source'", "':status'", "':theories'", "':values'", "':verbosity'",
-            "':version'" ]
+    literalNames = [
+        "<INVALID>",
+        "'('",
+        "')'",
+        "';'",
+        "'not'",
+        "'Bool'",
+        "'Int'",
+        "'Real'",
+        "'continued-execution'",
+        "'error'",
+        "'false'",
+        "'immediate-exit'",
+        "'incomplete'",
+        "'logic'",
+        "'memout'",
+        "'sat'",
+        "'success'",
+        "'theory'",
+        "'true'",
+        "'unknown'",
+        "'unsupported'",
+        "'unsat'",
+        "'assert'",
+        "'assert-soft'",
+        "'simplify'",
+        "'check-sat'",
+        "'check-sat-assuming'",
+        "'check-sat-using'",
+        "'labels'",
+        "'minimize'",
+        "'maximize'",
+        "'declare-const'",
+        "'declare-datatype'",
+        "'declare-codatatype'",
+        "'declare-datatypes'",
+        "'declare-codatatypes'",
+        "'declare-fun'",
+        "'declare-sort'",
+        "'define'",
+        "'define-fun'",
+        "'define-const'",
+        "'define-fun-rec'",
+        "'define-funs-rec'",
+        "'define-sort'",
+        "'display'",
+        "'echo'",
+        "'eval'",
+        "'exit'",
+        "'get-objectives'",
+        "'get-assertions'",
+        "'get-assignment'",
+        "'get-info'",
+        "'get-model'",
+        "'block-model'",
+        "'get-option'",
+        "'poly/factor'",
+        "'get-proof'",
+        "'get-unsat-assumptions'",
+        "'get-unsat-core'",
+        "'get-value'",
+        "'pop'",
+        "'push'",
+        "'reset'",
+        "'reset-assertions'",
+        "'set-info'",
+        "'set-logic'",
+        "'set-option'",
+        "'then'",
+        "'and-then'",
+        "'par-then'",
+        "'or-else'",
+        "'par-or-else'",
+        "'par-or'",
+        "'try-for'",
+        "'using-params'",
+        "'!'",
+        "'_'",
+        "'as'",
+        "'BINARY'",
+        "'DECIMAL'",
+        "'exists'",
+        "'HEXADECIMAL'",
+        "'forall'",
+        "'let'",
+        "'match'",
+        "'NUMERAL'",
+        "'par'",
+        "':'",
+        "':all-statistics'",
+        "':assertion-stack-levels'",
+        "':authors'",
+        "':category'",
+        "':chainable'",
+        "':definition'",
+        "':diagnostic-output-channel'",
+        "':error-behavior'",
+        "':extensions'",
+        "':funs'",
+        "':funs-description'",
+        "':global-declarations'",
+        "':interactive-mode'",
+        "':language'",
+        "':left-assoc'",
+        "':license'",
+        "':named'",
+        "':name'",
+        "':notes'",
+        "':pattern'",
+        "':print-success'",
+        "':produce-assertions'",
+        "':produce-assignments'",
+        "':produce-models'",
+        "':produce-proofs'",
+        "':produce-unsat-assumptions'",
+        "':produce-unsat-cores'",
+        "':random-seed'",
+        "':reason-unknown'",
+        "':regular-output-channel'",
+        "':reproducible-resource-limit'",
+        "':right-assoc'",
+        "':smt-lib-version'",
+        "':sorts'",
+        "':sorts-description'",
+        "':source'",
+        "':status'",
+        "':theories'",
+        "':values'",
+        "':verbosity'",
+        "':version'",
+    ]
 
-    symbolicNames = [ "<INVALID>",
-            "Comment", "ParOpen", "ParClose", "Semicolon", "String", "QuotedSymbol",
-            "RegConst", "PS_Not", "PS_Bool", "PS_Int", "PS_Real", "PS_ContinuedExecution",
-            "PS_Error", "PS_False", "PS_ImmediateExit", "PS_Incomplete",
-            "PS_Logic", "PS_Memout", "PS_Sat", "PS_Success", "PS_Theory",
-            "PS_True", "PS_Unknown", "PS_Unsupported", "PS_Unsat", "CMD_Assert",
-            "CMD_AssertSoft", "Simplify", "CMD_CheckSat", "CMD_CheckSatAssuming",
-            "CMD_CheckSatUsing", "CMD_Labels", "CMD_Minimize", "CMD_Maximize",
-            "CMD_DeclareConst", "CMD_DeclareDatatype", "CMD_DeclareCodatatype",
-            "CMD_DeclareDatatypes", "CMD_DeclareCodatatypes", "CMD_DeclareFun",
-            "CMD_DeclareSort", "CMD_Define", "CMD_DefineFun", "CMD_DefineConst",
-            "CMD_DefineFunRec", "CMD_DefineFunsRec", "CMD_DefineSort", "CMD_Display",
-            "CMD_Echo", "CMD_Eval", "CMD_Exit", "CMD_GetObjectives", "CMD_GetAssertions",
-            "CMD_GetAssignment", "CMD_GetInfo", "CMD_GetModel", "CMD_BlockModel",
-            "CMD_GetOption", "CMD_PolyFactor", "CMD_GetProof", "CMD_GetUnsatAssumptions",
-            "CMD_GetUnsatCore", "CMD_GetValue", "CMD_Pop", "CMD_Push", "CMD_Reset",
-            "CMD_ResetAssertions", "CMD_SetInfo", "CMD_SetLogic", "CMD_SetOption",
-            "TAC_Then", "TAC_AndThen", "TAC_ParThen", "TAC_OrElse", "TAC_ParOrElse",
-            "TAC_ParOr", "TAC_TryFor", "TAC_UsingParams", "GRW_Exclamation",
-            "GRW_Underscore", "GRW_As", "GRW_Binary", "GRW_Decimal", "GRW_Exists",
-            "GRW_Hexadecimal", "GRW_Forall", "GRW_Let", "GRW_Match", "GRW_Numeral",
-            "GRW_Par", "Numeral", "Binary", "HexDecimal", "Decimal", "Colon",
-            "PK_AllStatistics", "PK_AssertionStackLevels", "PK_Authors",
-            "PK_Category", "PK_Chainable", "PK_Definition", "PK_DiagnosticOutputChannel",
-            "PK_ErrorBehaviour", "PK_Extension", "PK_Funs", "PK_FunsDescription",
-            "PK_GlobalDeclarations", "PK_InteractiveMode", "PK_Language",
-            "PK_LeftAssoc", "PK_License", "PK_Named", "PK_Name", "PK_Notes",
-            "PK_Pattern", "PK_PrintSuccess", "PK_ProduceAssertions", "PK_ProduceAssignments",
-            "PK_ProduceModels", "PK_ProduceProofs", "PK_ProduceUnsatAssumptions",
-            "PK_ProduceUnsatCores", "PK_RandomSeed", "PK_ReasonUnknown",
-            "PK_RegularOutputChannel", "PK_ReproducibleResourceLimit", "PK_RightAssoc",
-            "PK_SmtLibVersion", "PK_Sorts", "PK_SortsDescription", "PK_Source",
-            "PK_Status", "PK_Theories", "PK_Values", "PK_Verbosity", "PK_Version",
-            "UndefinedSymbol", "WS" ]
+    symbolicNames = [
+        "<INVALID>",
+        "Comment",
+        "ParOpen",
+        "ParClose",
+        "Semicolon",
+        "String",
+        "QuotedSymbol",
+        "RegConst",
+        "PS_Not",
+        "PS_Bool",
+        "PS_Int",
+        "PS_Real",
+        "PS_ContinuedExecution",
+        "PS_Error",
+        "PS_False",
+        "PS_ImmediateExit",
+        "PS_Incomplete",
+        "PS_Logic",
+        "PS_Memout",
+        "PS_Sat",
+        "PS_Success",
+        "PS_Theory",
+        "PS_True",
+        "PS_Unknown",
+        "PS_Unsupported",
+        "PS_Unsat",
+        "CMD_Assert",
+        "CMD_AssertSoft",
+        "Simplify",
+        "CMD_CheckSat",
+        "CMD_CheckSatAssuming",
+        "CMD_CheckSatUsing",
+        "CMD_Labels",
+        "CMD_Minimize",
+        "CMD_Maximize",
+        "CMD_DeclareConst",
+        "CMD_DeclareDatatype",
+        "CMD_DeclareCodatatype",
+        "CMD_DeclareDatatypes",
+        "CMD_DeclareCodatatypes",
+        "CMD_DeclareFun",
+        "CMD_DeclareSort",
+        "CMD_Define",
+        "CMD_DefineFun",
+        "CMD_DefineConst",
+        "CMD_DefineFunRec",
+        "CMD_DefineFunsRec",
+        "CMD_DefineSort",
+        "CMD_Display",
+        "CMD_Echo",
+        "CMD_Eval",
+        "CMD_Exit",
+        "CMD_GetObjectives",
+        "CMD_GetAssertions",
+        "CMD_GetAssignment",
+        "CMD_GetInfo",
+        "CMD_GetModel",
+        "CMD_BlockModel",
+        "CMD_GetOption",
+        "CMD_PolyFactor",
+        "CMD_GetProof",
+        "CMD_GetUnsatAssumptions",
+        "CMD_GetUnsatCore",
+        "CMD_GetValue",
+        "CMD_Pop",
+        "CMD_Push",
+        "CMD_Reset",
+        "CMD_ResetAssertions",
+        "CMD_SetInfo",
+        "CMD_SetLogic",
+        "CMD_SetOption",
+        "TAC_Then",
+        "TAC_AndThen",
+        "TAC_ParThen",
+        "TAC_OrElse",
+        "TAC_ParOrElse",
+        "TAC_ParOr",
+        "TAC_TryFor",
+        "TAC_UsingParams",
+        "GRW_Exclamation",
+        "GRW_Underscore",
+        "GRW_As",
+        "GRW_Binary",
+        "GRW_Decimal",
+        "GRW_Exists",
+        "GRW_Hexadecimal",
+        "GRW_Forall",
+        "GRW_Let",
+        "GRW_Match",
+        "GRW_Numeral",
+        "GRW_Par",
+        "Numeral",
+        "Binary",
+        "HexDecimal",
+        "Decimal",
+        "Colon",
+        "PK_AllStatistics",
+        "PK_AssertionStackLevels",
+        "PK_Authors",
+        "PK_Category",
+        "PK_Chainable",
+        "PK_Definition",
+        "PK_DiagnosticOutputChannel",
+        "PK_ErrorBehaviour",
+        "PK_Extension",
+        "PK_Funs",
+        "PK_FunsDescription",
+        "PK_GlobalDeclarations",
+        "PK_InteractiveMode",
+        "PK_Language",
+        "PK_LeftAssoc",
+        "PK_License",
+        "PK_Named",
+        "PK_Name",
+        "PK_Notes",
+        "PK_Pattern",
+        "PK_PrintSuccess",
+        "PK_ProduceAssertions",
+        "PK_ProduceAssignments",
+        "PK_ProduceModels",
+        "PK_ProduceProofs",
+        "PK_ProduceUnsatAssumptions",
+        "PK_ProduceUnsatCores",
+        "PK_RandomSeed",
+        "PK_ReasonUnknown",
+        "PK_RegularOutputChannel",
+        "PK_ReproducibleResourceLimit",
+        "PK_RightAssoc",
+        "PK_SmtLibVersion",
+        "PK_Sorts",
+        "PK_SortsDescription",
+        "PK_Source",
+        "PK_Status",
+        "PK_Theories",
+        "PK_Values",
+        "PK_Verbosity",
+        "PK_Version",
+        "UndefinedSymbol",
+        "WS",
+    ]
 
-    ruleNames = [ "Comment", "ParOpen", "ParClose", "Semicolon", "String",
-                  "QuotedSymbol", "RegConst", "PS_Not", "PS_Bool", "PS_Int",
-                  "PS_Real", "PS_ContinuedExecution", "PS_Error", "PS_False",
-                  "PS_ImmediateExit", "PS_Incomplete", "PS_Logic", "PS_Memout",
-                  "PS_Sat", "PS_Success", "PS_Theory", "PS_True", "PS_Unknown",
-                  "PS_Unsupported", "PS_Unsat", "CMD_Assert", "CMD_AssertSoft",
-                  "Simplify", "CMD_CheckSat", "CMD_CheckSatAssuming", "CMD_CheckSatUsing",
-                  "CMD_Labels", "CMD_Minimize", "CMD_Maximize", "CMD_DeclareConst",
-                  "CMD_DeclareDatatype", "CMD_DeclareCodatatype", "CMD_DeclareDatatypes",
-                  "CMD_DeclareCodatatypes", "CMD_DeclareFun", "CMD_DeclareSort",
-                  "CMD_Define", "CMD_DefineFun", "CMD_DefineConst", "CMD_DefineFunRec",
-                  "CMD_DefineFunsRec", "CMD_DefineSort", "CMD_Display",
-                  "CMD_Echo", "CMD_Eval", "CMD_Exit", "CMD_GetObjectives",
-                  "CMD_GetAssertions", "CMD_GetAssignment", "CMD_GetInfo",
-                  "CMD_GetModel", "CMD_BlockModel", "CMD_GetOption", "CMD_PolyFactor",
-                  "CMD_GetProof", "CMD_GetUnsatAssumptions", "CMD_GetUnsatCore",
-                  "CMD_GetValue", "CMD_Pop", "CMD_Push", "CMD_Reset", "CMD_ResetAssertions",
-                  "CMD_SetInfo", "CMD_SetLogic", "CMD_SetOption", "TAC_Then",
-                  "TAC_AndThen", "TAC_ParThen", "TAC_OrElse", "TAC_ParOrElse",
-                  "TAC_ParOr", "TAC_TryFor", "TAC_UsingParams", "GRW_Exclamation",
-                  "GRW_Underscore", "GRW_As", "GRW_Binary", "GRW_Decimal",
-                  "GRW_Exists", "GRW_Hexadecimal", "GRW_Forall", "GRW_Let",
-                  "GRW_Match", "GRW_Numeral", "GRW_Par", "Numeral", "Binary",
-                  "HexDecimal", "Decimal", "HexDigit", "Colon", "Digit",
-                  "Sym", "BinaryDigit", "PrintableChar", "PrintableCharNoDquote",
-                  "PrintableCharNoBackslash", "EscapedSpace", "WhiteSpaceChar",
-                  "PK_AllStatistics", "PK_AssertionStackLevels", "PK_Authors",
-                  "PK_Category", "PK_Chainable", "PK_Definition", "PK_DiagnosticOutputChannel",
-                  "PK_ErrorBehaviour", "PK_Extension", "PK_Funs", "PK_FunsDescription",
-                  "PK_GlobalDeclarations", "PK_InteractiveMode", "PK_Language",
-                  "PK_LeftAssoc", "PK_License", "PK_Named", "PK_Name", "PK_Notes",
-                  "PK_Pattern", "PK_PrintSuccess", "PK_ProduceAssertions",
-                  "PK_ProduceAssignments", "PK_ProduceModels", "PK_ProduceProofs",
-                  "PK_ProduceUnsatAssumptions", "PK_ProduceUnsatCores",
-                  "PK_RandomSeed", "PK_ReasonUnknown", "PK_RegularOutputChannel",
-                  "PK_ReproducibleResourceLimit", "PK_RightAssoc", "PK_SmtLibVersion",
-                  "PK_Sorts", "PK_SortsDescription", "PK_Source", "PK_Status",
-                  "PK_Theories", "PK_Values", "PK_Verbosity", "PK_Version",
-                  "UndefinedSymbol", "WS" ]
+    ruleNames = [
+        "Comment",
+        "ParOpen",
+        "ParClose",
+        "Semicolon",
+        "String",
+        "QuotedSymbol",
+        "RegConst",
+        "PS_Not",
+        "PS_Bool",
+        "PS_Int",
+        "PS_Real",
+        "PS_ContinuedExecution",
+        "PS_Error",
+        "PS_False",
+        "PS_ImmediateExit",
+        "PS_Incomplete",
+        "PS_Logic",
+        "PS_Memout",
+        "PS_Sat",
+        "PS_Success",
+        "PS_Theory",
+        "PS_True",
+        "PS_Unknown",
+        "PS_Unsupported",
+        "PS_Unsat",
+        "CMD_Assert",
+        "CMD_AssertSoft",
+        "Simplify",
+        "CMD_CheckSat",
+        "CMD_CheckSatAssuming",
+        "CMD_CheckSatUsing",
+        "CMD_Labels",
+        "CMD_Minimize",
+        "CMD_Maximize",
+        "CMD_DeclareConst",
+        "CMD_DeclareDatatype",
+        "CMD_DeclareCodatatype",
+        "CMD_DeclareDatatypes",
+        "CMD_DeclareCodatatypes",
+        "CMD_DeclareFun",
+        "CMD_DeclareSort",
+        "CMD_Define",
+        "CMD_DefineFun",
+        "CMD_DefineConst",
+        "CMD_DefineFunRec",
+        "CMD_DefineFunsRec",
+        "CMD_DefineSort",
+        "CMD_Display",
+        "CMD_Echo",
+        "CMD_Eval",
+        "CMD_Exit",
+        "CMD_GetObjectives",
+        "CMD_GetAssertions",
+        "CMD_GetAssignment",
+        "CMD_GetInfo",
+        "CMD_GetModel",
+        "CMD_BlockModel",
+        "CMD_GetOption",
+        "CMD_PolyFactor",
+        "CMD_GetProof",
+        "CMD_GetUnsatAssumptions",
+        "CMD_GetUnsatCore",
+        "CMD_GetValue",
+        "CMD_Pop",
+        "CMD_Push",
+        "CMD_Reset",
+        "CMD_ResetAssertions",
+        "CMD_SetInfo",
+        "CMD_SetLogic",
+        "CMD_SetOption",
+        "TAC_Then",
+        "TAC_AndThen",
+        "TAC_ParThen",
+        "TAC_OrElse",
+        "TAC_ParOrElse",
+        "TAC_ParOr",
+        "TAC_TryFor",
+        "TAC_UsingParams",
+        "GRW_Exclamation",
+        "GRW_Underscore",
+        "GRW_As",
+        "GRW_Binary",
+        "GRW_Decimal",
+        "GRW_Exists",
+        "GRW_Hexadecimal",
+        "GRW_Forall",
+        "GRW_Let",
+        "GRW_Match",
+        "GRW_Numeral",
+        "GRW_Par",
+        "Numeral",
+        "Binary",
+        "HexDecimal",
+        "Decimal",
+        "HexDigit",
+        "Colon",
+        "Digit",
+        "Sym",
+        "BinaryDigit",
+        "PrintableChar",
+        "PrintableCharNoDquote",
+        "PrintableCharNoBackslash",
+        "EscapedSpace",
+        "WhiteSpaceChar",
+        "PK_AllStatistics",
+        "PK_AssertionStackLevels",
+        "PK_Authors",
+        "PK_Category",
+        "PK_Chainable",
+        "PK_Definition",
+        "PK_DiagnosticOutputChannel",
+        "PK_ErrorBehaviour",
+        "PK_Extension",
+        "PK_Funs",
+        "PK_FunsDescription",
+        "PK_GlobalDeclarations",
+        "PK_InteractiveMode",
+        "PK_Language",
+        "PK_LeftAssoc",
+        "PK_License",
+        "PK_Named",
+        "PK_Name",
+        "PK_Notes",
+        "PK_Pattern",
+        "PK_PrintSuccess",
+        "PK_ProduceAssertions",
+        "PK_ProduceAssignments",
+        "PK_ProduceModels",
+        "PK_ProduceProofs",
+        "PK_ProduceUnsatAssumptions",
+        "PK_ProduceUnsatCores",
+        "PK_RandomSeed",
+        "PK_ReasonUnknown",
+        "PK_RegularOutputChannel",
+        "PK_ReproducibleResourceLimit",
+        "PK_RightAssoc",
+        "PK_SmtLibVersion",
+        "PK_Sorts",
+        "PK_SortsDescription",
+        "PK_Source",
+        "PK_Status",
+        "PK_Theories",
+        "PK_Values",
+        "PK_Verbosity",
+        "PK_Version",
+        "UndefinedSymbol",
+        "WS",
+    ]
 
     grammarFileName = "SMTLIBv2.g4"
 
-    def __init__(self, input=None, output:TextIO = sys.stdout):
+    def __init__(self, input=None, output: TextIO = sys.stdout):
         super().__init__(input, output)
         self.checkVersion("4.9.2")
-        self._interp = LexerATNSimulator(self, self.atn, self.decisionsToDFA, PredictionContextCache())
+        self._interp = LexerATNSimulator(
+            self, self.atn, self.decisionsToDFA, PredictionContextCache()
+        )
         self._actions = None
         self._predicates = None
-
-

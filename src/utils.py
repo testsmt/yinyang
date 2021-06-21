@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -23,8 +23,10 @@
 import random
 import string
 
+
 def random_string(length=5):
-    return ''.join(random.sample(string.ascii_letters + string.digits, length))
+    return "".join(random.sample(string.ascii_letters + string.digits, length))
+
 
 def plain(cli):
     plain_cli = ""
@@ -32,14 +34,16 @@ def plain(cli):
         plain_cli += token.split("/")[-1]
     return escape(plain_cli)
 
+
 def escape(s):
     s = s.replace(".", "")
     s = s.replace("=", "")
     return s
 
 
-def in_list(stdout, stderr,lst):
+def in_list(stdout, stderr, lst):
     stdstream = stdout + " " + stderr
     for err in lst:
-        if err in stdstream: return True
+        if err in stdstream:
+            return True
     return False

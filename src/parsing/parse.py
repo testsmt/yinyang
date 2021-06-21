@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -21,58 +21,72 @@
 # SOFTWARE.
 
 import sys
-sys.setrecursionlimit(100000)
-
 import traceback
 import logging
 
-from antlr4 import *
+from antlr4.CommonTokenStream import CommonTokenStream, FileStream, InputStream
 from antlr4.error.ErrorListener import ErrorListener
 
-from src.parsing.timeout_decorator import *
+from src.parsing.SMTLIBv2Lexer import SMTLIBv2Lexer
+from src.parsing.SMTLIBv2Parser import SMTLIBv2Parser
+from src.parsing.ast_visitor import ASTVisitor
+from src.parsing.timeout_decorator import exit_after
 
-from .SMTLIBv2Lexer import SMTLIBv2Lexer
-from .SMTLIBv2Parser import *
-from .ast_visitor import *
+sys.setrecursionlimit(100000)
+
 
 class ErrorListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        logging.debug("Parser error on line %d column %d." % (line, column), flush=True)
+        logging.debug("Parser error on line %d column %d."
+                      % (line, column), flush=True)
+
 
 def prepare_seed(formula):
     """
-    Prepare seed script for fuzzing. Remove set-logic, set-info and other output-producing
-    commands. Set-logic and set-info may raise warning messages from SMT solvers.
-    Output-producing commands may cause errors, e.g., get-model, get-proof etc.
-    Errors such as
+    Prepare seed script for fuzzing. Remove set-logic, set-info and other
+    output-producing commands. Set-logic and set-info may raise warning
+    messages from SMT solvers. Output-producing commands may cause errors,
+    e.g., get-model, get-proof etc. Errors such as
 
                 (error "line X column Y: msg")
 
     are ignored to avoid false positives in the bug detection logic. As the bug
-    detection logic is based on string matching such errors may lead to soundness
-    issues being ignored, e.g. if the error occurred after a faulty check-sat result.
-    Hence, we remove all output-producing SMT-LIB commands from the script.
+    detection logic is based on string matching such errors may lead to
+    soundness issues being ignored, e.g. if the error occurred after a faulty
+    check-sat result. Hence, we remove all output-producing SMT-LIB commands
+    from the script.
     """
     new_cmds = []
     for cmd in formula.commands:
-        if "set-info" in cmd.__str__():continue
-        if "set-logic" in cmd.__str__(): continue
+        if "set-info" in cmd.__str__():
+            continue
+        if "set-logic" in cmd.__str__():
+            continue
 
-        # Ignore output-producing commands to make sure the detection logic won't be mislead
-        # by the other SMT-LIB commands which produce output.
+        # Ignore output-producing commands to make sure the detection logic
+        # won't be mislead
         #
-        if "get-model" in cmd.__str__(): continue
-        if "get-assertions" in cmd.__str__(): continue
-        if "get-proof" in cmd.__str__(): continue
-        if "get-unsat-assumptions" in cmd.__str__(): continue
-        if "get-unsat-core" in cmd.__str__():continue
-        if "get-value" in cmd.__str__(): continue
-        if "echo" in cmd.__str__(): continue
-        if "simplify" in cmd.__str__(): continue
+        if "get-model" in cmd.__str__():
+            continue
+        if "get-assertions" in cmd.__str__():
+            continue
+        if "get-proof" in cmd.__str__():
+            continue
+        if "get-unsat-assumptions" in cmd.__str__():
+            continue
+        if "get-unsat-core" in cmd.__str__():
+            continue
+        if "get-value" in cmd.__str__():
+            continue
+        if "echo" in cmd.__str__():
+            continue
+        if "simplify" in cmd.__str__():
+            continue
         new_cmds.append(cmd)
 
     formula.commands = new_cmds
     return formula
+
 
 def generate_ast(stream, prep_seed=True):
     error_listener = ErrorListener()
@@ -93,22 +107,23 @@ def generate_ast(stream, prep_seed=True):
     return prepare_seed(formula) if prep_seed else formula
 
 
-def parse_filestream(fn,timeout_limit):
+def parse_filestream(fn, timeout_limit):
     @exit_after(timeout_limit)
     def _parse_filestream(fn):
-        fstream = FileStream(fn, encoding = 'utf8')
+        fstream = FileStream(fn, encoding="utf8")
         ast = generate_ast(fstream)
         return ast
+
     return _parse_filestream(fn)
 
 
-def parse_inputstream(s,timeout_limit):
-
+def parse_inputstream(s, timeout_limit):
     @exit_after(timeout_limit)
     def _parse_inputstream(s):
         istream = InputStream(s)
         ast = generate_ast(istream)
         return ast
+
     return _parse_inputstream(s)
 
 
@@ -124,7 +139,7 @@ def parse(parse_fct, arg, timeout_limit, silent=True):
     script = None
 
     try:
-        script = parse_fct(arg,timeout_limit)
+        script = parse_fct(arg, timeout_limit)
     except KeyboardInterrupt:
         print("Parser timed out or was interrupted.")
     except Exception as e:
@@ -140,7 +155,8 @@ def parse_file(fn, timeout_limit=30, silent=True):
     Parse SMT-LIB file.
 
     :fn: path to SMT-LIB file.
-    :silent: if silent=True the parser will withhold stacktrace from user on crash.
+    :silent: if silent=True the parser will withhold stacktrace from user
+             on crash.
     :returns: Script object representing AST of SMT-LIB file. None if timeout
               or crash occurred.
     """
@@ -152,7 +168,8 @@ def parse_str(s, timeout_limit=30, silent=True):
     Parse SMT-LIB from string.
 
     :fn: path to SMT-LIB file.
-    :silent: if silent=True the parser will withhold stacktrace from user on crash.
+    :silent: if silent=True the parser will withhold stacktrace from user
+             on crash.
     :returns: Script object representing AST of SMT-LIB file. None if timeout
               or crash occurred.
     """

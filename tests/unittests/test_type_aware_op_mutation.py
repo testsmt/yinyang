@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -20,13 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import unittest
-import sys
-sys.path.append("../../")
 import os
+import sys
+import unittest
 
-from src.parsing.parse import *
+from src.parsing.parse import parse_str, parse_file
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
+
+sys.path.append("../../")
 
 
 class Mockargs:
@@ -34,12 +35,12 @@ class Mockargs:
     scratchfolder = "."
     name = ""
 
-class TypeAwareOpMutationTestCase(unittest.TestCase):
 
+class TypeAwareOpMutationTestCase(unittest.TestCase):
     def test_ta(self):
-        configfile="operators.txt"
-        formulafile="formula.smt2"
-        ops= """
+        configfile = "operators.txt"
+        formulafile = "formula.smt2"
+        ops = """
         =,distinct
         exists,forall
         and,or,=>
@@ -47,7 +48,7 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         +,-,*,/ :arity 2+
         div,mod
         """
-        with open(configfile,"w") as f:
+        with open(configfile, "w") as f:
             f.write(ops)
 
         formula = """
@@ -59,7 +60,7 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         (assert w)
         (check-sat)
         """
-        with open(formulafile,"w") as f:
+        with open(formulafile, "w") as f:
             f.write(formula)
         script = parse_str(formula)
         args = Mockargs()
@@ -67,14 +68,11 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         args.name = formulafile.strip(".smt2")
         args.opconfig = configfile
         args.modulo = 2
-        script= parse_file(formulafile,silent=True)
-        gen = TypeAwareOpMutation(script,args)
+        script = parse_file(formulafile, silent=True)
+        gen = TypeAwareOpMutation(script, args)
         gen.generate()
-        os.system("rm -rf "+configfile+ " "+ formulafile)
+        os.system("rm -rf " + configfile + " " + formulafile)
 
 
-
-if __name__ == '__main__':
-    #TypeAwareOpMutationTestCase.test_ta()
+if __name__ == "__main__":
     unittest.main()
-
