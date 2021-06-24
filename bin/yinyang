@@ -22,345 +22,59 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import argparse
 import sys
 import signal
 import inspect
 from pathlib import Path
 
-from src.args import run_checks
-from src.modules.Fuzzer import Fuzzer
-from src.modules.exitcodes import OK_BUGS, OK_NOBUGS, ERR_USAGE, ERR_INTERNAL
-
 path = Path(__file__)
 rootpath = str(path.parent.absolute().parent)
 sys.path.append(rootpath)
 
+from src.base.Driver import run_checks
+from src.base.Error import raise_runtime_error
+from src.base.ArgumentParser import build_yinyang_parser
+from src.base.Exitcodes import OK_NOBUGS, ERR_USAGE, ERR_INTERNAL
 
-try:
-    import subprocess
+from src.core.Fuzzer import Fuzzer
+from src.core.Statistic import stats_control_c, silent_control_c
 
-    label = subprocess.getoutput(
-            ["cd " + rootpath + " && git describe --tags"]).strip()
-
-    VERSION = str(label).split("-")[0][1:]
-    COMMIT = str(label).split("-")[2][:-1]
-except Exception:
-    VERSION = "0.2.0"
-    COMMIT = "unknown"
-
-short_description = (
-    "yinyang -- a metamorphic fuzzer for SMT solvers [version: "
-    + VERSION
-    + " ("
-    + COMMIT
-    + ")]"
+from config.YinyangHelptext import (
+    usage,
+    header,
+    short_description,
+    long_description,
+    options,
 )
 
-usage = """ yinyang [options] -o oracle solver_clis seed_file1 seed_file2 [optionally, more seed files]
-       yinyang [options] -o oracle solver_clis seed_folder [optionally, more seed folders]
 
-       solver_clis := "solver_cli1;solver_cli2;...;solver_clik"
-       oracle      := {sat,unsat}
-"""  # noqa: E501
-
-long_description = """
-yinyang is a tool for finding bugs in SMT solver by generating mutant SMT-LIB
-scripts from a set of seed SMT-LIB scripts (.smt2 files) with known satisfiability
-(i.e. either sat or unsat) and generates mutant formulas of the same satisfiability.
-yinyang realizes semantic fusion and can work with a single SMT solver.
-
-Example (basic usage):
-
-$ yinyang -o sat "z3 model_validate=true" semantic-fusion-seeds/QF_NRA/sat
-[2021/06/18 11:25:14 AM] Strategy: yinyang, 1 testing targets, 19228225 seeds
-[2021/06/18 11:25:14 AM] Performed 0 solver calls (0.0 calls/s, eff: NaN, 0.0 mutants/s)
-[2021/06/18 11:25:22 AM] Performed 2 solver calls (0.2 calls/s, eff: 50.0%, 0.1 mutants/s)
-[2021/06/18 11:25:30 AM] Performed 4 solver calls (0.2 calls/s, eff: 50.0%, 0.1 mutants/s)
-[2021/06/18 11:25:38 AM] Performed 6 solver calls (0.2 calls/s, eff: 50.0%, 0.1 mutants/s)
-[2021/06/18 11:25:47 AM] Performed 12 solver calls (0.4 calls/s, eff: 66.7%, 0.2 mutants/s)
-[2021/06/18 11:25:55 AM] Performed 14 solver calls (0.3 calls/s, eff: 64.3%, 0.2 mutants/s)
-User interrupt
-16 seeds processed, 16 valid, 0 invalid
-0 bug triggers found
-
-This will by default randomly select smt2 files from `./semantic-fusion-seeds/QF_NRA/sat`
-and generate 30 mutants per file. If a bug has been found, yinyang will store it
-in `./bugs`. You can use the shortcut CTRL+C to terminate yinyang manually.
-You can obtain pre-categorized seeds from the following GitHub repository:
-
-    https://github.com/testsmt/semantic-fusion-seeds
-
-For a listing of options and further information, use yinyang --help."""  # noqa: E501
-
-
-detailed_explanation = """
-yinyang is a tool for finding bugs in SMT solver by generating mutant SMT-LIB
-scripts from a set of seed SMT-LIB scripts (.smt2 files) with known
-satisfiability (i.e. either sat or unsat) and generates mutant formulas of the
-same satisfiability. yinyang realizes semantic fusion whihc can work with a
-single SMT solver. The idea behind semantic fusion is to fuse formula pairs of
-the same satisfiability (both either sat or unsat) and so produce mutant
-formulas of known satisfiability.
-
-***Example 1 (basic usage):
-The following command runs yinyang on the the SMT solver z3 with pre-categorized
-seed formulas [1] and shows its expected behavior.
-
-    $ yinyang -o sat "z3 model_validate=true" semantic-fusion-seeds/QF_NRA/sat
-    [2021/06/18 11:25:14 AM] Strategy: yinyang, 1 testing targets, 19228225 seeds
-    [2021/06/18 11:25:14 AM] Performed 0 solver calls (0.0 calls/s, eff: NaN, 0.0 mutants/s)
-    [2021/06/18 11:25:22 AM] Performed 2 solver calls (0.2 calls/s, eff: 50.0%, 0.1 mutants/s)
-    [2021/06/18 11:25:30 AM] Performed 4 solver calls (0.2 calls/s, eff: 50.0%, 0.1 mutants/s)
-    [2021/06/18 11:25:38 AM] Performed 6 solver calls (0.2 calls/s, eff: 50.0%, 0.1 mutants/s)
-    [2021/06/18 11:25:47 AM] Performed 12 solver calls (0.4 calls/s, eff: 66.7%, 0.2 mutants/s)
-    [2021/06/18 11:25:55 AM] Performed 14 solver calls (0.3 calls/s, eff: 64.3%, 0.2 mutants/s)
-    User interrupt
-    16 seeds processed, 16 valid, 0 invalid
-    0 bug triggers found
-
-This will by default randomly select smt2 files from `./semantic-fusion-seeds/QF_NRA/sat`
-and generate 30 mutants per file. If a bug has been found, yinyang will store it
-in `./bugs`.  You can terminate opfuzz by CTLR + C. yinyang stores bug trigger in
-./bugs and creates rolling logs up to 5MB per run in ./logs. Note, if you run yinyang
-many times in a row, it might be worthwhile to disable logging to avoid an overflow
-of the logs directory.
-
-Every five seconds, yinyang will generate statistics on (1) solver calls,
-(2) efficiency and (3) mutants per second. Efficiency corresponds to the percentage
-of solver calls that did not timeout, cause parser or unsupported option errors.
-It is expected that efficiency, solver calls and mutants per second can vary
-quite a bit during a regular run of opfuzz. However, if the efficiency is
-very low (e.g., < 30%), it may be a good idea to inspect the logs, see what
-is going on and potentially adjust seed set and solver commandlines. Note, some
-SMT solvers need options to support a particular set of seeds. E.g, cvc5 needs
-the option "--strings-exp" to support string logic. Otherwise it will often
-throw an error message.
-
-[1] https://github.com/testsmt/semantic-fusion-seeds
-
-*** Example 2 (finding a bug with yinyang) ***
-
-The following command sequence will let you find a soundness bug in z3-4.8.6.
-
-** 1. Get z3-4.8.6 **
-Fro linux execute the following two commands:
-
-    $ wget https://github.com/Z3Prover/z3/releases/download/z3-4.8.6/z3-4.8.6-x64-ubuntu-16.04.zip
-    $ unzip z3-4.8.6-x64-ubuntu-16.04.zip
-
-For Mac and windows, you can download z3-4.8.6 from https://github.com/Z3Prover/z3/releases/download/z3-4.8.6
-
-** 2. Seeds **
-Create a two smt2 files with the following contents:
-
-    $ cat formula1.smt2
-    (declare-const x String)
-    (declare-const y String)
-    (declare-const m String)
-    (declare-const n String)
-    (assert (str.in.re x (re.union (str.to.re "b") (re.* (str.to.re "a")))))
-    (assert (str.in.re x (re.union (str.to.re "a") (re.+ (str.to.re "")))))
-    (assert (str.in.re x (re.++ (re.+ (str.to.re "")) (re.* (re.++ (str.to.re "L") (str.to.re "g"))))))
-    (check-sat)
-    (get-model)
-
-    $ cat formula2.smt2
-    (declare-const x String)
-    (declare-const y String)
-    (declare-const m String)
-    (declare-const n String)
-    (assert (= (str.++ x y) (str.++ m n)))
-    (assert (str.in.re n (re.* (str.to.re "_o|'\t'}RC+:'\t'\\^S_c"))))
-    (assert (> (str.to.int x) (str.len m)))
-    (check-sat)
-    (get-model)
-
-** 3. Run yinyang **
-To trigger the bug triggers, execute the following statement
-
-    for (( i = 0; i < 100; i++ )); do
-        yinyang -o sat "./z3-4.8.6-x64-ubuntu-16.04/bin/z3 model_validate=true" formula1.smt2 formula2.smt2
-    done
-
-You can now observe the corresponding bug by executing:
-<TODO>
-"""  # noqa: E501
-
-help_text = """
-
-options:
-    -o {sat,unsat}, --oracle {sat,unsat}
-            oracle for fusion. Should match with the provided seed files
-            (default: sat)
-
-    -i <N>,  --iterations <N>
-            iterations per seed (default: 30)
-
-    -l <path>, --logfolder <path>
-            log folder (default: ./logs)
-
-    -t <secs>, --timeout <secs>
-            timeout per SMT solver call in seconds (default: 8)
-
-    -b <path>, --bugsfolder <path>
-            set bug folder (default: ./bugs)
-
-    -s <path>, --scratchfolder <path>
-            temp folder to dump mutants. (default: ./scratch)
-
-    -c <file>, --config <file>
-            set custom fusion function file
-
-    -L <bytes>, --limit <bytes>
-            file size limit on seed formula in bytes (default: 100000)
-
-    -n, --no-log    disable logging
-    -q, --quiet     do not print statistics and other output
-    -v, --version   show version number and exit
-    -h, --help      show this help message and exit
-"""
-
-
-def print_stats():
-    fuzzer.statistic.printsum()
-    if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
-        exit(OK_NOBUGS)
-    exit(OK_BUGS)
-
-
-def stats_control_c(sig, frame):
-    print("\b\b\rUser interrupt", flush=True)
-    print_stats()
-    if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
-        exit(OK_NOBUGS)
-    exit(OK_BUGS)
-
-
-def silent_control_c(sig, frame):
-    if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
-        exit(OK_NOBUGS)
-    exit(OK_BUGS)
-
-
-if __name__ == "__main__":
-    rootpath = "/".join(__file__.split("/")[:-2])
-
-    class ArgumentParser(argparse.ArgumentParser):
-        def error(self, message):
-            print("usage:" + usage, flush=True)
-            self.exit(
-                ERR_USAGE,
-                "error: %s\nFor a listing of options, use %s --help.\n"
-                % (message, self.prog),
-            )
-
-    parser = ArgumentParser(
-        description="",
-        usage=usage,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        add_help=False,
-    )
-    parser.add_argument(
-        "SOLVER_CLIS",
-        metavar="solver_clis",
-    )
-    parser.add_argument(
-        "PATH_TO_SEEDS",
-        nargs="+",
-        metavar="seed_file/seed_folder",
-    )
-    parser.add_argument(
-        "-o",
-        "--oracle",
-        default="sat",
-        metavar="{sat,unsat}",
-        type=str,
-    )
-    parser.add_argument(
-        "-i",
-        "--iterations",
-        default=30,
-        metavar="<N>",
-        type=int,
-    )
-    parser.add_argument(
-        "-m",
-        "--modulo",
-        default=2,
-        metavar="<N>",
-        type=int,
-    )
-    parser.add_argument(
-        "-l",
-        "--logfolder",
-        metavar="path_path_to_folder",
-        default=rootpath + "/logs",
-    )
-    parser.add_argument(
-        "-v",
-        "--version",
-        action="version",
-        version="%(prog)s " + VERSION + " " + "(" + COMMIT + ")",
-    )
-    parser.add_argument(
-        "-h",
-        "--help",
-        action="help",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-t",
-        "--timeout",
-        default=8,
-        metavar="secs",
-        type=int,
-    )
-    parser.add_argument(
-        "-b",
-        "--bugsfolder",
-        metavar="path_to_folder",
-        default=rootpath + "/bugs",
-    )
-    parser.add_argument(
-        "-s",
-        "--scratchfolder",
-        metavar="path_to_folder",
-        default=rootpath + "/scratch",
-    )
-    parser.add_argument(
-        "-c",
-        "--config",
-        metavar="path_to_file",
-        default=rootpath + "/config/operator_mutations.txt",
-    )
-    parser.add_argument(
-        "-q",
-        "--quiet",
-        action="store_true",
-    )
-    parser.add_argument(
-        "-n",
-        "--no-log",
-        action="store_true",
-    )
-    parser.add_argument(
-        "-L",
-        "--file-size-limit",
-        metavar="num_bytes",
-        default=100000,
-        type=int,
-    )
+def main():
+    parser = build_yinyang_parser(rootpath)
 
     if len(sys.argv) == 1:
-        print(short_description + "\n\nusage:" + usage + long_description)
+        # Show medium-length description when called without args containing
+        # one example and the usage dialogue.
+        print(header + "\n\nusage:" + usage + short_description, flush=True)
         exit(ERR_USAGE)
+
     elif "-h" in sys.argv or "--help" in sys.argv:
-        print(short_description)
-        print(detailed_explanation)
-        print(help_text)
-        print("usage:" + usage)
+        # If called for help, show long description containing general
+        # information on opfuzz, two examples with in-depth explanation,
+        # and the usage dialogue.
+        print(
+            header
+            + "\n"
+            + long_description
+            + "\n"
+            + options
+            + "\n"
+            + "usage:"
+            + usage
+            + "\n",
+            flush=True,
+        )
         exit(OK_NOBUGS)
+
     else:
         args = run_checks(parser, "yinyang")
 
@@ -374,23 +88,10 @@ if __name__ == "__main__":
             fuzzer.run()
             exit(OK_NOBUGS)
         except Exception as e:
-            fn = inspect.trace()[-1].filename
-            lineno = inspect.trace()[-1].lineno
-            print("Runtime error at %s:%s" % (fn, lineno))
-            print("msg: " + str(e))
-            print(
-                "cmd: "
-                + " ".join(sys.argv[:-2])
-                + " "
-                + '"'
-                + sys.argv[-2]
-                + '"'
-                + " "
-                + sys.argv[-1]
-            )
-            print("version: yinyang " + VERSION + " " + COMMIT)
-            print(
-                "Please file an issue:\
-                    https://github.com/testsmt/yinyang/issues"
-            )
+            trace = inspect.trace()
+            raise_runtime_error(trace, sys.argv, e)
             exit(ERR_INTERNAL)
+
+
+if __name__ == "__main__":
+    main()
