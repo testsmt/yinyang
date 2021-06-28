@@ -120,7 +120,7 @@ class SemanticFusion(Mutator):
 
         return formula
 
-    def generate(self):
+    def mutate(self):
         skip_seed = False
         if self.formula1.free_var_occs == []\
            and self.formula2.free_var_occs == []:

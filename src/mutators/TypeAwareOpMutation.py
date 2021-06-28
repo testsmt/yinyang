@@ -91,7 +91,7 @@ class TypeAwareOpMutation(Mutator):
             return replacee
         return None
 
-    def generate(self):
+    def mutate(self):
         success = False
         for _ in range(self.args.modulo):
             max_choices = len(self.formula.op_occs)

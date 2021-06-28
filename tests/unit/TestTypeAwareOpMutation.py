@@ -20,7 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import os
 import sys
 import unittest
 
@@ -38,40 +37,19 @@ class Mockargs:
 
 class TypeAwareOpMutationTestCase(unittest.TestCase):
     def test_ta(self):
-        configfile = "operators.txt"
-        formulafile = "formula.smt2"
-        ops = """
-        =,distinct
-        exists,forall
-        and,or,=>
-        <=, >=,<,>
-        +,-,*,/ :arity 2+
-        div,mod
-        """
-        with open(configfile, "w") as f:
-            f.write(ops)
+        configfile = "tests/res/operators.txt"
+        formulafile = "tests/res/formula_file.smt2"
+        script = parse_file(formulafile)
 
-        formula = """
-        (declare-const x Int)
-        (declare-const y Int)
-        (declare-const w Bool)
-        (assert (= x (- x)))
-        (assert (distinct w (= x (- y))))
-        (assert w)
-        (check-sat)
-        """
-        with open(formulafile, "w") as f:
-            f.write(formula)
-        script = parse_str(formula)
         args = Mockargs()
-        print(formulafile)
+        args.config = configfile
         args.name = formulafile.strip(".smt2")
-        args.opconfig = configfile
+        args.config = configfile
         args.modulo = 2
+
         script = parse_file(formulafile, silent=True)
-        gen = TypeAwareOpMutation(script, args)
-        gen.generate()
-        os.system("rm -rf " + configfile + " " + formulafile)
+        mutator = TypeAwareOpMutation(script, args)
+        mutator.mutate()
 
 
 if __name__ == "__main__":

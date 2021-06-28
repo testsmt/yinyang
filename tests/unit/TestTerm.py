@@ -94,17 +94,14 @@ class TermTestCase(unittest.TestCase):
 (assert (= y (str.replace z x (str.at z (str.len z)))))
             """
             formula = parse_str(formula)
-            # expr = Expr(op="str++",
-            # subterms=[Var("x", "String"), Var("y", "String")])
             equals = formula.commands[5].term
             replacee = formula.commands[3].term.subterms[1]
             z = Var("z", "String")
             equals.substitute(z, replacee)
-            self.assertEqual(
-                equals.__str__(),
-                "(= y (str.replace (str.++ x y) x\
-                 (str.at (str.++ x y) (str.len (str.++ x y)))))",
-            )
+            expected = """\
+(= y (str.replace (str.++ x y) x (str.at (str.++ x y) (str.len (str.++ x y)))))
+"""
+            self.assertEqual(equals.__str__().strip(), expected.strip())
 
         def free_vars_quantifier():
             script = """\

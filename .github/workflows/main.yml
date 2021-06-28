@@ -21,7 +21,7 @@ jobs:
         python -m pip install antlr4-python3-runtime==4.9.2  
     - name: Run Unittests
       run: |
-        python -m unittest tests/runtests.py
+        python -m unittest tests/RunUnitTests.py
     - name: Detection logic 
       run: |
         python tests/integration_tests/detection/test_detection.py
