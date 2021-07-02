@@ -5,7 +5,6 @@ import os
 
 from src.parsing.parse import *
 from src.parsing.typechecker import Context, typecheck
-from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.GenTypeAwareMutation.GenTypeAwareMutation import *
 from src.generators.GenTypeAwareMutation.util import * 
 
@@ -14,7 +13,7 @@ class Mockargs:
     modulo = 3
     config_file = "config/generalization.txt"
 
-class TypeAwareMutationTestCase(unittest.TestCase):
+class GenTypeAwareMutationTestCase(unittest.TestCase):
     def test_ta(self):
         formulafile="formula.smt2"
         formula = """
