@@ -1,15 +1,17 @@
 import unittest
 import sys
+sys.path.append("../../")
 import os
 
 from src.parsing.parse import *
 from src.parsing.typechecker import Context, typecheck
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
-from src.generators.TypeMutation.TypeMutation import *
-from src.generators.TypeMutation.util import * 
+from src.generators.GenTypeAwareMutation.GenTypeAwareMutation import *
+from src.generators.GenTypeAwareMutation.util import * 
 
 class Mockargs:
     modulo = 3
+    config_file = "config/generalization.txt"
 
 class LocalVariableMutationTestCase(unittest.TestCase):
     def test_local_defs_quantifier(self):
@@ -127,7 +129,7 @@ class LocalVariableMutationTestCase(unittest.TestCase):
         av_expr, expr_type = get_all_subterms(formula)
         unique_expr = get_unique_subterms(formula)
         args = Mockargs()
-        gen = TypeMutation(formula,args,unique_expr)
+        gen = GenTypeAwareMutation(formula,args,unique_expr)
         gen.generate()
 
 if __name__ == '__main__':

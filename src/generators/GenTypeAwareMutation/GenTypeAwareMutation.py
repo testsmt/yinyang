@@ -1,11 +1,11 @@
 import random
 
 from src.generators.Generator import Generator
-from src.generators.Generalization.Operator import *
-from src.generators.TypeMutation.util import *
+from src.generators.GenTypeAwareMutation.Operator import *
+from src.generators.GenTypeAwareMutation.util import *
 from src.parsing.parse import *
 
-class Generalization(Generator):
+class GenTypeAwareMutation(Generator):
     def __init__(self, formula, args, unique_expr):
         self.args = args
         self.formula = formula
@@ -15,6 +15,12 @@ class Generalization(Generator):
         self.parse_config_file()
 
     def parse_config_file(self):
+        """
+        Read the customizable configuration file. 
+        Customize the configuration file at config/generalization.txt.
+        Configuration file contains all the signatures of SMT-LIB operators
+        and the signatures are used for operator choice during the mutation.
+        """
         with open(self.args.config_file) as f:
             lines = f.readlines()
 
@@ -27,10 +33,10 @@ class Generalization(Generator):
             line = line.strip() # remove trailing whitespaces
             tokens = line.split(" ")
 
-            if not "par" in tokens[0]:
+            if not "par" in tokens[0]: # signature without parameter binder
                 op_name, type_strings, attributes = handle_non_parametric_op(tokens)
                 op = Operator(op_name,type_strings,attributes)
-            else:
+            else: 
                 op_name, type_strings, attributes, parameters = handle_parametric_op(tokens)
                 op = Operator(op_name,type_strings,attributes,parameters)
             self.operators.append(op)
@@ -76,6 +82,17 @@ class Generalization(Generator):
         return candidate_ops
 
     def get_replacee(self,term):
+        """
+        term: term object
+
+        Choose randomly an operator from the list of candidate operators.
+
+        When id is chosen for the operator, we pick an expression of a 
+        same type as input term. Else, we choose expression(s) according to the 
+        signature of the operator from the configuration file and generate a new expression.
+
+        :returns: newly generated expression for substitution
+        """
         candidate_ops = self.get_candidate_ops(term)
         op = random.choice(candidate_ops)
         args = []
@@ -102,6 +119,12 @@ class Generalization(Generator):
 
 
     def generate(self):
+        """
+        Perform a generative type-aware mutation.
+        In case generator could not generate valid mutant, return false.
+        
+        :returns: mutant formula, and result of mutation
+        """
         success = False
         self.av_expr, self.expr_type = get_all_subterms(self.formula)
         num_holes = len(self.av_expr)
@@ -111,10 +134,7 @@ class Generalization(Generator):
             t2 = self.get_replacee(t1)
             if t2:
                 success = True
-                # print(t1, "->", t2)
                 t1.substitute(t1, t2)
                 break
             all_holes.remove(t1)
-        # print()
-        # print(self.formula)
         return self.formula, success

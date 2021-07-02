@@ -18,10 +18,8 @@ from src.parsing.parse import *
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.SemanticFusion.SemanticFusion import SemanticFusion
 
-from src.generators.TypeMutation.TypeMutation import *
-from src.generators.TypeMutation.util import get_unique_subterms
-
-from src.generators.Generalization.Generalization import *
+from src.generators.GenTypeAwareMutation.GenTypeAwareMutation import *
+from src.generators.GenTypeAwareMutation.util import get_unique_subterms
 
 TIMEOUT_LIMIT = 32
 class Fuzzer:
@@ -48,7 +46,7 @@ class Fuzzer:
         return True
 
     def run(self):
-        if self.args.strategy in ["opfuzz","typfuzz","generalization"]:
+        if self.args.strategy in ["opfuzz","typefuzz"]:
             seeds = self.args.PATH_TO_SEEDS
         elif (self.args.strategy == "fusion"):
             if len(self.args.PATH_TO_SEEDS) > 2:
@@ -90,7 +88,7 @@ class Fuzzer:
                 fusion_seeds = [seed1, seed2]
                 self.generator = SemanticFusion(fusion_seeds, self.args)
 
-            elif (self.args.strategy == "typfuzz"):
+            elif (self.args.strategy == "typefuzz"):
                 seed = seeds.pop(random.randrange(len(seeds)))
 
                 self.statistic.seeds += 1
@@ -108,27 +106,7 @@ class Fuzzer:
                 typecheck(script, glob)
                 script_cp = copy.deepcopy(script)
                 unique_expr = get_unique_subterms(script_cp)
-                self.generator = TypeMutation(script, self.args, unique_expr)
-
-            elif (self.args.strategy == "generalization"):
-                seed = seeds.pop(random.randrange(len(seeds)))
-
-                self.statistic.seeds += 1
-                if not self.admissible_seed_size(seed):
-                    self.statistic.ignored += 1
-                    continue
-
-                self.currentseeds = Path(seed).stem
-                script, glob = parse_file(seed,silent=True)
-
-                if not script: # i.e. parsing was unsucessful
-                    self.statistic.ignored += 1
-                    continue
-
-                typecheck(script, glob)
-                script_cp = copy.deepcopy(script)
-                unique_expr = get_unique_subterms(script_cp)
-                self.generator = Generalization(script, self.args, unique_expr)
+                self.generator = GenTypeAwareMutation(script, self.args, unique_expr)
 
             else: assert(False)
 
