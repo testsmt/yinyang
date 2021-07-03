@@ -31,13 +31,13 @@ WARNING = "\033[91m"
 ENDC = "\033[0m"
 
 
-def init_logging(strategy, quiet_mode):
+def init_logging(strategy, quiet_mode, name, args):
     fn = (datetime.datetime.now().strftime(strategy + "-%Y-%m-%d-%M:%S-%p")
             + "-"
-            + str(self.name)
+            + str(name)
             + ".log"
         )
-    log_fn = self.args.logfolder + "/" + fn
+    log_fn = args.logfolder + "/" + fn
     logging.basicConfig(
         handlers=[
             RotatingFileHandler(
@@ -59,11 +59,11 @@ def init_logging(strategy, quiet_mode):
         logging.getLogger().addHandler(console)
 
 
-def log_strategy_num_seeds(args, seeds, targets):
+def log_strategy_num_seeds(strategy, seeds, targets):
     num_targets = len(targets)
     num_seeds = len(seeds)
     logging.info("Strategy: "
-            + args.strategy
+            + strategy
             + ", "
             + str(num_targets)
             + " testing targets, "

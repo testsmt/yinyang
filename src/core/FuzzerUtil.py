@@ -30,15 +30,15 @@ from src.base.Utils import random_string, plain, escape, in_list
 from config.Config import crash_list, duplicate_list, ignore_list
 
 
-def in_crash_list(self, stdout, stderr):
+def in_crash_list(stdout, stderr):
     return in_list(stdout, stderr, crash_list)
 
 
-def in_duplicate_list(self, stdout, stderr):
+def in_duplicate_list(stdout, stderr):
     return in_list(stdout, stderr, duplicate_list)
 
 
-def in_ignore_list(self, stdout, stderr):
+def in_ignore_list(stdout, stderr):
     return in_list(stdout, stderr, ignore_list)
 
 

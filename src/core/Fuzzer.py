@@ -40,6 +40,27 @@ from src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
 from src.base.Utils import random_string, plain, escape
 from src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_EXHAUSTED_DISK
 
+from src.core.Logger import (
+        init_logging,
+        log_strategy_num_seeds,
+        log_generation_attempt,
+        log_finished_generations,
+        log_crash_trigger,
+        log_ignore_list_mutant,
+        log_duplicate_trigger,
+        log_segfault_trigger,
+        log_solver_timeout,
+        log_soundness_trigger,
+        log_invalid_mutant
+)
+from src.core.FuzzerUtil import (
+        get_seeds,
+        admissible_seed_size,
+        in_crash_list,
+        in_duplicate_list,
+        in_ignore_list
+)
+
 class Fuzzer:
     def __init__(self, args, strategy):
         self.args = args
@@ -50,32 +71,32 @@ class Fuzzer:
         self.old_time = time.time()
         self.start_time = time.time()
         self.first_status_bar_printed = False
-        self.name = random_string() #TODO: check if needed 
-        
-        init_logging(self.args.strategy, self.args.quiet)       
+        self.name = random_string()
+
+        init_logging(strategy, self.args.quiet, self.name, args)
 
     def process_seed(self, seed):
-        if not self.admissible_seed_size(seed):
+        if not admissible_seed_size(seed, self.args):
             self.statistic.invalid_seeds += 1
             logging.debug("Skip invalid seed: exceeds max file size")
-            return None 
+            return None
 
         self.currentseeds = pathlib.Path(seed).stem
         script = parse_file(seed, silent=True)
 
-        if not script:                      
+        if not script:
 
-            # Parsing was unsuccessful. 
+            # Parsing was unsuccessful.
             self.statistic.invalid_seeds += 1
             logging.debug("Skipping invalid seed: error in parsing")
             return None
-        return script 
+        return script
 
     def get_script(self, seeds):
         seed = seeds.pop(random.randrange(len(seeds)))
         logging.debug("Processing seed " + seed)
         self.statistic.total_seeds += 1
-        return process_seed(seed)
+        return self.process_seed(seed)
 
     def get_script_pair(self, seeds):
         seed = seeds.pop(random.randrange(len(seeds)))
@@ -83,52 +104,52 @@ class Fuzzer:
         seed2 = seed[1]
         logging.debug("Processing seeds " + seed1 + " " + seed2)
         self.statistic.total_seeds += 2
-        return process_seed(seed1), process_seed(seed2)
+        return self.process_seed(seed1), self.process_seed(seed2)
 
     def run(self):
         """
-        Realizes the main fuzzing loop. The procedure fetches seeds at random 
-        from the seed corpus (or a pair of seeds for yinyang), instantiates a 
-        mutator and then generates `self.args.iterations` many iterations per        
+        Realizes the main fuzzing loop. The procedure fetches seeds at random
+        from the seed corpus (or a pair of seeds for yinyang), instantiates a
+        mutator and then generates `self.args.iterations` many iterations per
         seed.
         """
-        seeds = self.get_seeds(self.args, strategy)
-        log_strategy_seeds_targets(self.strategy, seeds, self.args.SOLVER_CLIS)
+        seeds = get_seeds(self.args, self.strategy)
+        log_strategy_num_seeds(self.strategy, seeds, self.args.SOLVER_CLIS)
 
         while len(seeds) != 0:
             if self.strategy == "opfuzz":
-                script = get_script(seeds)
-                if not script: 
+                script = self.get_script(seeds)
+                if not script:
                     continue
                 self.mutator = TypeAwareOpMutation(script, self.args)
 
             elif self.strategy == "yinyang":
-                script1, script2 = get_script_pair(seeds)
+                script1, script2 = self.get_script_pair(seeds)
                 if not script1 or not script2:
-                   continue 
+                   continue
                 self.mutator = SemanticFusion(script1, script2, self.args)
 
             else:
-                assert False 
+                assert False
 
-            log_generation_attempt(self.args.interations) 
+            log_generation_attempt(self.args)
 
             unsuccessful_gens = 0
             for i in range(self.args.iterations):
                 self.print_stats()
                 mutant, success, skip_seed = self.mutator.mutate()
 
-                # Reason for unsuccessful generation: randomness in the 
-                # mutator to more efficiently generate mutants. 
+                # Reason for unsuccessful generation: randomness in the
+                # mutator to more efficiently generate mutants.
                 if not success:
                     self.statistic.unsuccessful_generations += 1
                     unsuccessful_gens += 1
                     continue                        # Go to next iteration.
 
-                # Reason for mutator to skip a seed: no random components, i.e. 
-                # mutant would be the same for all  iterations and hence just 
-                # waste  time.
-                if skip_seed: break                 # Continue to next seed. 
+                # Reason for mutator to skip a seed: no random components, i.e.
+                # mutant would be the same for all  iterations and hence just
+                # waste time.
+                if skip_seed: break                 # Continue to next seed.
 
                 if not self.test(mutant, i + 1):    # Continue to next seed.
                     break
@@ -137,13 +158,13 @@ class Fuzzer:
 
             log_finished_generations(unsuccessful_gens)
         self.terminate()
-        
+
     def create_testbook(self, script):
         """
-        Generate a "testbook" for script and solver configs.  
+        Generate a "testbook" for script and solver configs.
 
-        script:     parsed SMT-LIB script  
-        :returns:   list containing with cli and testcases pairs  
+        script:     parsed SMT-LIB script
+        :returns:   list containing with cli and testcases pairs
         """
         testbook = []
         testcase = "%s/%s-%s-%s.smt2" % (
@@ -161,19 +182,19 @@ class Fuzzer:
 
     def test(self, script, iteration):
         """
-        Tests the solvers on the provided script. Checks for crashes, segfaults    
-        invalid models and soundness issues, ignores duplicates. Stores bug  
-        triggers in ./bugs along with .output files for bug reproduction.  
+        Tests the solvers on the provided script. Checks for crashes, segfaults
+        invalid models and soundness issues, ignores duplicates. Stores bug
+        triggers in ./bugs along with .output files for bug reproduction.
 
-        script:     parsed SMT-LIB script  
-        iteration:  number of current iteration (used for logging)     
-        :returns:   False if the testing on the script should be stopped 
+        script:     parsed SMT-LIB script
+        iteration:  number of current iteration (used for logging)
+        :returns:   False if the testing on the script should be stopped
                     and True otherwise.
         """
-       
-        # For differential testing (opfuzz), the oracle is set to "unknown" and    
-        # gets overwritten by the result of the first solver call. For 
-        # metamorphic testing (yinyang) the oracle is pre-set by the cmd line. 
+
+        # For differential testing (opfuzz), the oracle is set to "unknown" and
+        # gets overwritten by the result of the first solver call. For
+        # metamorphic testing (yinyang) the oracle is pre-set by the cmd line.
         if self.strategy == "opfuzz":
             oracle = SolverResult(SolverQueryResult.UNKNOWN)
         else:
@@ -187,21 +208,21 @@ class Fuzzer:
             solver = Solver(solver_cli)
             self.statistic.solver_calls += 1
             stdout, stderr, exitcode = solver.solve(
-                scratchfile, self.args.timeout 
+                scratchfile, self.args.timeout
             )
 
-            # Match stdout and stderr against the crash list  
-            # (see config/Config.py:27) which contains various crash messages   
+            # Match stdout and stderr against the crash list
+            # (see config/Config.py:27) which contains various crash messages
             # such as assertion errors, check failure, invalid models, etc.
             if in_crash_list(stdout, stderr):
 
-                # Match stdout and stderr against the duplicate list 
-                # (see config/Config.py:51) to prevent catching duplicate bug 
+                # Match stdout and stderr against the duplicate list
+                # (see config/Config.py:51) to prevent catching duplicate bug
                 # triggers.
                 if not in_duplicate_list(stdout, stderr):
                     self.statistic.effective_calls += 1
                     self.statistic.crashes += 1
-                    path = report(scratchfile, "crash", solver_cli, 
+                    path = self.report(scratchfile, "crash", solver_cli,
                         stdout, stderr
                     )
                     log_crash_trigger(path)
@@ -211,8 +232,8 @@ class Fuzzer:
                 return False                    # Stop testing.
             else:
 
-                # Check whether the solver call produced errors, e.g, related 
-                # to its parser, options, type-checker etc., by matching stdout 
+                # Check whether the solver call produced errors, e.g, related
+                # to its parser, options, type-checker etc., by matching stdout
                 # and stderr against the ignore list (see config/Config.py:54).
                 if in_ignore_list(stdout, stderr):
                     log_ignore_list_mutant()
@@ -221,29 +242,29 @@ class Fuzzer:
 
                 if exitcode != 0:
 
-                    # Check whether the solver crashed with a segfault. 
+                    # Check whether the solver crashed with a segfault.
                     if exitcode == -signal.SIGSEGV or exitcode == 245:
                         self.statistic.effective_calls += 1
                         self.statistic.crashes += 1
-                        path = self.report(scratchfile, "segfault", solver_cli, 
+                        path = self.report(scratchfile, "segfault", solver_cli,
                             stdout, stderr
                         )
                         log_segfault_trigger()
                         return False            # Stop testing.
 
-                    # Check whether the solver timed out. 
+                    # Check whether the solver timed out.
                     elif exitcode == 137:
                         self.statistic.timeout += 1
                         log_solver_timeout(self.args, solver_cli, iteration)
-                        continue                # Continue to the next solver. 
+                        continue                # Continue to the next solver.
 
-                    # Check whether a "command not found" error occurred.    
+                    # Check whether a "command not found" error occurred.
                     elif exitcode == 127:
                         continue                # Continue to the next solver.
 
 
-                # Check if the stdout contains a valid solver query result, 
-                # i.e., contains lines with 'sat', 'unsat' or 'unknown'. 
+                # Check if the stdout contains a valid solver query result,
+                # i.e., contains lines with 'sat', 'unsat' or 'unknown'.
                 elif (
                     not re.search("^unsat$", stdout, flags=re.MULTILINE)
                     and not re.search("^sat$", stdout, flags=re.MULTILINE)
@@ -258,44 +279,126 @@ class Fuzzer:
                     # Grep for '^sat$', '^unsat$', and '^unknown$' to produce
                     # the output (including '^unknown$' to also deal with
                     # incremental benchmarks) for comparing with the oracle
-                    # (yinyang) or with other non-erroneous solver runs 
-                    # (opfuzz) for soundness bugs. 
+                    # (yinyang) or with other non-erroneous solver runs
+                    # (opfuzz) for soundness bugs.
                     self.statistic.effective_calls += 1
                     result = self.grep_result(stdout)
                     if oracle.equals(SolverQueryResult.UNKNOWN):
 
-                        # For differential testing (opfuzz), the first solver  
-                        # is set as the reference, its result to be the oracle.  
+                        # For differential testing (opfuzz), the first solver
+                        # is set as the reference, its result to be the oracle.
                         oracle = result
                         reference = (solver_cli, scratchfile, stdout, stderr)
 
-                    # Comparing with the oracle (yinyang) or with other 
-                    # non-erroneous solver runs (opfuzz) for soundness bugs. 
+                    # Comparing with the oracle (yinyang) or with other
+                    # non-erroneous solver runs (opfuzz) for soundness bugs.
                     if not oracle.equals(result):
                         self.statistic.soundness += 1
-                        log_soundness_trigger(self.args, i, path) 
-                        
+                        log_soundness_trigger(self.args, i, path)
+
                         if reference:
 
-                            # Produce a bug report for soundness bugs 
-                            # containing a diff with the reference solver 
-                            # (opfuzz). 
+                            # Produce a bug report for soundness bugs
+                            # containing a diff with the reference solver
+                            # (opfuzz).
                             ref_cli = reference[0]
                             ref_stdout = reference[1]
                             ref_stderr = reference[2]
-                            path = report_diff(scratchfile, "incorrect",
+                            path = self.report_diff(scratchfile, "incorrect",
                                 ref_cli, ref_stdout, ref_stderr, solver_cli,
                                 stdout, stderr
                             )
-                        else: 
+                        else:
 
-                            # Produce a bug report if the query result differs   
+                            # Produce a bug report if the query result differs
                             # from the pre-set oracle (yinyang).
                             path = report(scratchfile, "incorrect", solver_cli,
                                 stdout, stderr
                             )
                         return False                # Stop testing.
         return True                                 # Continue to next seed.
+
+    def report(scratchfile, bugtype, cli, stdout, stderr, report_id):
+        plain_cli = plain(cli)
+        # format: <solver><{crash,wrong,invalid_model}><seed>.<random-str>.smt2
+        report = "%s/%s-%s-%s-%s.smt2" % (
+            self.args.bugsfolder,
+            bugtype,
+            plain_cli,
+            escape(self.currentseeds),
+            report_id,
+        )
+        try:
+            shutil.copy(scratchfile, report)
+        except Exception:
+            logging.error(
+                "Could not copy scratchfile to bugfolder.\
+                 Disk space seems exhausted."
+            )
+            exit(ERR_EXHAUSTED_DISK)
+        logpath = "%s/%s-%s-%s-%s.output" % (
+            self.args.bugsfolder,
+            bugtype,
+            plain_cli,
+            escape(self.currentseeds),
+            report_id,
+        )
+        with open(logpath, "w") as log:
+            log.write("command: " + cli + "\n")
+            log.write("stderr:\n")
+            log.write(stderr)
+            log.write("stdout:\n")
+            log.write(stdout)
+        return report
+
+        def report_diff(
+            scratchfile,
+            bugtype,
+            ref_cli,
+            ref_stdout,
+            ref_stderr,
+            sol_cli,
+            sol_stdout,
+            sol_stderr,
+            report_id,
+        ):
+            plain_cli = plain(sol_cli)
+            # format: <solver><{crash,wrong,invalid_model}><seed>.<random-str>.smt2
+            report = "%s/%s-%s-%s-%s.smt2" % (
+                self.args.bugsfolder,
+                bugtype,
+                plain_cli,
+                escape(self.currentseeds),
+                report_id,
+            )
+            try:
+                shutil.copy(scratchfile, report)
+            except Exception:
+                logging.error("Could not copy scratchfile to bugfolder.\
+                    Disk space seems exhausted.")
+                exit(ERR_EXHAUSTED_DISK)
+
+        logpath = "%s/%s-%s-%s-%s.output" % (
+            self.args.bugsfolder,
+            bugtype,
+            plain_cli,
+            escape(self.currentseeds),
+            report_id,
+        )
+        with open(logpath, "w") as log:
+            log.write("*** REFERENCE \n")
+            log.write("command: " + ref_cli + "\n")
+            log.write("stderr:\n")
+            log.write(ref_stderr)
+            log.write("stdout:\n")
+            log.write(ref_stdout)
+            log.write("\n\n*** INCORRECT \n")
+            log.write("command: " + sol_cli + "\n")
+            log.write("stderr:\n")
+            log.write(sol_stderr)
+            log.write("stdout:\n")
+            log.write(sol_stdout)
+        return report
 
     def print_stats(self):
         if not self.first_status_bar_printed\
@@ -307,8 +410,8 @@ class Fuzzer:
         if time.time() - self.old_time >= 5.0:
             self.statistic.printbar(self.start_time)
             self.old_time = time.time()
-   
-   def terminate(self):
+
+    def terminate(self):
         print("All seeds processed", flush=True)
         if not self.args.quiet:
             self.statistic.printsum()

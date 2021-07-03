@@ -45,15 +45,17 @@ from config.OpfuzzHelptext import (
 
 
 def main():
-    parser = build_opfuzz_parser(rootpath)
+    parser = build_opfuzz_parser(rootpath, usage)
 
     if len(sys.argv) == 1:
+
         # Show medium-length description when called without args containing
         # one example and the usage dialogue.
         print(header + "\n\nusage:" + usage + short_description, flush=True)
         exit(ERR_USAGE)
 
     elif "-h" in sys.argv or "--help" in sys.argv:
+
         # If called for help, show long description containing general 
         # information on opfuzz, two examples with in-depth explanation, 
         # and the usage dialogue. 

@@ -27,8 +27,9 @@ from src.base.Version import VERSION, COMMIT
 
 
 class ArgumentParser(argparse.ArgumentParser):
+
     def error(self, message):
-        print("usage:" + usage, flush=True)
+        print("usage:" + self.usage, flush=True)
         self.exit(
             ERR_USAGE,
             "error: %s\nFor a listing of options, use %s --help.\n"
@@ -43,6 +44,7 @@ def add_common_args(parser, rootpath):
     )
     parser.add_argument(
         "PATH_TO_SEEDS",
+        nargs='+',
         metavar="seed_file/seed_folder",
     )
     parser.add_argument(
@@ -153,23 +155,23 @@ def add_yinyang_args(parser, rootpath):
     )
 
 
-def build_opfuzz_parser(rootpath):
+def build_opfuzz_parser(rootpath, usage):
     parser = ArgumentParser(
         description="",
-        usage="",
+        usage=usage,
         formatter_class=argparse.RawDescriptionHelpFormatter,
         add_help=False,
     )
     add_common_args(parser, rootpath)
     add_opfuzz_args(parser, rootpath)
 
-    return parser 
+    return parser
 
 
-def build_yinyang_parser(rootpath):
+def build_yinyang_parser(rootpath, usage):
     parser = ArgumentParser(
         description="",
-        usage="",
+        usage=usage,
         formatter_class=argparse.RawDescriptionHelpFormatter,
         add_help=False,
     )

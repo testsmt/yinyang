@@ -30,7 +30,7 @@ python = sys.executable
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = (
         python
-        + " yinyang.py "
+        + " bin/yinyang "
         + '"'
         + first_config
         + ";"
@@ -41,7 +41,6 @@ def call_fuzzer(first_config, second_config, fn, opts):
         + fn
     )
     output = subprocess.getoutput(cmd)
-    # print(output)
     crash_issues = None
     soundness_issues = None
     duplicate_issues = None
