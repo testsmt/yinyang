@@ -113,52 +113,55 @@ throw an error message.
 
 [1] https://github.com/testsmt/semantic-fusion-seeds
 
-*** Example 2 (finding a bug with yinyang) ***
 
-The following command sequence will let you find a soundness bug in z3-4.8.6.
-
-** 1. Get z3-4.8.6 **
-Fro linux execute the following two commands:
-
-    $ wget https://github.com/Z3Prover/z3/releases/download/z3-4.8.6/z3-4.8.6-x64-ubuntu-16.04.zip
-    $ unzip z3-4.8.6-x64-ubuntu-16.04.zip
-
-For Mac and windows, you can download z3-4.8.6 from https://github.com/Z3Prover/z3/releases/download/z3-4.8.6
-
-** 2. Seeds **
-Create a two smt2 files with the following contents:
-
-    $ cat formula1.smt2
-    (declare-const x String)
-    (declare-const y String)
-    (declare-const m String)
-    (declare-const n String)
-    (assert (str.in.re x (re.union (str.to.re "b") (re.* (str.to.re "a")))))
-    (assert (str.in.re x (re.union (str.to.re "a") (re.+ (str.to.re "")))))
-    (assert (str.in.re x (re.++ (re.+ (str.to.re "")) (re.* (re.++ (str.to.re "L") (str.to.re "g"))))))
-    (check-sat)
-    (get-model)
-    $ cat formula2.smt2
-    (declare-const x String)
-    (declare-const y String)
-    (declare-const m String)
-    (declare-const n String)
-    (assert (= (str.++ x y) (str.++ m n)))
-    (assert (str.in.re n (re.* (str.to.re "_o|'\t'}RC+:'\t'\\^S_c"))))
-    (assert (> (str.to.int x) (str.len m)))
-    (check-sat)
-    (get-model)
-
-** 3. Run yinyang **
-To trigger the bug triggers, execute the following statement
-
-    for (( i = 0; i < 100; i++ )); do
-        yinyang -o sat "./z3-4.8.6-x64-ubuntu-16.04/bin/z3 model_validate=true" formula1.smt2 formula2.smt2
-    done
-
-You can now observe the corresponding bug by executing:
-<TODO>
 """  # noqa: E501
+# *** Example 2 (finding a bug with yinyang) ***
+
+# The following command sequence will let you find a soundness bug in z3-4.8.6.
+
+# ** 1. Get z3-4.8.6 **
+# Fro linux execute the following two commands:
+
+# $ wget https://github.com/Z3Prover/z3/releases/download/z3-4.8.6/z3-4.8.6-x64-ubuntu-16.04.zip
+# $ unzip z3-4.8.6-x64-ubuntu-16.04.zip
+
+# For Mac and windows, you can download z3-4.8.6 from https://github.com/Z3Prover/z3/releases/download/z3-4.8.6
+
+# ** 2. Seeds **
+# Create a two smt2 files with the following contents:
+
+# $ cat formula1.smt2
+# (declare-const x String)
+# (declare-const y String)
+# (declare-const m String)
+# (declare-const n String)
+# (assert (str.in.re x (re.union (str.to.re "b") (re.* (str.to.re "a")))))
+# (assert (str.in.re x (re.union (str.to.re "a") (re.+ (str.to.re "")))))
+# (assert (str.in.re x (re.++ (re.+ (str.to.re "")) (re.* (re.++ (str.to.re "L") (str.to.re "g"))))))
+# (check-sat)
+# (get-model)
+# $ cat formula2.smt2
+# (declare-const x String)
+# (declare-const y String)
+# (declare-const m String)
+# (declare-const n String)
+# (assert (= (str.++ x y) (str.++ m n)))
+# (assert (str.in.re n (re.* (str.to.re "_o|'\t'}RC+:'\t'\\^S_c"))))
+# (assert (> (str.to.int x) (str.len m)))
+# (check-sat)
+# (get-model)
+
+
+# ** 3. Run yinyang **
+# To trigger the bug triggers, execute the following statement
+
+    # for (( i = 0; i < 100; i++ )); do
+        # yinyang -o sat "./z3-4.8.6-x64-ubuntu-16.04/bin/z3 model_validate=true" formula1.smt2 formula2.smt2
+    # done
+
+# You can now observe the corresponding bug by executing:
+# <TODO>
+
 
 options = """
 options:
