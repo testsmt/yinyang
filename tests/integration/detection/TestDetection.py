@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 """
-Script to test bug detection logic of yinyang (src/modules/Fuzzer.py).
+Script to test bug detection logic of yinyang (src/core/Fuzzer.py).
 """
 import os
 import sys
@@ -32,6 +32,10 @@ python = sys.executable
 script_dir = os.path.dirname(os.path.realpath(__file__))
 ERRORS = False
 
+def newest_log(path):
+    files = os.listdir(path)
+    paths = [os.path.join(path, basename) for basename in files]
+    return max(paths, key=os.path.getctime)
 
 def is_sound(res1, res2):
     for i in range(len(res1)):
@@ -56,28 +60,30 @@ def call_fuzzer(first_config, second_config, fn, opts):
         + fn
     )
     output = subprocess.getoutput(cmd)
-    print(cmd)
+    print("$", cmd)
     print(output, flush=True)
-    crash_issues = None
-    soundness_issues = None
-    duplicate_issues = None
+    crash_issues = 0
+    soundness_issues = 0
+    segfault_issues = 0
+    duplicate_issues = 0
     timeout_issues = None
     ignored_issues = None
     for line in output.split("\n"):
-        if "Crash" in line:
-            crash_issues = int(line.split()[-1])
-        if "Soundness" in line:
-            soundness_issues = int(line.split()[-1])
-        if "Duplicate" in line:
-            duplicate_issues = int(line.split()[-1])
-        if "Timeout" in line:
-            timeout_issues = int(line.split()[-1])
+        if "Detected crash bug" in line:
+            crash_issues += 1
+        if "Detected soundness bug" in line:
+            soundness_issues += 1
+        if "Detected segfault" in line:
+            segfault_issues += 1
+        if "Duplicate. Stop testing on this seed." in line:
+            duplicate_issues += 1
         if "Ignored" in line:
             ignored_issues = int(line.split()[-1])
 
     return (
         crash_issues,
         soundness_issues,
+        segfault_issues,
         duplicate_issues,
         timeout_issues,
         ignored_issues,
@@ -114,7 +120,7 @@ def create_mocksolver_timeout(script_fn):
 
 
 def test_crash_list():
-    print("1. Test crash list")
+    print("*** (1) Test crash list")
     solver = "crash.py"
     msg = """
     Fatal failure within void CVC4::SmtEngine::checkUnsatCore() at src/smt/smt_engine.cpp:1464
@@ -124,7 +130,7 @@ def test_crash_list():
     create_mocksolver_msg(msg, solver)
     first_config = os.path.abspath(solver)
     second_config = os.path.abspath(solver)
-    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(
+    crash, soundness, segfault, duplicate, timeout, ignored, cmd = call_fuzzer(
         first_config, second_config, FN, OPTS
     )
 
@@ -137,7 +143,7 @@ def test_crash_list():
 
 
 def test_ignore_list():
-    print("2. Test ignore list")
+    print("*** (2) Test ignore list")
     solver = "ignore_list.py"
     msg = """
     formula3.smt2:2.12: No set-logic command was given before this point.
@@ -153,11 +159,12 @@ def test_ignore_list():
     create_mocksolver_msg(msg, solver)
     first_config = os.path.abspath(solver)
     second_config = os.path.abspath(solver)
-    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(
+    crash, soundness, segfault, duplicate, timeout, ignored, cmd = call_fuzzer(
         first_config, second_config, FN, OPTS
     )
 
-    if ignored != 2:
+    log = open(newest_log("logs")).read()
+    if log.count("Invalid mutant:ignore_list") != 2:
         print("[ERROR] Ignore list incorrect.")
         print(cmd)
         exit(1)
@@ -166,16 +173,16 @@ def test_ignore_list():
 
 
 def test_segfault():
-    print("3. Test segfault")
+    print("*** (3) Test segfault")
     solver = "segfault.py"
     create_mocksolver_segfault(solver)
     first_config = os.path.abspath(solver)
     second_config = os.path.abspath(solver)
-    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(
+    crash, soundness, segfault, duplicate, timeout, ignored, cmd = call_fuzzer(
         first_config, second_config, FN, OPTS
     )
 
-    if crash != 1:
+    if segfault != 1:
         print("[ERROR] Segfault undetected.")
         print(cmd)
         exit(1)
@@ -184,7 +191,7 @@ def test_segfault():
 
 
 def test_timeout():
-    print("4. Test timeout")
+    print("*** (4) Test timeout")
     timeout_solver = "timeout.py"
     sat_solver = "sat_solver.py"
     create_mocksolver_timeout(timeout_solver)
@@ -192,11 +199,12 @@ def test_timeout():
     create_mocksolver_msg(msg, sat_solver)
     first_config = os.path.abspath(timeout_solver)
     second_config = os.path.abspath(sat_solver)
-    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(
+    crash, soundness, segfault, duplicate, timeout, ignored, cmd = call_fuzzer(
         first_config, second_config, FN, OPTS
     )
+    log = open(newest_log("logs")).read()
 
-    if timeout != 1:
+    if log.count("Solver timeout occured.") != 1:
         print("[ERROR] Timeout undetected.")
         print(cmd)
         exit(1)
@@ -206,7 +214,7 @@ def test_timeout():
 
 
 def test_empty_output():
-    print("5. Test empty output")
+    print("*** (5) Test empty output")
     empty_solver = "empty_solver.py"
     sat_solver = "sat_solver.py"
     msg = ""
@@ -215,34 +223,11 @@ def test_empty_output():
     create_mocksolver_msg(msg, sat_solver)
     first_config = os.path.abspath(empty_solver)
     second_config = os.path.abspath(sat_solver)
-    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(
+    crash, soundness, segfault, duplicate, timeout, ignored, cmd = call_fuzzer(
         first_config, second_config, FN, OPTS
     )
-
-    if ignored != 1:
-        print("[ERROR] Empty output undetected.")
-        print(cmd)
-        exit(1)
-    else:
-        os.system("rm -rf " + sat_solver)
-        os.system("rm -rf " + empty_solver)
-
-
-def test_get_value():
-    print("6. Test get-value ")
-    empty_solver = "empty_solver.py"
-    sat_solver = "sat_solver.py"
-    msg = "(= 1.0 x)"
-    create_mocksolver_msg(msg, empty_solver)
-    msg = "sat"
-    create_mocksolver_msg(msg, sat_solver)
-    first_config = os.path.abspath(empty_solver)
-    second_config = os.path.abspath(sat_solver)
-    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(
-        first_config, second_config, FN, OPTS
-    )
-
-    if ignored != 1:
+    log = open(newest_log("logs")).read()
+    if log.count("Invalid mutant") != 1:
         print("[ERROR] Empty output undetected.")
         print(cmd)
         exit(1)
@@ -252,7 +237,7 @@ def test_get_value():
 
 
 def test_unsoundness():
-    print("7. Unsoundness")
+    print("*** (6) Unsoundness")
     values = ["sat", "unsat", "unknown"]
     k = random.randint(1, 20)
     res1 = random.choices(values, k=k)
@@ -267,12 +252,12 @@ def test_unsoundness():
     first_config = os.path.abspath(solver1)
     second_config = os.path.abspath(solver2)
     create_mocksolver_msg("\n".join(res2), solver2)
-    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(
+    crash, soundness, segfault, duplicate, timeout, ignored, cmd = call_fuzzer(
         first_config, second_config, FN, OPTS
     )
 
     if soundness != 1:
-        print("[ERROR] Unsundness undetected.")
+        print("[ERROR] Unsoundness undetected.")
         print(cmd)
         exit(1)
     else:
@@ -281,7 +266,7 @@ def test_unsoundness():
 
 
 def test_soundness():
-    print("8. Soundness")
+    print("*** (7) Soundness")
     values = ["sat", "unsat", "unknown"]
     k = random.randint(1, 20)
     res1 = random.choices(values, k=k)
@@ -299,7 +284,7 @@ def test_soundness():
     first_config = os.path.abspath(solver1)
     second_config = os.path.abspath(solver2)
     create_mocksolver_msg("\n".join(res2), solver2)
-    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(
+    crash, soundness, segfault, duplicate, timeout, ignored, cmd = call_fuzzer(
         first_config, second_config, FN, OPTS
     )
 
@@ -313,7 +298,7 @@ def test_soundness():
 
 
 def test_duplicate_list():
-    print("9. Test duplicate list")
+    print("*** (8) Test duplicate list")
     solver = "crash.py"
     msg = """
 Fatal failure within void CVC4::SmtEngine::checkUnsatCore() at src/smt/smt_mock.cpp:1489
@@ -364,16 +349,16 @@ ignore_list = [
 
 """
     os.system("mv config/config.py config/config.py.orig")
-    with open("config/config.py", "w") as f:
+    with open("config/Config.py", "w") as f:
         f.write(config_py)
     create_mocksolver_msg(msg, solver)
     first_config = os.path.abspath(solver)
     second_config = os.path.abspath(solver)
-    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(
+    crash, soundness, segfault, duplicate, timeout, ignored, cmd = call_fuzzer(
         first_config, second_config, FN, OPTS
     )
-
-    if duplicate != 1:
+    log = open(newest_log("logs")).read()
+    if log.count("Duplicate.") != 1:
         print("[ERROR] Duplicate crash cannot be captured.")
         exit(1)
     else:
@@ -385,13 +370,19 @@ if __name__ == "__main__":
     # Create empty mock.smt2, set fuzzer opts
     FN = "mock.smt2"
     create_mocksmt2(FN)
-    OPTS = "-i 1 -m 1"
+    OPTS = "-i 1 -m 1 "
     test_crash_list()
+    print()
     test_ignore_list()
+    print()
     test_segfault()
+    print()
     test_timeout()
+    print()
     test_empty_output()
-    test_get_value()
+    print()
     test_unsoundness()
+    print()
     test_soundness()
+    print()
     test_duplicate_list()

@@ -57,8 +57,8 @@ class Statistic:
 
         mutants_per_sec = round(float(self.mutants) / float(total_time), 1)
         mutants_per_sec_str = str(mutants_per_sec)
-        bar = "Performed %d solver calls\
-              (%s calls/s, eff: %s, %s mutants/s)" % (
+        bar = "Performed %d solver calls \
+(%s calls/s, eff: %s, %s mutants/s)" % (
             self.solver_calls,
             solver_calls_per_sec,
             eff_str,
@@ -70,8 +70,8 @@ class Statistic:
         valid_seeds = self.total_seeds - self.invalid_seeds
         num_bugs = self.crashes + self.soundness
         summary = (
-            "\b\b\r%d seeds processed,\
-            %d valid, %d invalid \n%d bug triggers found"
+            "\b\b%d seeds processed, \
+%d valid, %d invalid \n%d bug triggers found"
             % (self.total_seeds, valid_seeds, self.invalid_seeds, num_bugs)
         )
         print(summary)

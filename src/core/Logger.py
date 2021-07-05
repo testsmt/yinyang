@@ -95,17 +95,11 @@ def log_duplicate_trigger():
     logging.debug("Duplicate. Stop testing on this seed.")
 
 
-def log_segfault_trigger(args, path):
+def log_segfault_trigger(args, path, i):
     logging.debug(str(i) + "/" + str(args.iterations)
         + " Segfault! Stop testing on this seed."
     )
-    logging.info(
-        BOLD,
-        WARNING,
-        + "Detected segfault: "
-        + path,
-        + ENDC
-    )
+    logging.info(BOLD+WARNING+ "Detected segfault: " + path + ENDC)
 
 
 def log_solver_timeout(args, solver_cli, i):

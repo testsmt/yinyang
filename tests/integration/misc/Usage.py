@@ -43,7 +43,7 @@ def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
     cmd = (
         timeout
         + python
-        + " yinyang.py "
+        + " bin/opfuzz "
         + '"'
         + first_config
         + ";"
@@ -63,9 +63,6 @@ def error(output):
         return True
     if "error" in output or "Error" in output:
         return True
-    # if ignored >= generated: return True # all of the mutants get ignored
-    # if used <= 1: return True # only a single seed is used
-    # if generated <= 1: return True # only one seed generated
     return False
 
 
@@ -99,18 +96,18 @@ def get_dir(benchmark):
 # 1. Get SMT-LIB 2 benchmarks.
 cleanup()
 
-print("1. Get SMT-LIB 2 benchmark", flush=True)
+print("(1) Get SMT-LIB 2 benchmark", flush=True)
 cmd = "git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_LIA.git"  # noqa: E501
 print(cmd)
 subprocess.getoutput(cmd)
 print("-" * 100)
 
-print("2. Get and build SMT solvers.", flush=True)
+print("(2) Get and build SMT solvers.", flush=True)
 z3 = get_z3()
 cvc4 = get_cvc4()
 print("-" * 100)
 
-print("3. Run Yin-Yang on the benchmarks e.g. with Z3 and CVC4.", flush=True)
+print("(3) Run Yin-Yang on the benchmarks e.g. with Z3 and CVC4.", flush=True)
 first_config = z3 + " model_validate=true"
 second_config = cvc4 + " --check-models -m -i -q"
 output, cmd = run_opfuzz(first_config, second_config, "QF_LIA", "", TIME_LIMIT)

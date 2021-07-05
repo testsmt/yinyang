@@ -31,7 +31,7 @@ python = sys.executable
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = (
         python
-        + " yinyang.py "
+        + " bin/opfuzz "
         + '"'
         + first_config
         + ";"
@@ -41,23 +41,22 @@ def call_fuzzer(first_config, second_config, fn, opts):
         + " "
         + fn
     )
-    print(cmd)
     output = subprocess.getoutput(cmd)
-    soundness_issues = None
-    crash_issues = None
+    soundness_issues = 0
+    crash_issues = 0
     for line in output.split("\n"):
-        if "Soundness" in line:
-            soundness_issues = int(line.split()[-1])
-        if "Crash" in line:
-            crash_issues = int(line.split()[-1])
+        if "Detected soundness bug" in line:
+            soundness_issues += 1
+        if "Detected crash bug" in line or "Detected segfault":
+            crash_issues += 1
 
     return soundness_issues, crash_issues, cmd
 
 
 def get_cvc4():
     cvc4_link = (
-        "https://github.com/CVC4/CVC4/releases/download/1.7/\
-         cvc4-1.7-x86_64-linux-opt"
+        "https://github.com/CVC4/CVC4/releases/download/1.7/"
+         + "cvc4-1.7-x86_64-linux-opt"
     )
     subprocess.getoutput("wget " + cvc4_link)
     subprocess.getoutput("chmod +x cvc4-1.7-x86_64-linux-opt")
@@ -65,8 +64,10 @@ def get_cvc4():
 
 
 def get_z3():
-    z3_link = "https://github.com/Z3Prover/z3/releases/download/z3-4.8.6/\
-               z3-4.8.6-x64-ubuntu-16.04.zip"
+    z3_link = (
+        "https://github.com/Z3Prover/z3/releases/download/z3-4.8.6/"
+        + "z3-4.8.6-x64-ubuntu-16.04.zip"
+    )
     subprocess.getoutput("wget " + z3_link)
     subprocess.getoutput("unzip z3-4.8.6-x64-ubuntu-16.04.zip")
     return os.path.abspath("z3-4.8.6-x64-ubuntu-16.04/bin/z3")
@@ -92,7 +93,7 @@ z3 = get_z3()
 #
 first_config = cvc4 + " -q"
 second_config = cvc4 + " --sygus-inference -q"
-fn = "tests/integration_tests/opfuzz/cvc4_wrong_3564_hidden.smt2"
+fn = "tests/integration/opfuzz/cvc4_wrong_3564_hidden.smt2"
 opts = "-i 1 -m 1"
 
 print("Trying to retrigger soundness bug...")
@@ -112,7 +113,7 @@ if not bug_catched:
 
 first_config = z3 + " model_validate=true"
 second_config = cvc4 + " --incremental --produce-models -q"
-fn = "tests/integration_tests/opfuzz/z3_invmodel_3118_hidden.smt2"
+fn = "tests/integration/opfuzz/z3_invmodel_3118_hidden.smt2"
 opts = "-i 1 -m 1"
 
 print("Trying to retrigger invalid model bug...")
@@ -132,7 +133,7 @@ if not bug_catched:
 
 first_config = z3 + " model_validate=true"
 second_config = cvc4 + " --incremental --produce-models -q"
-fn = "tests/integration_tests/opfuzz/z3-segfault-3549.smt2"
+fn = "tests/integration/opfuzz/z3-segfault-3549.smt2"
 opts = "-i 1 -m 1"
 
 print("Trying to retrigger segfault...")

@@ -30,7 +30,7 @@ python = sys.executable
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = (
         python
-        + " bin/yinyang "
+        + " bin/opfuzz "
         + '"'
         + first_config
         + ";"
@@ -41,31 +41,13 @@ def call_fuzzer(first_config, second_config, fn, opts):
         + fn
     )
     output = subprocess.getoutput(cmd)
-    crash_issues = None
-    soundness_issues = None
-    duplicate_issues = None
-    timeout_issues = None
-    ignored_issues = None
+    print("$",cmd)
+    print(output)
+    crash_issues = 0
     for line in output.split("\n"):
-        if "Crash" in line:
-            crash_issues = int(line.split()[-1])
-        if "Soundness" in line:
-            soundness_issues = int(line.split()[-1])
-        if "Duplicate" in line:
-            duplicate_issues = int(line.split()[-1])
-        if "Timeout" in line:
-            timeout_issues = int(line.split()[-1])
-        if "Ignored" in line:
-            ignored_issues = int(line.split()[-1])
-
-    return (
-        crash_issues,
-        soundness_issues,
-        duplicate_issues,
-        timeout_issues,
-        ignored_issues,
-        cmd,
-    )
+        if "Detected crash bug:" in line:
+            crash_issues += 1
+    return crash_issues, cmd
 
 
 def create_mocksmt2(fn):
@@ -89,13 +71,14 @@ def test_crash_list(msg, fn):
     first_config = os.path.abspath(solver)
     second_config = os.path.abspath(solver)
     opts = "-i 1 -m 1"
-    crash, soundness, duplicate, timeout, ignored, cmd = call_fuzzer(
+    crash, cmd = call_fuzzer(
         first_config, second_config, FN, opts
     )
 
     if crash != 1:
         print("[ERROR] Crash", fn, "cannot be captured.")
         print(cmd)
+        exit(1)
     else:
         os.system("rm -rf " + solver)
 

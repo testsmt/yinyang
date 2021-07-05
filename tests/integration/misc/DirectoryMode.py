@@ -34,7 +34,7 @@ def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
     cmd = (
         timeout
         + python
-        + " yinyang.py "
+        + " bin/opfuzz "
         + '"'
         + first_config
         + ";"
@@ -48,15 +48,7 @@ def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
     generated_seeds = 0
     used_seeds = 0
     ignored_issues = 0
-    for line in output.split("\n"):
-        if "Generated mutants" in line:
-            generated_seeds = int(line.split()[-1])
-        if "Used seeds" in line:
-            used_seeds = int(line.split()[-1])
-        if "Ignored" in line:
-            ignored_issues = int(line.split()[-1])
-
-    return generated_seeds, used_seeds, ignored_issues, cmd
+    return output, cmd
 
 
 def get_cvc4():
@@ -89,13 +81,10 @@ first_config = z3 + " model_validate=true"
 second_config = cvc4 + " --check-models --produce-models --incremental -q"
 mock_benchmarks = str(os.path.dirname(os.path.realpath(__file__)))\
                   + "/mock_benchmarks"
-generated_seeds, used_seeds, ignored_issues, cmd = run_opfuzz(
+out, cmd = run_opfuzz(
     first_config, second_config, mock_benchmarks, "-m 1", TIME_LIMIT
 )
-if not (generated_seeds == 300 and used_seeds == 3 and ignored_issues == 2):
+if not "3 seeds processed, 1 valid, 2 invalid" in out:
     print("An error occurred.", flush=True)
     print("cmd", cmd)
-    print("generated_seeds", generated_seeds)
-    print("used_seeds", used_seeds)
-    print("ignored_issues", ignored_issues)
     exit(1)

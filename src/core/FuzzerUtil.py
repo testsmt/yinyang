@@ -29,6 +29,8 @@ from src.base.Utils import random_string, plain, escape, in_list
 
 from config.Config import crash_list, duplicate_list, ignore_list
 
+from src.core.Solver import SolverResult, SolverQueryResult
+
 
 def in_crash_list(stdout, stderr):
     return in_list(stdout, stderr, crash_list)

@@ -23,6 +23,7 @@
 import os
 import re
 import time
+import shutil
 import random
 import datetime
 import signal
@@ -55,10 +56,12 @@ from src.core.Logger import (
 )
 from src.core.FuzzerUtil import (
         get_seeds,
+        grep_result,
         admissible_seed_size,
         in_crash_list,
         in_duplicate_list,
-        in_ignore_list
+        in_ignore_list,
+        init_oracle
 )
 
 class Fuzzer:
@@ -156,7 +159,7 @@ class Fuzzer:
 
                 self.statistic.mutants += 1
 
-            log_finished_generations(unsuccessful_gens)
+            log_finished_generations(self.args, unsuccessful_gens)
         self.terminate()
 
     def create_testbook(self, script):
@@ -198,7 +201,7 @@ class Fuzzer:
         if self.strategy == "opfuzz":
             oracle = SolverResult(SolverQueryResult.UNKNOWN)
         else:
-            oracle = self.init_oracle()
+            oracle = init_oracle(self.args)
 
         testbook = self.create_testbook(script)
         reference = None
@@ -236,7 +239,7 @@ class Fuzzer:
                 # to its parser, options, type-checker etc., by matching stdout
                 # and stderr against the ignore list (see config/Config.py:54).
                 if in_ignore_list(stdout, stderr):
-                    log_ignore_list_mutant()
+                    log_ignore_list_mutant(solver_cli)
                     self.statistic.invalid_mutants += 1
                     continue                    # Continue to the next solver.
 
@@ -249,7 +252,7 @@ class Fuzzer:
                         path = self.report(scratchfile, "segfault", solver_cli,
                             stdout, stderr
                         )
-                        log_segfault_trigger()
+                        log_segfault_trigger(self.args, path, iteration)
                         return False            # Stop testing.
 
                     # Check whether the solver timed out.
@@ -270,8 +273,8 @@ class Fuzzer:
                     and not re.search("^sat$", stdout, flags=re.MULTILINE)
                     and not re.search("^unknown$", stdout, flags=re.MULTILINE)
                 ):
-                    self.statistic.ignored += 1
-                    log_invalid_mutant(self.args, i)
+                    self.statistic.invalid_mutants += 1
+                    log_invalid_mutant(self.args, iteration)
                     continue                    # Continue to the next solver.
 
                 else:
@@ -282,7 +285,7 @@ class Fuzzer:
                     # (yinyang) or with other non-erroneous solver runs
                     # (opfuzz) for soundness bugs.
                     self.statistic.effective_calls += 1
-                    result = self.grep_result(stdout)
+                    result = grep_result(stdout)
                     if oracle.equals(SolverQueryResult.UNKNOWN):
 
                         # For differential testing (opfuzz), the first solver
@@ -294,7 +297,6 @@ class Fuzzer:
                     # non-erroneous solver runs (opfuzz) for soundness bugs.
                     if not oracle.equals(result):
                         self.statistic.soundness += 1
-                        log_soundness_trigger(self.args, i, path)
 
                         if reference:
 
@@ -312,13 +314,15 @@ class Fuzzer:
 
                             # Produce a bug report if the query result differs
                             # from the pre-set oracle (yinyang).
-                            path = report(scratchfile, "incorrect", solver_cli,
+                            path = self.report(scratchfile, "incorrect", solver_cli,
                                 stdout, stderr
                             )
+
+                        log_soundness_trigger(self.args, iteration, path)
                         return False                # Stop testing.
         return True                                 # Continue to next seed.
 
-    def report(scratchfile, bugtype, cli, stdout, stderr, report_id):
+    def report(self, scratchfile, bugtype, cli, stdout, stderr):
         plain_cli = plain(cli)
         # format: <solver><{crash,wrong,invalid_model}><seed>.<random-str>.smt2
         report = "%s/%s-%s-%s-%s.smt2" % (
@@ -326,14 +330,13 @@ class Fuzzer:
             bugtype,
             plain_cli,
             escape(self.currentseeds),
-            report_id,
+            random_string(),
         )
         try:
             shutil.copy(scratchfile, report)
         except Exception:
             logging.error(
-                "Could not copy scratchfile to bugfolder.\
-                 Disk space seems exhausted."
+                "error: couldn't copy scratchfile to bugfolder."
             )
             exit(ERR_EXHAUSTED_DISK)
         logpath = "%s/%s-%s-%s-%s.output" % (
@@ -341,7 +344,7 @@ class Fuzzer:
             bugtype,
             plain_cli,
             escape(self.currentseeds),
-            report_id,
+            random_string(),
         )
         with open(logpath, "w") as log:
             log.write("command: " + cli + "\n")
@@ -351,39 +354,40 @@ class Fuzzer:
             log.write(stdout)
         return report
 
-        def report_diff(
-            scratchfile,
+    def report_diff(
+        self,
+        scratchfile,
+        bugtype,
+        ref_cli,
+        ref_stdout,
+        ref_stderr,
+        sol_cli,
+        sol_stdout,
+        sol_stderr,
+    ):
+        plain_cli = plain(sol_cli)
+        # format: <solver><{crash,wrong,invalid_model}><seed>.<random-str>.smt2
+        report = "%s/%s-%s-%s-%s.smt2" % (
+            self.args.bugsfolder,
             bugtype,
-            ref_cli,
-            ref_stdout,
-            ref_stderr,
-            sol_cli,
-            sol_stdout,
-            sol_stderr,
-            report_id,
-        ):
-            plain_cli = plain(sol_cli)
-            # format: <solver><{crash,wrong,invalid_model}><seed>.<random-str>.smt2
-            report = "%s/%s-%s-%s-%s.smt2" % (
-                self.args.bugsfolder,
-                bugtype,
-                plain_cli,
-                escape(self.currentseeds),
-                report_id,
+            plain_cli,
+            escape(self.currentseeds),
+            random_string(),
+        )
+        try:
+            shutil.copy(scratchfile, report)
+        except Exception:
+            logging.error(
+                "error: couldn't copy scratchfile to bugfolder."
             )
-            try:
-                shutil.copy(scratchfile, report)
-            except Exception:
-                logging.error("Could not copy scratchfile to bugfolder.\
-                    Disk space seems exhausted.")
-                exit(ERR_EXHAUSTED_DISK)
+            exit(ERR_EXHAUSTED_DISK)
 
         logpath = "%s/%s-%s-%s-%s.output" % (
             self.args.bugsfolder,
             bugtype,
             plain_cli,
             escape(self.currentseeds),
-            report_id,
+            random_string()
         )
         with open(logpath, "w") as log:
             log.write("*** REFERENCE \n")

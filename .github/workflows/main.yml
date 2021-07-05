@@ -24,20 +24,20 @@ jobs:
         python -m unittest tests/RunUnitTests.py
     - name: Detection logic 
       run: |
-        python tests/integration_tests/detection/test_detection.py
-        python tests/integration_tests/detection/test_crashes.py
+        python tests/integration/detection/TestDetection.py
+        python tests/integration/detection/TestCrashes.py
     - name: Misc
       run: |
-        python tests/integration_tests/misc/file_size_limit.py
-        python tests/integration_tests/misc/no_solvers.py
-        python tests/integration_tests/misc/directory_mode.py
+        python tests/integration/misc/FileSizeLimit.py
+        python tests/integration/misc/NoSolvers.py
+        python tests/integration/misc/DirectoryMode.py
     - name: opfuzz
       run: |
-        python tests/integration_tests/opfuzz/sanity_opfuzz.py 
-        python tests/integration_tests/misc/usage.py
+        python tests/integration/opfuzz/SanityOpFuzz.py
+        python tests/integration/misc/Usage.py
     - name: semanticfusion
       run: |
-        python tests/integration_tests/semanticfusion/sanity_semanticfusion.py
+        python tests/integration/semanticfusion/SanitySemanticFusion.py
     - name: code style 
       run: |
-        flake8 --extend-exclude "*SMTLIBv2*" src tests bin/opfuzz bin/yinyang config  
+        #flake8 --extend-exclude "*SMTLIBv2*" src tests bin/opfuzz bin/yinyang config  
