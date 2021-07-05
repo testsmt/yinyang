@@ -544,7 +544,9 @@ class Term:
             op=op,
             subterms=subterms,
             is_indexed_id=is_indexed_id,
+            parent=parent,
         )
+        self._add_parent_pointer()
 
     def _initialize(
         self,
@@ -561,6 +563,7 @@ class Term:
         op=None,
         subterms=None,
         is_indexed_id=None,
+        parent=None
     ):
         self.name = name
         self.type = type
@@ -575,13 +578,24 @@ class Term:
         self.op = op
         self.subterms = subterms
         self.is_indexed_id = is_indexed_id
+        self.parent = parent
+
+
+
+    def _add_parent_pointer(self):
+        """
+        Adds pointer from each element in subterm to expr
+        """
+        if self.subterms:
+            for term in self.subterms:
+                term.parent = self
 
     def find_all(self, e, occs):
         """
         Find all expressions e in self and add them to the list occs.
         """
         if self == e:
-            return occs.append(self)
+            return occs.append(e)
         if self.subterms:
             for sub in self.subterms:
                 if sub == e:
@@ -609,6 +623,7 @@ class Term:
                 let_terms=repl.let_terms,
                 op=repl.op,
                 subterms=repl.subterms,
+                parent=occ.parent
             )
 
     def __eq__(self, other):
