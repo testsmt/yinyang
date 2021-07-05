@@ -89,7 +89,8 @@ formula, with which it tests the SMT solvers. You can terminate opfuzz by CTLR +
 opfuzz stores bug trigger in ./bugs and creates rolling logs up to 5MB per run
 in ./logs. Note, if you run opfuzz many times in a row, it might be worthwhile
 to disable logging to avoid an overflow of the logs directory.
-Every five seconds, opfuzz will generate statistics on (1) solver calls,
+
+Every two seconds, opfuzz will generate statistics on (1) solver calls,
 (2) efficiency and (3) mutants per second. Efficiency corresponds to the percentage
 of solver calls that did not timeout, cause parser or unsupported option errors.
 It is expected that efficiency, solver calls and mutants per second can vary
@@ -129,7 +130,7 @@ Now, run opfuzz with the following configurations on the fabricated seed.
     1 seeds processed, 1 valid, 0 invalid
     1 bug triggers found
 
-You can now observe the corresponding bug by executing
+You can now observe the bug by executing
 
     $ ./cvc4-1.7-x86_64-linux-opt -q --sygus-inference bugs/incorrect-cvc4-17-x86_64-linux-opt-q-seed-5yCdH.smt2
     unsat

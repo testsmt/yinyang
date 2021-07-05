@@ -78,12 +78,6 @@ def main():
 
     else:
         args = run_checks(parser, "yinyang")
-
-        if not args.quiet:
-            signal.signal(signal.SIGINT, stats_control_c)
-        else:
-            signal.signal(signal.SIGINT, silent_control_c)
-
         try:
             fuzzer = Fuzzer(args, "yinyang")
 

@@ -35,7 +35,7 @@ sys.path.append(import_path)
 
 python = sys.executable
 
-TIME_LIMIT = 10
+TIME_LIMIT = 30
 
 
 def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
