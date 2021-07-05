@@ -114,8 +114,8 @@ class Solver:
             stderr = ""
             return stdout, stderr, 0
 
-        except Exception:
-            print('error: solver "' + cmd[0] + '" not found')
+        except FileNotFoundError:
+            print('error: solver "' + cmd[0] + '" not found',flush=True)
             exit(ERR_USAGE)
 
         stdout = output.stdout.decode()

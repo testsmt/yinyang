@@ -37,11 +37,12 @@ from src.base.ArgumentParser import build_opfuzz_parser
 from src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_USAGE, ERR_INTERNAL
 
 from src.core.Fuzzer import Fuzzer
-from src.core.Statistic import print_stats, stats_control_c, silent_control_c
 
 from config.OpfuzzHelptext import (
     usage, header, short_description, long_description, options
 )
+
+
 
 
 def main():
@@ -66,15 +67,38 @@ def main():
     else:
         args = run_checks(parser, "opfuzz")
 
-        if not args.quiet:
-            signal.signal(signal.SIGINT, stats_control_c)
-        else:
-            signal.signal(signal.SIGINT, silent_control_c)
+        fuzzer = None
 
         try:
             fuzzer = Fuzzer(args, "opfuzz")
+
+            def print_stats():
+                fuzzer.statistic.printsum()
+                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
+                    exit(OK_NOBUGS)
+                exit(OK_BUGS)
+
+
+            def stats_control_c(sig, frame):
+                print("\b\b\rUser interrupt", flush=True)
+                print_stats()
+                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
+                    exit(OK_NOBUGS)
+                exit(OK_BUGS)
+
+
+            def silent_control_c(sig, frame):
+                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
+                    exit(OK_NOBUGS)
+                exit(OK_BUGS)
+
+            if not args.quiet:
+                signal.signal(signal.SIGINT, stats_control_c)
+            else:
+                signal.signal(signal.SIGINT, silent_control_c)
+                exit(OK_NOBUGS)
+            
             fuzzer.run()
-            exit(OK_NOBUGS)
         except Exception as e:
             trace = inspect.trace()
             raise_runtime_error(trace, sys.argv, e)

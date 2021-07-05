@@ -77,22 +77,4 @@ class Statistic:
         print(summary)
 
 
-def print_stats():
-    fuzzer.statistic.printsum()
-    if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
-        exit(OK_NOBUGS)
-    exit(OK_BUGS)
 
-
-def stats_control_c(sig, frame):
-    print("\b\b\rUser interrupt", flush=True)
-    print_stats()
-    if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
-        exit(OK_NOBUGS)
-    exit(OK_BUGS)
-
-
-def silent_control_c(sig, frame):
-    if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
-        exit(OK_NOBUGS)
-    exit(OK_BUGS)

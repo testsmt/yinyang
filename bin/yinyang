@@ -37,7 +37,6 @@ from src.base.ArgumentParser import build_yinyang_parser
 from src.base.Exitcodes import OK_NOBUGS, ERR_USAGE, ERR_INTERNAL
 
 from src.core.Fuzzer import Fuzzer
-from src.core.Statistic import stats_control_c, silent_control_c
 
 from config.YinyangHelptext import (
     usage,
@@ -87,6 +86,33 @@ def main():
 
         try:
             fuzzer = Fuzzer(args, "yinyang")
+
+            def print_stats():
+                fuzzer.statistic.printsum()
+                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
+                    exit(OK_NOBUGS)
+                exit(OK_BUGS)
+
+
+            def stats_control_c(sig, frame):
+                print("\b\b\rUser interrupt", flush=True)
+                print_stats()
+                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
+                    exit(OK_NOBUGS)
+                exit(OK_BUGS)
+
+
+            def silent_control_c(sig, frame):
+                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
+                    exit(OK_NOBUGS)
+                exit(OK_BUGS)
+
+            if not args.quiet:
+                signal.signal(signal.SIGINT, stats_control_c)
+            else:
+                signal.signal(signal.SIGINT, silent_control_c)
+                exit(OK_NOBUGS)
+
             fuzzer.run()
             exit(OK_NOBUGS)
         except Exception as e:

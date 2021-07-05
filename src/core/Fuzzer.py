@@ -411,7 +411,7 @@ class Fuzzer:
             self.old_time = time.time()
             self.first_status_bar_printed = True
 
-        if time.time() - self.old_time >= 5.0:
+        if time.time() - self.old_time >= 2.0:
             self.statistic.printbar(self.start_time)
             self.old_time = time.time()
 
