@@ -139,7 +139,7 @@ def run_checks(parser, strategy):
     create_log_folder()
     create_scratch_folder()
     get_seeds()
-    if strategy == "opfuzz":
+    if strategy in ["opfuzz", "typefuzz"]:
         check_opfuzz()
     else:
         check_fusion()

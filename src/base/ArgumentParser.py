@@ -195,6 +195,7 @@ def build_opfuzz_parser(rootpath, usage):
 
     return parser
 
+
 def build_typefuzz_parser(rootpath, usage):
     parser = ArgumentParser(
         description="",
