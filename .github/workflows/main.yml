@@ -31,7 +31,7 @@ jobs:
         python tests/integration/misc/FileSizeLimit.py
         python tests/integration/misc/NoSolvers.py
         python tests/integration/misc/DirectoryMode.py
-     - name: typefuzz
+    - name: typefuzz 
       run: |
         python tests/integration/typefuzz/BasicUsage.py
     - name: opfuzz
