@@ -39,8 +39,10 @@ from src.parsing.Typechecker import typecheck
 
 from src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
-from src.mutators.GenTypeAwareMutation import GenTypeAwareMutation
 from src.mutators.GenTypeAwareMutation.util import get_unique_subterms
+from src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import (
+        GenTypeAwareMutation
+)
 
 
 from src.base.Utils import random_string, plain, escape
@@ -86,7 +88,7 @@ class Fuzzer:
 
         init_logging(strategy, self.args.quiet, self.name, args)
 
-    def process_seed(self, seed, typecheck = False):
+    def process_seed(self, seed):
         if not admissible_seed_size(seed, self.args):
             self.statistic.invalid_seeds += 1
             logging.debug("Skip invalid seed: exceeds max file size")
@@ -102,12 +104,7 @@ class Fuzzer:
             logging.debug("Skipping invalid seed: error in parsing")
             return None
 
-        if typecheck:
-
-            # label the AST of the script with types
-             typecheck(script, glob)
-
-        return script
+        return script, glob
 
     def get_script(self, seeds):
         seed = seeds.pop(random.randrange(len(seeds)))
@@ -126,7 +123,7 @@ class Fuzzer:
     def max_timeouts_reached(self):
         if self.timeout_of_current_seed >= MAX_TIMEOUTS:
             return True
-        return False # stop testing if timeout limit is exceeded
+        return False                # stop testing if timeout limit is exceeded
 
     def run(self):
         """
@@ -140,15 +137,17 @@ class Fuzzer:
 
         while len(seeds) != 0:
             if self.strategy == "typefuzz":
-                script = self.get_script(seeds)
+                script, glob = self.get_script(seeds)
                 if not script:
                     continue
+
+                typecheck(script, glob)
                 script_cp = copy.deepcopy(script)
                 unique_expr = get_unique_subterms(script_cp)
                 self.mutator = GenTypeAwareMutation(script, self.args, unique_expr)
 
-            if self.strategy == "opfuzz":
-                script = self.get_script(seeds)
+            elif self.strategy == "opfuzz":
+                script, _ = self.get_script(seeds)
                 if not script:
                     continue
                 self.mutator = TypeAwareOpMutation(script, self.args)
@@ -225,7 +224,7 @@ class Fuzzer:
         # For differential testing (opfuzz), the oracle is set to "unknown" and
         # gets overwritten by the result of the first solver call. For
         # metamorphic testing (yinyang) the oracle is pre-set by the cmd line.
-        if self.strategy == "opfuzz":
+        if self.strategy in ["opfuzz", "typefuzz"]:
             oracle = SolverResult(SolverQueryResult.UNKNOWN)
         else:
             oracle = init_oracle(self.args)

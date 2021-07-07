@@ -31,11 +31,14 @@ jobs:
         python tests/integration/misc/FileSizeLimit.py
         python tests/integration/misc/NoSolvers.py
         python tests/integration/misc/DirectoryMode.py
+     - name: typefuzz
+      run: |
+        python tests/integration/typefuzz/BasicUsage.py
     - name: opfuzz
       run: |
         python tests/integration/opfuzz/SanityOpFuzz.py
         python tests/integration/misc/Usage.py
-    - name: semanticfusion
+       - name: semanticfusion
       run: |
         python tests/integration/semanticfusion/SanitySemanticFusion.py
     - name: code style 

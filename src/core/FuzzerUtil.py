@@ -71,7 +71,7 @@ def grep_result(stdout):
 
 
 def get_seeds(args, strategy):
-    if strategy == "opfuzz":
+    if strategy in ["opfuzz", "typefuzz"]:
         seeds = args.PATH_TO_SEEDS
     elif strategy == "yinyang":
         if len(args.PATH_TO_SEEDS) > 2:

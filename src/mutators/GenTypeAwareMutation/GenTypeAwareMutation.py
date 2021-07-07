@@ -12,7 +12,6 @@ class GenTypeAwareMutation(Mutator):
         self.formula = formula
         self.unique_expr = unique_expr
         self.operators = []
-
         self.parse_config_file()
 
     def parse_config_file(self):
@@ -22,7 +21,7 @@ class GenTypeAwareMutation(Mutator):
         Configuration file contains all the signatures of SMT-LIB operators
         and the signatures are used for operator choice during the mutation.
         """
-        with open(self.args.config_file) as f:
+        with open(self.args.config) as f:
             lines = f.readlines()
 
         for line in lines:
@@ -70,12 +69,6 @@ class GenTypeAwareMutation(Mutator):
         """
         candidate_ops = []
         for op in self.operators:
-
-            # Debugging
-            #   if term.type == None:
-            #     print("term=",term,"type",term.type)
-            #     assert(False)
-
             if op.rtype != ALL and op.rtype != term.type:
                 continue
             if self.has_types(op.arg_types):
@@ -102,7 +95,6 @@ class GenTypeAwareMutation(Mutator):
             if self.unique_expr[typ_id]:
                 choices = [termPrime for termPrime in self.unique_expr[typ_id] if\
                            termPrime != term and local_compatible(term, termPrime)]
-
             if len(choices) == 0:
                 return None
             return random.choice(choices)
@@ -119,13 +111,15 @@ class GenTypeAwareMutation(Mutator):
         return None
 
 
-    def generate(self):
+    def mutate(self):
         """
         Perform a generative type-aware mutation.
         In case generator could not generate valid mutant, return false.
 
         :returns: mutant formula, and result of mutation
         """
+        # print(self.formula)
+        # print()
         success = False
         self.av_expr, self.expr_type = get_all_subterms(self.formula)
         num_holes = len(self.av_expr)
@@ -138,4 +132,4 @@ class GenTypeAwareMutation(Mutator):
                 t1.substitute(t1, t2)
                 break
             all_holes.remove(t1)
-        return self.formula, success
+        return self.formula, success, False         # False = never skip seed
