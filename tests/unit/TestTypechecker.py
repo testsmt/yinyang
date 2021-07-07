@@ -1,11 +1,13 @@
 import unittest
 import sys
+import pathlib
+
 sys.path.append("../../")
 
-from src.parsing.ast import *
-from src.parsing.parse import *
-from src.parsing.typechecker import *
-from src.parsing.types import *
+from src.parsing.Ast import *
+from src.parsing.Parse import *
+from src.parsing.Typechecker import *
+from src.parsing.Types import *
 
 def check_type(expr):
     """
@@ -149,7 +151,6 @@ class TypecheckerTestCase(unittest.TestCase):
         self.assertEqual(oracle(formula),True)
 
     def test_typechecking_formula_large(self):
-        import pathlib
         script_path = pathlib.Path(__file__).parent.absolute()
         formula, glob = parse_file(str(script_path)+"/test.smt2", silent=False)
         typecheck(formula,glob)

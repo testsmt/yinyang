@@ -528,6 +528,7 @@ class Term:
         op=None,
         subterms=None,
         is_indexed_id=False,
+        parent=None
     ):
 
         self._initialize(
@@ -544,7 +545,7 @@ class Term:
             op=op,
             subterms=subterms,
             is_indexed_id=is_indexed_id,
-            parent=parent,
+            parent=parent
         )
         self._add_parent_pointer()
 

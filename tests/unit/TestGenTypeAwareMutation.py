@@ -3,10 +3,10 @@ import sys
 sys.path.append("../../")
 import os
 
-from src.parsing.parse import *
-from src.parsing.typechecker import Context, typecheck
-from src.generators.GenTypeAwareMutation.GenTypeAwareMutation import *
-from src.generators.GenTypeAwareMutation.util import * 
+from src.parsing.Parse import *
+from src.parsing.Typechecker import Context, typecheck
+from src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import *
+from src.mutators.GenTypeAwareMutation.util import *
 
 
 class Mockargs:
@@ -25,7 +25,7 @@ class GenTypeAwareMutationTestCase(unittest.TestCase):
         (assert (< 6 (div (+ 4 x) z)))
         (check-sat)
         """
-        with open(formulafile,"w") as f: 
+        with open(formulafile,"w") as f:
             f.write(formula)
         script, glob = parse_str(formula)
         typecheck(script, glob)

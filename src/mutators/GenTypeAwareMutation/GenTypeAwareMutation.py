@@ -1,11 +1,11 @@
 import random
 
-from src.generators.Generator import Generator
-from src.generators.GenTypeAwareMutation.Operator import *
-from src.generators.GenTypeAwareMutation.util import *
-from src.parsing.parse import *
+from src.mutators.Mutator import Mutator
+from src.mutators.GenTypeAwareMutation.Operator import *
+from src.mutators.GenTypeAwareMutation.util import *
+from src.parsing.Parse import *
 
-class GenTypeAwareMutation(Generator):
+class GenTypeAwareMutation(Mutator):
     def __init__(self, formula, args, unique_expr):
         self.args = args
         self.formula = formula
@@ -16,7 +16,7 @@ class GenTypeAwareMutation(Generator):
 
     def parse_config_file(self):
         """
-        Read the customizable configuration file. 
+        Read the customizable configuration file.
         Customize the configuration file at config/generalization.txt.
         Configuration file contains all the signatures of SMT-LIB operators
         and the signatures are used for operator choice during the mutation.
@@ -36,7 +36,7 @@ class GenTypeAwareMutation(Generator):
             if not "par" in tokens[0]: # signature without parameter binder
                 op_name, type_strings, attributes = handle_non_parametric_op(tokens)
                 op = Operator(op_name,type_strings,attributes)
-            else: 
+            else:
                 op_name, type_strings, attributes, parameters = handle_parametric_op(tokens)
                 op = Operator(op_name,type_strings,attributes,parameters)
             self.operators.append(op)
@@ -87,8 +87,8 @@ class GenTypeAwareMutation(Generator):
 
         Choose randomly an operator from the list of candidate operators.
 
-        When id is chosen for the operator, we pick an expression of a 
-        same type as input term. Else, we choose expression(s) according to the 
+        When id is chosen for the operator, we pick an expression of a
+        same type as input term. Else, we choose expression(s) according to the
         signature of the operator from the configuration file and generate a new expression.
 
         :returns: newly generated expression for substitution
@@ -122,7 +122,7 @@ class GenTypeAwareMutation(Generator):
         """
         Perform a generative type-aware mutation.
         In case generator could not generate valid mutant, return false.
-        
+
         :returns: mutant formula, and result of mutation
         """
         success = False

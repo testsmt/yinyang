@@ -1,8 +1,8 @@
 import copy
 from enum import Enum
 
-from src.parsing.ast import Term
-from src.parsing.types import *
+from src.parsing.Ast import Term
+from src.parsing.Types import *
 
 type2num = {
     'Bool': 0,
@@ -115,7 +115,7 @@ def local_defs(term, local):
                 local.add(var)
         if term.parent:
             local_defs(term, local)
-    return local     
+    return local
 
 def local_compatible(t1, t2):
     """

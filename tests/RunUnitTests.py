@@ -28,8 +28,8 @@ from tests.unit.TestParsing import ParsingTestCase
 from tests.unit.TestSemanticFusion import SemanticFusionTestCase
 from tests.unit.TestTypeAwareOpMutation import TypeAwareOpMutationTestCase
 
-from tests.unittests.test_gen_type_aware_mutation import GenTypeAwareMutationTestCase
-from tests.unittests.test_typechecker import TypecheckerTestCase
+from tests.unit.TestGenTypeAwareMutation import GenTypeAwareMutationTestCase
+from tests.unit.TestTypechecker import TypecheckerTestCase
 
 sys.path.append("../")
 

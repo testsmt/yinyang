@@ -1,9 +1,9 @@
 import sys
 sys.setrecursionlimit(100000)
 
-from src.parsing.ast_visitor import *
-from src.parsing.parse import *
-from src.parsing.types import *
+from src.parsing.AstVisitor import *
+from src.parsing.Parse import *
+from src.parsing.Types import *
 
 class Context:
     def __init__(self,globals,locals):
@@ -706,9 +706,9 @@ def typecheck_to_fp(expr,ctxt):
 
 def annotate(f,expr,ctxt):
     """
-    :f: function argument
-    :expr: expression
-    :ctxt: context
+    f: function argument
+    expr: expression
+    ctxt: context
     :returns: type of expr
     """
     t = f(expr,ctxt)
