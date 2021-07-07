@@ -43,7 +43,7 @@ def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
     cmd = (
         timeout
         + python
-        + " bin/opfuzz "
+        + " bin/typefuzz "
         + '"'
         + first_config
         + ";"
@@ -83,7 +83,6 @@ def get_z3():
 def cleanup():
     subprocess.getoutput("rm -rf cvc4*")
     subprocess.getoutput("rm -rf z3*")
-    subprocess.getoutput("rm -rf QF_LIA")
 
 
 def get_dir(benchmark):
@@ -95,15 +94,11 @@ def get_dir(benchmark):
 
 cleanup()
 
-print("(1) Get SMT-LIB 2 benchmark", flush=True)
-cmd = "git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_LIA.git"  # noqa: E501
-print(cmd)
-subprocess.getoutput(cmd)
-print("-" * 100)
-
+print("Getting solvers...")
 z3 = get_z3()
 cvc4 = get_cvc4()
-print("-" * 100)
+
+print("Running TypeFuzz for 30 secs...")
 
 first_config = z3 + " model_validate=true"
 second_config = cvc4 + " --check-models -m -i -q"
