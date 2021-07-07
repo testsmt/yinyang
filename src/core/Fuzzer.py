@@ -118,7 +118,9 @@ class Fuzzer:
         seed2 = seed[1]
         logging.debug("Processing seeds " + seed1 + " " + seed2)
         self.statistic.total_seeds += 2
-        return self.process_seed(seed1), self.process_seed(seed2)
+        script1, glob1 = self.process_seed(seed1)
+        script2, glob2 = self.process_seed(seed2)
+        return script1, glob1, script2, glob2
 
     def max_timeouts_reached(self):
         if self.timeout_of_current_seed >= MAX_TIMEOUTS:
@@ -153,7 +155,7 @@ class Fuzzer:
                 self.mutator = TypeAwareOpMutation(script, self.args)
 
             elif self.strategy == "yinyang":
-                script1, script2 = self.get_script_pair(seeds)
+                script1,_,script2,_ = self.get_script_pair(seeds)
                 if not script1 or not script2:
                    continue
                 self.mutator = SemanticFusion(script1, script2, self.args)

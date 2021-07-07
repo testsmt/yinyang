@@ -31,6 +31,7 @@ python = sys.executable
 def call_fuzzer(first_config, fn, opts):
     cmd = python + " bin/yinyang " + '"' + first_config + '" ' + opts + " " + fn
     output = subprocess.getoutput(cmd)
+    print(output)
     soundness_issues = 0
     crash_issues = 0
     for line in output.split("\n"):
