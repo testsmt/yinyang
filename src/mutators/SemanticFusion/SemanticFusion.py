@@ -78,7 +78,7 @@ class SemanticFusion(Mutator):
                 curr.append(line)
 
         for i, mr in enumerate(_mrs):
-            template = parse_str(mr)
+            template, _ = parse_str(mr)
             sort = template.commands[0].sort
 
             if sort not in self.templates:

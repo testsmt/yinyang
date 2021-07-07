@@ -125,6 +125,34 @@ def add_opfuzz_args(parser, rootpath):
         default=rootpath + "/config/operator_mutations.txt",
     )
 
+def add_typefuzz_args(parser, rootpath):
+    parser.add_argument(
+        "-i",
+        "--iterations",
+        default=300,
+        metavar="<N>",
+        type=int,
+    )
+    parser.add_argument(
+        "-m",
+        "--modulo",
+        default=2,
+        metavar="<N>",
+        type=int,
+    )
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version="typefuzz " + VERSION,
+    )
+    parser.add_argument(
+        "-c",
+        "--config",
+        metavar="path_to_file",
+        default=rootpath + "/config/typefuzz_config.txt",
+    )
+
 
 def add_yinyang_args(parser, rootpath):
     parser.add_argument(
@@ -166,6 +194,19 @@ def build_opfuzz_parser(rootpath, usage):
     add_opfuzz_args(parser, rootpath)
 
     return parser
+
+def build_typefuzz_parser(rootpath, usage):
+    parser = ArgumentParser(
+        description="",
+        usage=usage,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        add_help=False,
+    )
+    add_common_args(parser, rootpath)
+    add_typefuzz_args(parser, rootpath)
+
+    return parser
+
 
 
 def build_yinyang_parser(rootpath, usage):

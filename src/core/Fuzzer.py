@@ -22,6 +22,7 @@
 
 import os
 import re
+import copy
 import time
 import shutil
 import random
@@ -34,9 +35,13 @@ from src.core.Statistic import Statistic
 from src.core.Solver import Solver, SolverQueryResult, SolverResult
 
 from src.parsing.Parse import parse_file
+from src.parsing.Typechecker import typecheck
 
 from src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
+from src.mutators.GenTypeAwareMutation import GenTypeAwareMutation
+from src.mutators.GenTypeAwareMutation.util import get_unique_subterms
+
 
 from src.base.Utils import random_string, plain, escape
 from src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_EXHAUSTED_DISK
@@ -64,6 +69,8 @@ from src.core.FuzzerUtil import (
         init_oracle
 )
 
+MAX_TIMEOUTS = 32
+
 class Fuzzer:
     def __init__(self, args, strategy):
         self.args = args
@@ -75,17 +82,18 @@ class Fuzzer:
         self.start_time = time.time()
         self.first_status_bar_printed = False
         self.name = random_string()
+        self.timeout_of_current_seed = 0
 
         init_logging(strategy, self.args.quiet, self.name, args)
 
-    def process_seed(self, seed):
+    def process_seed(self, seed, typecheck = False):
         if not admissible_seed_size(seed, self.args):
             self.statistic.invalid_seeds += 1
             logging.debug("Skip invalid seed: exceeds max file size")
             return None
 
         self.currentseeds = pathlib.Path(seed).stem
-        script = parse_file(seed, silent=True)
+        script, glob = parse_file(seed, silent=True)
 
         if not script:
 
@@ -93,6 +101,12 @@ class Fuzzer:
             self.statistic.invalid_seeds += 1
             logging.debug("Skipping invalid seed: error in parsing")
             return None
+
+        if typecheck:
+
+            # label the AST of the script with types
+             typecheck(script, glob)
+
         return script
 
     def get_script(self, seeds):
@@ -109,6 +123,11 @@ class Fuzzer:
         self.statistic.total_seeds += 2
         return self.process_seed(seed1), self.process_seed(seed2)
 
+    def max_timeouts_reached(self):
+        if self.timeout_of_current_seed >= MAX_TIMEOUTS:
+            return True
+        return False # stop testing if timeout limit is exceeded
+
     def run(self):
         """
         Realizes the main fuzzing loop. The procedure fetches seeds at random
@@ -120,6 +139,14 @@ class Fuzzer:
         log_strategy_num_seeds(self.strategy, seeds, self.args.SOLVER_CLIS)
 
         while len(seeds) != 0:
+            if self.strategy == "typefuzz":
+                script = self.get_script(seeds)
+                if not script:
+                    continue
+                script_cp = copy.deepcopy(script)
+                unique_expr = get_unique_subterms(script_cp)
+                self.mutator = GenTypeAwareMutation(script, self.args, unique_expr)
+
             if self.strategy == "opfuzz":
                 script = self.get_script(seeds)
                 if not script:
@@ -214,6 +241,9 @@ class Fuzzer:
                 scratchfile, self.args.timeout
             )
 
+            if self.timeout_limit_reached():
+                return False
+
             # Match stdout and stderr against the crash list
             # (see config/Config.py:27) which contains various crash messages
             # such as assertion errors, check failure, invalid models, etc.
@@ -258,6 +288,7 @@ class Fuzzer:
                     # Check whether the solver timed out.
                     elif exitcode == 137:
                         self.statistic.timeout += 1
+                        self.timeout_of_current_seed += 1
                         log_solver_timeout(self.args, solver_cli, iteration)
                         continue                # Continue to the next solver.
 

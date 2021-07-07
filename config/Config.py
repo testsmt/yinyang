@@ -1,13 +1,5 @@
-<<<<<<< HEAD:config/Config.py
-
 solvers = []
-=======
-solvers = [
-    "cvc5 --check-models --strings-exp -q",
-    "z3release model_validate=true"
-]
 
->>>>>>> 7b1271db07ca2fc3f93b98658c318db175109807:config/config.py
 crash_list = [
     "Exception",
     "lang.AssertionError",

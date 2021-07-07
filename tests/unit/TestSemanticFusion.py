@@ -43,12 +43,12 @@ class SemanticFusionTestCase(unittest.TestCase):
         args = Mockargs()
         args.oracle = "sat"
         args.config = fn_fcts
-        script1 = parse_file(fn1, silent=True)
-        script2 = parse_file(fn2, silent=True)
+        script1, _ = parse_file(fn1, silent=True)
+        script2, _ = parse_file(fn2, silent=True)
         sf_sat = SemanticFusion(script1, script2, args)
         args.oracle = "unsat"
-        script1 = parse_file(fn1, silent=True)
-        script2 = parse_file(fn2, silent=True)
+        script1, _ = parse_file(fn1, silent=True)
+        script2, _ = parse_file(fn2, silent=True)
         sf_sat.mutate()
 
 

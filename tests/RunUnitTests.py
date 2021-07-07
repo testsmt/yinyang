@@ -25,11 +25,10 @@ import unittest
 
 from tests.unit.TestTerm import TermTestCase
 from tests.unit.TestParsing import ParsingTestCase
+from tests.unit.TestTypechecker import TypecheckerTestCase
 from tests.unit.TestSemanticFusion import SemanticFusionTestCase
 from tests.unit.TestTypeAwareOpMutation import TypeAwareOpMutationTestCase
-
 from tests.unit.TestGenTypeAwareMutation import GenTypeAwareMutationTestCase
-from tests.unit.TestTypechecker import TypecheckerTestCase
 
 sys.path.append("../")
 

@@ -39,7 +39,7 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
     def test_ta(self):
         configfile = "tests/res/operators.txt"
         formulafile = "tests/res/formula_file.smt2"
-        script = parse_file(formulafile)
+        script, _ = parse_file(formulafile)
 
         args = Mockargs()
         args.config = configfile
@@ -47,7 +47,7 @@ class TypeAwareOpMutationTestCase(unittest.TestCase):
         args.config = configfile
         args.modulo = 2
 
-        script = parse_file(formulafile, silent=True)
+        script, _ = parse_file(formulafile, silent=True)
         mutator = TypeAwareOpMutation(script, args)
         mutator.mutate()
 

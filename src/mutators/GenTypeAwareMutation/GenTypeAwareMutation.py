@@ -4,6 +4,7 @@ from src.mutators.Mutator import Mutator
 from src.mutators.GenTypeAwareMutation.Operator import *
 from src.mutators.GenTypeAwareMutation.util import *
 from src.parsing.Parse import *
+from src.parsing.Ast import Expr
 
 class GenTypeAwareMutation(Mutator):
     def __init__(self, formula, args, unique_expr):
@@ -25,15 +26,15 @@ class GenTypeAwareMutation(Mutator):
             lines = f.readlines()
 
         for line in lines:
-            line = line.strip("\n") # remove linebreaks
-            if ";" in line: # ignore comments
+            line = line.strip("\n")                 # remove linebreaks
+            if ";" in line:                         # ignore comments
                 line = line[:line.index(";")]
-            if line.strip() == "": # skip empty lines
+            if line.strip() == "":                  # skip empty lines
                 continue
-            line = line.strip() # remove trailing whitespaces
+            line = line.strip()                     # remove trailing whitespaces
             tokens = line.split(" ")
 
-            if not "par" in tokens[0]: # signature without parameter binder
+            if not "par" in tokens[0]:
                 op_name, type_strings, attributes = handle_non_parametric_op(tokens)
                 op = Operator(op_name,type_strings,attributes)
             else:

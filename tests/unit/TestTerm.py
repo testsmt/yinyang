@@ -45,7 +45,7 @@ class TermTestCase(unittest.TestCase):
 """
 
         def var2const():
-            script = parse_str(formula1)
+            script, _ = parse_str(formula1)
             script.commands[2].term.substitute(
                 Var(name="v", type="Bool"), Const(name="true", type="Bool")
             )
@@ -54,7 +54,7 @@ class TermTestCase(unittest.TestCase):
             )
 
         def entire_expr():
-            assert_expr = parse_str(formula2).commands[2].term
+            assert_expr = parse_str(formula2)[0].commands[2].term
             z = Var("z", "Int")
             y = Var("y", "Int")
             assert_expr.substitute(assert_expr, Expr("-", [z, y]))
@@ -63,7 +63,7 @@ class TermTestCase(unittest.TestCase):
         def subexpr():
             z = Var("z", "Int")
             y = Var("y", "Int")
-            assert_expr = parse_str(formula2).commands[2].term
+            assert_expr = parse_str(formula2)[0].commands[2].term
             assert_expr.substitute(assert_expr.subterms[0], Expr("-", [z, y]))
             self.assertEqual(assert_expr.__str__(), "(= (- z y) y)")
 
@@ -75,7 +75,7 @@ class TermTestCase(unittest.TestCase):
 (declare-const c String)
 (assert (= x (str.substr z 0 (str.len x))))
             """
-            expr = parse_str(formula).commands[4].term
+            expr = parse_str(formula)[0].commands[4].term
             x = Var("x", "String")
             var1 = Var("var1", "String")
             expr.substitute(x, var1)
@@ -93,7 +93,7 @@ class TermTestCase(unittest.TestCase):
 (assert (= x (str.substr z 0 (str.len x))))
 (assert (= y (str.replace z x (str.at z (str.len z)))))
             """
-            formula = parse_str(formula)
+            formula, _ = parse_str(formula)
             equals = formula.commands[5].term
             replacee = formula.commands[3].term.subterms[1]
             z = Var("z", "String")
@@ -112,7 +112,7 @@ class TermTestCase(unittest.TestCase):
 (assert (exists ((ts0uscore1 Real)) (> ts0uscore1 a)))
 (check-sat)
 """
-            script = parse_str(script)
+            script, _ = parse_str(script)
             self.assertEqual(script.free_var_occs.__str__(), "[a:Real]")
 
             script = """\
@@ -123,7 +123,7 @@ class TermTestCase(unittest.TestCase):
 (assert (exists ((ts0uscore1 Real)) (> ts0uscore1 a)))
 (check-sat)
 """
-            script = parse_str(script)
+            script, _ = parse_str(script)
             self.assertEqual(script.free_var_occs.__str__(), "[a:Real]")
 
             script = """\
@@ -134,7 +134,7 @@ class TermTestCase(unittest.TestCase):
 (assert (> ts0uscore1 a))
 (check-sat)
 """
-            script = parse_str(script)
+            script, _ = parse_str(script)
             self.assertEqual(
                 script.free_var_occs.__str__(), "[ts0uscore1:Real, a:Real]"
             )
@@ -146,7 +146,7 @@ class TermTestCase(unittest.TestCase):
 (check-sat)
 (exit)
 """
-            script = parse_str(script_str)
+            script, _ = parse_str(script_str)
             self.assertEqual(script.free_var_occs.__str__(), "[]")
 
             script_str = """\
@@ -155,7 +155,7 @@ class TermTestCase(unittest.TestCase):
 (check-sat)
 (exit)
 """
-            script = parse_str(script_str)
+            script, _ = parse_str(script_str)
             self.assertEqual(script.free_var_occs.__str__(), "[?v_0:Int]")
 
         def free_vars_let2():
@@ -166,7 +166,7 @@ class TermTestCase(unittest.TestCase):
 (check-sat)
 (exit)
 """
-            script = parse_str(script_str, silent=False)
+            script, _ = parse_str(script_str, silent=False)
             self.assertEqual(script.free_var_occs.__str__(), "[?v_0:Int]")
 
             script_str = """\
@@ -176,7 +176,7 @@ class TermTestCase(unittest.TestCase):
 (check-sat)
 (exit)
 """
-            script = parse_str(script_str, silent=False)
+            script, _ = parse_str(script_str, silent=False)
             self.assertEqual(script.free_var_occs.__str__(), "[?v_0:Int]")
 
             script_str = """\
@@ -186,7 +186,7 @@ class TermTestCase(unittest.TestCase):
 (check-sat)
 (exit)
 """
-            script = parse_str(script_str, silent=False)
+            script, _ = parse_str(script_str, silent=False)
             self.assertEqual(script.free_var_occs.__str__(), "[?v_0:Int]")
 
         var2const()

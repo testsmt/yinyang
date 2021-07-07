@@ -268,22 +268,22 @@ class AstVisitor(SMTLIBv2Visitor):
         ;
         """
         if ctx.ParOpen():
-            X,n = ctx.numeral()[0].getText(), ctx.numeral()[1].getText()
+            X,n = ctx.numeral()[0].getText(), ctx.numeral()[1].getText().encode('utf-8').decode("utf-8")
             return "(_ bv"+X+" "+n+")", BITVECTOR_TYPE(int(n))
         if ctx.numeral():
-            return ctx.getText(),INTEGER_TYPE
+            return ctx.getText().encode('utf-8').decode("utf-8"), INTEGER_TYPE
         if ctx.decimal():
-            return ctx.getText(),REAL_TYPE
+            return ctx.getText().encode('utf-8').decode("utf-8"), REAL_TYPE
         if ctx.hexadecimal():
-            return ctx.getText(),INTEGER_TYPE
+            return ctx.getText().encode('utf-8').decode("utf-8"),INTEGER_TYPE
         if ctx.binary():
-             return ctx.getText(),INTEGER_TYPE
+             return ctx.getText().encode('utf-8').decode("utf-8"),INTEGER_TYPE
         if ctx.string():
-            return ctx.getText(),STRING_TYPE
+            return ctx.getText().encode('utf-8').decode("utf-8"),STRING_TYPE
         if ctx.b_value():
-            return ctx.getText(),BOOLEAN_TYPE
+            return ctx.getText().encode('utf-8').decode("utf-8"),BOOLEAN_TYPE
         if ctx.reg_const():
-            return ctx.getText(),REGEXP_TYPE
+            return ctx.getText().encode('utf-8').decode("utf-8"),REGEXP_TYPE
 
 
     def visitTerm(self, ctx: SMTLIBv2Parser.TermContext, local_vars):
@@ -328,6 +328,11 @@ class AstVisitor(SMTLIBv2Visitor):
         if len(ctx.ParOpen()) == 1 and ctx.GRW_Underscore() and ctx.numeral():
             bitwidth = ctx.symbol().getText().strip("bv")
             value = ctx.numeral().getText()
+            return Const(name="(_ bv"+bitwidth+" "+ value+")")
+
+        if len(ctx.ParOpen()) == 1 and ctx.GRW_Underscore() and ctx.numeral():
+            bitwidth = ctx.symbol().getText().strip("bv")
+            value = ctx.numeral().getText()
             return Const(name="(_ bv" + bitwidth + " " + value + ")")
 
         if (
@@ -337,6 +342,7 @@ class AstVisitor(SMTLIBv2Visitor):
             and len(ctx.ParClose()) == 2
             and ctx.term()
         ):
+
             return self.handle_quantifier(ctx, "exists", local_vars)
 
         if (
@@ -346,6 +352,7 @@ class AstVisitor(SMTLIBv2Visitor):
             and len(ctx.ParClose()) == 2
             and ctx.term()
         ):
+
             return self.handle_quantifier(ctx, "forall", local_vars)
 
         if (
@@ -355,6 +362,7 @@ class AstVisitor(SMTLIBv2Visitor):
             and len(ctx.ParClose()) == 2
             and ctx.term()
         ):
+
             terms = []
             var_list = []
             for b in ctx.var_binding():
@@ -372,6 +380,7 @@ class AstVisitor(SMTLIBv2Visitor):
             and len(ctx.term()) >= 1
             and ctx.ParClose()
         ):
+
             op = self.visitQual_identifier(ctx.qual_identifier(), local_vars)
             subterms = []
             for term in ctx.term():
