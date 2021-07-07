@@ -40,7 +40,7 @@ to download the corresponding SMT-LIB 2 benchmarks. Alternatively, you can downl
 
 3. **Run yinyang** on the benchmarks e.g. with Z3 and CVC4.  
 ```bash
-python3 yinyang.py "z3 model_validate=true;cvc4 --check-models -m -i -q" benchmarks 
+bin/opfuzz "z3 model_validate=true;cvc4 --check-models -m -i -q" benchmarks 
 ```
 
 yinyang will by default randomly select formulas from the folder `./benchmarks` and generate 300 mutants per seed formula. If a bug has been found, the bug trigger is stored in `./bugs`. yinyang will run in an infinite loop. You can use the shortcut CTRL+C to terminate yinyang manually.
