@@ -581,11 +581,9 @@ class Term:
         self.is_indexed_id = is_indexed_id
         self.parent = parent
 
-
-
     def _add_parent_pointer(self):
         """
-        Adds pointer from each element in subterm to expr
+        Adds pointer from each element in subterm to expr.
         """
         if self.subterms:
             for term in self.subterms:

@@ -28,6 +28,10 @@ from src.parsing.Ast import (
     DefineFunsRec, DefineConst, Script, AssertSoft, Assert, CheckSat,
     CheckSatAssuming, Simplify, Display, Eval, GetValue, FunDecl, SMTLIBCommand
 )
+from src.parsing.Types import (
+    BITVECTOR_TYPE, INTEGER_TYPE, REAL_TYPE, INTEGER_TYPE, STRING_TYPE,
+    BOOLEAN_TYPE, REGEXP_TYPE, sort2type
+)
 
 class AstException(Exception):
     pass
@@ -36,6 +40,7 @@ class AstVisitor(SMTLIBv2Visitor):
     def __init__(self, strict=True):
         self.strict = strict
         self.global_vars = {}
+        self.sorts = {}
 
     def visitStart(self, ctx: SMTLIBv2Parser.StartContext):
         return self.visitScript(ctx.script())
@@ -48,9 +53,11 @@ class AstVisitor(SMTLIBv2Visitor):
 
     def add_to_globals(self, identifier, input_sorts, output_sort):
         if len(input_sorts) == 0:
-            self.global_vars[identifier] = output_sort
+            if output_sort in self.sorts:
+                output_sort = self.sorts[output_sort]
+            self.global_vars[identifier] = sort2type(output_sort)
         else:
-            self.global_vars[identifier] = input_sorts + " " + output_sort
+            self.global_vars[identifier] = sort2type(input_sorts +" "+ output_sort)
 
     def handleCommand(self, ctx: SMTLIBv2Parser.CommandContext):
         if ctx.cmd_assert():
@@ -248,7 +255,7 @@ class AstVisitor(SMTLIBv2Visitor):
             subterms.append(self.visitTerm(t, local_vars))
         return Quantifier(quant, (qvars, qtypes), subterms)
 
-    def visitSpec_constant(self, ctx: SMTLIBv2Parser.Spec_constantContext):
+    def visitSpec_constant(self, ctx:SMTLIBv2Parser.Spec_constantContext):
         """
         spec_constant
         : numeral
@@ -257,10 +264,27 @@ class AstVisitor(SMTLIBv2Visitor):
         | binary
         | string
         | b_value
+        | ParOpen GRW_Underscore ' bv' numeral numeral ParClose
         ;
         """
+        if ctx.ParOpen():
+            X,n = ctx.numeral()[0].getText(), ctx.numeral()[1].getText()
+            return "(_ bv"+X+" "+n+")", BITVECTOR_TYPE(int(n))
+        if ctx.numeral():
+            return ctx.getText(),INTEGER_TYPE
+        if ctx.decimal():
+            return ctx.getText(),REAL_TYPE
+        if ctx.hexadecimal():
+            return ctx.getText(),INTEGER_TYPE
+        if ctx.binary():
+             return ctx.getText(),INTEGER_TYPE
+        if ctx.string():
+            return ctx.getText(),STRING_TYPE
+        if ctx.b_value():
+            return ctx.getText(),BOOLEAN_TYPE
+        if ctx.reg_const():
+            return ctx.getText(),REGEXP_TYPE
 
-        return ctx.getText().encode("utf-8").decode("utf-8")
 
     def visitTerm(self, ctx: SMTLIBv2Parser.TermContext, local_vars):
         """
@@ -355,8 +379,8 @@ class AstVisitor(SMTLIBv2Visitor):
             return Expr(op=op, subterms=subterms)
 
         if ctx.spec_constant():
-            name = self.visitSpec_constant(ctx.spec_constant())
-            return Const(name=name)
+            name, type = self.visitSpec_constant(ctx.spec_constant())
+            return Const(name=name,type=type)
 
         if ctx.qual_identifier():
             return self.visitQual_identifier(ctx.qual_identifier(), local_vars)
