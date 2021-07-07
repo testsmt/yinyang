@@ -92,7 +92,7 @@ class Fuzzer:
         if not admissible_seed_size(seed, self.args):
             self.statistic.invalid_seeds += 1
             logging.debug("Skip invalid seed: exceeds max file size")
-            return None
+            return None, None
 
         self.currentseeds = pathlib.Path(seed).stem
         script, glob = parse_file(seed, silent=True)
@@ -102,7 +102,7 @@ class Fuzzer:
             # Parsing was unsuccessful.
             self.statistic.invalid_seeds += 1
             logging.debug("Skipping invalid seed: error in parsing")
-            return None
+            return None, None
 
         return script, glob
 
