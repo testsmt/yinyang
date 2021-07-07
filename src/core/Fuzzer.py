@@ -241,7 +241,7 @@ class Fuzzer:
                 scratchfile, self.args.timeout
             )
 
-            if self.timeout_limit_reached():
+            if self.max_timeouts_reached():
                 return False
 
             # Match stdout and stderr against the crash list
