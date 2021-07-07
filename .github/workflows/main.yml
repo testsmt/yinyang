@@ -38,7 +38,7 @@ jobs:
       run: |
         python tests/integration/opfuzz/SanityOpFuzz.py
         python tests/integration/misc/Usage.py
-       - name: semanticfusion
+    - name: semanticfusion
       run: |
         python tests/integration/semanticfusion/SanitySemanticFusion.py
     - name: code style 
