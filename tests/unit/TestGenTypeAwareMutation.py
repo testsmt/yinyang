@@ -11,7 +11,7 @@ from src.mutators.GenTypeAwareMutation.util import *
 
 class Mockargs:
     modulo = 3
-    config_file = "config/generalization.txt"
+    config = "config/generalization.txt"
 
 class GenTypeAwareMutationTestCase(unittest.TestCase):
     def test_ta(self):
