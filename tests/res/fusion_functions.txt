@@ -1,0 +1,9 @@
+#begin
+(declare-const x Int)
+(declare-const y Int)
+(declare-const z Int)
+(declare-const c Int)
+(assert (= z (+ x c) y))
+(assert (= x (- (- z c) y)))
+(assert (= y (- (- z c) x)))
+#end

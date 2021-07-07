@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,3 +19,29 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+import inspect
+
+from src.base.Version import VERSION, COMMIT
+
+def raise_runtime_error(trace, argv, e):
+    fn = trace[-1].filename
+    lineno = trace[-1].lineno
+    print("Runtime error at %s:%s" % (fn, lineno), flush=True)
+    print("msg: " + str(e), flush=True)
+    print(
+        "cmd: "
+        + " ".join(argv[:-2])
+        + " "
+        + '"'
+        + argv[-2]
+        + '"'
+        + " "
+        + argv[-1],
+        flush=True
+    )
+    print("version: yinyang " + VERSION + " " + COMMIT, flush=True)
+    print(
+        "Please file an issue: https://github.com/testsmt/yinyang/issues",
+        flush=True
+    )

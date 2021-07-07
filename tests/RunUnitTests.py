@@ -9,8 +9,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,3 +19,18 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+import sys
+import unittest
+
+from tests.unit.TestTerm import TermTestCase
+from tests.unit.TestParsing import ParsingTestCase
+from tests.unit.TestTypechecker import TypecheckerTestCase
+from tests.unit.TestSemanticFusion import SemanticFusionTestCase
+from tests.unit.TestTypeAwareOpMutation import TypeAwareOpMutationTestCase
+from tests.unit.TestGenTypeAwareMutation import GenTypeAwareMutationTestCase
+
+sys.path.append("../")
+
+if __name__ == "__main__":
+    unittest.main()
