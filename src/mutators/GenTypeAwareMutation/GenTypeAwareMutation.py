@@ -133,11 +133,9 @@ class GenTypeAwareMutation(Mutator):
         self.av_expr, self.expr_type = get_all_subterms(self.formula)
         num_holes = len(self.av_expr)
         all_holes = self.av_expr
-        print(len(all_holes))
         for _ in range(num_holes):
             t1 = random.choice(all_holes)
             t2 = self.get_replacee(t1)
-            print(t1, "->", t2)
             if t2:
                 success = True
                 t1.substitute(t1, t2)
