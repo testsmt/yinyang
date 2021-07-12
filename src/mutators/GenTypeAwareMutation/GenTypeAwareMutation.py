@@ -95,8 +95,10 @@ class GenTypeAwareMutation(Mutator):
             if self.unique_expr[typ_id]:
                 choices = [termPrime for termPrime in self.unique_expr[typ_id] if\
                            termPrime != term and local_compatible(term, termPrime)]
+
             if len(choices) == 0:
                 return None
+
             return random.choice(choices)
         else:
             for t in op.arg_types:
@@ -110,8 +112,6 @@ class GenTypeAwareMutation(Mutator):
 
             exp = Expr(op=op.name, subterms=args)
             exp.type = op.rtype
-            
-
 
             return exp
         return None
