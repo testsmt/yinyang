@@ -118,8 +118,6 @@ class GenTypeAwareMutation(Mutator):
 
         :returns: mutant formula, and result of mutation
         """
-        # print(self.formula)
-        # print()
         success = False
         self.av_expr, self.expr_type = get_all_subterms(self.formula)
         num_holes = len(self.av_expr)
