@@ -88,6 +88,10 @@ class GenTypeAwareMutation(Mutator):
         :returns: newly generated expression for substitution
         """
         candidate_ops = self.get_candidate_ops(term)
+
+        if len(candidate_ops) == 0:
+            return None
+
         op = random.choice(candidate_ops)
         args = []
         if op.name == "id":
@@ -97,20 +101,22 @@ class GenTypeAwareMutation(Mutator):
                            termPrime != term and local_compatible(term, termPrime)]
             if len(choices) == 0:
                 return None
+
             return random.choice(choices)
         else:
             for t in op.arg_types:
                 typ_id =  type2num[t]
                 choices = [tPrime for tPrime in self.unique_expr[typ_id]]
-                arg = random.choice(choices)
-                args.append(arg)
 
                 if len(choices) == 0:
                    return None
 
+                arg = random.choice(choices)
+                args.append(arg)
+
             exp = Expr(op=op.name, subterms=args)
             exp.type = op.rtype
-            
+
 
 
             return exp

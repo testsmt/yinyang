@@ -1,0 +1,2 @@
+(str.prefixof String String Bool)
+
