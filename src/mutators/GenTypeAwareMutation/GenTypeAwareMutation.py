@@ -136,7 +136,6 @@ class GenTypeAwareMutation(Mutator):
         for _ in range(num_holes):
             t1 = random.choice(all_holes)
             t2 = self.get_replacee(t1)
-            print(t1, "->", t2)
             if t2:
                 success = True
                 t1.substitute(t1, t2)
