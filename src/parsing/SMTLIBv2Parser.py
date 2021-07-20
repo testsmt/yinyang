@@ -3,10 +3,11 @@
 from antlr4 import *
 from io import StringIO
 import sys
+
 if sys.version_info[1] > 5:
-	from typing import TextIO
+    from typing import TextIO
 else:
-	from typing.io import TextIO
+    from typing.io import TextIO
 
 
 def serializedATN():
@@ -17,8 +18,8 @@ def serializedATN():
         buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23\t\23")
         buf.write("\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31")
         buf.write("\t\31\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36")
-        buf.write("\4\37\t\37\4 \t \4!\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t")
-        buf.write("&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4,\t,\4-\t-\4.\t.\4")
+        buf.write('\4\37\t\37\4 \t \4!\t!\4"\t"\4#\t#\4$\t$\4%\t%\4&\t')
+        buf.write("&\4'\t'\4(\t(\4)\t)\4*\t*\4+\t+\4,\t,\4-\t-\4.\t.\4")
         buf.write("/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\4\64\t\64")
         buf.write("\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\4:\t:\4;\t")
         buf.write(";\4<\t<\4=\t=\4>\t>\4?\t?\4@\t@\4A\tA\4B\tB\4C\tC\4D\t")
@@ -61,13 +62,13 @@ def serializedATN():
         buf.write("\n \f \16 \u0213\13 \3 \3 \5 \u0217\n \3!\3!\3!\3!\3!")
         buf.write("\6!\u021e\n!\r!\16!\u021f\3!\3!\3!\3!\6!\u0226\n!\r!\16")
         buf.write("!\u0227\3!\7!\u022b\n!\f!\16!\u022e\13!\3!\3!\3!\5!\u0233")
-        buf.write("\n!\3\"\3\"\3\"\6\"\u0238\n\"\r\"\16\"\u0239\3\"\3\"\3")
-        buf.write("\"\3\"\3\"\6\"\u0241\n\"\r\"\16\"\u0242\3\"\3\"\3\"\3")
-        buf.write("\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\5\"\u0252\n\"\3")
+        buf.write('\n!\3"\3"\3"\6"\u0238\n"\r"\16"\u0239\3"\3"\3')
+        buf.write('"\3"\3"\6"\u0241\n"\r"\16"\u0242\3"\3"\3"\3')
+        buf.write('"\3"\3"\3"\3"\3"\3"\3"\3"\3"\5"\u0252\n"\3')
         buf.write("#\3#\3#\3#\6#\u0258\n#\r#\16#\u0259\3#\3#\3$\3$\3$\6$")
         buf.write("\u0261\n$\r$\16$\u0262\3$\3$\3$\3$\3$\3$\3$\3$\3$\3$\3")
         buf.write("$\5$\u0270\n$\3%\3%\3%\3%\6%\u0276\n%\r%\16%\u0277\3%")
-        buf.write("\3%\3&\3&\3&\3&\3&\3\'\3\'\3\'\3\'\3\'\3(\3(\3(\7(\u0289")
+        buf.write("\3%\3&\3&\3&\3&\3&\3'\3'\3'\3'\3'\3(\3(\3(\7(\u0289")
         buf.write("\n(\f(\16(\u028c\13(\3(\3(\3)\3)\6)\u0292\n)\r)\16)\u0293")
         buf.write("\3)\3)\3)\3)\3)\3)\6)\u029c\n)\r)\16)\u029d\3)\3)\3)\6")
         buf.write(")\u02a3\n)\r)\16)\u02a4\3)\3)\3)\5)\u02aa\n)\3*\3*\3*")
@@ -124,7 +125,7 @@ def serializedATN():
         buf.write("v\3v\3w\3w\7w\u0580\nw\fw\16w\u0583\13w\3w\3w\3x\3x\6")
         buf.write("x\u0589\nx\rx\16x\u058a\3x\3x\3y\3y\3y\3y\3y\3y\3y\3y")
         buf.write("\3y\3y\3y\5y\u059a\ny\3z\3z\3z\3z\3z\3z\3z\3z\5z\u05a4")
-        buf.write("\nz\3z\2\2{\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"")
+        buf.write('\nz\3z\2\2{\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 "')
         buf.write("$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bdfhjlnprtvxz")
         buf.write("|~\u0080\u0082\u0084\u0086\u0088\u008a\u008c\u008e\u0090")
         buf.write("\u0092\u0094\u0096\u0098\u009a\u009c\u009e\u00a0\u00a2")
@@ -139,7 +140,7 @@ def serializedATN():
         buf.write("\2\16\u0104\3\2\2\2\20\u0108\3\2\2\2\22\u010a\3\2\2\2")
         buf.write("\24\u010c\3\2\2\2\26\u010e\3\2\2\2\30\u0110\3\2\2\2\32")
         buf.write("\u0112\3\2\2\2\34\u0114\3\2\2\2\36\u0119\3\2\2\2 \u0129")
-        buf.write("\3\2\2\2\"\u0136\3\2\2\2$\u013a\3\2\2\2&\u0147\3\2\2\2")
+        buf.write('\3\2\2\2"\u0136\3\2\2\2$\u013a\3\2\2\2&\u0147\3\2\2\2')
         buf.write("(\u0153\3\2\2\2*\u0159\3\2\2\2,\u0165\3\2\2\2.\u016e\3")
         buf.write("\2\2\2\60\u0170\3\2\2\2\62\u0175\3\2\2\2\64\u0184\3\2")
         buf.write("\2\2\66\u0186\3\2\2\28\u01e2\3\2\2\2:\u01e4\3\2\2\2<\u01ef")
@@ -198,7 +199,7 @@ def serializedATN():
         buf.write("\2\2\2\u0129\u0120\3\2\2\2\u0129\u0121\3\2\2\2\u0129\u0122")
         buf.write("\3\2\2\2\u012a!\3\2\2\2\u012b\u0137\5 \21\2\u012c\u0137")
         buf.write("\5\20\t\2\u012d\u0137\5\36\20\2\u012e\u0132\7\5\2\2\u012f")
-        buf.write("\u0131\5\"\22\2\u0130\u012f\3\2\2\2\u0131\u0134\3\2\2")
+        buf.write('\u0131\5"\22\2\u0130\u012f\3\2\2\2\u0131\u0134\3\2\2')
         buf.write("\2\u0132\u0130\3\2\2\2\u0132\u0133\3\2\2\2\u0133\u0135")
         buf.write("\3\2\2\2\u0134\u0132\3\2\2\2\u0135\u0137\7\6\2\2\u0136")
         buf.write("\u012b\3\2\2\2\u0136\u012c\3\2\2\2\u0136\u012d\3\2\2\2")
@@ -209,9 +210,9 @@ def serializedATN():
         buf.write("\u0142\5$\23\2\u0141\u0140\3\2\2\2\u0142\u0143\3\2\2\2")
         buf.write("\u0143\u0141\3\2\2\2\u0143\u0144\3\2\2\2\u0144\u0145\3")
         buf.write("\2\2\2\u0145\u0146\7\6\2\2\u0146\u0148\3\2\2\2\u0147\u013c")
-        buf.write("\3\2\2\2\u0147\u013d\3\2\2\2\u0148\'\3\2\2\2\u0149\u0154")
+        buf.write("\3\2\2\2\u0147\u013d\3\2\2\2\u0148'\3\2\2\2\u0149\u0154")
         buf.write("\5 \21\2\u014a\u0154\5\20\t\2\u014b\u014f\7\5\2\2\u014c")
-        buf.write("\u014e\5\"\22\2\u014d\u014c\3\2\2\2\u014e\u0151\3\2\2")
+        buf.write('\u014e\5"\22\2\u014d\u014c\3\2\2\2\u014e\u0151\3\2\2')
         buf.write("\2\u014f\u014d\3\2\2\2\u014f\u0150\3\2\2\2\u0150\u0152")
         buf.write("\3\2\2\2\u0151\u014f\3\2\2\2\u0152\u0154\7\6\2\2\u0153")
         buf.write("\u0149\3\2\2\2\u0153\u014a\3\2\2\2\u0153\u014b\3\2\2\2")
@@ -324,7 +325,7 @@ def serializedATN():
         buf.write("\u0251\u0248\3\2\2\2\u0251\u024a\3\2\2\2\u0251\u024c\3")
         buf.write("\2\2\2\u0251\u024e\3\2\2\2\u0251\u0250\3\2\2\2\u0252C")
         buf.write("\3\2\2\2\u0253\u0254\7\5\2\2\u0254\u0255\7\30\2\2\u0255")
-        buf.write("\u0257\5\20\t\2\u0256\u0258\5B\"\2\u0257\u0256\3\2\2\2")
+        buf.write('\u0257\5\20\t\2\u0256\u0258\5B"\2\u0257\u0256\3\2\2\2')
         buf.write("\u0258\u0259\3\2\2\2\u0259\u0257\3\2\2\2\u0259\u025a\3")
         buf.write("\2\2\2\u025a\u025b\3\2\2\2\u025b\u025c\7\6\2\2\u025cE")
         buf.write("\3\2\2\2\u025d\u025e\7\u0088\2\2\u025e\u0260\7\5\2\2\u025f")
@@ -345,7 +346,7 @@ def serializedATN():
         buf.write("\7\6\2\2\u027fK\3\2\2\2\u0280\u0281\7\5\2\2\u0281\u0282")
         buf.write("\5\20\t\2\u0282\u0283\5,\27\2\u0283\u0284\7\6\2\2\u0284")
         buf.write("M\3\2\2\2\u0285\u0286\7\5\2\2\u0286\u028a\5\20\t\2\u0287")
-        buf.write("\u0289\5L\'\2\u0288\u0287\3\2\2\2\u0289\u028c\3\2\2\2")
+        buf.write("\u0289\5L'\2\u0288\u0287\3\2\2\2\u0289\u028c\3\2\2\2")
         buf.write("\u028a\u0288\3\2\2\2\u028a\u028b\3\2\2\2\u028b\u028d\3")
         buf.write("\2\2\2\u028c\u028a\3\2\2\2\u028d\u028e\7\6\2\2\u028eO")
         buf.write("\3\2\2\2\u028f\u0291\7\5\2\2\u0290\u0292\5N(\2\u0291\u0290")
@@ -378,10 +379,10 @@ def serializedATN():
         buf.write("\3\2\2\2\u02d2\u02d3\7\35\2\2\u02d3[\3\2\2\2\u02d4\u02d5")
         buf.write("\7\36\2\2\u02d5]\3\2\2\2\u02d6\u02d7\7\37\2\2\u02d7_\3")
         buf.write("\2\2\2\u02d8\u02d9\7 \2\2\u02d9a\3\2\2\2\u02da\u02db\7")
-        buf.write("!\2\2\u02dbc\3\2\2\2\u02dc\u02dd\7\"\2\2\u02dde\3\2\2")
+        buf.write('!\2\2\u02dbc\3\2\2\2\u02dc\u02dd\7"\2\2\u02dde\3\2\2')
         buf.write("\2\u02de\u02df\7$\2\2\u02dfg\3\2\2\2\u02e0\u02e1\7%\2")
         buf.write("\2\u02e1i\3\2\2\2\u02e2\u02e3\7&\2\2\u02e3k\3\2\2\2\u02e4")
-        buf.write("\u02e5\7\'\2\2\u02e5m\3\2\2\2\u02e6\u02e7\7(\2\2\u02e7")
+        buf.write("\u02e5\7'\2\2\u02e5m\3\2\2\2\u02e6\u02e7\7(\2\2\u02e7")
         buf.write("o\3\2\2\2\u02e8\u02e9\7)\2\2\u02e9q\3\2\2\2\u02ea\u02eb")
         buf.write("\7*\2\2\u02ebs\3\2\2\2\u02ec\u02ed\7+\2\2\u02edu\3\2\2")
         buf.write("\2\u02ee\u02ef\7,\2\2\u02efw\3\2\2\2\u02f0\u02f1\7-\2")
@@ -623,7 +624,7 @@ def serializedATN():
         buf.write("\u0505\3\2\2\2\u0509\u0506\3\2\2\2\u0509\u0507\3\2\2\2")
         buf.write("\u0509\u0508\3\2\2\2\u050a\u00cd\3\2\2\2\u050b\u050c\t")
         buf.write("\7\2\2\u050c\u00cf\3\2\2\2\u050d\u0511\7\25\2\2\u050e")
-        buf.write("\u0511\7\23\2\2\u050f\u0511\5\"\22\2\u0510\u050d\3\2\2")
+        buf.write('\u0511\7\23\2\2\u050f\u0511\5"\22\2\u0510\u050d\3\2\2')
         buf.write("\2\u0510\u050e\3\2\2\2\u0510\u050f\3\2\2\2\u0511\u00d1")
         buf.write("\3\2\2\2\u0512\u0513\7\5\2\2\u0513\u0514\7.\2\2\u0514")
         buf.write("\u0515\5T+\2\u0515\u0516\7\6\2\2\u0516\u052f\3\2\2\2\u0517")
@@ -665,7 +666,7 @@ def serializedATN():
         buf.write("\u0568\3\2\2\2\u056a\u056d\3\2\2\2\u056b\u0569\3\2\2\2")
         buf.write("\u056b\u056c\3\2\2\2\u056c\u056e\3\2\2\2\u056d\u056b\3")
         buf.write("\2\2\2\u056e\u056f\7\6\2\2\u056f\u00e5\3\2\2\2\u0570\u0571")
-        buf.write("\5(\25\2\u0571\u00e7\3\2\2\2\u0572\u0573\5\"\22\2\u0573")
+        buf.write('\5(\25\2\u0571\u00e7\3\2\2\2\u0572\u0573\5"\22\2\u0573')
         buf.write("\u00e9\3\2\2\2\u0574\u0578\7\5\2\2\u0575\u0577\5\20\t")
         buf.write("\2\u0576\u0575\3\2\2\2\u0577\u057a\3\2\2\2\u0578\u0576")
         buf.write("\3\2\2\2\u0578\u0579\3\2\2\2\u0579\u057b\3\2\2\2\u057a")
@@ -705,93 +706,299 @@ def serializedATN():
         return buf.getvalue()
 
 
-class SMTLIBv2Parser ( Parser ):
+class SMTLIBv2Parser(Parser):
 
     grammarFileName = "SMTLIBv2.g4"
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
-    decisionsToDFA = [ DFA(ds, i) for i, ds in enumerate(atn.decisionToState) ]
+    decisionsToDFA = [DFA(ds, i) for i, ds in enumerate(atn.decisionToState)]
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "' bv'", "<INVALID>", "'('", "')'", "';'", 
-                     "<INVALID>", "<INVALID>", "<INVALID>", "'not'", "'Bool'", 
-                     "'Int'", "'Real'", "'continued-execution'", "'error'", 
-                     "'false'", "'immediate-exit'", "'incomplete'", "'logic'", 
-                     "'memout'", "'sat'", "'success'", "'theory'", "'true'", 
-                     "'unknown'", "'unsupported'", "'unsat'", "'assert'", 
-                     "'assert-soft'", "'simplify'", "'check-sat'", "'check-sat-assuming'", 
-                     "'check-sat-using'", "'labels'", "'minimize'", "'maximize'", 
-                     "'declare-const'", "'declare-datatype'", "'declare-codatatype'", 
-                     "'declare-datatypes'", "'declare-codatatypes'", "'declare-fun'", 
-                     "'declare-sort'", "'define'", "'define-fun'", "'define-const'", 
-                     "'define-fun-rec'", "'define-funs-rec'", "'define-sort'", 
-                     "'display'", "'echo'", "'eval'", "'exit'", "'get-objectives'", 
-                     "'get-assertions'", "'get-assignment'", "'get-info'", 
-                     "'get-model'", "'block-model'", "'get-option'", "'poly/factor'", 
-                     "'get-proof'", "'get-unsat-assumptions'", "'get-unsat-core'", 
-                     "'get-value'", "'pop'", "'push'", "'reset'", "'reset-assertions'", 
-                     "'set-info'", "'set-logic'", "'set-option'", "'then'", 
-                     "'and-then'", "'par-then'", "'or-else'", "'par-or-else'", 
-                     "'par-or'", "'try-for'", "'using-params'", "'!'", "'_'", 
-                     "'as'", "'BINARY'", "'DECIMAL'", "'exists'", "'HEXADECIMAL'", 
-                     "'forall'", "'let'", "'match'", "'NUMERAL'", "'par'", 
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                     "':'", "':all-statistics'", "':assertion-stack-levels'", 
-                     "':authors'", "':category'", "':chainable'", "':definition'", 
-                     "':diagnostic-output-channel'", "':error-behavior'", 
-                     "':extensions'", "':funs'", "':funs-description'", 
-                     "':global-declarations'", "':interactive-mode'", "':language'", 
-                     "':left-assoc'", "':license'", "':named'", "':name'", 
-                     "':notes'", "':pattern'", "':print-success'", "':produce-assertions'", 
-                     "':produce-assignments'", "':produce-models'", "':produce-proofs'", 
-                     "':produce-unsat-assumptions'", "':produce-unsat-cores'", 
-                     "':random-seed'", "':reason-unknown'", "':regular-output-channel'", 
-                     "':reproducible-resource-limit'", "':right-assoc'", 
-                     "':smt-lib-version'", "':sorts'", "':sorts-description'", 
-                     "':source'", "':status'", "':theories'", "':values'", 
-                     "':verbosity'", "':version'" ]
+    literalNames = [
+        "<INVALID>",
+        "' bv'",
+        "<INVALID>",
+        "'('",
+        "')'",
+        "';'",
+        "<INVALID>",
+        "<INVALID>",
+        "<INVALID>",
+        "'not'",
+        "'Bool'",
+        "'Int'",
+        "'Real'",
+        "'continued-execution'",
+        "'error'",
+        "'false'",
+        "'immediate-exit'",
+        "'incomplete'",
+        "'logic'",
+        "'memout'",
+        "'sat'",
+        "'success'",
+        "'theory'",
+        "'true'",
+        "'unknown'",
+        "'unsupported'",
+        "'unsat'",
+        "'assert'",
+        "'assert-soft'",
+        "'simplify'",
+        "'check-sat'",
+        "'check-sat-assuming'",
+        "'check-sat-using'",
+        "'labels'",
+        "'minimize'",
+        "'maximize'",
+        "'declare-const'",
+        "'declare-datatype'",
+        "'declare-codatatype'",
+        "'declare-datatypes'",
+        "'declare-codatatypes'",
+        "'declare-fun'",
+        "'declare-sort'",
+        "'define'",
+        "'define-fun'",
+        "'define-const'",
+        "'define-fun-rec'",
+        "'define-funs-rec'",
+        "'define-sort'",
+        "'display'",
+        "'echo'",
+        "'eval'",
+        "'exit'",
+        "'get-objectives'",
+        "'get-assertions'",
+        "'get-assignment'",
+        "'get-info'",
+        "'get-model'",
+        "'block-model'",
+        "'get-option'",
+        "'poly/factor'",
+        "'get-proof'",
+        "'get-unsat-assumptions'",
+        "'get-unsat-core'",
+        "'get-value'",
+        "'pop'",
+        "'push'",
+        "'reset'",
+        "'reset-assertions'",
+        "'set-info'",
+        "'set-logic'",
+        "'set-option'",
+        "'then'",
+        "'and-then'",
+        "'par-then'",
+        "'or-else'",
+        "'par-or-else'",
+        "'par-or'",
+        "'try-for'",
+        "'using-params'",
+        "'!'",
+        "'_'",
+        "'as'",
+        "'BINARY'",
+        "'DECIMAL'",
+        "'exists'",
+        "'HEXADECIMAL'",
+        "'forall'",
+        "'let'",
+        "'match'",
+        "'NUMERAL'",
+        "'par'",
+        "<INVALID>",
+        "<INVALID>",
+        "<INVALID>",
+        "<INVALID>",
+        "':'",
+        "':all-statistics'",
+        "':assertion-stack-levels'",
+        "':authors'",
+        "':category'",
+        "':chainable'",
+        "':definition'",
+        "':diagnostic-output-channel'",
+        "':error-behavior'",
+        "':extensions'",
+        "':funs'",
+        "':funs-description'",
+        "':global-declarations'",
+        "':interactive-mode'",
+        "':language'",
+        "':left-assoc'",
+        "':license'",
+        "':named'",
+        "':name'",
+        "':notes'",
+        "':pattern'",
+        "':print-success'",
+        "':produce-assertions'",
+        "':produce-assignments'",
+        "':produce-models'",
+        "':produce-proofs'",
+        "':produce-unsat-assumptions'",
+        "':produce-unsat-cores'",
+        "':random-seed'",
+        "':reason-unknown'",
+        "':regular-output-channel'",
+        "':reproducible-resource-limit'",
+        "':right-assoc'",
+        "':smt-lib-version'",
+        "':sorts'",
+        "':sorts-description'",
+        "':source'",
+        "':status'",
+        "':theories'",
+        "':values'",
+        "':verbosity'",
+        "':version'",
+    ]
 
-    symbolicNames = [ "<INVALID>", "<INVALID>", "Comment", "ParOpen", "ParClose", 
-                      "Semicolon", "String", "QuotedSymbol", "RegConst", 
-                      "PS_Not", "PS_Bool", "PS_Int", "PS_Real", "PS_ContinuedExecution", 
-                      "PS_Error", "PS_False", "PS_ImmediateExit", "PS_Incomplete", 
-                      "PS_Logic", "PS_Memout", "PS_Sat", "PS_Success", "PS_Theory", 
-                      "PS_True", "PS_Unknown", "PS_Unsupported", "PS_Unsat", 
-                      "CMD_Assert", "CMD_AssertSoft", "Simplify", "CMD_CheckSat", 
-                      "CMD_CheckSatAssuming", "CMD_CheckSatUsing", "CMD_Labels", 
-                      "CMD_Minimize", "CMD_Maximize", "CMD_DeclareConst", 
-                      "CMD_DeclareDatatype", "CMD_DeclareCodatatype", "CMD_DeclareDatatypes", 
-                      "CMD_DeclareCodatatypes", "CMD_DeclareFun", "CMD_DeclareSort", 
-                      "CMD_Define", "CMD_DefineFun", "CMD_DefineConst", 
-                      "CMD_DefineFunRec", "CMD_DefineFunsRec", "CMD_DefineSort", 
-                      "CMD_Display", "CMD_Echo", "CMD_Eval", "CMD_Exit", 
-                      "CMD_GetObjectives", "CMD_GetAssertions", "CMD_GetAssignment", 
-                      "CMD_GetInfo", "CMD_GetModel", "CMD_BlockModel", "CMD_GetOption", 
-                      "CMD_PolyFactor", "CMD_GetProof", "CMD_GetUnsatAssumptions", 
-                      "CMD_GetUnsatCore", "CMD_GetValue", "CMD_Pop", "CMD_Push", 
-                      "CMD_Reset", "CMD_ResetAssertions", "CMD_SetInfo", 
-                      "CMD_SetLogic", "CMD_SetOption", "TAC_Then", "TAC_AndThen", 
-                      "TAC_ParThen", "TAC_OrElse", "TAC_ParOrElse", "TAC_ParOr", 
-                      "TAC_TryFor", "TAC_UsingParams", "GRW_Exclamation", 
-                      "GRW_Underscore", "GRW_As", "GRW_Binary", "GRW_Decimal", 
-                      "GRW_Exists", "GRW_Hexadecimal", "GRW_Forall", "GRW_Let", 
-                      "GRW_Match", "GRW_Numeral", "GRW_Par", "Numeral", 
-                      "Binary", "HexDecimal", "Decimal", "Colon", "PK_AllStatistics", 
-                      "PK_AssertionStackLevels", "PK_Authors", "PK_Category", 
-                      "PK_Chainable", "PK_Definition", "PK_DiagnosticOutputChannel", 
-                      "PK_ErrorBehaviour", "PK_Extension", "PK_Funs", "PK_FunsDescription", 
-                      "PK_GlobalDeclarations", "PK_InteractiveMode", "PK_Language", 
-                      "PK_LeftAssoc", "PK_License", "PK_Named", "PK_Name", 
-                      "PK_Notes", "PK_Pattern", "PK_PrintSuccess", "PK_ProduceAssertions", 
-                      "PK_ProduceAssignments", "PK_ProduceModels", "PK_ProduceProofs", 
-                      "PK_ProduceUnsatAssumptions", "PK_ProduceUnsatCores", 
-                      "PK_RandomSeed", "PK_ReasonUnknown", "PK_RegularOutputChannel", 
-                      "PK_ReproducibleResourceLimit", "PK_RightAssoc", "PK_SmtLibVersion", 
-                      "PK_Sorts", "PK_SortsDescription", "PK_Source", "PK_Status", 
-                      "PK_Theories", "PK_Values", "PK_Verbosity", "PK_Version", 
-                      "UndefinedSymbol", "WS" ]
+    symbolicNames = [
+        "<INVALID>",
+        "<INVALID>",
+        "Comment",
+        "ParOpen",
+        "ParClose",
+        "Semicolon",
+        "String",
+        "QuotedSymbol",
+        "RegConst",
+        "PS_Not",
+        "PS_Bool",
+        "PS_Int",
+        "PS_Real",
+        "PS_ContinuedExecution",
+        "PS_Error",
+        "PS_False",
+        "PS_ImmediateExit",
+        "PS_Incomplete",
+        "PS_Logic",
+        "PS_Memout",
+        "PS_Sat",
+        "PS_Success",
+        "PS_Theory",
+        "PS_True",
+        "PS_Unknown",
+        "PS_Unsupported",
+        "PS_Unsat",
+        "CMD_Assert",
+        "CMD_AssertSoft",
+        "Simplify",
+        "CMD_CheckSat",
+        "CMD_CheckSatAssuming",
+        "CMD_CheckSatUsing",
+        "CMD_Labels",
+        "CMD_Minimize",
+        "CMD_Maximize",
+        "CMD_DeclareConst",
+        "CMD_DeclareDatatype",
+        "CMD_DeclareCodatatype",
+        "CMD_DeclareDatatypes",
+        "CMD_DeclareCodatatypes",
+        "CMD_DeclareFun",
+        "CMD_DeclareSort",
+        "CMD_Define",
+        "CMD_DefineFun",
+        "CMD_DefineConst",
+        "CMD_DefineFunRec",
+        "CMD_DefineFunsRec",
+        "CMD_DefineSort",
+        "CMD_Display",
+        "CMD_Echo",
+        "CMD_Eval",
+        "CMD_Exit",
+        "CMD_GetObjectives",
+        "CMD_GetAssertions",
+        "CMD_GetAssignment",
+        "CMD_GetInfo",
+        "CMD_GetModel",
+        "CMD_BlockModel",
+        "CMD_GetOption",
+        "CMD_PolyFactor",
+        "CMD_GetProof",
+        "CMD_GetUnsatAssumptions",
+        "CMD_GetUnsatCore",
+        "CMD_GetValue",
+        "CMD_Pop",
+        "CMD_Push",
+        "CMD_Reset",
+        "CMD_ResetAssertions",
+        "CMD_SetInfo",
+        "CMD_SetLogic",
+        "CMD_SetOption",
+        "TAC_Then",
+        "TAC_AndThen",
+        "TAC_ParThen",
+        "TAC_OrElse",
+        "TAC_ParOrElse",
+        "TAC_ParOr",
+        "TAC_TryFor",
+        "TAC_UsingParams",
+        "GRW_Exclamation",
+        "GRW_Underscore",
+        "GRW_As",
+        "GRW_Binary",
+        "GRW_Decimal",
+        "GRW_Exists",
+        "GRW_Hexadecimal",
+        "GRW_Forall",
+        "GRW_Let",
+        "GRW_Match",
+        "GRW_Numeral",
+        "GRW_Par",
+        "Numeral",
+        "Binary",
+        "HexDecimal",
+        "Decimal",
+        "Colon",
+        "PK_AllStatistics",
+        "PK_AssertionStackLevels",
+        "PK_Authors",
+        "PK_Category",
+        "PK_Chainable",
+        "PK_Definition",
+        "PK_DiagnosticOutputChannel",
+        "PK_ErrorBehaviour",
+        "PK_Extension",
+        "PK_Funs",
+        "PK_FunsDescription",
+        "PK_GlobalDeclarations",
+        "PK_InteractiveMode",
+        "PK_Language",
+        "PK_LeftAssoc",
+        "PK_License",
+        "PK_Named",
+        "PK_Name",
+        "PK_Notes",
+        "PK_Pattern",
+        "PK_PrintSuccess",
+        "PK_ProduceAssertions",
+        "PK_ProduceAssignments",
+        "PK_ProduceModels",
+        "PK_ProduceProofs",
+        "PK_ProduceUnsatAssumptions",
+        "PK_ProduceUnsatCores",
+        "PK_RandomSeed",
+        "PK_ReasonUnknown",
+        "PK_RegularOutputChannel",
+        "PK_ReproducibleResourceLimit",
+        "PK_RightAssoc",
+        "PK_SmtLibVersion",
+        "PK_Sorts",
+        "PK_SortsDescription",
+        "PK_Source",
+        "PK_Status",
+        "PK_Theories",
+        "PK_Values",
+        "PK_Verbosity",
+        "PK_Version",
+        "UndefinedSymbol",
+        "WS",
+    ]
 
     RULE_start = 0
     RULE_response = 1
@@ -915,200 +1122,290 @@ class SMTLIBv2Parser ( Parser ):
     RULE_specific_success_response = 119
     RULE_general_response = 120
 
-    ruleNames =  [ "start", "response", "generalReservedWord", "simpleSymbol", 
-                   "quotedSymbol", "predefSymbol", "predefKeyword", "symbol", 
-                   "numeral", "decimal", "hexadecimal", "binary", "string", 
-                   "reg_const", "keyword", "spec_constant", "s_expr", "index", 
-                   "identifier", "attribute_value", "attribute", "sort", 
-                   "qual_identifier", "var_binding", "sorted_var", "pattern", 
-                   "match_case", "term", "sort_symbol_decl", "meta_spec_constant", 
-                   "fun_symbol_decl", "par_fun_symbol_decl", "theory_attribute", 
-                   "theory_decl", "logic_attribue", "logic", "sort_dec", 
-                   "selector_dec", "constructor_dec", "datatype_dec", "function_dec", 
-                   "function_def", "prop_literal", "script", "cmd_assert", 
-                   "cmd_assertSoft", "cmd_simplify", "cmd_checkSat", "cmd_checkSatAssuming", 
-                   "cmd_checkSatUsing", "cmd_minimize", "cmd_maximize", 
-                   "cmd_declareConst", "cmd_declareDatatype", "cmd_declareCodatatype", 
-                   "cmd_declareDatatypes", "cmd_declareCodatatypes", "cmd_declareFun", 
-                   "cmd_declareSort", "cmd_define", "cmd_defineFun", "cmd_defineConst", 
-                   "cmd_defineFunRec", "cmd_defineFunsRec", "cmd_defineSort", 
-                   "cmd_display", "cmd_echo", "cmd_eval", "cmd_exit", "cmd_GetObjectives", 
-                   "cmd_getAssertions", "cmd_getAssignment", "cmd_getInfo", 
-                   "cmd_getModel", "cmd_blockModel", "cmd_getOption", "cmd_getProof", 
-                   "cmd_getUnsatAssumptions", "cmd_labels", "cmd_getUnsatCore", 
-                   "cmd_getValue", "cmd_pop", "cmd_poly_factor", "cmd_push", 
-                   "cmd_reset", "cmd_resetAssertions", "cmd_setInfo", "cmd_setLogic", 
-                   "cmd_setOption", "tac_then", "tac_and_then", "par_then", 
-                   "or_else", "par_or_else", "par_or", "tryFor", "usingParams", 
-                   "tactical", "command", "b_value", "option", "info_flag", 
-                   "error_behaviour", "reason_unknown", "model_response", 
-                   "info_response", "valuation_pair", "t_valuation_pair", 
-                   "check_sat_response", "echo_response", "get_assertions_response", 
-                   "get_assignment_response", "get_info_response", "get_model_response", 
-                   "get_option_response", "get_proof_response", "get_unsat_assump_response", 
-                   "get_unsat_core_response", "get_value_response", "specific_success_response", 
-                   "general_response" ]
+    ruleNames = [
+        "start",
+        "response",
+        "generalReservedWord",
+        "simpleSymbol",
+        "quotedSymbol",
+        "predefSymbol",
+        "predefKeyword",
+        "symbol",
+        "numeral",
+        "decimal",
+        "hexadecimal",
+        "binary",
+        "string",
+        "reg_const",
+        "keyword",
+        "spec_constant",
+        "s_expr",
+        "index",
+        "identifier",
+        "attribute_value",
+        "attribute",
+        "sort",
+        "qual_identifier",
+        "var_binding",
+        "sorted_var",
+        "pattern",
+        "match_case",
+        "term",
+        "sort_symbol_decl",
+        "meta_spec_constant",
+        "fun_symbol_decl",
+        "par_fun_symbol_decl",
+        "theory_attribute",
+        "theory_decl",
+        "logic_attribue",
+        "logic",
+        "sort_dec",
+        "selector_dec",
+        "constructor_dec",
+        "datatype_dec",
+        "function_dec",
+        "function_def",
+        "prop_literal",
+        "script",
+        "cmd_assert",
+        "cmd_assertSoft",
+        "cmd_simplify",
+        "cmd_checkSat",
+        "cmd_checkSatAssuming",
+        "cmd_checkSatUsing",
+        "cmd_minimize",
+        "cmd_maximize",
+        "cmd_declareConst",
+        "cmd_declareDatatype",
+        "cmd_declareCodatatype",
+        "cmd_declareDatatypes",
+        "cmd_declareCodatatypes",
+        "cmd_declareFun",
+        "cmd_declareSort",
+        "cmd_define",
+        "cmd_defineFun",
+        "cmd_defineConst",
+        "cmd_defineFunRec",
+        "cmd_defineFunsRec",
+        "cmd_defineSort",
+        "cmd_display",
+        "cmd_echo",
+        "cmd_eval",
+        "cmd_exit",
+        "cmd_GetObjectives",
+        "cmd_getAssertions",
+        "cmd_getAssignment",
+        "cmd_getInfo",
+        "cmd_getModel",
+        "cmd_blockModel",
+        "cmd_getOption",
+        "cmd_getProof",
+        "cmd_getUnsatAssumptions",
+        "cmd_labels",
+        "cmd_getUnsatCore",
+        "cmd_getValue",
+        "cmd_pop",
+        "cmd_poly_factor",
+        "cmd_push",
+        "cmd_reset",
+        "cmd_resetAssertions",
+        "cmd_setInfo",
+        "cmd_setLogic",
+        "cmd_setOption",
+        "tac_then",
+        "tac_and_then",
+        "par_then",
+        "or_else",
+        "par_or_else",
+        "par_or",
+        "tryFor",
+        "usingParams",
+        "tactical",
+        "command",
+        "b_value",
+        "option",
+        "info_flag",
+        "error_behaviour",
+        "reason_unknown",
+        "model_response",
+        "info_response",
+        "valuation_pair",
+        "t_valuation_pair",
+        "check_sat_response",
+        "echo_response",
+        "get_assertions_response",
+        "get_assignment_response",
+        "get_info_response",
+        "get_model_response",
+        "get_option_response",
+        "get_proof_response",
+        "get_unsat_assump_response",
+        "get_unsat_core_response",
+        "get_value_response",
+        "specific_success_response",
+        "general_response",
+    ]
 
     EOF = Token.EOF
-    T__0=1
-    Comment=2
-    ParOpen=3
-    ParClose=4
-    Semicolon=5
-    String=6
-    QuotedSymbol=7
-    RegConst=8
-    PS_Not=9
-    PS_Bool=10
-    PS_Int=11
-    PS_Real=12
-    PS_ContinuedExecution=13
-    PS_Error=14
-    PS_False=15
-    PS_ImmediateExit=16
-    PS_Incomplete=17
-    PS_Logic=18
-    PS_Memout=19
-    PS_Sat=20
-    PS_Success=21
-    PS_Theory=22
-    PS_True=23
-    PS_Unknown=24
-    PS_Unsupported=25
-    PS_Unsat=26
-    CMD_Assert=27
-    CMD_AssertSoft=28
-    Simplify=29
-    CMD_CheckSat=30
-    CMD_CheckSatAssuming=31
-    CMD_CheckSatUsing=32
-    CMD_Labels=33
-    CMD_Minimize=34
-    CMD_Maximize=35
-    CMD_DeclareConst=36
-    CMD_DeclareDatatype=37
-    CMD_DeclareCodatatype=38
-    CMD_DeclareDatatypes=39
-    CMD_DeclareCodatatypes=40
-    CMD_DeclareFun=41
-    CMD_DeclareSort=42
-    CMD_Define=43
-    CMD_DefineFun=44
-    CMD_DefineConst=45
-    CMD_DefineFunRec=46
-    CMD_DefineFunsRec=47
-    CMD_DefineSort=48
-    CMD_Display=49
-    CMD_Echo=50
-    CMD_Eval=51
-    CMD_Exit=52
-    CMD_GetObjectives=53
-    CMD_GetAssertions=54
-    CMD_GetAssignment=55
-    CMD_GetInfo=56
-    CMD_GetModel=57
-    CMD_BlockModel=58
-    CMD_GetOption=59
-    CMD_PolyFactor=60
-    CMD_GetProof=61
-    CMD_GetUnsatAssumptions=62
-    CMD_GetUnsatCore=63
-    CMD_GetValue=64
-    CMD_Pop=65
-    CMD_Push=66
-    CMD_Reset=67
-    CMD_ResetAssertions=68
-    CMD_SetInfo=69
-    CMD_SetLogic=70
-    CMD_SetOption=71
-    TAC_Then=72
-    TAC_AndThen=73
-    TAC_ParThen=74
-    TAC_OrElse=75
-    TAC_ParOrElse=76
-    TAC_ParOr=77
-    TAC_TryFor=78
-    TAC_UsingParams=79
-    GRW_Exclamation=80
-    GRW_Underscore=81
-    GRW_As=82
-    GRW_Binary=83
-    GRW_Decimal=84
-    GRW_Exists=85
-    GRW_Hexadecimal=86
-    GRW_Forall=87
-    GRW_Let=88
-    GRW_Match=89
-    GRW_Numeral=90
-    GRW_Par=91
-    Numeral=92
-    Binary=93
-    HexDecimal=94
-    Decimal=95
-    Colon=96
-    PK_AllStatistics=97
-    PK_AssertionStackLevels=98
-    PK_Authors=99
-    PK_Category=100
-    PK_Chainable=101
-    PK_Definition=102
-    PK_DiagnosticOutputChannel=103
-    PK_ErrorBehaviour=104
-    PK_Extension=105
-    PK_Funs=106
-    PK_FunsDescription=107
-    PK_GlobalDeclarations=108
-    PK_InteractiveMode=109
-    PK_Language=110
-    PK_LeftAssoc=111
-    PK_License=112
-    PK_Named=113
-    PK_Name=114
-    PK_Notes=115
-    PK_Pattern=116
-    PK_PrintSuccess=117
-    PK_ProduceAssertions=118
-    PK_ProduceAssignments=119
-    PK_ProduceModels=120
-    PK_ProduceProofs=121
-    PK_ProduceUnsatAssumptions=122
-    PK_ProduceUnsatCores=123
-    PK_RandomSeed=124
-    PK_ReasonUnknown=125
-    PK_RegularOutputChannel=126
-    PK_ReproducibleResourceLimit=127
-    PK_RightAssoc=128
-    PK_SmtLibVersion=129
-    PK_Sorts=130
-    PK_SortsDescription=131
-    PK_Source=132
-    PK_Status=133
-    PK_Theories=134
-    PK_Values=135
-    PK_Verbosity=136
-    PK_Version=137
-    UndefinedSymbol=138
-    WS=139
+    T__0 = 1
+    Comment = 2
+    ParOpen = 3
+    ParClose = 4
+    Semicolon = 5
+    String = 6
+    QuotedSymbol = 7
+    RegConst = 8
+    PS_Not = 9
+    PS_Bool = 10
+    PS_Int = 11
+    PS_Real = 12
+    PS_ContinuedExecution = 13
+    PS_Error = 14
+    PS_False = 15
+    PS_ImmediateExit = 16
+    PS_Incomplete = 17
+    PS_Logic = 18
+    PS_Memout = 19
+    PS_Sat = 20
+    PS_Success = 21
+    PS_Theory = 22
+    PS_True = 23
+    PS_Unknown = 24
+    PS_Unsupported = 25
+    PS_Unsat = 26
+    CMD_Assert = 27
+    CMD_AssertSoft = 28
+    Simplify = 29
+    CMD_CheckSat = 30
+    CMD_CheckSatAssuming = 31
+    CMD_CheckSatUsing = 32
+    CMD_Labels = 33
+    CMD_Minimize = 34
+    CMD_Maximize = 35
+    CMD_DeclareConst = 36
+    CMD_DeclareDatatype = 37
+    CMD_DeclareCodatatype = 38
+    CMD_DeclareDatatypes = 39
+    CMD_DeclareCodatatypes = 40
+    CMD_DeclareFun = 41
+    CMD_DeclareSort = 42
+    CMD_Define = 43
+    CMD_DefineFun = 44
+    CMD_DefineConst = 45
+    CMD_DefineFunRec = 46
+    CMD_DefineFunsRec = 47
+    CMD_DefineSort = 48
+    CMD_Display = 49
+    CMD_Echo = 50
+    CMD_Eval = 51
+    CMD_Exit = 52
+    CMD_GetObjectives = 53
+    CMD_GetAssertions = 54
+    CMD_GetAssignment = 55
+    CMD_GetInfo = 56
+    CMD_GetModel = 57
+    CMD_BlockModel = 58
+    CMD_GetOption = 59
+    CMD_PolyFactor = 60
+    CMD_GetProof = 61
+    CMD_GetUnsatAssumptions = 62
+    CMD_GetUnsatCore = 63
+    CMD_GetValue = 64
+    CMD_Pop = 65
+    CMD_Push = 66
+    CMD_Reset = 67
+    CMD_ResetAssertions = 68
+    CMD_SetInfo = 69
+    CMD_SetLogic = 70
+    CMD_SetOption = 71
+    TAC_Then = 72
+    TAC_AndThen = 73
+    TAC_ParThen = 74
+    TAC_OrElse = 75
+    TAC_ParOrElse = 76
+    TAC_ParOr = 77
+    TAC_TryFor = 78
+    TAC_UsingParams = 79
+    GRW_Exclamation = 80
+    GRW_Underscore = 81
+    GRW_As = 82
+    GRW_Binary = 83
+    GRW_Decimal = 84
+    GRW_Exists = 85
+    GRW_Hexadecimal = 86
+    GRW_Forall = 87
+    GRW_Let = 88
+    GRW_Match = 89
+    GRW_Numeral = 90
+    GRW_Par = 91
+    Numeral = 92
+    Binary = 93
+    HexDecimal = 94
+    Decimal = 95
+    Colon = 96
+    PK_AllStatistics = 97
+    PK_AssertionStackLevels = 98
+    PK_Authors = 99
+    PK_Category = 100
+    PK_Chainable = 101
+    PK_Definition = 102
+    PK_DiagnosticOutputChannel = 103
+    PK_ErrorBehaviour = 104
+    PK_Extension = 105
+    PK_Funs = 106
+    PK_FunsDescription = 107
+    PK_GlobalDeclarations = 108
+    PK_InteractiveMode = 109
+    PK_Language = 110
+    PK_LeftAssoc = 111
+    PK_License = 112
+    PK_Named = 113
+    PK_Name = 114
+    PK_Notes = 115
+    PK_Pattern = 116
+    PK_PrintSuccess = 117
+    PK_ProduceAssertions = 118
+    PK_ProduceAssignments = 119
+    PK_ProduceModels = 120
+    PK_ProduceProofs = 121
+    PK_ProduceUnsatAssumptions = 122
+    PK_ProduceUnsatCores = 123
+    PK_RandomSeed = 124
+    PK_ReasonUnknown = 125
+    PK_RegularOutputChannel = 126
+    PK_ReproducibleResourceLimit = 127
+    PK_RightAssoc = 128
+    PK_SmtLibVersion = 129
+    PK_Sorts = 130
+    PK_SortsDescription = 131
+    PK_Source = 132
+    PK_Status = 133
+    PK_Theories = 134
+    PK_Values = 135
+    PK_Verbosity = 136
+    PK_Version = 137
+    UndefinedSymbol = 138
+    WS = 139
 
-    def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
+    def __init__(self, input: TokenStream, output: TextIO = sys.stdout):
         super().__init__(input, output)
         self.checkVersion("4.9.2")
-        self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
+        self._interp = ParserATNSimulator(
+            self, self.atn, self.decisionsToDFA, self.sharedContextCache
+        )
         self._predicates = None
 
-
-
-
     class StartContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def script(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.ScriptContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.ScriptContext, 0)
 
         def EOF(self):
             return self.getToken(SMTLIBv2Parser.EOF, 0)
@@ -1116,16 +1413,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_start
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterStart" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterStart"):
                 listener.enterStart(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitStart" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitStart"):
                 listener.exitStart(self)
-
-
-
 
     def start(self):
 
@@ -1145,17 +1439,17 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class ResponseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def general_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.General_responseContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.General_responseContext, 0)
 
         def EOF(self):
             return self.getToken(SMTLIBv2Parser.EOF, 0)
@@ -1163,16 +1457,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterResponse" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterResponse"):
                 listener.enterResponse(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitResponse" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitResponse"):
                 listener.exitResponse(self)
-
-
-
 
     def response(self):
 
@@ -1192,11 +1483,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class GeneralReservedWordContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1239,27 +1531,48 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_generalReservedWord
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGeneralReservedWord" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGeneralReservedWord"):
                 listener.enterGeneralReservedWord(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGeneralReservedWord" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGeneralReservedWord"):
                 listener.exitGeneralReservedWord(self)
-
-
-
 
     def generalReservedWord(self):
 
-        localctx = SMTLIBv2Parser.GeneralReservedWordContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.GeneralReservedWordContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 4, self.RULE_generalReservedWord)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 248
             _la = self._input.LA(1)
-            if not(((((_la - 80)) & ~0x3f) == 0 and ((1 << (_la - 80)) & ((1 << (SMTLIBv2Parser.GRW_Exclamation - 80)) | (1 << (SMTLIBv2Parser.GRW_Underscore - 80)) | (1 << (SMTLIBv2Parser.GRW_As - 80)) | (1 << (SMTLIBv2Parser.GRW_Binary - 80)) | (1 << (SMTLIBv2Parser.GRW_Decimal - 80)) | (1 << (SMTLIBv2Parser.GRW_Exists - 80)) | (1 << (SMTLIBv2Parser.GRW_Hexadecimal - 80)) | (1 << (SMTLIBv2Parser.GRW_Forall - 80)) | (1 << (SMTLIBv2Parser.GRW_Let - 80)) | (1 << (SMTLIBv2Parser.GRW_Match - 80)) | (1 << (SMTLIBv2Parser.GRW_Numeral - 80)) | (1 << (SMTLIBv2Parser.GRW_Par - 80)))) != 0)):
+            if not (
+                (
+                    (((_la - 80)) & ~0x3F) == 0
+                    and (
+                        (1 << (_la - 80))
+                        & (
+                            (1 << (SMTLIBv2Parser.GRW_Exclamation - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_Underscore - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_As - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_Binary - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_Decimal - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_Exists - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_Hexadecimal - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_Forall - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_Let - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_Match - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_Numeral - 80))
+                            | (1 << (SMTLIBv2Parser.GRW_Par - 80))
+                        )
+                    )
+                    != 0
+                )
+            ):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1272,17 +1585,17 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class SimpleSymbolContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def predefSymbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.PredefSymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.PredefSymbolContext, 0)
 
         def UndefinedSymbol(self):
             return self.getToken(SMTLIBv2Parser.UndefinedSymbol, 0)
@@ -1290,16 +1603,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_simpleSymbol
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterSimpleSymbol" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterSimpleSymbol"):
                 listener.enterSimpleSymbol(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitSimpleSymbol" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitSimpleSymbol"):
                 listener.exitSimpleSymbol(self)
-
-
-
 
     def simpleSymbol(self):
 
@@ -1309,7 +1619,26 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 252
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [SMTLIBv2Parser.PS_Not, SMTLIBv2Parser.PS_Bool, SMTLIBv2Parser.PS_Int, SMTLIBv2Parser.PS_Real, SMTLIBv2Parser.PS_ContinuedExecution, SMTLIBv2Parser.PS_Error, SMTLIBv2Parser.PS_False, SMTLIBv2Parser.PS_ImmediateExit, SMTLIBv2Parser.PS_Incomplete, SMTLIBv2Parser.PS_Logic, SMTLIBv2Parser.PS_Memout, SMTLIBv2Parser.PS_Sat, SMTLIBv2Parser.PS_Success, SMTLIBv2Parser.PS_Theory, SMTLIBv2Parser.PS_True, SMTLIBv2Parser.PS_Unknown, SMTLIBv2Parser.PS_Unsupported, SMTLIBv2Parser.PS_Unsat]:
+            if token in [
+                SMTLIBv2Parser.PS_Not,
+                SMTLIBv2Parser.PS_Bool,
+                SMTLIBv2Parser.PS_Int,
+                SMTLIBv2Parser.PS_Real,
+                SMTLIBv2Parser.PS_ContinuedExecution,
+                SMTLIBv2Parser.PS_Error,
+                SMTLIBv2Parser.PS_False,
+                SMTLIBv2Parser.PS_ImmediateExit,
+                SMTLIBv2Parser.PS_Incomplete,
+                SMTLIBv2Parser.PS_Logic,
+                SMTLIBv2Parser.PS_Memout,
+                SMTLIBv2Parser.PS_Sat,
+                SMTLIBv2Parser.PS_Success,
+                SMTLIBv2Parser.PS_Theory,
+                SMTLIBv2Parser.PS_True,
+                SMTLIBv2Parser.PS_Unknown,
+                SMTLIBv2Parser.PS_Unsupported,
+                SMTLIBv2Parser.PS_Unsat,
+            ]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 250
                 self.predefSymbol()
@@ -1330,11 +1659,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class QuotedSymbolContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1344,16 +1674,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_quotedSymbol
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterQuotedSymbol" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterQuotedSymbol"):
                 listener.enterQuotedSymbol(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitQuotedSymbol" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitQuotedSymbol"):
                 listener.exitQuotedSymbol(self)
-
-
-
 
     def quotedSymbol(self):
 
@@ -1371,11 +1698,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class PredefSymbolContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1436,27 +1764,52 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_predefSymbol
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterPredefSymbol" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterPredefSymbol"):
                 listener.enterPredefSymbol(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitPredefSymbol" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitPredefSymbol"):
                 listener.exitPredefSymbol(self)
-
-
-
 
     def predefSymbol(self):
 
         localctx = SMTLIBv2Parser.PredefSymbolContext(self, self._ctx, self.state)
         self.enterRule(localctx, 10, self.RULE_predefSymbol)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 256
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0)):
+            if not (
+                (
+                    ((_la) & ~0x3F) == 0
+                    and (
+                        (1 << _la)
+                        & (
+                            (1 << SMTLIBv2Parser.PS_Not)
+                            | (1 << SMTLIBv2Parser.PS_Bool)
+                            | (1 << SMTLIBv2Parser.PS_Int)
+                            | (1 << SMTLIBv2Parser.PS_Real)
+                            | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                            | (1 << SMTLIBv2Parser.PS_Error)
+                            | (1 << SMTLIBv2Parser.PS_False)
+                            | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                            | (1 << SMTLIBv2Parser.PS_Incomplete)
+                            | (1 << SMTLIBv2Parser.PS_Logic)
+                            | (1 << SMTLIBv2Parser.PS_Memout)
+                            | (1 << SMTLIBv2Parser.PS_Sat)
+                            | (1 << SMTLIBv2Parser.PS_Success)
+                            | (1 << SMTLIBv2Parser.PS_Theory)
+                            | (1 << SMTLIBv2Parser.PS_True)
+                            | (1 << SMTLIBv2Parser.PS_Unknown)
+                            | (1 << SMTLIBv2Parser.PS_Unsupported)
+                            | (1 << SMTLIBv2Parser.PS_Unsat)
+                        )
+                    )
+                    != 0
+                )
+            ):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1469,11 +1822,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class PredefKeywordContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1603,27 +1957,75 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_predefKeyword
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterPredefKeyword" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterPredefKeyword"):
                 listener.enterPredefKeyword(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitPredefKeyword" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitPredefKeyword"):
                 listener.exitPredefKeyword(self)
-
-
-
 
     def predefKeyword(self):
 
         localctx = SMTLIBv2Parser.PredefKeywordContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_predefKeyword)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 258
             _la = self._input.LA(1)
-            if not(((((_la - 97)) & ~0x3f) == 0 and ((1 << (_la - 97)) & ((1 << (SMTLIBv2Parser.PK_AllStatistics - 97)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 97)) | (1 << (SMTLIBv2Parser.PK_Authors - 97)) | (1 << (SMTLIBv2Parser.PK_Category - 97)) | (1 << (SMTLIBv2Parser.PK_Chainable - 97)) | (1 << (SMTLIBv2Parser.PK_Definition - 97)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 97)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 97)) | (1 << (SMTLIBv2Parser.PK_Extension - 97)) | (1 << (SMTLIBv2Parser.PK_Funs - 97)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 97)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 97)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 97)) | (1 << (SMTLIBv2Parser.PK_Language - 97)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 97)) | (1 << (SMTLIBv2Parser.PK_License - 97)) | (1 << (SMTLIBv2Parser.PK_Named - 97)) | (1 << (SMTLIBv2Parser.PK_Name - 97)) | (1 << (SMTLIBv2Parser.PK_Notes - 97)) | (1 << (SMTLIBv2Parser.PK_Pattern - 97)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 97)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 97)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 97)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 97)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 97)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 97)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 97)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 97)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 97)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 97)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 97)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 97)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 97)) | (1 << (SMTLIBv2Parser.PK_Sorts - 97)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 97)) | (1 << (SMTLIBv2Parser.PK_Source - 97)) | (1 << (SMTLIBv2Parser.PK_Status - 97)) | (1 << (SMTLIBv2Parser.PK_Theories - 97)) | (1 << (SMTLIBv2Parser.PK_Values - 97)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 97)) | (1 << (SMTLIBv2Parser.PK_Version - 97)))) != 0)):
+            if not (
+                (
+                    (((_la - 97)) & ~0x3F) == 0
+                    and (
+                        (1 << (_la - 97))
+                        & (
+                            (1 << (SMTLIBv2Parser.PK_AllStatistics - 97))
+                            | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Authors - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Category - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Chainable - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Definition - 97))
+                            | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 97))
+                            | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Extension - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Funs - 97))
+                            | (1 << (SMTLIBv2Parser.PK_FunsDescription - 97))
+                            | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 97))
+                            | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Language - 97))
+                            | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 97))
+                            | (1 << (SMTLIBv2Parser.PK_License - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Named - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Name - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Notes - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Pattern - 97))
+                            | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 97))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 97))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 97))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceModels - 97))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 97))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 97))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 97))
+                            | (1 << (SMTLIBv2Parser.PK_RandomSeed - 97))
+                            | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 97))
+                            | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 97))
+                            | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 97))
+                            | (1 << (SMTLIBv2Parser.PK_RightAssoc - 97))
+                            | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Sorts - 97))
+                            | (1 << (SMTLIBv2Parser.PK_SortsDescription - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Source - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Status - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Theories - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Values - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Verbosity - 97))
+                            | (1 << (SMTLIBv2Parser.PK_Version - 97))
+                        )
+                    )
+                    != 0
+                )
+            ):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1636,35 +2038,31 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class SymbolContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def simpleSymbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SimpleSymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SimpleSymbolContext, 0)
 
         def quotedSymbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.QuotedSymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.QuotedSymbolContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_symbol
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterSymbol" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterSymbol"):
                 listener.enterSymbol(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitSymbol" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitSymbol"):
                 listener.exitSymbol(self)
-
-
-
 
     def symbol(self):
 
@@ -1674,7 +2072,27 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 262
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [SMTLIBv2Parser.PS_Not, SMTLIBv2Parser.PS_Bool, SMTLIBv2Parser.PS_Int, SMTLIBv2Parser.PS_Real, SMTLIBv2Parser.PS_ContinuedExecution, SMTLIBv2Parser.PS_Error, SMTLIBv2Parser.PS_False, SMTLIBv2Parser.PS_ImmediateExit, SMTLIBv2Parser.PS_Incomplete, SMTLIBv2Parser.PS_Logic, SMTLIBv2Parser.PS_Memout, SMTLIBv2Parser.PS_Sat, SMTLIBv2Parser.PS_Success, SMTLIBv2Parser.PS_Theory, SMTLIBv2Parser.PS_True, SMTLIBv2Parser.PS_Unknown, SMTLIBv2Parser.PS_Unsupported, SMTLIBv2Parser.PS_Unsat, SMTLIBv2Parser.UndefinedSymbol]:
+            if token in [
+                SMTLIBv2Parser.PS_Not,
+                SMTLIBv2Parser.PS_Bool,
+                SMTLIBv2Parser.PS_Int,
+                SMTLIBv2Parser.PS_Real,
+                SMTLIBv2Parser.PS_ContinuedExecution,
+                SMTLIBv2Parser.PS_Error,
+                SMTLIBv2Parser.PS_False,
+                SMTLIBv2Parser.PS_ImmediateExit,
+                SMTLIBv2Parser.PS_Incomplete,
+                SMTLIBv2Parser.PS_Logic,
+                SMTLIBv2Parser.PS_Memout,
+                SMTLIBv2Parser.PS_Sat,
+                SMTLIBv2Parser.PS_Success,
+                SMTLIBv2Parser.PS_Theory,
+                SMTLIBv2Parser.PS_True,
+                SMTLIBv2Parser.PS_Unknown,
+                SMTLIBv2Parser.PS_Unsupported,
+                SMTLIBv2Parser.PS_Unsat,
+                SMTLIBv2Parser.UndefinedSymbol,
+            ]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 260
                 self.simpleSymbol()
@@ -1695,11 +2113,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class NumeralContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1709,16 +2128,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_numeral
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterNumeral" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterNumeral"):
                 listener.enterNumeral(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitNumeral" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitNumeral"):
                 listener.exitNumeral(self)
-
-
-
 
     def numeral(self):
 
@@ -1736,11 +2152,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class DecimalContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1750,16 +2167,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_decimal
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterDecimal" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterDecimal"):
                 listener.enterDecimal(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitDecimal" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitDecimal"):
                 listener.exitDecimal(self)
-
-
-
 
     def decimal(self):
 
@@ -1777,11 +2191,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class HexadecimalContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1791,16 +2206,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_hexadecimal
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterHexadecimal" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterHexadecimal"):
                 listener.enterHexadecimal(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitHexadecimal" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitHexadecimal"):
                 listener.exitHexadecimal(self)
-
-
-
 
     def hexadecimal(self):
 
@@ -1818,11 +2230,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class BinaryContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1832,16 +2245,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_binary
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterBinary" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterBinary"):
                 listener.enterBinary(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitBinary" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitBinary"):
                 listener.exitBinary(self)
-
-
-
 
     def binary(self):
 
@@ -1859,11 +2269,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class StringContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1873,16 +2284,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_string
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterString" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterString"):
                 listener.enterString(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitString" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitString"):
                 listener.exitString(self)
-
-
-
 
     def string(self):
 
@@ -1900,11 +2308,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Reg_constContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1914,16 +2323,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_reg_const
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterReg_const" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterReg_const"):
                 listener.enterReg_const(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitReg_const" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitReg_const"):
                 listener.exitReg_const(self)
-
-
-
 
     def reg_const(self):
 
@@ -1941,38 +2347,34 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class KeywordContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def predefKeyword(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.PredefKeywordContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.PredefKeywordContext, 0)
 
         def Colon(self):
             return self.getToken(SMTLIBv2Parser.Colon, 0)
 
         def simpleSymbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SimpleSymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SimpleSymbolContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_keyword
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterKeyword" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterKeyword"):
                 listener.enterKeyword(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitKeyword" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitKeyword"):
                 listener.exitKeyword(self)
-
-
-
 
     def keyword(self):
 
@@ -1982,7 +2384,49 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 279
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [SMTLIBv2Parser.PK_AllStatistics, SMTLIBv2Parser.PK_AssertionStackLevels, SMTLIBv2Parser.PK_Authors, SMTLIBv2Parser.PK_Category, SMTLIBv2Parser.PK_Chainable, SMTLIBv2Parser.PK_Definition, SMTLIBv2Parser.PK_DiagnosticOutputChannel, SMTLIBv2Parser.PK_ErrorBehaviour, SMTLIBv2Parser.PK_Extension, SMTLIBv2Parser.PK_Funs, SMTLIBv2Parser.PK_FunsDescription, SMTLIBv2Parser.PK_GlobalDeclarations, SMTLIBv2Parser.PK_InteractiveMode, SMTLIBv2Parser.PK_Language, SMTLIBv2Parser.PK_LeftAssoc, SMTLIBv2Parser.PK_License, SMTLIBv2Parser.PK_Named, SMTLIBv2Parser.PK_Name, SMTLIBv2Parser.PK_Notes, SMTLIBv2Parser.PK_Pattern, SMTLIBv2Parser.PK_PrintSuccess, SMTLIBv2Parser.PK_ProduceAssertions, SMTLIBv2Parser.PK_ProduceAssignments, SMTLIBv2Parser.PK_ProduceModels, SMTLIBv2Parser.PK_ProduceProofs, SMTLIBv2Parser.PK_ProduceUnsatAssumptions, SMTLIBv2Parser.PK_ProduceUnsatCores, SMTLIBv2Parser.PK_RandomSeed, SMTLIBv2Parser.PK_ReasonUnknown, SMTLIBv2Parser.PK_RegularOutputChannel, SMTLIBv2Parser.PK_ReproducibleResourceLimit, SMTLIBv2Parser.PK_RightAssoc, SMTLIBv2Parser.PK_SmtLibVersion, SMTLIBv2Parser.PK_Sorts, SMTLIBv2Parser.PK_SortsDescription, SMTLIBv2Parser.PK_Source, SMTLIBv2Parser.PK_Status, SMTLIBv2Parser.PK_Theories, SMTLIBv2Parser.PK_Values, SMTLIBv2Parser.PK_Verbosity, SMTLIBv2Parser.PK_Version]:
+            if token in [
+                SMTLIBv2Parser.PK_AllStatistics,
+                SMTLIBv2Parser.PK_AssertionStackLevels,
+                SMTLIBv2Parser.PK_Authors,
+                SMTLIBv2Parser.PK_Category,
+                SMTLIBv2Parser.PK_Chainable,
+                SMTLIBv2Parser.PK_Definition,
+                SMTLIBv2Parser.PK_DiagnosticOutputChannel,
+                SMTLIBv2Parser.PK_ErrorBehaviour,
+                SMTLIBv2Parser.PK_Extension,
+                SMTLIBv2Parser.PK_Funs,
+                SMTLIBv2Parser.PK_FunsDescription,
+                SMTLIBv2Parser.PK_GlobalDeclarations,
+                SMTLIBv2Parser.PK_InteractiveMode,
+                SMTLIBv2Parser.PK_Language,
+                SMTLIBv2Parser.PK_LeftAssoc,
+                SMTLIBv2Parser.PK_License,
+                SMTLIBv2Parser.PK_Named,
+                SMTLIBv2Parser.PK_Name,
+                SMTLIBv2Parser.PK_Notes,
+                SMTLIBv2Parser.PK_Pattern,
+                SMTLIBv2Parser.PK_PrintSuccess,
+                SMTLIBv2Parser.PK_ProduceAssertions,
+                SMTLIBv2Parser.PK_ProduceAssignments,
+                SMTLIBv2Parser.PK_ProduceModels,
+                SMTLIBv2Parser.PK_ProduceProofs,
+                SMTLIBv2Parser.PK_ProduceUnsatAssumptions,
+                SMTLIBv2Parser.PK_ProduceUnsatCores,
+                SMTLIBv2Parser.PK_RandomSeed,
+                SMTLIBv2Parser.PK_ReasonUnknown,
+                SMTLIBv2Parser.PK_RegularOutputChannel,
+                SMTLIBv2Parser.PK_ReproducibleResourceLimit,
+                SMTLIBv2Parser.PK_RightAssoc,
+                SMTLIBv2Parser.PK_SmtLibVersion,
+                SMTLIBv2Parser.PK_Sorts,
+                SMTLIBv2Parser.PK_SortsDescription,
+                SMTLIBv2Parser.PK_Source,
+                SMTLIBv2Parser.PK_Status,
+                SMTLIBv2Parser.PK_Theories,
+                SMTLIBv2Parser.PK_Values,
+                SMTLIBv2Parser.PK_Verbosity,
+                SMTLIBv2Parser.PK_Version,
+            ]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 276
                 self.predefKeyword()
@@ -2005,44 +2449,38 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Spec_constantContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def numeral(self, i:int=None):
+        def numeral(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.NumeralContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext, i)
 
         def decimal(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.DecimalContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.DecimalContext, 0)
 
         def hexadecimal(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.HexadecimalContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.HexadecimalContext, 0)
 
         def binary(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.BinaryContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.BinaryContext, 0)
 
         def string(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext, 0)
 
         def b_value(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.B_valueContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.B_valueContext, 0)
 
         def reg_const(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Reg_constContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Reg_constContext, 0)
 
         def ParOpen(self):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
@@ -2056,16 +2494,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_spec_constant
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterSpec_constant" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterSpec_constant"):
                 listener.enterSpec_constant(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitSpec_constant" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitSpec_constant"):
                 listener.exitSpec_constant(self)
-
-
-
 
     def spec_constant(self):
 
@@ -2136,25 +2571,23 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class S_exprContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def spec_constant(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Spec_constantContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Spec_constantContext, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def keyword(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.KeywordContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.KeywordContext, 0)
 
         def ParOpen(self):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
@@ -2162,36 +2595,32 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def s_expr(self, i:int=None):
+        def s_expr(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.S_exprContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.S_exprContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.S_exprContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_s_expr
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterS_expr" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterS_expr"):
                 listener.enterS_expr(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitS_expr" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitS_expr"):
                 listener.exitS_expr(self)
-
-
-
 
     def s_expr(self):
 
         localctx = SMTLIBv2Parser.S_exprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 32, self.RULE_s_expr)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 308
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,5,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 5, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 297
@@ -2217,7 +2646,92 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 304
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 92)) & ~0x3f) == 0 and ((1 << (_la - 92)) & ((1 << (SMTLIBv2Parser.Numeral - 92)) | (1 << (SMTLIBv2Parser.Binary - 92)) | (1 << (SMTLIBv2Parser.HexDecimal - 92)) | (1 << (SMTLIBv2Parser.Decimal - 92)) | (1 << (SMTLIBv2Parser.Colon - 92)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 92)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 92)) | (1 << (SMTLIBv2Parser.PK_Authors - 92)) | (1 << (SMTLIBv2Parser.PK_Category - 92)) | (1 << (SMTLIBv2Parser.PK_Chainable - 92)) | (1 << (SMTLIBv2Parser.PK_Definition - 92)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 92)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 92)) | (1 << (SMTLIBv2Parser.PK_Extension - 92)) | (1 << (SMTLIBv2Parser.PK_Funs - 92)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 92)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 92)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 92)) | (1 << (SMTLIBv2Parser.PK_Language - 92)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 92)) | (1 << (SMTLIBv2Parser.PK_License - 92)) | (1 << (SMTLIBv2Parser.PK_Named - 92)) | (1 << (SMTLIBv2Parser.PK_Name - 92)) | (1 << (SMTLIBv2Parser.PK_Notes - 92)) | (1 << (SMTLIBv2Parser.PK_Pattern - 92)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 92)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 92)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 92)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 92)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 92)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 92)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 92)) | (1 << (SMTLIBv2Parser.PK_Sorts - 92)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 92)) | (1 << (SMTLIBv2Parser.PK_Source - 92)) | (1 << (SMTLIBv2Parser.PK_Status - 92)) | (1 << (SMTLIBv2Parser.PK_Theories - 92)) | (1 << (SMTLIBv2Parser.PK_Values - 92)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 92)) | (1 << (SMTLIBv2Parser.PK_Version - 92)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92)))) != 0):
+                while (
+                    ((_la) & ~0x3F) == 0
+                    and (
+                        (1 << _la)
+                        & (
+                            (1 << SMTLIBv2Parser.ParOpen)
+                            | (1 << SMTLIBv2Parser.String)
+                            | (1 << SMTLIBv2Parser.QuotedSymbol)
+                            | (1 << SMTLIBv2Parser.RegConst)
+                            | (1 << SMTLIBv2Parser.PS_Not)
+                            | (1 << SMTLIBv2Parser.PS_Bool)
+                            | (1 << SMTLIBv2Parser.PS_Int)
+                            | (1 << SMTLIBv2Parser.PS_Real)
+                            | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                            | (1 << SMTLIBv2Parser.PS_Error)
+                            | (1 << SMTLIBv2Parser.PS_False)
+                            | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                            | (1 << SMTLIBv2Parser.PS_Incomplete)
+                            | (1 << SMTLIBv2Parser.PS_Logic)
+                            | (1 << SMTLIBv2Parser.PS_Memout)
+                            | (1 << SMTLIBv2Parser.PS_Sat)
+                            | (1 << SMTLIBv2Parser.PS_Success)
+                            | (1 << SMTLIBv2Parser.PS_Theory)
+                            | (1 << SMTLIBv2Parser.PS_True)
+                            | (1 << SMTLIBv2Parser.PS_Unknown)
+                            | (1 << SMTLIBv2Parser.PS_Unsupported)
+                            | (1 << SMTLIBv2Parser.PS_Unsat)
+                        )
+                    )
+                    != 0
+                ) or (
+                    (((_la - 92)) & ~0x3F) == 0
+                    and (
+                        (1 << (_la - 92))
+                        & (
+                            (1 << (SMTLIBv2Parser.Numeral - 92))
+                            | (1 << (SMTLIBv2Parser.Binary - 92))
+                            | (1 << (SMTLIBv2Parser.HexDecimal - 92))
+                            | (1 << (SMTLIBv2Parser.Decimal - 92))
+                            | (1 << (SMTLIBv2Parser.Colon - 92))
+                            | (1 << (SMTLIBv2Parser.PK_AllStatistics - 92))
+                            | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Authors - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Category - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Chainable - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Definition - 92))
+                            | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Extension - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Funs - 92))
+                            | (1 << (SMTLIBv2Parser.PK_FunsDescription - 92))
+                            | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 92))
+                            | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Language - 92))
+                            | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 92))
+                            | (1 << (SMTLIBv2Parser.PK_License - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Named - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Name - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Notes - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Pattern - 92))
+                            | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceModels - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 92))
+                            | (1 << (SMTLIBv2Parser.PK_RandomSeed - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 92))
+                            | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 92))
+                            | (1 << (SMTLIBv2Parser.PK_RightAssoc - 92))
+                            | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Sorts - 92))
+                            | (1 << (SMTLIBv2Parser.PK_SortsDescription - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Source - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Status - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Theories - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Values - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Verbosity - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Version - 92))
+                            | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92))
+                        )
+                    )
+                    != 0
+                ):
                     self.state = 301
                     self.s_expr()
                     self.state = 306
@@ -2228,7 +2742,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -2237,35 +2750,31 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class IndexContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def numeral(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_index
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterIndex" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterIndex"):
                 listener.enterIndex(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitIndex" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitIndex"):
                 listener.exitIndex(self)
-
-
-
 
     def index(self):
 
@@ -2280,7 +2789,28 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 310
                 self.numeral()
                 pass
-            elif token in [SMTLIBv2Parser.QuotedSymbol, SMTLIBv2Parser.PS_Not, SMTLIBv2Parser.PS_Bool, SMTLIBv2Parser.PS_Int, SMTLIBv2Parser.PS_Real, SMTLIBv2Parser.PS_ContinuedExecution, SMTLIBv2Parser.PS_Error, SMTLIBv2Parser.PS_False, SMTLIBv2Parser.PS_ImmediateExit, SMTLIBv2Parser.PS_Incomplete, SMTLIBv2Parser.PS_Logic, SMTLIBv2Parser.PS_Memout, SMTLIBv2Parser.PS_Sat, SMTLIBv2Parser.PS_Success, SMTLIBv2Parser.PS_Theory, SMTLIBv2Parser.PS_True, SMTLIBv2Parser.PS_Unknown, SMTLIBv2Parser.PS_Unsupported, SMTLIBv2Parser.PS_Unsat, SMTLIBv2Parser.UndefinedSymbol]:
+            elif token in [
+                SMTLIBv2Parser.QuotedSymbol,
+                SMTLIBv2Parser.PS_Not,
+                SMTLIBv2Parser.PS_Bool,
+                SMTLIBv2Parser.PS_Int,
+                SMTLIBv2Parser.PS_Real,
+                SMTLIBv2Parser.PS_ContinuedExecution,
+                SMTLIBv2Parser.PS_Error,
+                SMTLIBv2Parser.PS_False,
+                SMTLIBv2Parser.PS_ImmediateExit,
+                SMTLIBv2Parser.PS_Incomplete,
+                SMTLIBv2Parser.PS_Logic,
+                SMTLIBv2Parser.PS_Memout,
+                SMTLIBv2Parser.PS_Sat,
+                SMTLIBv2Parser.PS_Success,
+                SMTLIBv2Parser.PS_Theory,
+                SMTLIBv2Parser.PS_True,
+                SMTLIBv2Parser.PS_Unknown,
+                SMTLIBv2Parser.PS_Unsupported,
+                SMTLIBv2Parser.PS_Unsat,
+                SMTLIBv2Parser.UndefinedSymbol,
+            ]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 311
                 self.symbol()
@@ -2296,17 +2826,17 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class IdentifierContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def ParOpen(self):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
@@ -2317,37 +2847,54 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def index(self, i:int=None):
+        def index(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.IndexContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.IndexContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.IndexContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_identifier
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterIdentifier" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterIdentifier"):
                 listener.enterIdentifier(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitIdentifier" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitIdentifier"):
                 listener.exitIdentifier(self)
-
-
-
 
     def identifier(self):
 
         localctx = SMTLIBv2Parser.IdentifierContext(self, self._ctx, self.state)
         self.enterRule(localctx, 36, self.RULE_identifier)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 325
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [SMTLIBv2Parser.QuotedSymbol, SMTLIBv2Parser.PS_Not, SMTLIBv2Parser.PS_Bool, SMTLIBv2Parser.PS_Int, SMTLIBv2Parser.PS_Real, SMTLIBv2Parser.PS_ContinuedExecution, SMTLIBv2Parser.PS_Error, SMTLIBv2Parser.PS_False, SMTLIBv2Parser.PS_ImmediateExit, SMTLIBv2Parser.PS_Incomplete, SMTLIBv2Parser.PS_Logic, SMTLIBv2Parser.PS_Memout, SMTLIBv2Parser.PS_Sat, SMTLIBv2Parser.PS_Success, SMTLIBv2Parser.PS_Theory, SMTLIBv2Parser.PS_True, SMTLIBv2Parser.PS_Unknown, SMTLIBv2Parser.PS_Unsupported, SMTLIBv2Parser.PS_Unsat, SMTLIBv2Parser.UndefinedSymbol]:
+            if token in [
+                SMTLIBv2Parser.QuotedSymbol,
+                SMTLIBv2Parser.PS_Not,
+                SMTLIBv2Parser.PS_Bool,
+                SMTLIBv2Parser.PS_Int,
+                SMTLIBv2Parser.PS_Real,
+                SMTLIBv2Parser.PS_ContinuedExecution,
+                SMTLIBv2Parser.PS_Error,
+                SMTLIBv2Parser.PS_False,
+                SMTLIBv2Parser.PS_ImmediateExit,
+                SMTLIBv2Parser.PS_Incomplete,
+                SMTLIBv2Parser.PS_Logic,
+                SMTLIBv2Parser.PS_Memout,
+                SMTLIBv2Parser.PS_Sat,
+                SMTLIBv2Parser.PS_Success,
+                SMTLIBv2Parser.PS_Theory,
+                SMTLIBv2Parser.PS_True,
+                SMTLIBv2Parser.PS_Unknown,
+                SMTLIBv2Parser.PS_Unsupported,
+                SMTLIBv2Parser.PS_Unsat,
+                SMTLIBv2Parser.UndefinedSymbol,
+            ]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 314
                 self.symbol()
@@ -2360,16 +2907,47 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Underscore)
                 self.state = 317
                 self.symbol()
-                self.state = 319 
+                self.state = 319
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 318
                     self.index()
-                    self.state = 321 
+                    self.state = 321
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.Numeral or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.Numeral
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 323
@@ -2386,21 +2964,20 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Attribute_valueContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def spec_constant(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Spec_constantContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Spec_constantContext, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def ParOpen(self):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
@@ -2408,36 +2985,32 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def s_expr(self, i:int=None):
+        def s_expr(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.S_exprContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.S_exprContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.S_exprContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_attribute_value
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterAttribute_value" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterAttribute_value"):
                 listener.enterAttribute_value(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitAttribute_value" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitAttribute_value"):
                 listener.exitAttribute_value(self)
-
-
-
 
     def attribute_value(self):
 
         localctx = SMTLIBv2Parser.Attribute_valueContext(self, self._ctx, self.state)
         self.enterRule(localctx, 38, self.RULE_attribute_value)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 337
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,10,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 10, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 327
@@ -2457,7 +3030,92 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 333
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 92)) & ~0x3f) == 0 and ((1 << (_la - 92)) & ((1 << (SMTLIBv2Parser.Numeral - 92)) | (1 << (SMTLIBv2Parser.Binary - 92)) | (1 << (SMTLIBv2Parser.HexDecimal - 92)) | (1 << (SMTLIBv2Parser.Decimal - 92)) | (1 << (SMTLIBv2Parser.Colon - 92)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 92)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 92)) | (1 << (SMTLIBv2Parser.PK_Authors - 92)) | (1 << (SMTLIBv2Parser.PK_Category - 92)) | (1 << (SMTLIBv2Parser.PK_Chainable - 92)) | (1 << (SMTLIBv2Parser.PK_Definition - 92)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 92)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 92)) | (1 << (SMTLIBv2Parser.PK_Extension - 92)) | (1 << (SMTLIBv2Parser.PK_Funs - 92)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 92)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 92)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 92)) | (1 << (SMTLIBv2Parser.PK_Language - 92)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 92)) | (1 << (SMTLIBv2Parser.PK_License - 92)) | (1 << (SMTLIBv2Parser.PK_Named - 92)) | (1 << (SMTLIBv2Parser.PK_Name - 92)) | (1 << (SMTLIBv2Parser.PK_Notes - 92)) | (1 << (SMTLIBv2Parser.PK_Pattern - 92)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 92)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 92)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 92)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 92)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 92)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 92)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 92)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 92)) | (1 << (SMTLIBv2Parser.PK_Sorts - 92)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 92)) | (1 << (SMTLIBv2Parser.PK_Source - 92)) | (1 << (SMTLIBv2Parser.PK_Status - 92)) | (1 << (SMTLIBv2Parser.PK_Theories - 92)) | (1 << (SMTLIBv2Parser.PK_Values - 92)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 92)) | (1 << (SMTLIBv2Parser.PK_Version - 92)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92)))) != 0):
+                while (
+                    ((_la) & ~0x3F) == 0
+                    and (
+                        (1 << _la)
+                        & (
+                            (1 << SMTLIBv2Parser.ParOpen)
+                            | (1 << SMTLIBv2Parser.String)
+                            | (1 << SMTLIBv2Parser.QuotedSymbol)
+                            | (1 << SMTLIBv2Parser.RegConst)
+                            | (1 << SMTLIBv2Parser.PS_Not)
+                            | (1 << SMTLIBv2Parser.PS_Bool)
+                            | (1 << SMTLIBv2Parser.PS_Int)
+                            | (1 << SMTLIBv2Parser.PS_Real)
+                            | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                            | (1 << SMTLIBv2Parser.PS_Error)
+                            | (1 << SMTLIBv2Parser.PS_False)
+                            | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                            | (1 << SMTLIBv2Parser.PS_Incomplete)
+                            | (1 << SMTLIBv2Parser.PS_Logic)
+                            | (1 << SMTLIBv2Parser.PS_Memout)
+                            | (1 << SMTLIBv2Parser.PS_Sat)
+                            | (1 << SMTLIBv2Parser.PS_Success)
+                            | (1 << SMTLIBv2Parser.PS_Theory)
+                            | (1 << SMTLIBv2Parser.PS_True)
+                            | (1 << SMTLIBv2Parser.PS_Unknown)
+                            | (1 << SMTLIBv2Parser.PS_Unsupported)
+                            | (1 << SMTLIBv2Parser.PS_Unsat)
+                        )
+                    )
+                    != 0
+                ) or (
+                    (((_la - 92)) & ~0x3F) == 0
+                    and (
+                        (1 << (_la - 92))
+                        & (
+                            (1 << (SMTLIBv2Parser.Numeral - 92))
+                            | (1 << (SMTLIBv2Parser.Binary - 92))
+                            | (1 << (SMTLIBv2Parser.HexDecimal - 92))
+                            | (1 << (SMTLIBv2Parser.Decimal - 92))
+                            | (1 << (SMTLIBv2Parser.Colon - 92))
+                            | (1 << (SMTLIBv2Parser.PK_AllStatistics - 92))
+                            | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Authors - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Category - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Chainable - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Definition - 92))
+                            | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Extension - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Funs - 92))
+                            | (1 << (SMTLIBv2Parser.PK_FunsDescription - 92))
+                            | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 92))
+                            | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Language - 92))
+                            | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 92))
+                            | (1 << (SMTLIBv2Parser.PK_License - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Named - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Name - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Notes - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Pattern - 92))
+                            | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceModels - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 92))
+                            | (1 << (SMTLIBv2Parser.PK_RandomSeed - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 92))
+                            | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 92))
+                            | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 92))
+                            | (1 << (SMTLIBv2Parser.PK_RightAssoc - 92))
+                            | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Sorts - 92))
+                            | (1 << (SMTLIBv2Parser.PK_SortsDescription - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Source - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Status - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Theories - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Values - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Verbosity - 92))
+                            | (1 << (SMTLIBv2Parser.PK_Version - 92))
+                            | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92))
+                        )
+                    )
+                    != 0
+                ):
                     self.state = 330
                     self.s_expr()
                     self.state = 335
@@ -2468,7 +3126,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -2477,35 +3134,31 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class AttributeContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def keyword(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.KeywordContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.KeywordContext, 0)
 
         def attribute_value(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Attribute_valueContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Attribute_valueContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_attribute
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterAttribute" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterAttribute"):
                 listener.enterAttribute(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitAttribute" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitAttribute"):
                 listener.exitAttribute(self)
-
-
-
 
     def attribute(self):
 
@@ -2514,7 +3167,7 @@ class SMTLIBv2Parser ( Parser ):
         try:
             self.state = 343
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,11,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 11, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 339
@@ -2529,7 +3182,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.attribute_value()
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -2538,17 +3190,17 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class SortContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def identifier(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext, 0)
 
         def ParOpen(self):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
@@ -2556,36 +3208,32 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def sort(self, i:int=None):
+        def sort(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SortContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SortContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.SortContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_sort
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterSort" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterSort"):
                 listener.enterSort(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitSort" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitSort"):
                 listener.exitSort(self)
-
-
-
 
     def sort(self):
 
         localctx = SMTLIBv2Parser.SortContext(self, self._ctx, self.state)
         self.enterRule(localctx, 42, self.RULE_sort)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 355
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,13,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 13, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 345
@@ -2598,22 +3246,52 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 347
                 self.identifier()
-                self.state = 349 
+                self.state = 349
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 348
                     self.sort()
-                    self.state = 351 
+                    self.state = 351
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 353
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
-
 
         except RecognitionException as re:
             localctx.exception = re
@@ -2623,17 +3301,17 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Qual_identifierContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def identifier(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext, 0)
 
         def ParOpen(self):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
@@ -2642,8 +3320,7 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.GRW_As, 0)
 
         def sort(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SortContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SortContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
@@ -2651,16 +3328,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_qual_identifier
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterQual_identifier" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterQual_identifier"):
                 listener.enterQual_identifier(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitQual_identifier" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitQual_identifier"):
                 listener.exitQual_identifier(self)
-
-
-
 
     def qual_identifier(self):
 
@@ -2669,7 +3343,7 @@ class SMTLIBv2Parser ( Parser ):
         try:
             self.state = 364
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,14,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 14, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 357
@@ -2690,7 +3364,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -2699,11 +3372,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Var_bindingContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -2711,12 +3385,10 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def term(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.TermContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.TermContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
@@ -2724,16 +3396,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_var_binding
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterVar_binding" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterVar_binding"):
                 listener.enterVar_binding(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitVar_binding" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitVar_binding"):
                 listener.exitVar_binding(self)
-
-
-
 
     def var_binding(self):
 
@@ -2757,11 +3426,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Sorted_varContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -2769,12 +3439,10 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def sort(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SortContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SortContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
@@ -2782,16 +3450,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_sorted_var
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterSorted_var" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterSorted_var"):
                 listener.enterSorted_var(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitSorted_var" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitSorted_var"):
                 listener.exitSorted_var(self)
-
-
-
 
     def sorted_var(self):
 
@@ -2815,20 +3480,20 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class PatternContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def symbol(self, i:int=None):
+        def symbol(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SymbolContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, i)
 
         def ParOpen(self):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
@@ -2839,27 +3504,45 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_pattern
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterPattern" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterPattern"):
                 listener.enterPattern(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitPattern" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitPattern"):
                 listener.exitPattern(self)
-
-
-
 
     def pattern(self):
 
         localctx = SMTLIBv2Parser.PatternContext(self, self._ctx, self.state)
         self.enterRule(localctx, 50, self.RULE_pattern)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 386
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [SMTLIBv2Parser.QuotedSymbol, SMTLIBv2Parser.PS_Not, SMTLIBv2Parser.PS_Bool, SMTLIBv2Parser.PS_Int, SMTLIBv2Parser.PS_Real, SMTLIBv2Parser.PS_ContinuedExecution, SMTLIBv2Parser.PS_Error, SMTLIBv2Parser.PS_False, SMTLIBv2Parser.PS_ImmediateExit, SMTLIBv2Parser.PS_Incomplete, SMTLIBv2Parser.PS_Logic, SMTLIBv2Parser.PS_Memout, SMTLIBv2Parser.PS_Sat, SMTLIBv2Parser.PS_Success, SMTLIBv2Parser.PS_Theory, SMTLIBv2Parser.PS_True, SMTLIBv2Parser.PS_Unknown, SMTLIBv2Parser.PS_Unsupported, SMTLIBv2Parser.PS_Unsat, SMTLIBv2Parser.UndefinedSymbol]:
+            if token in [
+                SMTLIBv2Parser.QuotedSymbol,
+                SMTLIBv2Parser.PS_Not,
+                SMTLIBv2Parser.PS_Bool,
+                SMTLIBv2Parser.PS_Int,
+                SMTLIBv2Parser.PS_Real,
+                SMTLIBv2Parser.PS_ContinuedExecution,
+                SMTLIBv2Parser.PS_Error,
+                SMTLIBv2Parser.PS_False,
+                SMTLIBv2Parser.PS_ImmediateExit,
+                SMTLIBv2Parser.PS_Incomplete,
+                SMTLIBv2Parser.PS_Logic,
+                SMTLIBv2Parser.PS_Memout,
+                SMTLIBv2Parser.PS_Sat,
+                SMTLIBv2Parser.PS_Success,
+                SMTLIBv2Parser.PS_Theory,
+                SMTLIBv2Parser.PS_True,
+                SMTLIBv2Parser.PS_Unknown,
+                SMTLIBv2Parser.PS_Unsupported,
+                SMTLIBv2Parser.PS_Unsat,
+                SMTLIBv2Parser.UndefinedSymbol,
+            ]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 376
                 self.symbol()
@@ -2870,16 +3553,46 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 378
                 self.symbol()
-                self.state = 380 
+                self.state = 380
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 379
                     self.symbol()
-                    self.state = 382 
+                    self.state = 382
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 384
@@ -2896,11 +3609,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Match_caseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -2908,12 +3622,10 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
 
         def pattern(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.PatternContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.PatternContext, 0)
 
         def term(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.TermContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.TermContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
@@ -2921,16 +3633,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_match_case
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterMatch_case" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterMatch_case"):
                 listener.enterMatch_case(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitMatch_case" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitMatch_case"):
                 listener.exitMatch_case(self)
-
-
-
 
     def match_case(self):
 
@@ -2954,19 +3663,19 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class TermContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def spec_constant(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Spec_constantContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Spec_constantContext, 0)
 
-
-        def ParOpen(self, i:int=None):
+        def ParOpen(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParOpen)
             else:
@@ -2976,49 +3685,43 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.GRW_Underscore, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def numeral(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext, 0)
 
-
-        def ParClose(self, i:int=None):
+        def ParClose(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParClose)
             else:
                 return self.getToken(SMTLIBv2Parser.ParClose, i)
 
         def qual_identifier(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Qual_identifierContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Qual_identifierContext, 0)
 
-
-        def term(self, i:int=None):
+        def term(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.TermContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.TermContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.TermContext, i)
 
         def GRW_Let(self):
             return self.getToken(SMTLIBv2Parser.GRW_Let, 0)
 
-        def var_binding(self, i:int=None):
+        def var_binding(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Var_bindingContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Var_bindingContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Var_bindingContext, i)
 
         def GRW_Forall(self):
             return self.getToken(SMTLIBv2Parser.GRW_Forall, 0)
 
-        def sorted_var(self, i:int=None):
+        def sorted_var(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Sorted_varContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Sorted_varContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Sorted_varContext, i)
 
         def GRW_Exists(self):
             return self.getToken(SMTLIBv2Parser.GRW_Exists, 0)
@@ -3026,46 +3729,41 @@ class SMTLIBv2Parser ( Parser ):
         def GRW_Match(self):
             return self.getToken(SMTLIBv2Parser.GRW_Match, 0)
 
-        def match_case(self, i:int=None):
+        def match_case(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Match_caseContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Match_caseContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Match_caseContext, i)
 
         def GRW_Exclamation(self):
             return self.getToken(SMTLIBv2Parser.GRW_Exclamation, 0)
 
-        def attribute(self, i:int=None):
+        def attribute(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.AttributeContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_term
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterTerm" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterTerm"):
                 listener.enterTerm(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitTerm" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitTerm"):
                 listener.exitTerm(self)
-
-
-
 
     def term(self):
 
         localctx = SMTLIBv2Parser.TermContext(self, self._ctx, self.state)
         self.enterRule(localctx, 54, self.RULE_term)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 480
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,24,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 24, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 393
@@ -3098,16 +3796,62 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 402
                 self.qual_identifier()
-                self.state = 404 
+                self.state = 404
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 403
                     self.term()
-                    self.state = 406 
+                    self.state = 406
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 92)) & ~0x3f) == 0 and ((1 << (_la - 92)) & ((1 << (SMTLIBv2Parser.Numeral - 92)) | (1 << (SMTLIBv2Parser.Binary - 92)) | (1 << (SMTLIBv2Parser.HexDecimal - 92)) | (1 << (SMTLIBv2Parser.Decimal - 92)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92)))) != 0)):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.String)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.RegConst)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or (
+                            (((_la - 92)) & ~0x3F) == 0
+                            and (
+                                (1 << (_la - 92))
+                                & (
+                                    (1 << (SMTLIBv2Parser.Numeral - 92))
+                                    | (1 << (SMTLIBv2Parser.Binary - 92))
+                                    | (1 << (SMTLIBv2Parser.HexDecimal - 92))
+                                    | (1 << (SMTLIBv2Parser.Decimal - 92))
+                                    | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92))
+                                )
+                            )
+                            != 0
+                        )
+                    ):
                         break
 
                 self.state = 408
@@ -3124,16 +3868,62 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Underscore)
                 self.state = 413
                 self.qual_identifier()
-                self.state = 415 
+                self.state = 415
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 414
                     self.term()
-                    self.state = 417 
+                    self.state = 417
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 92)) & ~0x3f) == 0 and ((1 << (_la - 92)) & ((1 << (SMTLIBv2Parser.Numeral - 92)) | (1 << (SMTLIBv2Parser.Binary - 92)) | (1 << (SMTLIBv2Parser.HexDecimal - 92)) | (1 << (SMTLIBv2Parser.Decimal - 92)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92)))) != 0)):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.String)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.RegConst)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or (
+                            (((_la - 92)) & ~0x3F) == 0
+                            and (
+                                (1 << (_la - 92))
+                                & (
+                                    (1 << (SMTLIBv2Parser.Numeral - 92))
+                                    | (1 << (SMTLIBv2Parser.Binary - 92))
+                                    | (1 << (SMTLIBv2Parser.HexDecimal - 92))
+                                    | (1 << (SMTLIBv2Parser.Decimal - 92))
+                                    | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92))
+                                )
+                            )
+                            != 0
+                        )
+                    ):
                         break
 
                 self.state = 419
@@ -3150,16 +3940,16 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Let)
                 self.state = 424
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 426 
+                self.state = 426
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 425
                     self.var_binding()
-                    self.state = 428 
+                    self.state = 428
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 430
@@ -3178,16 +3968,16 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Forall)
                 self.state = 436
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 438 
+                self.state = 438
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 437
                     self.sorted_var()
-                    self.state = 440 
+                    self.state = 440
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 442
@@ -3206,16 +3996,16 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Exists)
                 self.state = 448
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 450 
+                self.state = 450
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 449
                     self.sorted_var()
-                    self.state = 452 
+                    self.state = 452
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 454
@@ -3236,16 +4026,16 @@ class SMTLIBv2Parser ( Parser ):
                 self.term()
                 self.state = 461
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 463 
+                self.state = 463
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 462
                     self.match_case()
-                    self.state = 465 
+                    self.state = 465
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 467
@@ -3262,22 +4052,97 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Exclamation)
                 self.state = 472
                 self.term()
-                self.state = 474 
+                self.state = 474
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 473
                     self.attribute()
-                    self.state = 476 
+                    self.state = 476
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0)):
+                    if not (
+                        (
+                            (((_la - 96)) & ~0x3F) == 0
+                            and (
+                                (1 << (_la - 96))
+                                & (
+                                    (1 << (SMTLIBv2Parser.Colon - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                                    | (
+                                        1
+                                        << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)
+                                    )
+                                    | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                                    | (
+                                        1
+                                        << (
+                                            SMTLIBv2Parser.PK_DiagnosticOutputChannel
+                                            - 96
+                                        )
+                                    )
+                                    | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_License - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                                    | (
+                                        1
+                                        << (
+                                            SMTLIBv2Parser.PK_ProduceUnsatAssumptions
+                                            - 96
+                                        )
+                                    )
+                                    | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                                    | (
+                                        1
+                                        << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)
+                                    )
+                                    | (
+                                        1
+                                        << (
+                                            SMTLIBv2Parser.PK_ReproducibleResourceLimit
+                                            - 96
+                                        )
+                                    )
+                                    | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                                    | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                                )
+                            )
+                            != 0
+                        )
+                    ):
                         break
 
                 self.state = 478
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
-
 
         except RecognitionException as re:
             localctx.exception = re
@@ -3287,11 +4152,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Sort_symbol_declContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -3299,42 +4165,36 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
 
         def identifier(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext, 0)
 
         def numeral(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def attribute(self, i:int=None):
+        def attribute(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.AttributeContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_sort_symbol_decl
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterSort_symbol_decl" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterSort_symbol_decl"):
                 listener.enterSort_symbol_decl(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitSort_symbol_decl" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitSort_symbol_decl"):
                 listener.exitSort_symbol_decl(self)
-
-
-
 
     def sort_symbol_decl(self):
 
         localctx = SMTLIBv2Parser.Sort_symbol_declContext(self, self._ctx, self.state)
         self.enterRule(localctx, 56, self.RULE_sort_symbol_decl)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 482
@@ -3346,7 +4206,53 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 488
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while ((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0):
+            while (((_la - 96)) & ~0x3F) == 0 and (
+                (1 << (_la - 96))
+                & (
+                    (1 << (SMTLIBv2Parser.Colon - 96))
+                    | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                    | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                    | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96))
+                    | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                    | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                    | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                    | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                    | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                    | (1 << (SMTLIBv2Parser.PK_License - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                    | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                    | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                    | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                    | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                    | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                    | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96))
+                    | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                    | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                    | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                    | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                    | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96))
+                    | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                    | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                    | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                    | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                )
+            ) != 0:
                 self.state = 485
                 self.attribute()
                 self.state = 490
@@ -3363,11 +4269,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Meta_spec_constantContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -3380,27 +4287,26 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_meta_spec_constant
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterMeta_spec_constant" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterMeta_spec_constant"):
                 listener.enterMeta_spec_constant(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitMeta_spec_constant" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitMeta_spec_constant"):
                 listener.exitMeta_spec_constant(self)
-
-
-
 
     def meta_spec_constant(self):
 
         localctx = SMTLIBv2Parser.Meta_spec_constantContext(self, self._ctx, self.state)
         self.enterRule(localctx, 58, self.RULE_meta_spec_constant)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 493
             _la = self._input.LA(1)
-            if not(_la==SMTLIBv2Parser.GRW_Decimal or _la==SMTLIBv2Parser.GRW_Numeral):
+            if not (
+                _la == SMTLIBv2Parser.GRW_Decimal or _la == SMTLIBv2Parser.GRW_Numeral
+            ):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -3413,11 +4319,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Fun_symbol_declContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -3425,57 +4332,49 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
 
         def spec_constant(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Spec_constantContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Spec_constantContext, 0)
 
-
-        def sort(self, i:int=None):
+        def sort(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SortContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SortContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.SortContext, i)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def attribute(self, i:int=None):
+        def attribute(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.AttributeContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext, i)
 
         def meta_spec_constant(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Meta_spec_constantContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Meta_spec_constantContext, 0)
 
         def identifier(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_fun_symbol_decl
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterFun_symbol_decl" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterFun_symbol_decl"):
                 listener.enterFun_symbol_decl(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitFun_symbol_decl" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitFun_symbol_decl"):
                 listener.exitFun_symbol_decl(self)
-
-
-
 
     def fun_symbol_decl(self):
 
         localctx = SMTLIBv2Parser.Fun_symbol_declContext(self, self._ctx, self.state)
         self.enterRule(localctx, 60, self.RULE_fun_symbol_decl)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 532
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,30,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 30, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 495
@@ -3487,7 +4386,53 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 501
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while ((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0):
+                while (((_la - 96)) & ~0x3F) == 0 and (
+                    (1 << (_la - 96))
+                    & (
+                        (1 << (SMTLIBv2Parser.Colon - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                        | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                        | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                        | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_License - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                        | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                    )
+                ) != 0:
                     self.state = 498
                     self.attribute()
                     self.state = 503
@@ -3509,7 +4454,53 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 512
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while ((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0):
+                while (((_la - 96)) & ~0x3F) == 0 and (
+                    (1 << (_la - 96))
+                    & (
+                        (1 << (SMTLIBv2Parser.Colon - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                        | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                        | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                        | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_License - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                        | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                    )
+                ) != 0:
                     self.state = 509
                     self.attribute()
                     self.state = 514
@@ -3526,22 +4517,99 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 518
                 self.identifier()
-                self.state = 520 
+                self.state = 520
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 519
                     self.sort()
-                    self.state = 522 
+                    self.state = 522
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 527
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while ((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0):
+                while (((_la - 96)) & ~0x3F) == 0 and (
+                    (1 << (_la - 96))
+                    & (
+                        (1 << (SMTLIBv2Parser.Colon - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                        | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                        | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                        | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_License - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                        | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                    )
+                ) != 0:
                     self.state = 524
                     self.attribute()
                     self.state = 529
@@ -3552,7 +4620,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -3561,19 +4628,19 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Par_fun_symbol_declContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def fun_symbol_decl(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Fun_symbol_declContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Fun_symbol_declContext, 0)
 
-
-        def ParOpen(self, i:int=None):
+        def ParOpen(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParOpen)
             else:
@@ -3582,60 +4649,55 @@ class SMTLIBv2Parser ( Parser ):
         def GRW_Par(self):
             return self.getToken(SMTLIBv2Parser.GRW_Par, 0)
 
-        def ParClose(self, i:int=None):
+        def ParClose(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParClose)
             else:
                 return self.getToken(SMTLIBv2Parser.ParClose, i)
 
         def identifier(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext, 0)
 
-
-        def symbol(self, i:int=None):
+        def symbol(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SymbolContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,i)
+                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, i)
 
-
-        def sort(self, i:int=None):
+        def sort(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SortContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SortContext,i)
+                return self.getTypedRuleContext(SMTLIBv2Parser.SortContext, i)
 
-
-        def attribute(self, i:int=None):
+        def attribute(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.AttributeContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_par_fun_symbol_decl
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterPar_fun_symbol_decl" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterPar_fun_symbol_decl"):
                 listener.enterPar_fun_symbol_decl(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitPar_fun_symbol_decl" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitPar_fun_symbol_decl"):
                 listener.exitPar_fun_symbol_decl(self)
-
-
-
 
     def par_fun_symbol_decl(self):
 
-        localctx = SMTLIBv2Parser.Par_fun_symbol_declContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Par_fun_symbol_declContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 62, self.RULE_par_fun_symbol_decl)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 560
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,34,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 34, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 534
@@ -3650,16 +4712,46 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Par)
                 self.state = 537
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 539 
+                self.state = 539
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 538
                     self.symbol()
-                    self.state = 541 
+                    self.state = 541
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 543
@@ -3668,22 +4760,99 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 545
                 self.identifier()
-                self.state = 547 
+                self.state = 547
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 546
                     self.sort()
-                    self.state = 549 
+                    self.state = 549
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 554
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while ((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0):
+                while (((_la - 96)) & ~0x3F) == 0 and (
+                    (1 << (_la - 96))
+                    & (
+                        (1 << (SMTLIBv2Parser.Colon - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                        | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                        | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                        | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_License - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                        | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                    )
+                ) != 0:
                     self.state = 551
                     self.attribute()
                     self.state = 556
@@ -3696,7 +4865,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -3705,11 +4873,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Theory_attributeContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -3722,29 +4891,32 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def sort_symbol_decl(self, i:int=None):
+        def sort_symbol_decl(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Sort_symbol_declContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Sort_symbol_declContext,i)
-
+                return self.getTypedRuleContext(
+                    SMTLIBv2Parser.Sort_symbol_declContext, i
+                )
 
         def PK_Funs(self):
             return self.getToken(SMTLIBv2Parser.PK_Funs, 0)
 
-        def par_fun_symbol_decl(self, i:int=None):
+        def par_fun_symbol_decl(self, i: int = None):
             if i is None:
-                return self.getTypedRuleContexts(SMTLIBv2Parser.Par_fun_symbol_declContext)
+                return self.getTypedRuleContexts(
+                    SMTLIBv2Parser.Par_fun_symbol_declContext
+                )
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Par_fun_symbol_declContext,i)
-
+                return self.getTypedRuleContext(
+                    SMTLIBv2Parser.Par_fun_symbol_declContext, i
+                )
 
         def PK_SortsDescription(self):
             return self.getToken(SMTLIBv2Parser.PK_SortsDescription, 0)
 
         def string(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext, 0)
 
         def PK_FunsDescription(self):
             return self.getToken(SMTLIBv2Parser.PK_FunsDescription, 0)
@@ -3759,48 +4931,44 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PK_Notes, 0)
 
         def attribute(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_theory_attribute
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterTheory_attribute" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterTheory_attribute"):
                 listener.enterTheory_attribute(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitTheory_attribute" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitTheory_attribute"):
                 listener.exitTheory_attribute(self)
-
-
-
 
     def theory_attribute(self):
 
         localctx = SMTLIBv2Parser.Theory_attributeContext(self, self._ctx, self.state)
         self.enterRule(localctx, 64, self.RULE_theory_attribute)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 591
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,37,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 37, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 562
                 self.match(SMTLIBv2Parser.PK_Sorts)
                 self.state = 563
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 565 
+                self.state = 565
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 564
                     self.sort_symbol_decl()
-                    self.state = 567 
+                    self.state = 567
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 569
@@ -3813,16 +4981,16 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.PK_Funs)
                 self.state = 572
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 574 
+                self.state = 574
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 573
                     self.par_fun_symbol_decl()
-                    self.state = 576 
+                    self.state = 576
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 578
@@ -3875,7 +5043,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.attribute()
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -3884,11 +5051,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Theory_declContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -3899,38 +5067,35 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PS_Theory, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def theory_attribute(self, i:int=None):
+        def theory_attribute(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Theory_attributeContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Theory_attributeContext,i)
-
+                return self.getTypedRuleContext(
+                    SMTLIBv2Parser.Theory_attributeContext, i
+                )
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_theory_decl
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterTheory_decl" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterTheory_decl"):
                 listener.enterTheory_decl(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitTheory_decl" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitTheory_decl"):
                 listener.exitTheory_decl(self)
-
-
-
 
     def theory_decl(self):
 
         localctx = SMTLIBv2Parser.Theory_declContext(self, self._ctx, self.state)
         self.enterRule(localctx, 66, self.RULE_theory_decl)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 593
@@ -3939,16 +5104,79 @@ class SMTLIBv2Parser ( Parser ):
             self.match(SMTLIBv2Parser.PS_Theory)
             self.state = 595
             self.symbol()
-            self.state = 597 
+            self.state = 597
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
                 self.state = 596
                 self.theory_attribute()
-                self.state = 599 
+                self.state = 599
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0)):
+                if not (
+                    (
+                        (((_la - 96)) & ~0x3F) == 0
+                        and (
+                            (1 << (_la - 96))
+                            & (
+                                (1 << (SMTLIBv2Parser.Colon - 96))
+                                | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                                | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                                | (
+                                    1
+                                    << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)
+                                )
+                                | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                                | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                                | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                                | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                                | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                                | (1 << (SMTLIBv2Parser.PK_License - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                                | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                                | (
+                                    1
+                                    << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)
+                                )
+                                | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                                | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                                | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                                | (
+                                    1
+                                    << (
+                                        SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96
+                                    )
+                                )
+                                | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                                | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                                | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                            )
+                        )
+                        != 0
+                    )
+                ):
                     break
 
             self.state = 601
@@ -3961,11 +5189,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Logic_attribueContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -3978,19 +5207,17 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def symbol(self, i:int=None):
+        def symbol(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SymbolContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, i)
 
         def PK_Language(self):
             return self.getToken(SMTLIBv2Parser.PK_Language, 0)
 
         def string(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext, 0)
 
         def PK_Extension(self):
             return self.getToken(SMTLIBv2Parser.PK_Extension, 0)
@@ -4002,48 +5229,74 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PK_Notes, 0)
 
         def attribute(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_logic_attribue
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterLogic_attribue" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterLogic_attribue"):
                 listener.enterLogic_attribue(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitLogic_attribue" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitLogic_attribue"):
                 listener.exitLogic_attribue(self)
-
-
-
 
     def logic_attribue(self):
 
         localctx = SMTLIBv2Parser.Logic_attribueContext(self, self._ctx, self.state)
         self.enterRule(localctx, 68, self.RULE_logic_attribue)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 621
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,40,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 40, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 603
                 self.match(SMTLIBv2Parser.PK_Theories)
                 self.state = 604
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 606 
+                self.state = 606
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 605
                     self.symbol()
-                    self.state = 608 
+                    self.state = 608
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 610
@@ -4088,7 +5341,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.attribute()
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -4097,11 +5349,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class LogicContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -4112,38 +5365,33 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PS_Logic, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def logic_attribue(self, i:int=None):
+        def logic_attribue(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Logic_attribueContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Logic_attribueContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Logic_attribueContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_logic
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterLogic" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterLogic"):
                 listener.enterLogic(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitLogic" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitLogic"):
                 listener.exitLogic(self)
-
-
-
 
     def logic(self):
 
         localctx = SMTLIBv2Parser.LogicContext(self, self._ctx, self.state)
         self.enterRule(localctx, 70, self.RULE_logic)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 623
@@ -4152,16 +5400,79 @@ class SMTLIBv2Parser ( Parser ):
             self.match(SMTLIBv2Parser.PS_Logic)
             self.state = 625
             self.symbol()
-            self.state = 627 
+            self.state = 627
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
                 self.state = 626
                 self.logic_attribue()
-                self.state = 629 
+                self.state = 629
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0)):
+                if not (
+                    (
+                        (((_la - 96)) & ~0x3F) == 0
+                        and (
+                            (1 << (_la - 96))
+                            & (
+                                (1 << (SMTLIBv2Parser.Colon - 96))
+                                | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                                | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                                | (
+                                    1
+                                    << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)
+                                )
+                                | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                                | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                                | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                                | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                                | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                                | (1 << (SMTLIBv2Parser.PK_License - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                                | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                                | (
+                                    1
+                                    << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)
+                                )
+                                | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                                | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                                | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                                | (
+                                    1
+                                    << (
+                                        SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96
+                                    )
+                                )
+                                | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                                | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                                | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                            )
+                        )
+                        != 0
+                    )
+                ):
                     break
 
             self.state = 631
@@ -4174,11 +5485,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Sort_decContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -4186,12 +5498,10 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def numeral(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
@@ -4199,16 +5509,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_sort_dec
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterSort_dec" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterSort_dec"):
                 listener.enterSort_dec(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitSort_dec" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitSort_dec"):
                 listener.exitSort_dec(self)
-
-
-
 
     def sort_dec(self):
 
@@ -4232,11 +5539,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Selector_decContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -4244,12 +5552,10 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def sort(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SortContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SortContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
@@ -4257,16 +5563,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_selector_dec
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterSelector_dec" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterSelector_dec"):
                 listener.enterSelector_dec(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitSelector_dec" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitSelector_dec"):
                 listener.exitSelector_dec(self)
-
-
-
 
     def selector_dec(self):
 
@@ -4290,11 +5593,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Constructor_decContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -4302,38 +5606,33 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def selector_dec(self, i:int=None):
+        def selector_dec(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Selector_decContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Selector_decContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Selector_decContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_constructor_dec
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterConstructor_dec" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterConstructor_dec"):
                 listener.enterConstructor_dec(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitConstructor_dec" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitConstructor_dec"):
                 listener.exitConstructor_dec(self)
-
-
-
 
     def constructor_dec(self):
 
         localctx = SMTLIBv2Parser.Constructor_decContext(self, self._ctx, self.state)
         self.enterRule(localctx, 76, self.RULE_constructor_dec)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 643
@@ -4343,7 +5642,7 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 648
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==SMTLIBv2Parser.ParOpen:
+            while _la == SMTLIBv2Parser.ParOpen:
                 self.state = 645
                 self.selector_dec()
                 self.state = 650
@@ -4360,80 +5659,78 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Datatype_decContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def ParOpen(self, i:int=None):
+        def ParOpen(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParOpen)
             else:
                 return self.getToken(SMTLIBv2Parser.ParOpen, i)
 
-        def ParClose(self, i:int=None):
+        def ParClose(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParClose)
             else:
                 return self.getToken(SMTLIBv2Parser.ParClose, i)
 
-        def constructor_dec(self, i:int=None):
+        def constructor_dec(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Constructor_decContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Constructor_decContext,i)
-
+                return self.getTypedRuleContext(
+                    SMTLIBv2Parser.Constructor_decContext, i
+                )
 
         def GRW_Par(self):
             return self.getToken(SMTLIBv2Parser.GRW_Par, 0)
 
-        def symbol(self, i:int=None):
+        def symbol(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SymbolContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_datatype_dec
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterDatatype_dec" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterDatatype_dec"):
                 listener.enterDatatype_dec(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitDatatype_dec" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitDatatype_dec"):
                 listener.exitDatatype_dec(self)
-
-
-
 
     def datatype_dec(self):
 
         localctx = SMTLIBv2Parser.Datatype_decContext(self, self._ctx, self.state)
         self.enterRule(localctx, 78, self.RULE_datatype_dec)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 679
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,46,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 46, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 653
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 655 
+                self.state = 655
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 654
                     self.constructor_dec()
-                    self.state = 657 
+                    self.state = 657
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 659
@@ -4448,32 +5745,62 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.GRW_Par)
                 self.state = 663
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 665 
+                self.state = 665
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 664
                     self.symbol()
-                    self.state = 667 
+                    self.state = 667
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 669
                 self.match(SMTLIBv2Parser.ParClose)
                 self.state = 670
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 672 
+                self.state = 672
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 671
                     self.constructor_dec()
-                    self.state = 674 
+                    self.state = 674
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 676
@@ -4481,7 +5808,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 677
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
-
 
         except RecognitionException as re:
             localctx.exception = re
@@ -4491,60 +5817,55 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Function_decContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def ParOpen(self, i:int=None):
+        def ParOpen(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParOpen)
             else:
                 return self.getToken(SMTLIBv2Parser.ParOpen, i)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
-
-        def ParClose(self, i:int=None):
+        def ParClose(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParClose)
             else:
                 return self.getToken(SMTLIBv2Parser.ParClose, i)
 
         def sort(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SortContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.SortContext, 0)
 
-
-        def sorted_var(self, i:int=None):
+        def sorted_var(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Sorted_varContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Sorted_varContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Sorted_varContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_function_dec
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterFunction_dec" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterFunction_dec"):
                 listener.enterFunction_dec(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitFunction_dec" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitFunction_dec"):
                 listener.exitFunction_dec(self)
-
-
-
 
     def function_dec(self):
 
         localctx = SMTLIBv2Parser.Function_decContext(self, self._ctx, self.state)
         self.enterRule(localctx, 80, self.RULE_function_dec)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 681
@@ -4556,7 +5877,7 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 687
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==SMTLIBv2Parser.ParOpen:
+            while _la == SMTLIBv2Parser.ParOpen:
                 self.state = 684
                 self.sorted_var()
                 self.state = 689
@@ -4577,17 +5898,17 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Function_defContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def ParOpen(self):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
@@ -4596,39 +5917,33 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
         def sort(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SortContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SortContext, 0)
 
         def term(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.TermContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.TermContext, 0)
 
-
-        def sorted_var(self, i:int=None):
+        def sorted_var(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Sorted_varContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Sorted_varContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Sorted_varContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_function_def
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterFunction_def" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterFunction_def"):
                 listener.enterFunction_def(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitFunction_def" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitFunction_def"):
                 listener.exitFunction_def(self)
-
-
-
 
     def function_def(self):
 
         localctx = SMTLIBv2Parser.Function_defContext(self, self._ctx, self.state)
         self.enterRule(localctx, 82, self.RULE_function_def)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 694
@@ -4638,7 +5953,7 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 699
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==SMTLIBv2Parser.ParOpen:
+            while _la == SMTLIBv2Parser.ParOpen:
                 self.state = 696
                 self.sorted_var()
                 self.state = 701
@@ -4659,17 +5974,17 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Prop_literalContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def ParOpen(self):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
@@ -4683,16 +5998,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_prop_literal
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterProp_literal" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterProp_literal"):
                 listener.enterProp_literal(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitProp_literal" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitProp_literal"):
                 listener.exitProp_literal(self)
-
-
-
 
     def prop_literal(self):
 
@@ -4702,7 +6014,28 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 712
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [SMTLIBv2Parser.QuotedSymbol, SMTLIBv2Parser.PS_Not, SMTLIBv2Parser.PS_Bool, SMTLIBv2Parser.PS_Int, SMTLIBv2Parser.PS_Real, SMTLIBv2Parser.PS_ContinuedExecution, SMTLIBv2Parser.PS_Error, SMTLIBv2Parser.PS_False, SMTLIBv2Parser.PS_ImmediateExit, SMTLIBv2Parser.PS_Incomplete, SMTLIBv2Parser.PS_Logic, SMTLIBv2Parser.PS_Memout, SMTLIBv2Parser.PS_Sat, SMTLIBv2Parser.PS_Success, SMTLIBv2Parser.PS_Theory, SMTLIBv2Parser.PS_True, SMTLIBv2Parser.PS_Unknown, SMTLIBv2Parser.PS_Unsupported, SMTLIBv2Parser.PS_Unsat, SMTLIBv2Parser.UndefinedSymbol]:
+            if token in [
+                SMTLIBv2Parser.QuotedSymbol,
+                SMTLIBv2Parser.PS_Not,
+                SMTLIBv2Parser.PS_Bool,
+                SMTLIBv2Parser.PS_Int,
+                SMTLIBv2Parser.PS_Real,
+                SMTLIBv2Parser.PS_ContinuedExecution,
+                SMTLIBv2Parser.PS_Error,
+                SMTLIBv2Parser.PS_False,
+                SMTLIBv2Parser.PS_ImmediateExit,
+                SMTLIBv2Parser.PS_Incomplete,
+                SMTLIBv2Parser.PS_Logic,
+                SMTLIBv2Parser.PS_Memout,
+                SMTLIBv2Parser.PS_Sat,
+                SMTLIBv2Parser.PS_Success,
+                SMTLIBv2Parser.PS_Theory,
+                SMTLIBv2Parser.PS_True,
+                SMTLIBv2Parser.PS_Unknown,
+                SMTLIBv2Parser.PS_Unsupported,
+                SMTLIBv2Parser.PS_Unsat,
+                SMTLIBv2Parser.UndefinedSymbol,
+            ]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 706
                 self.symbol()
@@ -4729,46 +6062,43 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class ScriptContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def command(self, i:int=None):
+        def command(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.CommandContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.CommandContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.CommandContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_script
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterScript" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterScript"):
                 listener.enterScript(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitScript" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitScript"):
                 listener.exitScript(self)
-
-
-
 
     def script(self):
 
         localctx = SMTLIBv2Parser.ScriptContext(self, self._ctx, self.state)
         self.enterRule(localctx, 86, self.RULE_script)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 717
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==SMTLIBv2Parser.ParOpen:
+            while _la == SMTLIBv2Parser.ParOpen:
                 self.state = 714
                 self.command()
                 self.state = 719
@@ -4783,11 +6113,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_assertContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -4797,16 +6128,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_assert
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_assert" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_assert"):
                 listener.enterCmd_assert(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_assert" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_assert"):
                 listener.exitCmd_assert(self)
-
-
-
 
     def cmd_assert(self):
 
@@ -4824,11 +6152,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_assertSoftContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -4838,16 +6167,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_assertSoft
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_assertSoft" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_assertSoft"):
                 listener.enterCmd_assertSoft(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_assertSoft" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_assertSoft"):
                 listener.exitCmd_assertSoft(self)
-
-
-
 
     def cmd_assertSoft(self):
 
@@ -4865,11 +6191,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_simplifyContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -4879,16 +6206,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_simplify
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_simplify" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_simplify"):
                 listener.enterCmd_simplify(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_simplify" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_simplify"):
                 listener.exitCmd_simplify(self)
-
-
-
 
     def cmd_simplify(self):
 
@@ -4906,11 +6230,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_checkSatContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -4920,16 +6245,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_checkSat
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_checkSat" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_checkSat"):
                 listener.enterCmd_checkSat(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_checkSat" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_checkSat"):
                 listener.exitCmd_checkSat(self)
-
-
-
 
     def cmd_checkSat(self):
 
@@ -4947,11 +6269,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_checkSatAssumingContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -4961,20 +6284,19 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_checkSatAssuming
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_checkSatAssuming" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_checkSatAssuming"):
                 listener.enterCmd_checkSatAssuming(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_checkSatAssuming" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_checkSatAssuming"):
                 listener.exitCmd_checkSatAssuming(self)
-
-
-
 
     def cmd_checkSatAssuming(self):
 
-        localctx = SMTLIBv2Parser.Cmd_checkSatAssumingContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Cmd_checkSatAssumingContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 96, self.RULE_cmd_checkSatAssuming)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -4988,11 +6310,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_checkSatUsingContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5002,16 +6325,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_checkSatUsing
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_checkSatUsing" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_checkSatUsing"):
                 listener.enterCmd_checkSatUsing(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_checkSatUsing" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_checkSatUsing"):
                 listener.exitCmd_checkSatUsing(self)
-
-
-
 
     def cmd_checkSatUsing(self):
 
@@ -5029,11 +6349,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_minimizeContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5043,16 +6364,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_minimize
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_minimize" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_minimize"):
                 listener.enterCmd_minimize(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_minimize" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_minimize"):
                 listener.exitCmd_minimize(self)
-
-
-
 
     def cmd_minimize(self):
 
@@ -5070,11 +6388,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_maximizeContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5084,16 +6403,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_maximize
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_maximize" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_maximize"):
                 listener.enterCmd_maximize(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_maximize" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_maximize"):
                 listener.exitCmd_maximize(self)
-
-
-
 
     def cmd_maximize(self):
 
@@ -5111,11 +6427,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_declareConstContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5125,16 +6442,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_declareConst
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_declareConst" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_declareConst"):
                 listener.enterCmd_declareConst(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_declareConst" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_declareConst"):
                 listener.exitCmd_declareConst(self)
-
-
-
 
     def cmd_declareConst(self):
 
@@ -5152,11 +6466,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_declareDatatypeContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5166,20 +6481,19 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_declareDatatype
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_declareDatatype" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_declareDatatype"):
                 listener.enterCmd_declareDatatype(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_declareDatatype" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_declareDatatype"):
                 listener.exitCmd_declareDatatype(self)
-
-
-
 
     def cmd_declareDatatype(self):
 
-        localctx = SMTLIBv2Parser.Cmd_declareDatatypeContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Cmd_declareDatatypeContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 106, self.RULE_cmd_declareDatatype)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -5193,11 +6507,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_declareCodatatypeContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5207,20 +6522,19 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_declareCodatatype
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_declareCodatatype" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_declareCodatatype"):
                 listener.enterCmd_declareCodatatype(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_declareCodatatype" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_declareCodatatype"):
                 listener.exitCmd_declareCodatatype(self)
-
-
-
 
     def cmd_declareCodatatype(self):
 
-        localctx = SMTLIBv2Parser.Cmd_declareCodatatypeContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Cmd_declareCodatatypeContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 108, self.RULE_cmd_declareCodatatype)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -5234,11 +6548,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_declareDatatypesContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5248,20 +6563,19 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_declareDatatypes
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_declareDatatypes" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_declareDatatypes"):
                 listener.enterCmd_declareDatatypes(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_declareDatatypes" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_declareDatatypes"):
                 listener.exitCmd_declareDatatypes(self)
-
-
-
 
     def cmd_declareDatatypes(self):
 
-        localctx = SMTLIBv2Parser.Cmd_declareDatatypesContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Cmd_declareDatatypesContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 110, self.RULE_cmd_declareDatatypes)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -5275,11 +6589,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_declareCodatatypesContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5289,20 +6604,19 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_declareCodatatypes
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_declareCodatatypes" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_declareCodatatypes"):
                 listener.enterCmd_declareCodatatypes(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_declareCodatatypes" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_declareCodatatypes"):
                 listener.exitCmd_declareCodatatypes(self)
-
-
-
 
     def cmd_declareCodatatypes(self):
 
-        localctx = SMTLIBv2Parser.Cmd_declareCodatatypesContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Cmd_declareCodatatypesContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 112, self.RULE_cmd_declareCodatatypes)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -5316,11 +6630,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_declareFunContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5330,16 +6645,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_declareFun
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_declareFun" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_declareFun"):
                 listener.enterCmd_declareFun(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_declareFun" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_declareFun"):
                 listener.exitCmd_declareFun(self)
-
-
-
 
     def cmd_declareFun(self):
 
@@ -5357,11 +6669,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_declareSortContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5371,16 +6684,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_declareSort
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_declareSort" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_declareSort"):
                 listener.enterCmd_declareSort(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_declareSort" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_declareSort"):
                 listener.exitCmd_declareSort(self)
-
-
-
 
     def cmd_declareSort(self):
 
@@ -5398,11 +6708,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_defineContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5412,16 +6723,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_define
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_define" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_define"):
                 listener.enterCmd_define(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_define" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_define"):
                 listener.exitCmd_define(self)
-
-
-
 
     def cmd_define(self):
 
@@ -5439,11 +6747,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_defineFunContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5453,16 +6762,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_defineFun
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_defineFun" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_defineFun"):
                 listener.enterCmd_defineFun(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_defineFun" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_defineFun"):
                 listener.exitCmd_defineFun(self)
-
-
-
 
     def cmd_defineFun(self):
 
@@ -5480,11 +6786,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_defineConstContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5494,16 +6801,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_defineConst
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_defineConst" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_defineConst"):
                 listener.enterCmd_defineConst(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_defineConst" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_defineConst"):
                 listener.exitCmd_defineConst(self)
-
-
-
 
     def cmd_defineConst(self):
 
@@ -5521,11 +6825,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_defineFunRecContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5535,16 +6840,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_defineFunRec
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_defineFunRec" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_defineFunRec"):
                 listener.enterCmd_defineFunRec(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_defineFunRec" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_defineFunRec"):
                 listener.exitCmd_defineFunRec(self)
-
-
-
 
     def cmd_defineFunRec(self):
 
@@ -5562,11 +6864,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_defineFunsRecContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5576,16 +6879,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_defineFunsRec
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_defineFunsRec" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_defineFunsRec"):
                 listener.enterCmd_defineFunsRec(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_defineFunsRec" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_defineFunsRec"):
                 listener.exitCmd_defineFunsRec(self)
-
-
-
 
     def cmd_defineFunsRec(self):
 
@@ -5603,11 +6903,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_defineSortContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5617,16 +6918,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_defineSort
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_defineSort" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_defineSort"):
                 listener.enterCmd_defineSort(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_defineSort" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_defineSort"):
                 listener.exitCmd_defineSort(self)
-
-
-
 
     def cmd_defineSort(self):
 
@@ -5644,11 +6942,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_displayContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5658,16 +6957,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_display
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_display" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_display"):
                 listener.enterCmd_display(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_display" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_display"):
                 listener.exitCmd_display(self)
-
-
-
 
     def cmd_display(self):
 
@@ -5685,11 +6981,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_echoContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5699,16 +6996,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_echo
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_echo" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_echo"):
                 listener.enterCmd_echo(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_echo" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_echo"):
                 listener.exitCmd_echo(self)
-
-
-
 
     def cmd_echo(self):
 
@@ -5726,11 +7020,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_evalContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5740,16 +7035,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_eval
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_eval" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_eval"):
                 listener.enterCmd_eval(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_eval" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_eval"):
                 listener.exitCmd_eval(self)
-
-
-
 
     def cmd_eval(self):
 
@@ -5767,11 +7059,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_exitContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5781,16 +7074,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_exit
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_exit" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_exit"):
                 listener.enterCmd_exit(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_exit" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_exit"):
                 listener.exitCmd_exit(self)
-
-
-
 
     def cmd_exit(self):
 
@@ -5808,11 +7098,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_GetObjectivesContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5822,16 +7113,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_GetObjectives
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_GetObjectives" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_GetObjectives"):
                 listener.enterCmd_GetObjectives(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_GetObjectives" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_GetObjectives"):
                 listener.exitCmd_GetObjectives(self)
-
-
-
 
     def cmd_GetObjectives(self):
 
@@ -5849,11 +7137,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_getAssertionsContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5863,16 +7152,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_getAssertions
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_getAssertions" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_getAssertions"):
                 listener.enterCmd_getAssertions(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_getAssertions" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_getAssertions"):
                 listener.exitCmd_getAssertions(self)
-
-
-
 
     def cmd_getAssertions(self):
 
@@ -5890,11 +7176,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_getAssignmentContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5904,16 +7191,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_getAssignment
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_getAssignment" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_getAssignment"):
                 listener.enterCmd_getAssignment(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_getAssignment" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_getAssignment"):
                 listener.exitCmd_getAssignment(self)
-
-
-
 
     def cmd_getAssignment(self):
 
@@ -5931,11 +7215,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_getInfoContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5945,16 +7230,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_getInfo
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_getInfo" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_getInfo"):
                 listener.enterCmd_getInfo(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_getInfo" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_getInfo"):
                 listener.exitCmd_getInfo(self)
-
-
-
 
     def cmd_getInfo(self):
 
@@ -5972,11 +7254,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_getModelContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -5986,16 +7269,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_getModel
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_getModel" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_getModel"):
                 listener.enterCmd_getModel(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_getModel" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_getModel"):
                 listener.exitCmd_getModel(self)
-
-
-
 
     def cmd_getModel(self):
 
@@ -6013,11 +7293,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_blockModelContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6027,16 +7308,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_blockModel
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_blockModel" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_blockModel"):
                 listener.enterCmd_blockModel(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_blockModel" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_blockModel"):
                 listener.exitCmd_blockModel(self)
-
-
-
 
     def cmd_blockModel(self):
 
@@ -6054,11 +7332,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_getOptionContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6068,16 +7347,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_getOption
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_getOption" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_getOption"):
                 listener.enterCmd_getOption(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_getOption" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_getOption"):
                 listener.exitCmd_getOption(self)
-
-
-
 
     def cmd_getOption(self):
 
@@ -6095,11 +7371,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_getProofContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6109,16 +7386,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_getProof
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_getProof" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_getProof"):
                 listener.enterCmd_getProof(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_getProof" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_getProof"):
                 listener.exitCmd_getProof(self)
-
-
-
 
     def cmd_getProof(self):
 
@@ -6136,11 +7410,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_getUnsatAssumptionsContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6150,20 +7425,19 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_getUnsatAssumptions
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_getUnsatAssumptions" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_getUnsatAssumptions"):
                 listener.enterCmd_getUnsatAssumptions(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_getUnsatAssumptions" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_getUnsatAssumptions"):
                 listener.exitCmd_getUnsatAssumptions(self)
-
-
-
 
     def cmd_getUnsatAssumptions(self):
 
-        localctx = SMTLIBv2Parser.Cmd_getUnsatAssumptionsContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Cmd_getUnsatAssumptionsContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 154, self.RULE_cmd_getUnsatAssumptions)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -6177,11 +7451,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_labelsContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6191,16 +7466,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_labels
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_labels" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_labels"):
                 listener.enterCmd_labels(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_labels" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_labels"):
                 listener.exitCmd_labels(self)
-
-
-
 
     def cmd_labels(self):
 
@@ -6218,11 +7490,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_getUnsatCoreContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6232,16 +7505,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_getUnsatCore
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_getUnsatCore" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_getUnsatCore"):
                 listener.enterCmd_getUnsatCore(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_getUnsatCore" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_getUnsatCore"):
                 listener.exitCmd_getUnsatCore(self)
-
-
-
 
     def cmd_getUnsatCore(self):
 
@@ -6259,11 +7529,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_getValueContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6273,16 +7544,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_getValue
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_getValue" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_getValue"):
                 listener.enterCmd_getValue(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_getValue" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_getValue"):
                 listener.exitCmd_getValue(self)
-
-
-
 
     def cmd_getValue(self):
 
@@ -6300,11 +7568,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_popContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6314,16 +7583,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_pop
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_pop" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_pop"):
                 listener.enterCmd_pop(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_pop" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_pop"):
                 listener.exitCmd_pop(self)
-
-
-
 
     def cmd_pop(self):
 
@@ -6341,11 +7607,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_poly_factorContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6355,16 +7622,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_poly_factor
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_poly_factor" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_poly_factor"):
                 listener.enterCmd_poly_factor(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_poly_factor" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_poly_factor"):
                 listener.exitCmd_poly_factor(self)
-
-
-
 
     def cmd_poly_factor(self):
 
@@ -6382,11 +7646,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_pushContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6396,16 +7661,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_push
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_push" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_push"):
                 listener.enterCmd_push(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_push" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_push"):
                 listener.exitCmd_push(self)
-
-
-
 
     def cmd_push(self):
 
@@ -6423,11 +7685,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_resetContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6437,16 +7700,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_reset
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_reset" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_reset"):
                 listener.enterCmd_reset(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_reset" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_reset"):
                 listener.exitCmd_reset(self)
-
-
-
 
     def cmd_reset(self):
 
@@ -6464,11 +7724,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_resetAssertionsContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6478,20 +7739,19 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_resetAssertions
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_resetAssertions" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_resetAssertions"):
                 listener.enterCmd_resetAssertions(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_resetAssertions" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_resetAssertions"):
                 listener.exitCmd_resetAssertions(self)
-
-
-
 
     def cmd_resetAssertions(self):
 
-        localctx = SMTLIBv2Parser.Cmd_resetAssertionsContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Cmd_resetAssertionsContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 170, self.RULE_cmd_resetAssertions)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -6505,11 +7765,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_setInfoContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6519,16 +7780,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_setInfo
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_setInfo" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_setInfo"):
                 listener.enterCmd_setInfo(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_setInfo" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_setInfo"):
                 listener.exitCmd_setInfo(self)
-
-
-
 
     def cmd_setInfo(self):
 
@@ -6546,11 +7804,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_setLogicContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6560,16 +7819,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_setLogic
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_setLogic" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_setLogic"):
                 listener.enterCmd_setLogic(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_setLogic" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_setLogic"):
                 listener.exitCmd_setLogic(self)
-
-
-
 
     def cmd_setLogic(self):
 
@@ -6587,11 +7843,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Cmd_setOptionContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6601,16 +7858,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_cmd_setOption
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCmd_setOption" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCmd_setOption"):
                 listener.enterCmd_setOption(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCmd_setOption" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCmd_setOption"):
                 listener.exitCmd_setOption(self)
-
-
-
 
     def cmd_setOption(self):
 
@@ -6628,11 +7882,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Tac_thenContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6642,16 +7897,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_tac_then
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterTac_then" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterTac_then"):
                 listener.enterTac_then(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitTac_then" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitTac_then"):
                 listener.exitTac_then(self)
-
-
-
 
     def tac_then(self):
 
@@ -6669,11 +7921,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Tac_and_thenContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6683,16 +7936,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_tac_and_then
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterTac_and_then" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterTac_and_then"):
                 listener.enterTac_and_then(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitTac_and_then" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitTac_and_then"):
                 listener.exitTac_and_then(self)
-
-
-
 
     def tac_and_then(self):
 
@@ -6710,11 +7960,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Par_thenContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6724,16 +7975,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_par_then
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterPar_then" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterPar_then"):
                 listener.enterPar_then(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitPar_then" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitPar_then"):
                 listener.exitPar_then(self)
-
-
-
 
     def par_then(self):
 
@@ -6751,11 +7999,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Or_elseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6765,16 +8014,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_or_else
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterOr_else" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterOr_else"):
                 listener.enterOr_else(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitOr_else" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitOr_else"):
                 listener.exitOr_else(self)
-
-
-
 
     def or_else(self):
 
@@ -6792,11 +8038,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Par_or_elseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6806,16 +8053,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_par_or_else
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterPar_or_else" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterPar_or_else"):
                 listener.enterPar_or_else(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitPar_or_else" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitPar_or_else"):
                 listener.exitPar_or_else(self)
-
-
-
 
     def par_or_else(self):
 
@@ -6833,11 +8077,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Par_orContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6847,16 +8092,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_par_or
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterPar_or" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterPar_or"):
                 listener.enterPar_or(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitPar_or" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitPar_or"):
                 listener.exitPar_or(self)
-
-
-
 
     def par_or(self):
 
@@ -6874,11 +8116,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class TryForContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6888,16 +8131,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_tryFor
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterTryFor" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterTryFor"):
                 listener.enterTryFor(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitTryFor" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitTryFor"):
                 listener.exitTryFor(self)
-
-
-
 
     def tryFor(self):
 
@@ -6915,11 +8155,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class UsingParamsContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -6929,16 +8170,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_usingParams
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterUsingParams" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterUsingParams"):
                 listener.enterUsingParams(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitUsingParams" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitUsingParams"):
                 listener.exitUsingParams(self)
-
-
-
 
     def usingParams(self):
 
@@ -6956,17 +8194,17 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class TacticalContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def identifier(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.IdentifierContext, 0)
 
         def Simplify(self):
             return self.getToken(SMTLIBv2Parser.Simplify, 0)
@@ -6977,97 +8215,80 @@ class SMTLIBv2Parser ( Parser ):
         def GRW_Exclamation(self):
             return self.getToken(SMTLIBv2Parser.GRW_Exclamation, 0)
 
-        def tactical(self, i:int=None):
+        def tactical(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.TacticalContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.TacticalContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.TacticalContext, i)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
         def attribute(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext, 0)
 
         def tac_then(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Tac_thenContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Tac_thenContext, 0)
 
         def tac_and_then(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Tac_and_thenContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Tac_and_thenContext, 0)
 
         def par_then(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Par_thenContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Par_thenContext, 0)
 
         def or_else(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Or_elseContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Or_elseContext, 0)
 
         def par_or_else(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Par_or_elseContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Par_or_elseContext, 0)
 
         def par_or(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Par_orContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Par_orContext, 0)
 
         def tryFor(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.TryForContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.TryForContext, 0)
 
         def decimal(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.DecimalContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.DecimalContext, 0)
 
         def usingParams(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.UsingParamsContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.UsingParamsContext, 0)
 
         def cmd_echo(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_echoContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_echoContext, 0)
 
-
-        def string(self, i:int=None):
+        def string(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.StringContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.StringContext,i)
+                return self.getTypedRuleContext(SMTLIBv2Parser.StringContext, i)
 
-
-        def symbol(self, i:int=None):
+        def symbol(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SymbolContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_tactical
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterTactical" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterTactical"):
                 listener.enterTactical(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitTactical" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitTactical"):
                 listener.exitTactical(self)
-
-
-
 
     def tactical(self):
 
         localctx = SMTLIBv2Parser.TacticalContext(self, self._ctx, self.state)
         self.enterRule(localctx, 194, self.RULE_tactical)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 918
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,61,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 61, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 826
@@ -7091,10 +8312,55 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 832
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if ((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0):
+                if (((_la - 96)) & ~0x3F) == 0 and (
+                    (1 << (_la - 96))
+                    & (
+                        (1 << (SMTLIBv2Parser.Colon - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                        | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                        | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                        | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_License - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                        | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                    )
+                ) != 0:
                     self.state = 831
                     self.attribute()
-
 
                 self.state = 834
                 self.match(SMTLIBv2Parser.ParClose)
@@ -7106,16 +8372,48 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 837
                 self.tac_then()
-                self.state = 839 
+                self.state = 839
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 838
                     self.tactical()
-                    self.state = 841 
+                    self.state = 841
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat) | (1 << SMTLIBv2Parser.Simplify))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                    | (1 << SMTLIBv2Parser.Simplify)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 843
@@ -7128,16 +8426,48 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 846
                 self.tac_and_then()
-                self.state = 848 
+                self.state = 848
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 847
                     self.tactical()
-                    self.state = 850 
+                    self.state = 850
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat) | (1 << SMTLIBv2Parser.Simplify))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                    | (1 << SMTLIBv2Parser.Simplify)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 852
@@ -7150,19 +8480,19 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 855
                 self.par_then()
-                self.state = 857 
+                self.state = 857
                 self._errHandler.sync(self)
                 _alt = 1
-                while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                while _alt != 2 and _alt != ATN.INVALID_ALT_NUMBER:
                     if _alt == 1:
                         self.state = 856
                         self.tactical()
 
                     else:
                         raise NoViableAltException(self)
-                    self.state = 859 
+                    self.state = 859
                     self._errHandler.sync(self)
-                    _alt = self._interp.adaptivePredict(self._input,54,self._ctx)
+                    _alt = self._interp.adaptivePredict(self._input, 54, self._ctx)
 
                 self.state = 861
                 self.tactical()
@@ -7176,19 +8506,19 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 865
                 self.or_else()
-                self.state = 867 
+                self.state = 867
                 self._errHandler.sync(self)
                 _alt = 1
-                while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                while _alt != 2 and _alt != ATN.INVALID_ALT_NUMBER:
                     if _alt == 1:
                         self.state = 866
                         self.tactical()
 
                     else:
                         raise NoViableAltException(self)
-                    self.state = 869 
+                    self.state = 869
                     self._errHandler.sync(self)
-                    _alt = self._interp.adaptivePredict(self._input,55,self._ctx)
+                    _alt = self._interp.adaptivePredict(self._input, 55, self._ctx)
 
                 self.state = 871
                 self.tactical()
@@ -7202,16 +8532,48 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 875
                 self.par_or_else()
-                self.state = 877 
+                self.state = 877
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 876
                     self.tactical()
-                    self.state = 879 
+                    self.state = 879
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat) | (1 << SMTLIBv2Parser.Simplify))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                    | (1 << SMTLIBv2Parser.Simplify)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 881
@@ -7224,16 +8586,48 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 884
                 self.par_or()
-                self.state = 886 
+                self.state = 886
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 885
                     self.tactical()
-                    self.state = 888 
+                    self.state = 888
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat) | (1 << SMTLIBv2Parser.Simplify))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                    | (1 << SMTLIBv2Parser.Simplify)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 890
@@ -7246,16 +8640,48 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 893
                 self.tryFor()
-                self.state = 895 
+                self.state = 895
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 894
                     self.tactical()
-                    self.state = 897 
+                    self.state = 897
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat) | (1 << SMTLIBv2Parser.Simplify))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                    | (1 << SMTLIBv2Parser.Simplify)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 899
@@ -7284,7 +8710,7 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 909
                 self.cmd_echo()
-                self.state = 912 
+                self.state = 912
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
@@ -7295,23 +8721,74 @@ class SMTLIBv2Parser ( Parser ):
                         self.state = 910
                         self.string()
                         pass
-                    elif token in [SMTLIBv2Parser.QuotedSymbol, SMTLIBv2Parser.PS_Not, SMTLIBv2Parser.PS_Bool, SMTLIBv2Parser.PS_Int, SMTLIBv2Parser.PS_Real, SMTLIBv2Parser.PS_ContinuedExecution, SMTLIBv2Parser.PS_Error, SMTLIBv2Parser.PS_False, SMTLIBv2Parser.PS_ImmediateExit, SMTLIBv2Parser.PS_Incomplete, SMTLIBv2Parser.PS_Logic, SMTLIBv2Parser.PS_Memout, SMTLIBv2Parser.PS_Sat, SMTLIBv2Parser.PS_Success, SMTLIBv2Parser.PS_Theory, SMTLIBv2Parser.PS_True, SMTLIBv2Parser.PS_Unknown, SMTLIBv2Parser.PS_Unsupported, SMTLIBv2Parser.PS_Unsat, SMTLIBv2Parser.UndefinedSymbol]:
+                    elif token in [
+                        SMTLIBv2Parser.QuotedSymbol,
+                        SMTLIBv2Parser.PS_Not,
+                        SMTLIBv2Parser.PS_Bool,
+                        SMTLIBv2Parser.PS_Int,
+                        SMTLIBv2Parser.PS_Real,
+                        SMTLIBv2Parser.PS_ContinuedExecution,
+                        SMTLIBv2Parser.PS_Error,
+                        SMTLIBv2Parser.PS_False,
+                        SMTLIBv2Parser.PS_ImmediateExit,
+                        SMTLIBv2Parser.PS_Incomplete,
+                        SMTLIBv2Parser.PS_Logic,
+                        SMTLIBv2Parser.PS_Memout,
+                        SMTLIBv2Parser.PS_Sat,
+                        SMTLIBv2Parser.PS_Success,
+                        SMTLIBv2Parser.PS_Theory,
+                        SMTLIBv2Parser.PS_True,
+                        SMTLIBv2Parser.PS_Unknown,
+                        SMTLIBv2Parser.PS_Unsupported,
+                        SMTLIBv2Parser.PS_Unsat,
+                        SMTLIBv2Parser.UndefinedSymbol,
+                    ]:
                         self.state = 911
                         self.symbol()
                         pass
                     else:
                         raise NoViableAltException(self)
 
-                    self.state = 914 
+                    self.state = 914
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.String)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 916
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
-
 
         except RecognitionException as re:
             localctx.exception = re
@@ -7321,309 +8798,262 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class CommandContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def ParOpen(self, i:int=None):
+        def ParOpen(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParOpen)
             else:
                 return self.getToken(SMTLIBv2Parser.ParOpen, i)
 
         def cmd_assert(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_assertContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_assertContext, 0)
 
-
-        def term(self, i:int=None):
+        def term(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.TermContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.TermContext,i)
+                return self.getTypedRuleContext(SMTLIBv2Parser.TermContext, i)
 
-
-        def ParClose(self, i:int=None):
+        def ParClose(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParClose)
             else:
                 return self.getToken(SMTLIBv2Parser.ParClose, i)
 
         def cmd_assertSoft(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_assertSoftContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_assertSoftContext, 0)
 
-
-        def attribute(self, i:int=None):
+        def attribute(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.AttributeContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext, i)
 
         def cmd_checkSat(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_checkSatContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_checkSatContext, 0)
 
         def cmd_checkSatAssuming(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_checkSatAssumingContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Cmd_checkSatAssumingContext, 0
+            )
 
         def cmd_minimize(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_minimizeContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_minimizeContext, 0)
 
         def cmd_maximize(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_maximizeContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_maximizeContext, 0)
 
         def cmd_simplify(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_simplifyContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_simplifyContext, 0)
 
         def cmd_declareConst(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_declareConstContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_declareConstContext, 0)
 
-
-        def symbol(self, i:int=None):
+        def symbol(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SymbolContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,i)
+                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, i)
 
-
-        def sort(self, i:int=None):
+        def sort(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SortContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SortContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.SortContext, i)
 
         def cmd_declareDatatype(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_declareDatatypeContext,0)
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Cmd_declareDatatypeContext, 0
+            )
 
-
-        def datatype_dec(self, i:int=None):
+        def datatype_dec(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Datatype_decContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Datatype_decContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Datatype_decContext, i)
 
         def cmd_declareCodatatype(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_declareCodatatypeContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Cmd_declareCodatatypeContext, 0
+            )
 
         def cmd_declareDatatypes(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_declareDatatypesContext,0)
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Cmd_declareDatatypesContext, 0
+            )
 
-
-        def sort_dec(self, i:int=None):
+        def sort_dec(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Sort_decContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Sort_decContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Sort_decContext, i)
 
         def cmd_declareCodatatypes(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_declareCodatatypesContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Cmd_declareCodatatypesContext, 0
+            )
 
         def cmd_declareFun(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_declareFunContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_declareFunContext, 0)
 
         def cmd_declareSort(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_declareSortContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_declareSortContext, 0)
 
         def numeral(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext, 0)
 
         def cmd_define(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineContext, 0)
 
         def cmd_defineFun(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineFunContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineFunContext, 0)
 
         def function_def(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Function_defContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Function_defContext, 0)
 
         def cmd_defineConst(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineConstContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineConstContext, 0)
 
         def cmd_defineFunRec(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineFunRecContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineFunRecContext, 0)
 
         def cmd_defineFunsRec(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineFunsRecContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineFunsRecContext, 0)
 
-
-        def function_dec(self, i:int=None):
+        def function_dec(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Function_decContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Function_decContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Function_decContext, i)
 
         def cmd_display(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_displayContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_displayContext, 0)
 
         def cmd_defineSort(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineSortContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_defineSortContext, 0)
 
         def cmd_echo(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_echoContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_echoContext, 0)
 
-
-        def string(self, i:int=None):
+        def string(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.StringContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.StringContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.StringContext, i)
 
         def cmd_eval(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_evalContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_evalContext, 0)
 
         def cmd_exit(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_exitContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_exitContext, 0)
 
         def cmd_GetObjectives(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_GetObjectivesContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_GetObjectivesContext, 0)
 
         def cmd_getAssertions(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getAssertionsContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getAssertionsContext, 0)
 
         def cmd_getAssignment(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getAssignmentContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getAssignmentContext, 0)
 
         def cmd_getInfo(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getInfoContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getInfoContext, 0)
 
         def info_flag(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Info_flagContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Info_flagContext, 0)
 
         def cmd_getModel(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getModelContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getModelContext, 0)
 
         def cmd_blockModel(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_blockModelContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_blockModelContext, 0)
 
         def cmd_getOption(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getOptionContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getOptionContext, 0)
 
         def keyword(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.KeywordContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.KeywordContext, 0)
 
         def cmd_getProof(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getProofContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getProofContext, 0)
 
         def cmd_getUnsatAssumptions(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getUnsatAssumptionsContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Cmd_getUnsatAssumptionsContext, 0
+            )
 
         def cmd_getUnsatCore(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getUnsatCoreContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getUnsatCoreContext, 0)
 
         def cmd_getValue(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getValueContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_getValueContext, 0)
 
         def cmd_poly_factor(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_poly_factorContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_poly_factorContext, 0)
 
         def cmd_pop(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_popContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_popContext, 0)
 
         def cmd_push(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_pushContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_pushContext, 0)
 
         def cmd_reset(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_resetContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_resetContext, 0)
 
         def cmd_resetAssertions(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_resetAssertionsContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Cmd_resetAssertionsContext, 0
+            )
 
         def cmd_setInfo(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_setInfoContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_setInfoContext, 0)
 
         def cmd_setLogic(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_setLogicContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_setLogicContext, 0)
 
         def cmd_setOption(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_setOptionContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_setOptionContext, 0)
 
         def option(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.OptionContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.OptionContext, 0)
 
         def cmd_checkSatUsing(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_checkSatUsingContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_checkSatUsingContext, 0)
 
         def tactical(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.TacticalContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.TacticalContext, 0)
 
         def cmd_labels(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_labelsContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Cmd_labelsContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_command
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCommand" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCommand"):
                 listener.enterCommand(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCommand" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCommand"):
                 listener.exitCommand(self)
-
-
-
 
     def command(self):
 
         localctx = SMTLIBv2Parser.CommandContext(self, self._ctx, self.state)
         self.enterRule(localctx, 196, self.RULE_command)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 1244
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,78,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 78, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 920
@@ -7647,7 +9077,53 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 931
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while ((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0):
+                while (((_la - 96)) & ~0x3F) == 0 and (
+                    (1 << (_la - 96))
+                    & (
+                        (1 << (SMTLIBv2Parser.Colon - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                        | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                        | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                        | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_License - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                        | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                    )
+                ) != 0:
                     self.state = 928
                     self.attribute()
                     self.state = 933
@@ -7667,7 +9143,50 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 941
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 92)) & ~0x3f) == 0 and ((1 << (_la - 92)) & ((1 << (SMTLIBv2Parser.Numeral - 92)) | (1 << (SMTLIBv2Parser.Binary - 92)) | (1 << (SMTLIBv2Parser.HexDecimal - 92)) | (1 << (SMTLIBv2Parser.Decimal - 92)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92)))) != 0):
+                while (
+                    ((_la) & ~0x3F) == 0
+                    and (
+                        (1 << _la)
+                        & (
+                            (1 << SMTLIBv2Parser.ParOpen)
+                            | (1 << SMTLIBv2Parser.String)
+                            | (1 << SMTLIBv2Parser.QuotedSymbol)
+                            | (1 << SMTLIBv2Parser.RegConst)
+                            | (1 << SMTLIBv2Parser.PS_Not)
+                            | (1 << SMTLIBv2Parser.PS_Bool)
+                            | (1 << SMTLIBv2Parser.PS_Int)
+                            | (1 << SMTLIBv2Parser.PS_Real)
+                            | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                            | (1 << SMTLIBv2Parser.PS_Error)
+                            | (1 << SMTLIBv2Parser.PS_False)
+                            | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                            | (1 << SMTLIBv2Parser.PS_Incomplete)
+                            | (1 << SMTLIBv2Parser.PS_Logic)
+                            | (1 << SMTLIBv2Parser.PS_Memout)
+                            | (1 << SMTLIBv2Parser.PS_Sat)
+                            | (1 << SMTLIBv2Parser.PS_Success)
+                            | (1 << SMTLIBv2Parser.PS_Theory)
+                            | (1 << SMTLIBv2Parser.PS_True)
+                            | (1 << SMTLIBv2Parser.PS_Unknown)
+                            | (1 << SMTLIBv2Parser.PS_Unsupported)
+                            | (1 << SMTLIBv2Parser.PS_Unsat)
+                        )
+                    )
+                    != 0
+                ) or (
+                    (((_la - 92)) & ~0x3F) == 0
+                    and (
+                        (1 << (_la - 92))
+                        & (
+                            (1 << (SMTLIBv2Parser.Numeral - 92))
+                            | (1 << (SMTLIBv2Parser.Binary - 92))
+                            | (1 << (SMTLIBv2Parser.HexDecimal - 92))
+                            | (1 << (SMTLIBv2Parser.Decimal - 92))
+                            | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92))
+                        )
+                    )
+                    != 0
+                ):
                     self.state = 938
                     self.term()
                     self.state = 943
@@ -7689,7 +9208,50 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 952
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 92)) & ~0x3f) == 0 and ((1 << (_la - 92)) & ((1 << (SMTLIBv2Parser.Numeral - 92)) | (1 << (SMTLIBv2Parser.Binary - 92)) | (1 << (SMTLIBv2Parser.HexDecimal - 92)) | (1 << (SMTLIBv2Parser.Decimal - 92)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92)))) != 0):
+                while (
+                    ((_la) & ~0x3F) == 0
+                    and (
+                        (1 << _la)
+                        & (
+                            (1 << SMTLIBv2Parser.ParOpen)
+                            | (1 << SMTLIBv2Parser.String)
+                            | (1 << SMTLIBv2Parser.QuotedSymbol)
+                            | (1 << SMTLIBv2Parser.RegConst)
+                            | (1 << SMTLIBv2Parser.PS_Not)
+                            | (1 << SMTLIBv2Parser.PS_Bool)
+                            | (1 << SMTLIBv2Parser.PS_Int)
+                            | (1 << SMTLIBv2Parser.PS_Real)
+                            | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                            | (1 << SMTLIBv2Parser.PS_Error)
+                            | (1 << SMTLIBv2Parser.PS_False)
+                            | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                            | (1 << SMTLIBv2Parser.PS_Incomplete)
+                            | (1 << SMTLIBv2Parser.PS_Logic)
+                            | (1 << SMTLIBv2Parser.PS_Memout)
+                            | (1 << SMTLIBv2Parser.PS_Sat)
+                            | (1 << SMTLIBv2Parser.PS_Success)
+                            | (1 << SMTLIBv2Parser.PS_Theory)
+                            | (1 << SMTLIBv2Parser.PS_True)
+                            | (1 << SMTLIBv2Parser.PS_Unknown)
+                            | (1 << SMTLIBv2Parser.PS_Unsupported)
+                            | (1 << SMTLIBv2Parser.PS_Unsat)
+                        )
+                    )
+                    != 0
+                ) or (
+                    (((_la - 92)) & ~0x3F) == 0
+                    and (
+                        (1 << (_la - 92))
+                        & (
+                            (1 << (SMTLIBv2Parser.Numeral - 92))
+                            | (1 << (SMTLIBv2Parser.Binary - 92))
+                            | (1 << (SMTLIBv2Parser.HexDecimal - 92))
+                            | (1 << (SMTLIBv2Parser.Decimal - 92))
+                            | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92))
+                        )
+                    )
+                    != 0
+                ):
                     self.state = 949
                     self.term()
                     self.state = 954
@@ -7737,7 +9299,53 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 974
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while ((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0):
+                while (((_la - 96)) & ~0x3F) == 0 and (
+                    (1 << (_la - 96))
+                    & (
+                        (1 << (SMTLIBv2Parser.Colon - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                        | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                        | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                        | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                        | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_License - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                        | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                        | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96))
+                        | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                        | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                        | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                    )
+                ) != 0:
                     self.state = 971
                     self.attribute()
                     self.state = 976
@@ -7798,32 +9406,32 @@ class SMTLIBv2Parser ( Parser ):
                 self.cmd_declareDatatypes()
                 self.state = 999
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1001 
+                self.state = 1001
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1000
                     self.sort_dec()
-                    self.state = 1003 
+                    self.state = 1003
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 1005
                 self.match(SMTLIBv2Parser.ParClose)
                 self.state = 1006
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1008 
+                self.state = 1008
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1007
                     self.datatype_dec()
-                    self.state = 1010 
+                    self.state = 1010
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 1012
@@ -7840,16 +9448,16 @@ class SMTLIBv2Parser ( Parser ):
                 self.cmd_declareCodatatypes()
                 self.state = 1017
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1019 
+                self.state = 1019
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1018
                     self.sort_dec()
-                    self.state = 1021 
+                    self.state = 1021
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 1023
@@ -7860,16 +9468,16 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 self.state = 1026
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1028 
+                self.state = 1028
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1027
                     self.datatype_dec()
-                    self.state = 1030 
+                    self.state = 1030
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 1032
@@ -7891,7 +9499,35 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 1042
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol:
+                while (
+                    ((_la) & ~0x3F) == 0
+                    and (
+                        (1 << _la)
+                        & (
+                            (1 << SMTLIBv2Parser.ParOpen)
+                            | (1 << SMTLIBv2Parser.QuotedSymbol)
+                            | (1 << SMTLIBv2Parser.PS_Not)
+                            | (1 << SMTLIBv2Parser.PS_Bool)
+                            | (1 << SMTLIBv2Parser.PS_Int)
+                            | (1 << SMTLIBv2Parser.PS_Real)
+                            | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                            | (1 << SMTLIBv2Parser.PS_Error)
+                            | (1 << SMTLIBv2Parser.PS_False)
+                            | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                            | (1 << SMTLIBv2Parser.PS_Incomplete)
+                            | (1 << SMTLIBv2Parser.PS_Logic)
+                            | (1 << SMTLIBv2Parser.PS_Memout)
+                            | (1 << SMTLIBv2Parser.PS_Sat)
+                            | (1 << SMTLIBv2Parser.PS_Success)
+                            | (1 << SMTLIBv2Parser.PS_Theory)
+                            | (1 << SMTLIBv2Parser.PS_True)
+                            | (1 << SMTLIBv2Parser.PS_Unknown)
+                            | (1 << SMTLIBv2Parser.PS_Unsupported)
+                            | (1 << SMTLIBv2Parser.PS_Unsat)
+                        )
+                    )
+                    != 0
+                ) or _la == SMTLIBv2Parser.UndefinedSymbol:
                     self.state = 1039
                     self.sort()
                     self.state = 1044
@@ -7917,10 +9553,9 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 1053
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la==SMTLIBv2Parser.Numeral:
+                if _la == SMTLIBv2Parser.Numeral:
                     self.state = 1052
                     self.numeral()
-
 
                 self.state = 1055
                 self.match(SMTLIBv2Parser.ParClose)
@@ -7988,32 +9623,78 @@ class SMTLIBv2Parser ( Parser ):
                 self.cmd_defineFunsRec()
                 self.state = 1082
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1084 
+                self.state = 1084
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1083
                     self.function_dec()
-                    self.state = 1086 
+                    self.state = 1086
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 1088
                 self.match(SMTLIBv2Parser.ParClose)
                 self.state = 1089
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1091 
+                self.state = 1091
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1090
                     self.term()
-                    self.state = 1093 
+                    self.state = 1093
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 92)) & ~0x3f) == 0 and ((1 << (_la - 92)) & ((1 << (SMTLIBv2Parser.Numeral - 92)) | (1 << (SMTLIBv2Parser.Binary - 92)) | (1 << (SMTLIBv2Parser.HexDecimal - 92)) | (1 << (SMTLIBv2Parser.Decimal - 92)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92)))) != 0)):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.String)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.RegConst)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or (
+                            (((_la - 92)) & ~0x3F) == 0
+                            and (
+                                (1 << (_la - 92))
+                                & (
+                                    (1 << (SMTLIBv2Parser.Numeral - 92))
+                                    | (1 << (SMTLIBv2Parser.Binary - 92))
+                                    | (1 << (SMTLIBv2Parser.HexDecimal - 92))
+                                    | (1 << (SMTLIBv2Parser.Decimal - 92))
+                                    | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92))
+                                )
+                            )
+                            != 0
+                        )
+                    ):
                         break
 
                 self.state = 1095
@@ -8047,7 +9728,34 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 1110
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol:
+                while (
+                    ((_la) & ~0x3F) == 0
+                    and (
+                        (1 << _la)
+                        & (
+                            (1 << SMTLIBv2Parser.QuotedSymbol)
+                            | (1 << SMTLIBv2Parser.PS_Not)
+                            | (1 << SMTLIBv2Parser.PS_Bool)
+                            | (1 << SMTLIBv2Parser.PS_Int)
+                            | (1 << SMTLIBv2Parser.PS_Real)
+                            | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                            | (1 << SMTLIBv2Parser.PS_Error)
+                            | (1 << SMTLIBv2Parser.PS_False)
+                            | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                            | (1 << SMTLIBv2Parser.PS_Incomplete)
+                            | (1 << SMTLIBv2Parser.PS_Logic)
+                            | (1 << SMTLIBv2Parser.PS_Memout)
+                            | (1 << SMTLIBv2Parser.PS_Sat)
+                            | (1 << SMTLIBv2Parser.PS_Success)
+                            | (1 << SMTLIBv2Parser.PS_Theory)
+                            | (1 << SMTLIBv2Parser.PS_True)
+                            | (1 << SMTLIBv2Parser.PS_Unknown)
+                            | (1 << SMTLIBv2Parser.PS_Unsupported)
+                            | (1 << SMTLIBv2Parser.PS_Unsat)
+                        )
+                    )
+                    != 0
+                ) or _la == SMTLIBv2Parser.UndefinedSymbol:
                     self.state = 1107
                     self.symbol()
                     self.state = 1112
@@ -8068,7 +9776,7 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParOpen)
                 self.state = 1118
                 self.cmd_echo()
-                self.state = 1121 
+                self.state = 1121
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
@@ -8079,17 +9787,69 @@ class SMTLIBv2Parser ( Parser ):
                         self.state = 1119
                         self.string()
                         pass
-                    elif token in [SMTLIBv2Parser.QuotedSymbol, SMTLIBv2Parser.PS_Not, SMTLIBv2Parser.PS_Bool, SMTLIBv2Parser.PS_Int, SMTLIBv2Parser.PS_Real, SMTLIBv2Parser.PS_ContinuedExecution, SMTLIBv2Parser.PS_Error, SMTLIBv2Parser.PS_False, SMTLIBv2Parser.PS_ImmediateExit, SMTLIBv2Parser.PS_Incomplete, SMTLIBv2Parser.PS_Logic, SMTLIBv2Parser.PS_Memout, SMTLIBv2Parser.PS_Sat, SMTLIBv2Parser.PS_Success, SMTLIBv2Parser.PS_Theory, SMTLIBv2Parser.PS_True, SMTLIBv2Parser.PS_Unknown, SMTLIBv2Parser.PS_Unsupported, SMTLIBv2Parser.PS_Unsat, SMTLIBv2Parser.UndefinedSymbol]:
+                    elif token in [
+                        SMTLIBv2Parser.QuotedSymbol,
+                        SMTLIBv2Parser.PS_Not,
+                        SMTLIBv2Parser.PS_Bool,
+                        SMTLIBv2Parser.PS_Int,
+                        SMTLIBv2Parser.PS_Real,
+                        SMTLIBv2Parser.PS_ContinuedExecution,
+                        SMTLIBv2Parser.PS_Error,
+                        SMTLIBv2Parser.PS_False,
+                        SMTLIBv2Parser.PS_ImmediateExit,
+                        SMTLIBv2Parser.PS_Incomplete,
+                        SMTLIBv2Parser.PS_Logic,
+                        SMTLIBv2Parser.PS_Memout,
+                        SMTLIBv2Parser.PS_Sat,
+                        SMTLIBv2Parser.PS_Success,
+                        SMTLIBv2Parser.PS_Theory,
+                        SMTLIBv2Parser.PS_True,
+                        SMTLIBv2Parser.PS_Unknown,
+                        SMTLIBv2Parser.PS_Unsupported,
+                        SMTLIBv2Parser.PS_Unsat,
+                        SMTLIBv2Parser.UndefinedSymbol,
+                    ]:
                         self.state = 1120
                         self.symbol()
                         pass
                     else:
                         raise NoViableAltException(self)
 
-                    self.state = 1123 
+                    self.state = 1123
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.String)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or _la == SMTLIBv2Parser.UndefinedSymbol
+                    ):
                         break
 
                 self.state = 1125
@@ -8230,16 +9990,62 @@ class SMTLIBv2Parser ( Parser ):
                 self.cmd_getValue()
                 self.state = 1180
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1182 
+                self.state = 1182
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1181
                     self.term()
-                    self.state = 1184 
+                    self.state = 1184
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 92)) & ~0x3f) == 0 and ((1 << (_la - 92)) & ((1 << (SMTLIBv2Parser.Numeral - 92)) | (1 << (SMTLIBv2Parser.Binary - 92)) | (1 << (SMTLIBv2Parser.HexDecimal - 92)) | (1 << (SMTLIBv2Parser.Decimal - 92)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92)))) != 0)):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.String)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.RegConst)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or (
+                            (((_la - 92)) & ~0x3F) == 0
+                            and (
+                                (1 << (_la - 92))
+                                & (
+                                    (1 << (SMTLIBv2Parser.Numeral - 92))
+                                    | (1 << (SMTLIBv2Parser.Binary - 92))
+                                    | (1 << (SMTLIBv2Parser.HexDecimal - 92))
+                                    | (1 << (SMTLIBv2Parser.Decimal - 92))
+                                    | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92))
+                                )
+                            )
+                            != 0
+                        )
+                    ):
                         break
 
                 self.state = 1186
@@ -8382,7 +10188,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -8391,11 +10196,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class B_valueContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -8408,27 +10214,24 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_b_value
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterB_value" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterB_value"):
                 listener.enterB_value(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitB_value" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitB_value"):
                 listener.exitB_value(self)
-
-
-
 
     def b_value(self):
 
         localctx = SMTLIBv2Parser.B_valueContext(self, self._ctx, self.state)
         self.enterRule(localctx, 198, self.RULE_b_value)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1246
             _la = self._input.LA(1)
-            if not(_la==SMTLIBv2Parser.PS_False or _la==SMTLIBv2Parser.PS_True):
+            if not (_la == SMTLIBv2Parser.PS_False or _la == SMTLIBv2Parser.PS_True):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -8441,11 +10244,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class OptionContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -8453,15 +10257,13 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PK_DiagnosticOutputChannel, 0)
 
         def string(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext, 0)
 
         def PK_GlobalDeclarations(self):
             return self.getToken(SMTLIBv2Parser.PK_GlobalDeclarations, 0)
 
         def b_value(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.B_valueContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.B_valueContext, 0)
 
         def PK_InteractiveMode(self):
             return self.getToken(SMTLIBv2Parser.PK_InteractiveMode, 0)
@@ -8491,8 +10293,7 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PK_RandomSeed, 0)
 
         def numeral(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext, 0)
 
         def PK_RegularOutputChannel(self):
             return self.getToken(SMTLIBv2Parser.PK_RegularOutputChannel, 0)
@@ -8504,22 +10305,18 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PK_Verbosity, 0)
 
         def attribute(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_option
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterOption" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterOption"):
                 listener.enterOption(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitOption" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitOption"):
                 listener.exitOption(self)
-
-
-
 
     def option(self):
 
@@ -8528,7 +10325,7 @@ class SMTLIBv2Parser ( Parser ):
         try:
             self.state = 1277
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,79,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 79, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 1248
@@ -8647,7 +10444,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.attribute()
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -8656,11 +10452,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Info_flagContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -8686,22 +10483,18 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PK_Version, 0)
 
         def keyword(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.KeywordContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.KeywordContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_info_flag
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterInfo_flag" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterInfo_flag"):
                 listener.enterInfo_flag(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitInfo_flag" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitInfo_flag"):
                 listener.exitInfo_flag(self)
-
-
-
 
     def info_flag(self):
 
@@ -8710,7 +10503,7 @@ class SMTLIBv2Parser ( Parser ):
         try:
             self.state = 1287
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,80,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 80, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 1279
@@ -8759,7 +10552,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.keyword()
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -8768,11 +10560,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Error_behaviourContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -8785,27 +10578,27 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_error_behaviour
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterError_behaviour" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterError_behaviour"):
                 listener.enterError_behaviour(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitError_behaviour" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitError_behaviour"):
                 listener.exitError_behaviour(self)
-
-
-
 
     def error_behaviour(self):
 
         localctx = SMTLIBv2Parser.Error_behaviourContext(self, self._ctx, self.state)
         self.enterRule(localctx, 204, self.RULE_error_behaviour)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1289
             _la = self._input.LA(1)
-            if not(_la==SMTLIBv2Parser.PS_ContinuedExecution or _la==SMTLIBv2Parser.PS_ImmediateExit):
+            if not (
+                _la == SMTLIBv2Parser.PS_ContinuedExecution
+                or _la == SMTLIBv2Parser.PS_ImmediateExit
+            ):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -8818,11 +10611,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Reason_unknownContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -8833,22 +10627,18 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PS_Incomplete, 0)
 
         def s_expr(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.S_exprContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.S_exprContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_reason_unknown
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterReason_unknown" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterReason_unknown"):
                 listener.enterReason_unknown(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitReason_unknown" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitReason_unknown"):
                 listener.exitReason_unknown(self)
-
-
-
 
     def reason_unknown(self):
 
@@ -8857,7 +10647,7 @@ class SMTLIBv2Parser ( Parser ):
         try:
             self.state = 1294
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,81,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 81, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 1291
@@ -8876,7 +10666,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.s_expr()
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -8885,15 +10674,16 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Model_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def ParOpen(self, i:int=None):
+        def ParOpen(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParOpen)
             else:
@@ -8903,10 +10693,9 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.CMD_DefineFun, 0)
 
         def function_def(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Function_defContext,0)
+            return self.getTypedRuleContext(SMTLIBv2Parser.Function_defContext, 0)
 
-
-        def ParClose(self, i:int=None):
+        def ParClose(self, i: int = None):
             if i is None:
                 return self.getTokens(SMTLIBv2Parser.ParClose)
             else:
@@ -8918,43 +10707,38 @@ class SMTLIBv2Parser ( Parser ):
         def CMD_DefineFunsRec(self):
             return self.getToken(SMTLIBv2Parser.CMD_DefineFunsRec, 0)
 
-        def function_dec(self, i:int=None):
+        def function_dec(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Function_decContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Function_decContext,i)
+                return self.getTypedRuleContext(SMTLIBv2Parser.Function_decContext, i)
 
-
-        def term(self, i:int=None):
+        def term(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.TermContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.TermContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.TermContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_model_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterModel_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterModel_response"):
                 listener.enterModel_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitModel_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitModel_response"):
                 listener.exitModel_response(self)
-
-
-
 
     def model_response(self):
 
         localctx = SMTLIBv2Parser.Model_responseContext(self, self._ctx, self.state)
         self.enterRule(localctx, 208, self.RULE_model_response)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.state = 1324
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,84,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 84, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 1296
@@ -8987,32 +10771,78 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.CMD_DefineFunsRec)
                 self.state = 1308
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1310 
+                self.state = 1310
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1309
                     self.function_dec()
-                    self.state = 1312 
+                    self.state = 1312
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==SMTLIBv2Parser.ParOpen):
+                    if not (_la == SMTLIBv2Parser.ParOpen):
                         break
 
                 self.state = 1314
                 self.match(SMTLIBv2Parser.ParClose)
                 self.state = 1315
                 self.match(SMTLIBv2Parser.ParOpen)
-                self.state = 1317 
+                self.state = 1317
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
                     self.state = 1316
                     self.term()
-                    self.state = 1319 
+                    self.state = 1319
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 92)) & ~0x3f) == 0 and ((1 << (_la - 92)) & ((1 << (SMTLIBv2Parser.Numeral - 92)) | (1 << (SMTLIBv2Parser.Binary - 92)) | (1 << (SMTLIBv2Parser.HexDecimal - 92)) | (1 << (SMTLIBv2Parser.Decimal - 92)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92)))) != 0)):
+                    if not (
+                        (
+                            ((_la) & ~0x3F) == 0
+                            and (
+                                (1 << _la)
+                                & (
+                                    (1 << SMTLIBv2Parser.ParOpen)
+                                    | (1 << SMTLIBv2Parser.String)
+                                    | (1 << SMTLIBv2Parser.QuotedSymbol)
+                                    | (1 << SMTLIBv2Parser.RegConst)
+                                    | (1 << SMTLIBv2Parser.PS_Not)
+                                    | (1 << SMTLIBv2Parser.PS_Bool)
+                                    | (1 << SMTLIBv2Parser.PS_Int)
+                                    | (1 << SMTLIBv2Parser.PS_Real)
+                                    | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                                    | (1 << SMTLIBv2Parser.PS_Error)
+                                    | (1 << SMTLIBv2Parser.PS_False)
+                                    | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                                    | (1 << SMTLIBv2Parser.PS_Incomplete)
+                                    | (1 << SMTLIBv2Parser.PS_Logic)
+                                    | (1 << SMTLIBv2Parser.PS_Memout)
+                                    | (1 << SMTLIBv2Parser.PS_Sat)
+                                    | (1 << SMTLIBv2Parser.PS_Success)
+                                    | (1 << SMTLIBv2Parser.PS_Theory)
+                                    | (1 << SMTLIBv2Parser.PS_True)
+                                    | (1 << SMTLIBv2Parser.PS_Unknown)
+                                    | (1 << SMTLIBv2Parser.PS_Unsupported)
+                                    | (1 << SMTLIBv2Parser.PS_Unsat)
+                                )
+                            )
+                            != 0
+                        )
+                        or (
+                            (((_la - 92)) & ~0x3F) == 0
+                            and (
+                                (1 << (_la - 92))
+                                & (
+                                    (1 << (SMTLIBv2Parser.Numeral - 92))
+                                    | (1 << (SMTLIBv2Parser.Binary - 92))
+                                    | (1 << (SMTLIBv2Parser.HexDecimal - 92))
+                                    | (1 << (SMTLIBv2Parser.Decimal - 92))
+                                    | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92))
+                                )
+                            )
+                            != 0
+                        )
+                    ):
                         break
 
                 self.state = 1321
@@ -9020,7 +10850,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.state = 1322
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
-
 
         except RecognitionException as re:
             localctx.exception = re
@@ -9030,11 +10859,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Info_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -9042,22 +10872,19 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PK_AssertionStackLevels, 0)
 
         def numeral(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.NumeralContext, 0)
 
         def PK_Authors(self):
             return self.getToken(SMTLIBv2Parser.PK_Authors, 0)
 
         def string(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext, 0)
 
         def PK_ErrorBehaviour(self):
             return self.getToken(SMTLIBv2Parser.PK_ErrorBehaviour, 0)
 
         def error_behaviour(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Error_behaviourContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Error_behaviourContext, 0)
 
         def PK_Name(self):
             return self.getToken(SMTLIBv2Parser.PK_Name, 0)
@@ -9066,29 +10893,24 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PK_ReasonUnknown, 0)
 
         def reason_unknown(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Reason_unknownContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Reason_unknownContext, 0)
 
         def PK_Version(self):
             return self.getToken(SMTLIBv2Parser.PK_Version, 0)
 
         def attribute(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.AttributeContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_info_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterInfo_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterInfo_response"):
                 listener.enterInfo_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitInfo_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitInfo_response"):
                 listener.exitInfo_response(self)
-
-
-
 
     def info_response(self):
 
@@ -9097,7 +10919,7 @@ class SMTLIBv2Parser ( Parser ):
         try:
             self.state = 1339
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,85,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 85, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 1326
@@ -9152,7 +10974,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.attribute()
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -9161,23 +10982,23 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Valuation_pairContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def ParOpen(self):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
 
-        def term(self, i:int=None):
+        def term(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.TermContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.TermContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.TermContext, i)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
@@ -9185,16 +11006,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_valuation_pair
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterValuation_pair" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterValuation_pair"):
                 listener.enterValuation_pair(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitValuation_pair" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitValuation_pair"):
                 listener.exitValuation_pair(self)
-
-
-
 
     def valuation_pair(self):
 
@@ -9218,11 +11036,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class T_valuation_pairContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -9230,12 +11049,10 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.ParOpen, 0)
 
         def symbol(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, 0)
 
         def b_value(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.B_valueContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.B_valueContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
@@ -9243,16 +11060,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_t_valuation_pair
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterT_valuation_pair" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterT_valuation_pair"):
                 listener.enterT_valuation_pair(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitT_valuation_pair" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitT_valuation_pair"):
                 listener.exitT_valuation_pair(self)
-
-
-
 
     def t_valuation_pair(self):
 
@@ -9276,11 +11090,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Check_sat_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -9296,27 +11111,37 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_check_sat_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCheck_sat_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterCheck_sat_response"):
                 listener.enterCheck_sat_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCheck_sat_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitCheck_sat_response"):
                 listener.exitCheck_sat_response(self)
-
-
-
 
     def check_sat_response(self):
 
         localctx = SMTLIBv2Parser.Check_sat_responseContext(self, self._ctx, self.state)
         self.enterRule(localctx, 216, self.RULE_check_sat_response)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1351
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0)):
+            if not (
+                (
+                    ((_la) & ~0x3F) == 0
+                    and (
+                        (1 << _la)
+                        & (
+                            (1 << SMTLIBv2Parser.PS_Sat)
+                            | (1 << SMTLIBv2Parser.PS_Unknown)
+                            | (1 << SMTLIBv2Parser.PS_Unsat)
+                        )
+                    )
+                    != 0
+                )
+            ):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -9329,31 +11154,28 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Echo_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def string(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_echo_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterEcho_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterEcho_response"):
                 listener.enterEcho_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitEcho_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitEcho_response"):
                 listener.exitEcho_response(self)
-
-
-
 
     def echo_response(self):
 
@@ -9371,11 +11193,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Get_assertions_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -9385,32 +11208,30 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def term(self, i:int=None):
+        def term(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.TermContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.TermContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.TermContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_get_assertions_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGet_assertions_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGet_assertions_response"):
                 listener.enterGet_assertions_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGet_assertions_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGet_assertions_response"):
                 listener.exitGet_assertions_response(self)
-
-
-
 
     def get_assertions_response(self):
 
-        localctx = SMTLIBv2Parser.Get_assertions_responseContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Get_assertions_responseContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 220, self.RULE_get_assertions_response)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1355
@@ -9418,7 +11239,50 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 1359
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.ParOpen) | (1 << SMTLIBv2Parser.String) | (1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.RegConst) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or ((((_la - 92)) & ~0x3f) == 0 and ((1 << (_la - 92)) & ((1 << (SMTLIBv2Parser.Numeral - 92)) | (1 << (SMTLIBv2Parser.Binary - 92)) | (1 << (SMTLIBv2Parser.HexDecimal - 92)) | (1 << (SMTLIBv2Parser.Decimal - 92)) | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92)))) != 0):
+            while (
+                ((_la) & ~0x3F) == 0
+                and (
+                    (1 << _la)
+                    & (
+                        (1 << SMTLIBv2Parser.ParOpen)
+                        | (1 << SMTLIBv2Parser.String)
+                        | (1 << SMTLIBv2Parser.QuotedSymbol)
+                        | (1 << SMTLIBv2Parser.RegConst)
+                        | (1 << SMTLIBv2Parser.PS_Not)
+                        | (1 << SMTLIBv2Parser.PS_Bool)
+                        | (1 << SMTLIBv2Parser.PS_Int)
+                        | (1 << SMTLIBv2Parser.PS_Real)
+                        | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                        | (1 << SMTLIBv2Parser.PS_Error)
+                        | (1 << SMTLIBv2Parser.PS_False)
+                        | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                        | (1 << SMTLIBv2Parser.PS_Incomplete)
+                        | (1 << SMTLIBv2Parser.PS_Logic)
+                        | (1 << SMTLIBv2Parser.PS_Memout)
+                        | (1 << SMTLIBv2Parser.PS_Sat)
+                        | (1 << SMTLIBv2Parser.PS_Success)
+                        | (1 << SMTLIBv2Parser.PS_Theory)
+                        | (1 << SMTLIBv2Parser.PS_True)
+                        | (1 << SMTLIBv2Parser.PS_Unknown)
+                        | (1 << SMTLIBv2Parser.PS_Unsupported)
+                        | (1 << SMTLIBv2Parser.PS_Unsat)
+                    )
+                )
+                != 0
+            ) or (
+                (((_la - 92)) & ~0x3F) == 0
+                and (
+                    (1 << (_la - 92))
+                    & (
+                        (1 << (SMTLIBv2Parser.Numeral - 92))
+                        | (1 << (SMTLIBv2Parser.Binary - 92))
+                        | (1 << (SMTLIBv2Parser.HexDecimal - 92))
+                        | (1 << (SMTLIBv2Parser.Decimal - 92))
+                        | (1 << (SMTLIBv2Parser.UndefinedSymbol - 92))
+                    )
+                )
+                != 0
+            ):
                 self.state = 1356
                 self.term()
                 self.state = 1361
@@ -9435,11 +11299,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Get_assignment_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -9449,32 +11314,32 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def t_valuation_pair(self, i:int=None):
+        def t_valuation_pair(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.T_valuation_pairContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.T_valuation_pairContext,i)
-
+                return self.getTypedRuleContext(
+                    SMTLIBv2Parser.T_valuation_pairContext, i
+                )
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_get_assignment_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGet_assignment_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGet_assignment_response"):
                 listener.enterGet_assignment_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGet_assignment_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGet_assignment_response"):
                 listener.exitGet_assignment_response(self)
-
-
-
 
     def get_assignment_response(self):
 
-        localctx = SMTLIBv2Parser.Get_assignment_responseContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Get_assignment_responseContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 222, self.RULE_get_assignment_response)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1364
@@ -9482,7 +11347,7 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 1368
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==SMTLIBv2Parser.ParOpen:
+            while _la == SMTLIBv2Parser.ParOpen:
                 self.state = 1365
                 self.t_valuation_pair()
                 self.state = 1370
@@ -9499,11 +11364,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Get_info_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -9513,46 +11379,105 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def info_response(self, i:int=None):
+        def info_response(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Info_responseContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Info_responseContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Info_responseContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_get_info_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGet_info_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGet_info_response"):
                 listener.enterGet_info_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGet_info_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGet_info_response"):
                 listener.exitGet_info_response(self)
-
-
-
 
     def get_info_response(self):
 
         localctx = SMTLIBv2Parser.Get_info_responseContext(self, self._ctx, self.state)
         self.enterRule(localctx, 224, self.RULE_get_info_response)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1373
             self.match(SMTLIBv2Parser.ParOpen)
-            self.state = 1375 
+            self.state = 1375
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
                 self.state = 1374
                 self.info_response()
-                self.state = 1377 
+                self.state = 1377
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (((((_la - 96)) & ~0x3f) == 0 and ((1 << (_la - 96)) & ((1 << (SMTLIBv2Parser.Colon - 96)) | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96)) | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96)) | (1 << (SMTLIBv2Parser.PK_Authors - 96)) | (1 << (SMTLIBv2Parser.PK_Category - 96)) | (1 << (SMTLIBv2Parser.PK_Chainable - 96)) | (1 << (SMTLIBv2Parser.PK_Definition - 96)) | (1 << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96)) | (1 << (SMTLIBv2Parser.PK_Extension - 96)) | (1 << (SMTLIBv2Parser.PK_Funs - 96)) | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96)) | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96)) | (1 << (SMTLIBv2Parser.PK_Language - 96)) | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_License - 96)) | (1 << (SMTLIBv2Parser.PK_Named - 96)) | (1 << (SMTLIBv2Parser.PK_Name - 96)) | (1 << (SMTLIBv2Parser.PK_Notes - 96)) | (1 << (SMTLIBv2Parser.PK_Pattern - 96)) | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)) | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96)) | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96)) | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96)) | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96)) | (1 << (SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96)) | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96)) | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96)) | (1 << (SMTLIBv2Parser.PK_Sorts - 96)) | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96)) | (1 << (SMTLIBv2Parser.PK_Source - 96)) | (1 << (SMTLIBv2Parser.PK_Status - 96)) | (1 << (SMTLIBv2Parser.PK_Theories - 96)) | (1 << (SMTLIBv2Parser.PK_Values - 96)) | (1 << (SMTLIBv2Parser.PK_Verbosity - 96)) | (1 << (SMTLIBv2Parser.PK_Version - 96)))) != 0)):
+                if not (
+                    (
+                        (((_la - 96)) & ~0x3F) == 0
+                        and (
+                            (1 << (_la - 96))
+                            & (
+                                (1 << (SMTLIBv2Parser.Colon - 96))
+                                | (1 << (SMTLIBv2Parser.PK_AllStatistics - 96))
+                                | (1 << (SMTLIBv2Parser.PK_AssertionStackLevels - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Authors - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Category - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Chainable - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Definition - 96))
+                                | (
+                                    1
+                                    << (SMTLIBv2Parser.PK_DiagnosticOutputChannel - 96)
+                                )
+                                | (1 << (SMTLIBv2Parser.PK_ErrorBehaviour - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Extension - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Funs - 96))
+                                | (1 << (SMTLIBv2Parser.PK_FunsDescription - 96))
+                                | (1 << (SMTLIBv2Parser.PK_GlobalDeclarations - 96))
+                                | (1 << (SMTLIBv2Parser.PK_InteractiveMode - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Language - 96))
+                                | (1 << (SMTLIBv2Parser.PK_LeftAssoc - 96))
+                                | (1 << (SMTLIBv2Parser.PK_License - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Named - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Name - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Notes - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Pattern - 96))
+                                | (1 << (SMTLIBv2Parser.PK_PrintSuccess - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceAssertions - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceAssignments - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceModels - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ProduceProofs - 96))
+                                | (
+                                    1
+                                    << (SMTLIBv2Parser.PK_ProduceUnsatAssumptions - 96)
+                                )
+                                | (1 << (SMTLIBv2Parser.PK_ProduceUnsatCores - 96))
+                                | (1 << (SMTLIBv2Parser.PK_RandomSeed - 96))
+                                | (1 << (SMTLIBv2Parser.PK_ReasonUnknown - 96))
+                                | (1 << (SMTLIBv2Parser.PK_RegularOutputChannel - 96))
+                                | (
+                                    1
+                                    << (
+                                        SMTLIBv2Parser.PK_ReproducibleResourceLimit - 96
+                                    )
+                                )
+                                | (1 << (SMTLIBv2Parser.PK_RightAssoc - 96))
+                                | (1 << (SMTLIBv2Parser.PK_SmtLibVersion - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Sorts - 96))
+                                | (1 << (SMTLIBv2Parser.PK_SortsDescription - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Source - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Status - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Theories - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Values - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Verbosity - 96))
+                                | (1 << (SMTLIBv2Parser.PK_Version - 96))
+                            )
+                        )
+                        != 0
+                    )
+                ):
                     break
 
             self.state = 1379
@@ -9565,11 +11490,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Get_model_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -9579,32 +11505,28 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def model_response(self, i:int=None):
+        def model_response(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Model_responseContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Model_responseContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Model_responseContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_get_model_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGet_model_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGet_model_response"):
                 listener.enterGet_model_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGet_model_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGet_model_response"):
                 listener.exitGet_model_response(self)
-
-
-
 
     def get_model_response(self):
 
         localctx = SMTLIBv2Parser.Get_model_responseContext(self, self._ctx, self.state)
         self.enterRule(localctx, 226, self.RULE_get_model_response)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1381
@@ -9612,7 +11534,7 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 1385
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==SMTLIBv2Parser.ParOpen:
+            while _la == SMTLIBv2Parser.ParOpen:
                 self.state = 1382
                 self.model_response()
                 self.state = 1387
@@ -9629,35 +11551,34 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Get_option_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def attribute_value(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Attribute_valueContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Attribute_valueContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_get_option_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGet_option_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGet_option_response"):
                 listener.enterGet_option_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGet_option_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGet_option_response"):
                 listener.exitGet_option_response(self)
-
-
-
 
     def get_option_response(self):
 
-        localctx = SMTLIBv2Parser.Get_option_responseContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Get_option_responseContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 228, self.RULE_get_option_response)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -9671,31 +11592,28 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Get_proof_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def s_expr(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.S_exprContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.S_exprContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_get_proof_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGet_proof_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGet_proof_response"):
                 listener.enterGet_proof_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGet_proof_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGet_proof_response"):
                 listener.exitGet_proof_response(self)
-
-
-
 
     def get_proof_response(self):
 
@@ -9713,11 +11631,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Get_unsat_assump_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -9727,32 +11646,30 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def symbol(self, i:int=None):
+        def symbol(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SymbolContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_get_unsat_assump_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGet_unsat_assump_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGet_unsat_assump_response"):
                 listener.enterGet_unsat_assump_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGet_unsat_assump_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGet_unsat_assump_response"):
                 listener.exitGet_unsat_assump_response(self)
-
-
-
 
     def get_unsat_assump_response(self):
 
-        localctx = SMTLIBv2Parser.Get_unsat_assump_responseContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Get_unsat_assump_responseContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 232, self.RULE_get_unsat_assump_response)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1394
@@ -9760,7 +11677,34 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 1398
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol:
+            while (
+                ((_la) & ~0x3F) == 0
+                and (
+                    (1 << _la)
+                    & (
+                        (1 << SMTLIBv2Parser.QuotedSymbol)
+                        | (1 << SMTLIBv2Parser.PS_Not)
+                        | (1 << SMTLIBv2Parser.PS_Bool)
+                        | (1 << SMTLIBv2Parser.PS_Int)
+                        | (1 << SMTLIBv2Parser.PS_Real)
+                        | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                        | (1 << SMTLIBv2Parser.PS_Error)
+                        | (1 << SMTLIBv2Parser.PS_False)
+                        | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                        | (1 << SMTLIBv2Parser.PS_Incomplete)
+                        | (1 << SMTLIBv2Parser.PS_Logic)
+                        | (1 << SMTLIBv2Parser.PS_Memout)
+                        | (1 << SMTLIBv2Parser.PS_Sat)
+                        | (1 << SMTLIBv2Parser.PS_Success)
+                        | (1 << SMTLIBv2Parser.PS_Theory)
+                        | (1 << SMTLIBv2Parser.PS_True)
+                        | (1 << SMTLIBv2Parser.PS_Unknown)
+                        | (1 << SMTLIBv2Parser.PS_Unsupported)
+                        | (1 << SMTLIBv2Parser.PS_Unsat)
+                    )
+                )
+                != 0
+            ) or _la == SMTLIBv2Parser.UndefinedSymbol:
                 self.state = 1395
                 self.symbol()
                 self.state = 1400
@@ -9777,11 +11721,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Get_unsat_core_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -9791,32 +11736,30 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def symbol(self, i:int=None):
+        def symbol(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.SymbolContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.SymbolContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_get_unsat_core_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGet_unsat_core_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGet_unsat_core_response"):
                 listener.enterGet_unsat_core_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGet_unsat_core_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGet_unsat_core_response"):
                 listener.exitGet_unsat_core_response(self)
-
-
-
 
     def get_unsat_core_response(self):
 
-        localctx = SMTLIBv2Parser.Get_unsat_core_responseContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Get_unsat_core_responseContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 234, self.RULE_get_unsat_core_response)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1403
@@ -9824,7 +11767,34 @@ class SMTLIBv2Parser ( Parser ):
             self.state = 1407
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SMTLIBv2Parser.QuotedSymbol) | (1 << SMTLIBv2Parser.PS_Not) | (1 << SMTLIBv2Parser.PS_Bool) | (1 << SMTLIBv2Parser.PS_Int) | (1 << SMTLIBv2Parser.PS_Real) | (1 << SMTLIBv2Parser.PS_ContinuedExecution) | (1 << SMTLIBv2Parser.PS_Error) | (1 << SMTLIBv2Parser.PS_False) | (1 << SMTLIBv2Parser.PS_ImmediateExit) | (1 << SMTLIBv2Parser.PS_Incomplete) | (1 << SMTLIBv2Parser.PS_Logic) | (1 << SMTLIBv2Parser.PS_Memout) | (1 << SMTLIBv2Parser.PS_Sat) | (1 << SMTLIBv2Parser.PS_Success) | (1 << SMTLIBv2Parser.PS_Theory) | (1 << SMTLIBv2Parser.PS_True) | (1 << SMTLIBv2Parser.PS_Unknown) | (1 << SMTLIBv2Parser.PS_Unsupported) | (1 << SMTLIBv2Parser.PS_Unsat))) != 0) or _la==SMTLIBv2Parser.UndefinedSymbol:
+            while (
+                ((_la) & ~0x3F) == 0
+                and (
+                    (1 << _la)
+                    & (
+                        (1 << SMTLIBv2Parser.QuotedSymbol)
+                        | (1 << SMTLIBv2Parser.PS_Not)
+                        | (1 << SMTLIBv2Parser.PS_Bool)
+                        | (1 << SMTLIBv2Parser.PS_Int)
+                        | (1 << SMTLIBv2Parser.PS_Real)
+                        | (1 << SMTLIBv2Parser.PS_ContinuedExecution)
+                        | (1 << SMTLIBv2Parser.PS_Error)
+                        | (1 << SMTLIBv2Parser.PS_False)
+                        | (1 << SMTLIBv2Parser.PS_ImmediateExit)
+                        | (1 << SMTLIBv2Parser.PS_Incomplete)
+                        | (1 << SMTLIBv2Parser.PS_Logic)
+                        | (1 << SMTLIBv2Parser.PS_Memout)
+                        | (1 << SMTLIBv2Parser.PS_Sat)
+                        | (1 << SMTLIBv2Parser.PS_Success)
+                        | (1 << SMTLIBv2Parser.PS_Theory)
+                        | (1 << SMTLIBv2Parser.PS_True)
+                        | (1 << SMTLIBv2Parser.PS_Unknown)
+                        | (1 << SMTLIBv2Parser.PS_Unsupported)
+                        | (1 << SMTLIBv2Parser.PS_Unsat)
+                    )
+                )
+                != 0
+            ) or _la == SMTLIBv2Parser.UndefinedSymbol:
                 self.state = 1404
                 self.symbol()
                 self.state = 1409
@@ -9841,11 +11811,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Get_value_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -9855,46 +11826,42 @@ class SMTLIBv2Parser ( Parser ):
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
 
-        def valuation_pair(self, i:int=None):
+        def valuation_pair(self, i: int = None):
             if i is None:
                 return self.getTypedRuleContexts(SMTLIBv2Parser.Valuation_pairContext)
             else:
-                return self.getTypedRuleContext(SMTLIBv2Parser.Valuation_pairContext,i)
-
+                return self.getTypedRuleContext(SMTLIBv2Parser.Valuation_pairContext, i)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_get_value_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGet_value_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGet_value_response"):
                 listener.enterGet_value_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGet_value_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGet_value_response"):
                 listener.exitGet_value_response(self)
-
-
-
 
     def get_value_response(self):
 
         localctx = SMTLIBv2Parser.Get_value_responseContext(self, self._ctx, self.state)
         self.enterRule(localctx, 236, self.RULE_get_value_response)
-        self._la = 0 # Token type
+        self._la = 0  # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 1412
             self.match(SMTLIBv2Parser.ParOpen)
-            self.state = 1414 
+            self.state = 1414
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
                 self.state = 1413
                 self.valuation_pair()
-                self.state = 1416 
+                self.state = 1416
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (_la==SMTLIBv2Parser.ParOpen):
+                if not (_la == SMTLIBv2Parser.ParOpen):
                     break
 
             self.state = 1418
@@ -9907,80 +11874,79 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class Specific_success_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def check_sat_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Check_sat_responseContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Check_sat_responseContext, 0)
 
         def echo_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Echo_responseContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Echo_responseContext, 0)
 
         def get_assertions_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Get_assertions_responseContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Get_assertions_responseContext, 0
+            )
 
         def get_assignment_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Get_assignment_responseContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Get_assignment_responseContext, 0
+            )
 
         def get_info_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Get_info_responseContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Get_info_responseContext, 0)
 
         def get_model_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Get_model_responseContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Get_model_responseContext, 0)
 
         def get_option_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Get_option_responseContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Get_option_responseContext, 0
+            )
 
         def get_proof_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Get_proof_responseContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Get_proof_responseContext, 0)
 
         def get_unsat_assump_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Get_unsat_assump_responseContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Get_unsat_assump_responseContext, 0
+            )
 
         def get_unsat_core_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Get_unsat_core_responseContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Get_unsat_core_responseContext, 0
+            )
 
         def get_value_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Get_value_responseContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.Get_value_responseContext, 0)
 
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_specific_success_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterSpecific_success_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterSpecific_success_response"):
                 listener.enterSpecific_success_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitSpecific_success_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitSpecific_success_response"):
                 listener.exitSpecific_success_response(self)
-
-
-
 
     def specific_success_response(self):
 
-        localctx = SMTLIBv2Parser.Specific_success_responseContext(self, self._ctx, self.state)
+        localctx = SMTLIBv2Parser.Specific_success_responseContext(
+            self, self._ctx, self.state
+        )
         self.enterRule(localctx, 238, self.RULE_specific_success_response)
         try:
             self.state = 1431
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,93,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 93, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 1420
@@ -10047,7 +12013,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.get_value_response()
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -10056,11 +12021,12 @@ class SMTLIBv2Parser ( Parser ):
             self.exitRule()
         return localctx
 
-
     class General_responseContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = "parser"
 
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+        def __init__(
+            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
+        ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -10068,8 +12034,9 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PS_Success, 0)
 
         def specific_success_response(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.Specific_success_responseContext,0)
-
+            return self.getTypedRuleContext(
+                SMTLIBv2Parser.Specific_success_responseContext, 0
+            )
 
         def PS_Unsupported(self):
             return self.getToken(SMTLIBv2Parser.PS_Unsupported, 0)
@@ -10081,8 +12048,7 @@ class SMTLIBv2Parser ( Parser ):
             return self.getToken(SMTLIBv2Parser.PS_Error, 0)
 
         def string(self):
-            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext,0)
-
+            return self.getTypedRuleContext(SMTLIBv2Parser.StringContext, 0)
 
         def ParClose(self):
             return self.getToken(SMTLIBv2Parser.ParClose, 0)
@@ -10090,16 +12056,13 @@ class SMTLIBv2Parser ( Parser ):
         def getRuleIndex(self):
             return SMTLIBv2Parser.RULE_general_response
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterGeneral_response" ):
+        def enterRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "enterGeneral_response"):
                 listener.enterGeneral_response(self)
 
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitGeneral_response" ):
+        def exitRule(self, listener: ParseTreeListener):
+            if hasattr(listener, "exitGeneral_response"):
                 listener.exitGeneral_response(self)
-
-
-
 
     def general_response(self):
 
@@ -10108,7 +12071,7 @@ class SMTLIBv2Parser ( Parser ):
         try:
             self.state = 1441
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,94,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input, 94, self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 1433
@@ -10139,7 +12102,6 @@ class SMTLIBv2Parser ( Parser ):
                 self.match(SMTLIBv2Parser.ParClose)
                 pass
 
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -10147,8 +12109,3 @@ class SMTLIBv2Parser ( Parser ):
         finally:
             self.exitRule()
         return localctx
-
-
-
-
-

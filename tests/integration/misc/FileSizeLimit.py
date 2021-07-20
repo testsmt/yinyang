@@ -61,6 +61,6 @@ opts = "-i 1 -m 1"
 FN = os.path.dirname(os.path.realpath(__file__)) + "/too_large.smt2"
 
 out, cmd = call_fuzzer(first_config, second_config, FN, opts)
-if not "1 seeds processed, 0 valid, 1 invalid" in out:
+if "1 seeds processed, 0 valid, 1 invalid" not in out:
     print(cmd)
     exit(1)

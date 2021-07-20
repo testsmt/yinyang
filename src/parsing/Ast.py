@@ -187,7 +187,8 @@ class DeclareConst(Commands):
         self.sort = sort
 
     def __str__(self):
-        return "(declare-const " + self.symbol + " "\
+        return "(declare-const "\
+               + self.symbol + " "\
                + self.sort.__str__() + ")"
 
 
@@ -479,10 +480,7 @@ def Var(name, type, is_indexed_id=False):
 
 def Const(name, is_indexed_id=False, type="Unknown"):
     return Term(
-            name=name,
-            type=type,
-            is_const=True,
-            is_indexed_id=is_indexed_id
+        name=name, type=type, is_const=True, is_indexed_id=is_indexed_id
     )
 
 
@@ -504,9 +502,9 @@ def Quantifier(quantifier, quantified_vars, subterms):
 
 def LetBinding(var_binders, let_terms, subterms):
     return Term(
-            var_binders=var_binders,
-            let_terms=let_terms,
-            subterms=subterms
+        var_binders=var_binders,
+        let_terms=let_terms,
+        subterms=subterms
     )
 
 
@@ -530,7 +528,7 @@ class Term:
         op=None,
         subterms=None,
         is_indexed_id=False,
-        parent=None
+        parent=None,
     ):
 
         self._initialize(
@@ -547,7 +545,7 @@ class Term:
             op=op,
             subterms=subterms,
             is_indexed_id=is_indexed_id,
-            parent=parent
+            parent=parent,
         )
         self._add_parent_pointer()
 
@@ -566,7 +564,7 @@ class Term:
         op=None,
         subterms=None,
         is_indexed_id=None,
-        parent=None
+        parent=None,
     ):
         self.name = name
         self.type = type
@@ -589,7 +587,7 @@ class Term:
         """
         if self.subterms:
             for term in self.subterms:
-                if not isinstance(term,str):
+                if not isinstance(term, str):
                     term.parent = self
 
     def find_all(self, e, occs):
@@ -605,7 +603,6 @@ class Term:
                 else:
                     sub.find_all(e, occs)
 
-
     def substitute(self, e, repl):
         """
         Substitute all expressions e in self by repl.
@@ -613,21 +610,22 @@ class Term:
         occs = []
         self.find_all(e, occs)
         for occ in occs:
-                occ._initialize(name=copy.deepcopy(repl.name),
-                                 type=copy.deepcopy(repl.type),
-                                 is_const=copy.deepcopy(repl.is_const),
-                                 is_var=copy.deepcopy(repl.is_var),
-                                 label=copy.deepcopy(repl.label),
-                                 indices=copy.deepcopy(repl.indices),
-                                 quantifier=copy.deepcopy(repl.quantifier),
-                                 quantified_vars=copy.deepcopy(repl.quantified_vars),
-                                 var_binders=copy.deepcopy(repl.var_binders),
-                                 let_terms=copy.deepcopy(repl.let_terms),
-                                 op=copy.deepcopy(repl.op),
-                                 subterms=copy.deepcopy(repl.subterms),
-                                 is_indexed_id=copy.deepcopy(repl.is_indexed_id),
-                                 parent=occ.parent,
-                                 )
+            occ._initialize(
+                name=copy.deepcopy(repl.name),
+                type=copy.deepcopy(repl.type),
+                is_const=copy.deepcopy(repl.is_const),
+                is_var=copy.deepcopy(repl.is_var),
+                label=copy.deepcopy(repl.label),
+                indices=copy.deepcopy(repl.indices),
+                quantifier=copy.deepcopy(repl.quantifier),
+                quantified_vars=copy.deepcopy(repl.quantified_vars),
+                var_binders=copy.deepcopy(repl.var_binders),
+                let_terms=copy.deepcopy(repl.let_terms),
+                op=copy.deepcopy(repl.op),
+                subterms=copy.deepcopy(repl.subterms),
+                is_indexed_id=copy.deepcopy(repl.is_indexed_id),
+                parent=occ.parent,
+            )
 
     def __eq__(self, other):
         if not isinstance(other, Term):
@@ -708,8 +706,9 @@ class Term:
 
         elif self.label:
             subs_str = self.__get_subterm_str__()
-            return "(! " + subs_str + " " + self.label[0] + " "\
-                   + self.label[1] + ")"
+            return "(! "\
+                   + subs_str + " "\
+                   + self.label[0] + " " + self.label[1] + ")"
         else:
             subs_str = self.__get_subterm_str__()
             return "(" + self.op.__str__() + " " + subs_str + ")"

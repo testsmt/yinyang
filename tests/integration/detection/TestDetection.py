@@ -32,16 +32,17 @@ python = sys.executable
 script_dir = os.path.dirname(os.path.realpath(__file__))
 ERRORS = False
 
+
 def newest_log(path):
     files = os.listdir(path)
     paths = [os.path.join(path, basename) for basename in files]
     return max(paths, key=os.path.getctime)
 
+
 def is_sound(res1, res2):
     for i in range(len(res1)):
-        if not (res1[i] == res2[i]
-           or res1[i] == "unknown"
-           or res2[i] == "unknown"):
+        if not (res1[i] == res2[i] or res1[i] == "unknown" 
+                or res2[i] == "unknown"):
             return False
     return True
 
@@ -275,8 +276,8 @@ def test_soundness():
     res1[j] = random.choice(["sat", "unsat"])
 
     for i in range(len(res1)):
-        if (res1[i] == "sat" or res1[i] == "unsat") and\
-           random.choice([True, False]):
+        if (res1[i] == "sat" or res1[i] == "unsat")\
+           and random.choice([True, False]):
             res2[i] = "unknown"
     solver1 = "solver1.py"
     create_mocksolver_msg("\n".join(res1), solver1)

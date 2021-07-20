@@ -26,7 +26,6 @@ import copy
 import time
 import shutil
 import random
-import datetime
 import signal
 import logging
 import pathlib
@@ -39,9 +38,9 @@ from src.parsing.Typechecker import typecheck
 
 from src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
-from src.mutators.GenTypeAwareMutation.util import get_unique_subterms
+from src.mutators.GenTypeAwareMutation.Util import get_unique_subterms
 from src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import (
-        GenTypeAwareMutation
+    GenTypeAwareMutation
 )
 
 
@@ -49,29 +48,30 @@ from src.base.Utils import random_string, plain, escape
 from src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_EXHAUSTED_DISK
 
 from src.core.Logger import (
-        init_logging,
-        log_strategy_num_seeds,
-        log_generation_attempt,
-        log_finished_generations,
-        log_crash_trigger,
-        log_ignore_list_mutant,
-        log_duplicate_trigger,
-        log_segfault_trigger,
-        log_solver_timeout,
-        log_soundness_trigger,
-        log_invalid_mutant
+    init_logging,
+    log_strategy_num_seeds,
+    log_generation_attempt,
+    log_finished_generations,
+    log_crash_trigger,
+    log_ignore_list_mutant,
+    log_duplicate_trigger,
+    log_segfault_trigger,
+    log_solver_timeout,
+    log_soundness_trigger,
+    log_invalid_mutant,
 )
 from src.core.FuzzerUtil import (
-        get_seeds,
-        grep_result,
-        admissible_seed_size,
-        in_crash_list,
-        in_duplicate_list,
-        in_ignore_list,
-        init_oracle
+    get_seeds,
+    grep_result,
+    admissible_seed_size,
+    in_crash_list,
+    in_duplicate_list,
+    in_ignore_list,
+    init_oracle,
 )
 
 MAX_TIMEOUTS = 32
+
 
 class Fuzzer:
     def __init__(self, args, strategy):
@@ -125,7 +125,7 @@ class Fuzzer:
     def max_timeouts_reached(self):
         if self.timeout_of_current_seed >= MAX_TIMEOUTS:
             return True
-        return False                # stop testing if timeout limit is exceeded
+        return False  # stop testing if timeout limit is exceeded
 
     def run(self):
         """
@@ -146,7 +146,9 @@ class Fuzzer:
                 typecheck(script, glob)
                 script_cp = copy.deepcopy(script)
                 unique_expr = get_unique_subterms(script_cp)
-                self.mutator = GenTypeAwareMutation(script, self.args, unique_expr)
+                self.mutator = GenTypeAwareMutation(
+                    script, self.args, unique_expr
+                )
 
             elif self.strategy == "opfuzz":
                 script, _ = self.get_script(seeds)
@@ -155,9 +157,9 @@ class Fuzzer:
                 self.mutator = TypeAwareOpMutation(script, self.args)
 
             elif self.strategy == "yinyang":
-                script1,_,script2,_ = self.get_script_pair(seeds)
+                script1, _, script2, _ = self.get_script_pair(seeds)
                 if not script1 or not script2:
-                   continue
+                    continue
                 self.mutator = SemanticFusion(script1, script2, self.args)
 
             else:
@@ -175,14 +177,15 @@ class Fuzzer:
                 if not success:
                     self.statistic.unsuccessful_generations += 1
                     unsuccessful_gens += 1
-                    continue                        # Go to next iteration.
+                    continue  # Go to next iteration.
 
                 # Reason for mutator to skip a seed: no random components, i.e.
                 # mutant would be the same for all  iterations and hence just
                 # waste time.
-                if skip_seed: break                 # Continue to next seed.
+                if skip_seed:
+                    break  # Continue to next seed.
 
-                if not self.test(mutant, i + 1):    # Continue to next seed.
+                if not self.test(mutant, i + 1):  # Continue to next seed.
                     break
 
                 self.statistic.mutants += 1
@@ -256,14 +259,14 @@ class Fuzzer:
                 if not in_duplicate_list(stdout, stderr):
                     self.statistic.effective_calls += 1
                     self.statistic.crashes += 1
-                    path = self.report(scratchfile, "crash", solver_cli,
-                        stdout, stderr
+                    path = self.report(
+                        scratchfile, "crash", solver_cli, stdout, stderr
                     )
                     log_crash_trigger(path)
                 else:
                     self.statistic.duplicates += 1
                     log_duplicate_trigger()
-                return False                    # Stop testing.
+                return False  # Stop testing.
             else:
 
                 # Check whether the solver call produced errors, e.g, related
@@ -272,7 +275,7 @@ class Fuzzer:
                 if in_ignore_list(stdout, stderr):
                     log_ignore_list_mutant(solver_cli)
                     self.statistic.invalid_mutants += 1
-                    continue                    # Continue to the next solver.
+                    continue  # Continue to the next solver.
 
                 if exitcode != 0:
 
@@ -280,23 +283,22 @@ class Fuzzer:
                     if exitcode == -signal.SIGSEGV or exitcode == 245:
                         self.statistic.effective_calls += 1
                         self.statistic.crashes += 1
-                        path = self.report(scratchfile, "segfault", solver_cli,
-                            stdout, stderr
+                        path = self.report(
+                            scratchfile, "segfault", solver_cli, stdout, stderr
                         )
                         log_segfault_trigger(self.args, path, iteration)
-                        return False            # Stop testing.
+                        return False  # Stop testing.
 
                     # Check whether the solver timed out.
                     elif exitcode == 137:
                         self.statistic.timeout += 1
                         self.timeout_of_current_seed += 1
                         log_solver_timeout(self.args, solver_cli, iteration)
-                        continue                # Continue to the next solver.
+                        continue  # Continue to the next solver.
 
                     # Check whether a "command not found" error occurred.
                     elif exitcode == 127:
-                        continue                # Continue to the next solver.
-
+                        continue  # Continue to the next solver.
 
                 # Check if the stdout contains a valid solver query result,
                 # i.e., contains lines with 'sat', 'unsat' or 'unknown'.
@@ -307,7 +309,7 @@ class Fuzzer:
                 ):
                     self.statistic.invalid_mutants += 1
                     log_invalid_mutant(self.args, iteration)
-                    continue                    # Continue to the next solver.
+                    continue  # Continue to the next solver.
 
                 else:
 
@@ -338,21 +340,28 @@ class Fuzzer:
                             ref_cli = reference[0]
                             ref_stdout = reference[1]
                             ref_stderr = reference[2]
-                            path = self.report_diff(scratchfile, "incorrect",
-                                ref_cli, ref_stdout, ref_stderr, solver_cli,
-                                stdout, stderr
+                            path = self.report_diff(
+                                scratchfile,
+                                "incorrect",
+                                ref_cli,
+                                ref_stdout,
+                                ref_stderr,
+                                solver_cli,
+                                stdout,
+                                stderr,
                             )
                         else:
 
                             # Produce a bug report if the query result differs
                             # from the pre-set oracle (yinyang).
-                            path = self.report(scratchfile, "incorrect", solver_cli,
+                            path = self.report(
+                                scratchfile, "incorrect", solver_cli,
                                 stdout, stderr
                             )
 
                         log_soundness_trigger(self.args, iteration, path)
-                        return False                # Stop testing.
-        return True                                 # Continue to next seed.
+                        return False  # Stop testing.
+        return True  # Continue to next seed.
 
     def report(self, scratchfile, bugtype, cli, stdout, stderr):
         plain_cli = plain(cli)
@@ -367,9 +376,7 @@ class Fuzzer:
         try:
             shutil.copy(scratchfile, report)
         except Exception:
-            logging.error(
-                "error: couldn't copy scratchfile to bugfolder."
-            )
+            logging.error("error: couldn't copy scratchfile to bugfolder.")
             exit(ERR_EXHAUSTED_DISK)
         logpath = "%s/%s-%s-%s-%s.output" % (
             self.args.bugsfolder,
@@ -409,9 +416,7 @@ class Fuzzer:
         try:
             shutil.copy(scratchfile, report)
         except Exception:
-            logging.error(
-                "error: couldn't copy scratchfile to bugfolder."
-            )
+            logging.error("error: couldn't copy scratchfile to bugfolder.")
             exit(ERR_EXHAUSTED_DISK)
 
         logpath = "%s/%s-%s-%s-%s.output" % (
@@ -419,7 +424,7 @@ class Fuzzer:
             bugtype,
             plain_cli,
             escape(self.currentseeds),
-            random_string()
+            random_string(),
         )
         with open(logpath, "w") as log:
             log.write("*** REFERENCE \n")

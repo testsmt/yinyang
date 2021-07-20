@@ -27,7 +27,6 @@ from src.base.Version import VERSION, COMMIT
 
 
 class ArgumentParser(argparse.ArgumentParser):
-
     def error(self, message):
         print("usage:" + self.usage, flush=True)
         self.exit(
@@ -44,7 +43,7 @@ def add_common_args(parser, rootpath):
     )
     parser.add_argument(
         "PATH_TO_SEEDS",
-        nargs='+',
+        nargs="+",
         metavar="seed_file/seed_folder",
     )
     parser.add_argument(
@@ -124,6 +123,7 @@ def add_opfuzz_args(parser, rootpath):
         metavar="path_to_file",
         default=rootpath + "/config/operator_mutations.txt",
     )
+
 
 def add_typefuzz_args(parser, rootpath):
     parser.add_argument(
@@ -207,7 +207,6 @@ def build_typefuzz_parser(rootpath, usage):
     add_typefuzz_args(parser, rootpath)
 
     return parser
-
 
 
 def build_yinyang_parser(rootpath, usage):

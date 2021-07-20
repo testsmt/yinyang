@@ -20,9 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import inspect
-
 from src.base.Version import VERSION, COMMIT
+
 
 def raise_runtime_error(trace, argv, e):
     fn = trace[-1].filename
@@ -33,15 +32,10 @@ def raise_runtime_error(trace, argv, e):
         "cmd: "
         + " ".join(argv[:-2])
         + " "
-        + '"'
-        + argv[-2]
-        + '"'
-        + " "
-        + argv[-1],
-        flush=True
+        + '"' + argv[-2]
+        + '"' + " " + argv[-1],
+        flush=True,
     )
     print("version: yinyang " + VERSION + " " + COMMIT, flush=True)
-    print(
-        "Please file an issue: https://github.com/testsmt/yinyang/issues",
-        flush=True
-    )
+    print("Please file an issue: https://github.com/testsmt/yinyang/issues",
+          flush=True)

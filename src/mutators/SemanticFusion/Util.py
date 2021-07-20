@@ -24,7 +24,12 @@ import random
 import itertools
 
 from src.parsing.Ast import (
-    Term, Script, Assert, DeclareConst, DeclareFun, SMTLIBCommand
+    Term,
+    Script,
+    Assert,
+    DeclareConst,
+    DeclareFun,
+    SMTLIBCommand,
 )
 
 
@@ -66,8 +71,9 @@ def concat(op, script1, script2):
     script1.merge_asserts()
     script2.merge_asserts()
     sorts = []
-    sorts =\
-        [cmd for cmd in script1.commands + script2.commands if is_sort(cmd)]
+    sorts = [
+        cmd for cmd in script1.commands + script2.commands if is_sort(cmd)
+    ]
     sorts = list(set(sorts))
     declares1 = [cmd for cmd in script1.commands if is_constant(cmd)]
     assert1 = [cmd for cmd in script1.commands if isinstance(cmd, Assert)][0]

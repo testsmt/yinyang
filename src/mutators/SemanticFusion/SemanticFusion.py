@@ -26,14 +26,16 @@ import copy
 from src.mutators.Mutator import Mutator
 from src.mutators.SemanticFusion.VariableFusion import (
     fill_template,
-    inv_x, inv_y,
-    fusion_contraints, add_fusion_constraints,
-    add_var_decls
+    inv_x,
+    inv_y,
+    fusion_contraints,
+    add_fusion_constraints,
+    add_var_decls,
 )
 from src.mutators.SemanticFusion.Util import (
     random_var_triplets,
     disjunction,
-    conjunction
+    conjunction,
 )
 from src.base.Exitcodes import ERR_USAGE
 from src.parsing.Parse import parse_str
@@ -122,8 +124,8 @@ class SemanticFusion(Mutator):
 
     def mutate(self):
         skip_seed = False
-        if self.formula1.free_var_occs == []\
-           and self.formula2.free_var_occs == []:
+        if self.formula1.free_var_occs == [] and\
+           self.formula2.free_var_occs == []:
             skip_seed = True
 
         formula1, formula2 =\

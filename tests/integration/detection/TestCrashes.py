@@ -41,7 +41,7 @@ def call_fuzzer(first_config, second_config, fn, opts):
         + fn
     )
     output = subprocess.getoutput(cmd)
-    print("$",cmd)
+    print("$", cmd)
     print(output)
     crash_issues = 0
     for line in output.split("\n"):
@@ -71,9 +71,7 @@ def test_crash_list(msg, fn):
     first_config = os.path.abspath(solver)
     second_config = os.path.abspath(solver)
     opts = "-i 1 -m 1"
-    crash, cmd = call_fuzzer(
-        first_config, second_config, FN, opts
-    )
+    crash, cmd = call_fuzzer(first_config, second_config, FN, opts)
 
     if crash != 1:
         print("[ERROR] Crash", fn, "cannot be captured.")

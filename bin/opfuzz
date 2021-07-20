@@ -39,10 +39,12 @@ from src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_USAGE, ERR_INTERNAL
 from src.core.Fuzzer import Fuzzer
 
 from config.OpfuzzHelptext import (
-    usage, header, short_description, long_description, options
+    usage,
+    header,
+    short_description,
+    long_description,
+    options,
 )
-
-
 
 
 def main():
@@ -57,11 +59,21 @@ def main():
 
     elif "-h" in sys.argv or "--help" in sys.argv:
 
-        # If called for help, show long description containing general 
-        # information on opfuzz, two examples with in-depth explanation, 
-        # and the usage dialogue. 
-        print(header + "\n" + long_description + "\n" + options + "\n"
-              + "usage:" + usage + "\n", flush=True)
+        # If called for help, show long description containing general
+        # information on opfuzz, two examples with in-depth explanation,
+        # and the usage dialogue.
+        print(
+            header
+            + "\n"
+            + long_description
+            + "\n"
+            + options
+            + "\n"
+            + "usage:"
+            + usage
+            + "\n",
+            flush=True,
+        )
         exit(OK_NOBUGS)
 
     else:
@@ -75,14 +87,12 @@ def main():
                     exit(OK_NOBUGS)
                 exit(OK_BUGS)
 
-
             def stats_control_c(sig, frame):
                 print("\b\b\rUser interrupt", flush=True)
                 print_stats()
                 if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
                     exit(OK_NOBUGS)
                 exit(OK_BUGS)
-
 
             def silent_control_c(sig, frame):
                 if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
@@ -94,7 +104,7 @@ def main():
             else:
                 signal.signal(signal.SIGINT, silent_control_c)
                 exit(OK_NOBUGS)
-            
+
             fuzzer.run()
         except Exception as e:
             trace = inspect.trace()
