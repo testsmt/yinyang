@@ -41,6 +41,6 @@ jobs:
     - name: semanticfusion
       run: |
         python tests/integration/semanticfusion/SanitySemanticFusion.py
-    - name: code style 
+    - name: code style and static analysis with flake 
       run: |
-        #flake8 --extend-exclude "*SMTLIBv2*" src tests bin/opfuzz bin/yinyang config  
+        bin/checkstyle.sh

@@ -26,13 +26,13 @@ from src.base.Version import VERSION
 header = (
     "typefuzz -- a differential fuzzer for SMT solvers [version: "
     + VERSION
-    +"]"
+    + "]"
 )
 
 usage = """ typefuzz [options] solver_clis seed_file   [optionally, more seed files]
        typefuzz [options] solver_clis seed_folder [optionally, more seed folders]
        solver_clis := "solver_cli1;solver_cli2;...;solver_clik"
-"""
+"""  # noqa: E501
 
 short_description = """
 typefuzz is a tool for finding bugs in SMT solver by generating mutant SMT-LIB

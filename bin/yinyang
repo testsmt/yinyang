@@ -34,7 +34,7 @@ sys.path.append(rootpath)
 from src.base.Driver import run_checks
 from src.base.Error import raise_runtime_error
 from src.base.ArgumentParser import build_yinyang_parser
-from src.base.Exitcodes import OK_NOBUGS, ERR_USAGE, ERR_INTERNAL
+from src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_USAGE, ERR_INTERNAL
 
 from src.core.Fuzzer import Fuzzer
 
@@ -87,14 +87,12 @@ def main():
                     exit(OK_NOBUGS)
                 exit(OK_BUGS)
 
-
             def stats_control_c(sig, frame):
                 print("\b\b\rUser interrupt", flush=True)
                 print_stats()
                 if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
                     exit(OK_NOBUGS)
                 exit(OK_BUGS)
-
 
             def silent_control_c(sig, frame):
                 if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:

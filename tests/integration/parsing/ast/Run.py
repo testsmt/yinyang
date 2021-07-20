@@ -71,9 +71,9 @@ n_err = 0
 n_timeout = 0
 with Pool(N) as p:
     for i in range(n):
-        res = \
-            p.map(do_comparison, files[i * batch_size:(i + 1) * batch_size])
-        e, t = collect(res, files[i * batch_size:(i + 1) * batch_size])
+        res = p.map(
+            do_comparison, files[i * batch_size: (i + 1) * batch_size])
+        e, t = collect(res, files[i * batch_size: (i + 1) * batch_size])
         n_err += len(e)
         n_timeout += len(t)
         append_to_file("errors.txt", e)

@@ -52,8 +52,7 @@ class Statistic:
             eff_str = "NaN"
 
         solver_calls_per_sec = round(
-            float(self.solver_calls) / float(total_time), 1
-        )
+            float(self.solver_calls) / float(total_time), 1)
 
         mutants_per_sec = round(float(self.mutants) / float(total_time), 1)
         mutants_per_sec_str = str(mutants_per_sec)
@@ -75,6 +74,3 @@ class Statistic:
             % (self.total_seeds, valid_seeds, self.invalid_seeds, num_bugs)
         )
         print(summary)
-
-
-

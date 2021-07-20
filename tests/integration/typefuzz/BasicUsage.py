@@ -102,7 +102,8 @@ print("Running TypeFuzz for 30 secs...")
 
 first_config = z3 + " model_validate=true"
 second_config = cvc4 + " --check-models -m -i -q"
-output, cmd = run_opfuzz(first_config, second_config, "examples", "", TIME_LIMIT)
+output, cmd = run_opfuzz(
+    first_config, second_config, "examples", "", TIME_LIMIT)
 print(output, flush=True)
 if error(output):
     print("An error occurred!")

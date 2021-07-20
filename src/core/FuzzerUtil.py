@@ -21,11 +21,9 @@
 # SOFTWARE.
 
 import re
-import shutil
 import pathlib
-import logging
 
-from src.base.Utils import random_string, plain, escape, in_list
+from src.base.Utils import in_list
 
 from config.Config import crash_list, duplicate_list, ignore_list
 
@@ -75,15 +73,11 @@ def get_seeds(args, strategy):
         seeds = args.PATH_TO_SEEDS
     elif strategy == "yinyang":
         if len(args.PATH_TO_SEEDS) > 2:
-            seeds = [
-                (a, b)
-                for a in args.PATH_TO_SEEDS
-                for b in args.PATH_TO_SEEDS
-            ]
+            seeds = [(a, b)
+                     for a in args.PATH_TO_SEEDS
+                     for b in args.PATH_TO_SEEDS]
         elif len(args.PATH_TO_SEEDS) == 2:
-            seeds = [
-                (args.PATH_TO_SEEDS[0], args.PATH_TO_SEEDS[1])
-            ]
+            seeds = [(args.PATH_TO_SEEDS[0], args.PATH_TO_SEEDS[1])]
         else:
             assert False
     else:
@@ -104,86 +98,3 @@ def init_oracle(args):
     elif args.oracle == "unsat":
         return SolverResult(SolverQueryResult.UNSAT)
     assert False
-
-
-def report(scratchfile, bugtype, cli, stdout, stderr, report_id):
-    plain_cli = plain(cli)
-    # format: <solver><{crash,wrong,invalid_model}><seed>.<random-str>.smt2
-    report = "%s/%s-%s-%s-%s.smt2" % (
-        self.args.bugsfolder,
-        bugtype,
-        plain_cli,
-        escape(self.currentseeds),
-        report_id,
-    )
-    try:
-        shutil.copy(scratchfile, report)
-    except Exception:
-        logging.error(
-            "Could not copy scratchfile to bugfolder.\
-             Disk space seems exhausted."
-        )
-        exit(ERR_EXHAUSTED_DISK)
-    logpath = "%s/%s-%s-%s-%s.output" % (
-        self.args.bugsfolder,
-        bugtype,
-        plain_cli,
-        escape(self.currentseeds),
-        report_id,
-    )
-    with open(logpath, "w") as log:
-        log.write("command: " + cli + "\n")
-        log.write("stderr:\n")
-        log.write(stderr)
-        log.write("stdout:\n")
-        log.write(stdout)
-    return report
-
-    def report_diff(
-        scratchfile,
-        bugtype,
-        ref_cli,
-        ref_stdout,
-        ref_stderr,
-        sol_cli,
-        sol_stdout,
-        sol_stderr,
-        report_id,
-    ):
-        plain_cli = plain(sol_cli)
-        # format: <solver><{crash,wrong,invalid_model}><seed>.<random-str>.smt2
-        report = "%s/%s-%s-%s-%s.smt2" % (
-            self.args.bugsfolder,
-            bugtype,
-            plain_cli,
-            escape(self.currentseeds),
-            report_id,
-        )
-        try:
-            shutil.copy(scratchfile, report)
-        except Exception:
-            logging.error("Could not copy scratchfile to bugfolder.\
-                Disk space seems exhausted.")
-            exit(ERR_EXHAUSTED_DISK)
-
-        logpath = "%s/%s-%s-%s-%s.output" % (
-            self.args.bugsfolder,
-            bugtype,
-            plain_cli,
-            escape(self.currentseeds),
-            report_id,
-        )
-        with open(logpath, "w") as log:
-            log.write("*** REFERENCE \n")
-            log.write("command: " + ref_cli + "\n")
-            log.write("stderr:\n")
-            log.write(ref_stderr)
-            log.write("stdout:\n")
-            log.write(ref_stdout)
-            log.write("\n\n*** INCORRECT \n")
-            log.write("command: " + sol_cli + "\n")
-            log.write("stderr:\n")
-            log.write(sol_stderr)
-            log.write("stdout:\n")
-            log.write(sol_stdout)
-        return report

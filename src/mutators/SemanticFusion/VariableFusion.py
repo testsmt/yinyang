@@ -81,19 +81,16 @@ def get_constant_value(declare_const):
     if const_type == "Int":
         r = random.randint(-1000, 1000)
         if r < 0:
-            return Expr(
-                        op="-",
-                        subterms=[Const(name=str(-r), type=const_type)]
-                    )
+            return Expr(op="-",
+                        subterms=[Const(name=str(-r), type=const_type)])
         else:
             return Const(name=str(r), type=const_type)
 
     if const_type == "Real":
         r = round(random.uniform(-1000, 1000), 5)
         if r < 0:
-            return Expr(
-                    op="-",
-                    subterms=[Const(name=str(-r), type=const_type)])
+            return Expr(op="-",
+                        subterms=[Const(name=str(-r), type=const_type)])
         else:
             return Const(str(r), type=const_type)
 

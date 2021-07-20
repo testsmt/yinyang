@@ -31,9 +31,9 @@ class SolverQueryResult(Enum):
     Enum storing the result of a single solver check-sat query.
     """
 
-    SAT = 0         # solver query returns "sat"
-    UNSAT = 1       # solver query returns "unsat"
-    UNKNOWN = 2     # solver query reports "unknown"
+    SAT = 0  # solver query returns "sat"
+    UNSAT = 1  # solver query returns "unsat"
+    UNKNOWN = 2  # solver query reports "unknown"
 
 
 def sr2str(sol_res):
@@ -115,7 +115,7 @@ class Solver:
             return stdout, stderr, 0
 
         except FileNotFoundError:
-            print('error: solver "' + cmd[0] + '" not found',flush=True)
+            print('error: solver "' + cmd[0] + '" not found', flush=True)
             exit(ERR_USAGE)
 
         stdout = output.stdout.decode()

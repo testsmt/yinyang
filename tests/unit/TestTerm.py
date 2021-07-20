@@ -80,9 +80,7 @@ class TermTestCase(unittest.TestCase):
             var1 = Var("var1", "String")
             expr.substitute(x, var1)
             self.assertEqual(
-                    expr.__str__(),
-                    "(= var1 (str.substr z 0 (str.len var1)))"
-            )
+                expr.__str__(), "(= var1 (str.substr z 0 (str.len var1)))")
 
         def substitute2():
             formula = """\

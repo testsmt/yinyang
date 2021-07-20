@@ -56,7 +56,7 @@ def call_fuzzer(first_config, second_config, fn, opts):
 def get_cvc4():
     cvc4_link = (
         "https://github.com/CVC4/CVC4/releases/download/1.7/"
-         + "cvc4-1.7-x86_64-linux-opt"
+        + "cvc4-1.7-x86_64-linux-opt"
     )
     subprocess.getoutput("wget " + cvc4_link)
     subprocess.getoutput("chmod +x cvc4-1.7-x86_64-linux-opt")

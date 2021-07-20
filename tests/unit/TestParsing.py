@@ -33,8 +33,8 @@ sys.path.append("../../")
 class ParsingTestCase(unittest.TestCase):
     def test_issue9(self):
         formula, _ = parse_file("tests/res/issue7.smt2")
-        self.assertTrue("\x0a" in formula.__str__()
-                        and "\n" in formula.__str__())
+        self.assertTrue(
+            "\x0a" in formula.__str__() and "\n" in formula.__str__())
 
     def test_issue18(self):
         formula, _ = parse_file("tests/res/issue18.smt2", silent=False)
@@ -47,15 +47,16 @@ class ParsingTestCase(unittest.TestCase):
 (check-sat)"""
         self.assertEqual(oracle, formula.__str__())
 
+
 #     def test_issue25(self):
-        # script = """\
+# script = """\
 # (declare-fun a () Bool)
 # (assert (= ((_ extract 5 3) (_ bv96 8))))
 # (check-sat)"""
-        # script, _ = parse_str(script, silent=False)
-        # t = type(script.commands[1].term.subterms[0].subterms[0])
-        # self.assertTrue("Term" in str(t))
-        # script = """\
+# script, _ = parse_str(script, silent=False)
+# t = type(script.commands[1].term.subterms[0].subterms[0])
+# self.assertTrue("Term" in str(t))
+# script = """\
 # (declare-fun bv () (_ BitVec 10))
 # (declare-fun a () Bool)
 # (assert (not (and (= ((_ extract 5 3) (_ bv96 8)) ((_ extract 4 2)
@@ -63,8 +64,8 @@ class ParsingTestCase(unittest.TestCase):
 # (_ bv0 1) (_ bv1 1))) ((_ extract 1 0)
 # (ite a (_ bv6 3) (_ bv3 3)))))))
 # (check-sat)"""
-        # script, _ = parse_str(script, silent=False)
-        # self.assertTrue(script)
+# script, _ = parse_str(script, silent=False)
+# self.assertTrue(script)
 
 
 if __name__ == "__main__":

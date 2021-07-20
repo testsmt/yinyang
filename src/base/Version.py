@@ -20,15 +20,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# TODO (Dominik):  rewrite this code
-
-try:
-    import subprocess
-    label = subprocess.getoutput(
-            ["cd " + rootpath + " && git describe --tags"]).strip()
-
-    VERSION = str(label).split("-")[0][1:]
-    COMMIT = str(label).split("-")[2][:-1]
-except Exception:
-    VERSION = "0.2.0"
-    COMMIT = "unknown"
+VERSION = "0.2.0"
+COMMIT = "unknown"

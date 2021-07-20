@@ -42,14 +42,14 @@ def check_solver_clis():
 
 def check_timeout():
     if args.timeout <= 0:
-        print("error: timeout should not be a negative number or zero",
+        print("error: timeout should not be a negative number or zero", 
               flush=True)
         exit(ERR_USAGE)
 
 
 def check_iterations():
     if args.iterations <= 0:
-        print("error: iterations should not be a negative number zero",
+        print("error: iterations should not be a negative number zero", 
               flush=True)
         exit(ERR_USAGE)
 

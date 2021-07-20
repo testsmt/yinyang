@@ -52,10 +52,8 @@ def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
 
 
 def get_cvc4():
-    cvc4_link = (
-        "https://github.com/CVC4/CVC4/releases/download/1.8/\
+    cvc4_link = "https://github.com/CVC4/CVC4/releases/download/1.8/\
 cvc4-1.8-x86_64-linux-opt"
-    )
     os.system("wget " + cvc4_link)
     subprocess.getoutput("chmod +x cvc4-1.8-x86_64-linux-opt")
     return os.path.abspath("cvc4-1.8-x86_64-linux-opt")
@@ -80,11 +78,10 @@ z3 = get_z3()
 first_config = z3 + " model_validate=true"
 second_config = cvc4 + " --check-models --produce-models --incremental -q"
 mock_benchmarks = str(os.path.dirname(os.path.realpath(__file__)))\
-                  + "/mock_benchmarks"
+    + "/mock_benchmarks"
 out, cmd = run_opfuzz(
-    first_config, second_config, mock_benchmarks, "-m 1", TIME_LIMIT
-)
-if not "3 seeds processed, 1 valid, 2 invalid" in out:
+    first_config, second_config, mock_benchmarks, "-m 1", TIME_LIMIT)
+if "3 seeds processed, 1 valid, 2 invalid" not in out:
     print("An error occurred.", flush=True)
     print("cmd", cmd)
     exit(1)

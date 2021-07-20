@@ -114,7 +114,7 @@ def parse_filestream(fn, timeout_limit):
     @exit_after(timeout_limit)
     def _parse_filestream(fn):
         fstream = FileStream(fn, encoding="utf8")
-        ast, globs  = generate_ast(fstream)
+        ast, globs = generate_ast(fstream)
         return ast, globs
 
     return _parse_filestream(fn)

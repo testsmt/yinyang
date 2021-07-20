@@ -29,7 +29,8 @@ python = sys.executable
 
 
 def call_fuzzer(first_config, fn, opts):
-    cmd = python + " bin/yinyang " + '"' + first_config + '" ' + opts + " " + fn
+    cmd = python + " bin/yinyang "\
+        + '"' + first_config + '" ' + opts + " " + fn
     output = subprocess.getoutput(cmd)
     print(output)
     soundness_issues = 0
@@ -44,8 +45,9 @@ def call_fuzzer(first_config, fn, opts):
 
 
 def get_z3():
-    z3_link = ("https://github.com/Z3Prover/z3/releases/download/z3-4.8.6/"
-            + "z3-4.8.6-x64-ubuntu-16.04.zip"
+    z3_link = (
+        "https://github.com/Z3Prover/z3/releases/download/z3-4.8.6/"
+        + "z3-4.8.6-x64-ubuntu-16.04.zip"
     )
     subprocess.getoutput("wget " + z3_link)
     subprocess.getoutput("unzip z3-4.8.6-x64-ubuntu-16.04.zip")
@@ -53,7 +55,8 @@ def get_z3():
 
 
 def get_cvc4():
-    cvc4_link = ("http://cvc4.cs.stanford.edu/downloads/builds/"
+    cvc4_link = (
+        "http://cvc4.cs.stanford.edu/downloads/builds/"
         + "x86_64-linux-opt/cvc4-1.6-x86_64-linux-opt"
     )
     subprocess.getoutput("wget " + cvc4_link)
@@ -86,9 +89,7 @@ opts = "-o unsat -s fusion"
 print("Trying to sanitize unsat fusion...")
 bug_catched = False
 for _ in range(N):
-    soundness_issues, crash_issues, cmd = call_fuzzer(
-        first_config, fn, opts
-    )
+    soundness_issues, crash_issues, cmd = call_fuzzer(first_config, fn, opts)
     if soundness_issues != 0 or crash_issues != 0:
         bug_catched = True
         break
@@ -105,9 +106,7 @@ opts = "-o sat -s fusion"
 print("Trying to sanitize sat fusion...")
 bug_catched = False
 for _ in range(N):
-    soundness_issues, crash_issues, cmd = call_fuzzer(
-        first_config, fn, opts
-    )
+    soundness_issues, crash_issues, cmd = call_fuzzer(first_config, fn, opts)
     if soundness_issues != 0 or crash_issues != 0:
         bug_catched = True
         break
@@ -126,9 +125,7 @@ fn = "tests/integration/semanticfusion/gIxXB_cvc4_bug_incorrect_script1.smt2 tes
 opts = "-o unsat -s fusion"
 
 for _ in range(1000):
-    soundness_issues, crash_issues, cmd = call_fuzzer(
-        first_config, fn, opts
-    )
+    soundness_issues, crash_issues, cmd = call_fuzzer(first_config, fn, opts)
     if soundness_issues != 0:
         bug_catched = True
         break
@@ -146,9 +143,7 @@ fn = "tests/integration/semanticfusion/5jby0_z3_bug_incorrect_script1.smt2 tests
 opts = "-o sat -s fusion"
 
 for _ in range(1000):
-    soundness_issues, crash_issues, cmd = call_fuzzer(
-        first_config, fn, opts
-    )
+    soundness_issues, crash_issues, cmd = call_fuzzer(first_config, fn, opts)
     if soundness_issues != 0:
         bug_catched = True
         break
