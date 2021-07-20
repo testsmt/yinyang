@@ -1,0 +1,9 @@
+;
+(not Bool Bool)
+(=> Bool Bool Bool :right-assoc)
+(and Bool Bool Bool :left-assoc)
+(or Bool Bool Bool :left-assoc)
+(xor Bool Bool Bool :left-assoc)
+(str.from_int Int String)
+
+
