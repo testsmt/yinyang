@@ -22,15 +22,15 @@
 
 import unittest
 import sys
+import os
 
 sys.path.append("../../")
-import os
 
 from src.parsing.parse import *
 from src.parsing.typechecker import Context, typecheck
 from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.generators.GenTypeAwareMutation.GenTypeAwareMutation import *
-from src.generators.GenTypeAwareMutation.util import *
+from src.generators.GenTypeAwareMutation.Util import *
 
 
 class Mockargs:

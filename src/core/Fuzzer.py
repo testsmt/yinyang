@@ -38,7 +38,7 @@ from src.parsing.Typechecker import typecheck
 
 from src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
 from src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
-from src.mutators.GenTypeAwareMutation.util import get_unique_subterms
+from src.mutators.GenTypeAwareMutation.Util import get_unique_subterms
 from src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import (
     GenTypeAwareMutation
 )

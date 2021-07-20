@@ -29,7 +29,7 @@ import os
 from src.parsing.Parse import *
 from src.parsing.Typechecker import Context, typecheck
 from src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import *
-from src.mutators.GenTypeAwareMutation.util import *
+from src.mutators.GenTypeAwareMutation.Util import *
 
 
 class Mockargs:

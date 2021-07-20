@@ -26,12 +26,8 @@ import pathlib
 
 sys.path.append("../../")
 
-# from src.parsing.Parse import *
-# from src.parsing.Typechecker import *
-
 from src.parsing.Ast import (
     Assert,
-    Context
 )
 from src.parsing.Parse import (
     parse_str, parse_file
@@ -42,9 +38,9 @@ from src.parsing.Types import (
     BOOLEAN_TYPE,
     INTEGER_TYPE,
     STRING_TYPE,
-    typecheck_expr,
-    typecheck
 )
+
+from src.parsing.Typechecker import Context, typecheck_expr, typecheck
 
 
 def check_type(expr):
