@@ -33,6 +33,7 @@ jobs:
         python tests/integration/misc/DirectoryMode.py
     - name: typefuzz 
       run: |
+        python tests/integration/opfuzz/SanityTypeFuzz.py
         python tests/integration/typefuzz/BasicUsage.py
     - name: opfuzz
       run: |
