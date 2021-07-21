@@ -21,13 +21,18 @@
 # SOFTWARE.
 
 import os
+import sys
 from pathlib import Path
-
-from config.Config import solvers
 from src.base.Exitcodes import ERR_USAGE, ERR_EXHAUSTED_DISK
 
 path = Path(__file__)
 rootpath = str(path.parent.absolute().parent)
+
+try:
+    sys.path.insert(1, os.getcwd() + "/.yinyang")
+    from Config import solvers
+except Exception as e:
+    from config.Config import solvers
 
 
 def check_solver_clis():
@@ -42,14 +47,14 @@ def check_solver_clis():
 
 def check_timeout():
     if args.timeout <= 0:
-        print("error: timeout should not be a negative number or zero", 
+        print("error: timeout should not be a negative number or zero",
               flush=True)
         exit(ERR_USAGE)
 
 
 def check_iterations():
     if args.iterations <= 0:
-        print("error: iterations should not be a negative number zero", 
+        print("error: iterations should not be a negative number zero",
               flush=True)
         exit(ERR_USAGE)
 
