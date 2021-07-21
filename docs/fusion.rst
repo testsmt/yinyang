@@ -59,9 +59,9 @@ The configuration file ``config/fusion_functions.txt`` specifies fusion and inve
 .. code-block:: text 
 
     #begin  
-    <declartation of x>
-    <declartation of y>
-    <declartation of z>
+    <declaration of x>
+    <declaration of y>
+    <declaration of z>
     [<declaration of c>]
     <assert fusion function>
     <assert inversion function> 

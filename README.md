@@ -53,7 +53,7 @@ For bugs/issues/questions/feature requests please file an issue. We are always h
  
  :memo: [Contact us](https://yinyang.readthedocs.io/en/latest/building_on.html#contact)
 
-Additional Ressources
+Additional Resources
 ----------
 - [Citing yinyang](https://yinyang.readthedocs.io/en/latest/building_on.html#citing-yinyang)
 - [Project website](https://testsmt.github.io/) with bug statistics, talk videos, etc.

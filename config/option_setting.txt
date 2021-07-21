@@ -320,7 +320,7 @@ rewriter.push_ite_arith
 rewriter.push_ite_bv
 rewriter.push_to_real
 rewriter.rewrite_patterns
-rewriter.som
+rewriter.some
 rewriter.sort_store
 rewriter.sort_sums
 rewriter.split_concat_eq
