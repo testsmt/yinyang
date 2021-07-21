@@ -25,7 +25,11 @@ import pathlib
 
 from src.base.Utils import in_list
 
-from config.Config import crash_list, duplicate_list, ignore_list
+try:
+    sys.path.insert(1, os.getcwd() + "/.yinyang")
+    from Config import crash_list, duplicate_list, ignore_list
+except Exception as e:
+    from config.Config import crash_list, duplicate_list, ignore_list
 
 from src.core.Solver import SolverResult, SolverQueryResult
 
