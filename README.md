@@ -16,7 +16,7 @@
 
 yinyang
 ------------
-A fuzzer for SMT solvers. Given a set of seed SMT formulas, yinyang generates mutant formulas to stress-test SMT solvers. yinyang can be used to robustify SMT solvers. It already found **1,500+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
+A fuzzing framework for SMT solvers. Given a set of seed SMT formulas, yinyang generates mutant formulas to stress-test SMT solvers. yinyang can be used to robustify SMT solvers. It already found **1,500+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
 
 
 
@@ -35,7 +35,7 @@ git clone https://github.com/testsmt/yinyang.git
 pip3 install antlr4-python3-runtime==4.9.2                                         
 ``` 
 
-Note that you may want to add `yinyang/bin` to your PATH, for running yinyang.  
+Note that you may want to add `yinyang/bin` to your PATH, for running yinyang conveniently without prefix.  
 
 Usage
 -------------

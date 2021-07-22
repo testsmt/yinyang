@@ -6,7 +6,7 @@ yinyang: a fuzzer for SMT solvers
   :align: center 
 
 
-yinyang is a `fuzzer <https://en.wikipedia.org/wiki/Fuzzing>`_ for SMT solvers. Given a set of `SMT-LIB <http://smtlib.cs.uiowa.edu/language.shtml>`_ seed formulas, it generates mutant formulas to stress-test SMT solvers. yinyang roughly operates in the following stages: 
+yinyang is a `fuzzing framework <https://en.wikipedia.org/wiki/Fuzzing>`_ for SMT solvers. It realizes three tools `typefuzz`, `opfuzz` and `yinyang`.  Given a set of `SMT-LIB <http://smtlib.cs.uiowa.edu/language.shtml>`_ seed formulas, each of the tools generates mutant formulas to stress-test SMT solvers. yinyang roughly operates in the following stages: 
 
 
 1. *Parsing:* First, yinyang parses a single or a set of SMT-LIB formulas to be used for fuzzing. yinyang's parser supports the SMT-LIB v2.6 standard and is customizable. 
