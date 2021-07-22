@@ -19,6 +19,9 @@ jobs:
         python -m pip install flake8
         python -m pip install --upgrade pip 
         python -m pip install antlr4-python3-runtime==4.9.2  
+    - name: Spell check 
+      run: |
+        codespell --skip="Solver.py,SMTLIBv2*,*.g4,*.tokens,*.interp,*.smt2"
     - name: Run Unittests
       run: |
         python -m unittest tests/RunUnitTests.py
@@ -45,6 +48,3 @@ jobs:
     - name: code style and static analysis with flake 
       run: |
         bin/checkstyle.sh
-    - name: spell check 
-      run: |
-        codespell --skip="Solver.py,SMTLIBv2*,*.g4,*.tokens,*.interp,*.smt2"
