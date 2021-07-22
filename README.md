@@ -1,4 +1,4 @@
-<p align="center"><a><img width="130" alt="portfolio_view" align="center" src="media/logo.png"></a></p>
+<p align="center"><a><img width="160" alt="portfolio_view" align="center" src="media/logo.png"></a></p>
 
 <br>
 <p align="center">
@@ -22,14 +22,20 @@ A fuzzer for SMT solvers. Given a set of seed SMT formulas, yinyang generates mu
 
 Installation
 ------------
-Requirements: 
-- python 3.6+ 
-- antlr4 python runtime  
-``` bash
-git clone https://github.com/testsmt/yinyang.git 
-pip3 install antlr4-python3-runtime==4.9.2  
+To install a stable version of yinyang use:    
+
+```
+pip3 install yinyang 
 ```
 
+To install the most recent version, check out the repository:            
+
+``` bash                                                                           
+git clone https://github.com/testsmt/yinyang.git                                   
+pip3 install antlr4-python3-runtime==4.9.2                                         
+``` 
+
+Note that you may want to add `yinyang/bin` to your PATH, for running yinyang.  
 
 Usage
 -------------
@@ -40,7 +46,7 @@ to download the corresponding SMT-LIB 2 benchmarks. Alternatively, you can downl
 
 3. **Run yinyang** on the benchmarks e.g. with Z3 and CVC4.  
 ```bash
-bin/opfuzz "z3 model_validate=true;cvc4 --check-models -m -i -q" benchmarks 
+typefuzz "z3 model_validate=true;cvc4 --check-models -m -i -q" benchmarks 
 ```
 
 yinyang will by default randomly select formulas from the folder `./benchmarks` and generate 300 mutants per seed formula. If a bug has been found, the bug trigger is stored in `./bugs`. yinyang will run in an infinite loop. You can use the shortcut CTRL+C to terminate yinyang manually.

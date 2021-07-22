@@ -99,7 +99,6 @@ is going on and potentially adjust seed set and solver commandlines. Note, some
 SMT solvers need options to support a particular set of seeds. E.g, cvc5 needs
 the option "--strings-exp" to support string logic. Otherwise it will often
 throw an error message.
-
 """  # noqa: E501
 
 
