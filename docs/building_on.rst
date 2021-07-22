@@ -2,7 +2,7 @@ Building on yinyang
 ===================
 This section  gives a brief overview of TypeFuzz's implementation and describes how researchers and practitioners can customize and extend TypeFuzz and yinyang.
 
-Understanding TypeFuzz's implementation in yinyang
+Understanding TypeFuzz's implementation
 ...................................................
 The following file tree shows the most important files of typefuzz and includes a brief description. 
 
@@ -34,7 +34,7 @@ Generative type-aware mutation's mutator class is realized in `GenTypeAwareMutat
 
 The `get_replacee(term)` method randomly chooses an operator from the list of candidate operators. The list of candidate operators contains all operators with a return type matching term's type and includes the identity operator `id`. Next, we pick a type-conforming expression from the set of unique expressions for every argument for the operator at hand and return the expression. The `get_replacee`method may fail, e.g., if we would have picked an operator of a conforming type but no term with conforming types to its arguments exist. To avoid this, we repeat the `get_replacee` method several times.
 
-Customizing and extending TypeFuzz and yinyang   
+Customizing and extending yinyang
 ...............................................
 The yinyang framework has many tests to ensure the reliability of its mutators and the bug detection logic. All tests are integrated into a CI making sure that the bug-finding ability is preserved on every commit. yinyang adheres to the PEP 8 code quality standard. We briefly describe how researchers and practitioners can customize and extend the framework. For an in-depth overview of the yinyang framework, see the [documentation](https://yinyang.readthedocs.io/en/latest/).                 
 
@@ -43,15 +43,14 @@ Run TypeFuzz with other SMT Solvers
 Besides Z3 and CVC4, TypeFuzz can be run with any other SMT solver such as [MathSAT](http://mathsat.fbk.eu), [Boolector](http://verify.inf.usi.ch/content/opensmt2), [Yices](http://yices.csl.sri.com/), and [SMT-Interpol](http://ultimate.informatik.uni-freiburg.de/smtinterpol/), etc. Since TypeFuzz is based on differential testing, it needs at least two solver configurations, ideally with a large overlap in the supported SMT logics. Furthermore, yinyang's type checker currently has stable support for string and arithmetic logics. Support for other logics is currently experimental but will be finalized shortly.
 
 Solver configurations could either be specified in the command line or in the configuration file `config/Config.py` such as:  
+.. code-block:: text
 
-```
-solvers = [
-    "yices-smt2 --incremental" 
-    "z3 model_validate=true",
-    "z3 model_validate=true smt.arith.solver=6",
-    "cvc4 --check-models --produce-models --incremental --strings-exp -q",
-]
-```
+    solvers = [
+        "yices-smt2 --incremental" 
+        "z3 model_validate=true",
+        "z3 model_validate=true smt.arith.solver=6",
+        "cvc4 --check-models --produce-models --incremental --strings-exp -q",
+    ]
 
 To run TypeFuzz with these four solver configurations in the config file, you would need to run `typefuzz "" <benchmark-dir>`. Note, the `crash_list` in Config/config.py, which may need to be updated ensuring that crashes by the new solver(s) are caught.
 
@@ -119,5 +118,7 @@ We are always happy to receive your feedback or help you adjust yinyang to the n
 * `Dominik Winterer <https://wintered.github.io/>`_ - dominik.winterer@inf.ethz.ch
 
 * `Chengyu Zhang <http://chengyuzhang.com/>`_ - dale.chengyu.zhang@gmail.com
+
+* `Jiwon Park <https://www.linkedin.com/in/jiwon-park-473998170/?originalSubdomain=fr>`_ - jiwon.park@polytechnique.edu  
 
 * `Zhendong Su <https://people.inf.ethz.ch/suz/>`_ - zhendong.su@inf.ethz.ch 
