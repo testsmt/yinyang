@@ -50,7 +50,7 @@ duplicate_list = [
 
 ignore_list = [
     "(error ",
-    "unsupport",
+    "unsupported",
     "unexpected char",
     "failed to open file",
     "Expected result sat but got unsat",

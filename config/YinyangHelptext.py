@@ -71,7 +71,7 @@ long_description = """
 yinyang is a tool for finding bugs in SMT solver by generating mutant SMT-LIB
 scripts from a set of seed SMT-LIB scripts (.smt2 files) with known
 satisfiability (i.e. either sat or unsat) and generates mutant formulas of the
-same satisfiability. yinyang realizes semantic fusion whihc can work with a
+same satisfiability. yinyang realizes semantic fusion which can work with a
 single SMT solver. The idea behind semantic fusion is to fuse formula pairs of
 the same satisfiability (both either sat or unsat) and so produce mutant
 formulas of known satisfiability.

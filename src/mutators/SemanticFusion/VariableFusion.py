@@ -73,7 +73,7 @@ def get_constant_idx(template):
 
 def get_constant_value(declare_const):
     """
-    :declare_const: DeclareConst statement specifiying the random constant
+    :declare_const: DeclareConst statement specifying the random constant
     :returns: expression for random constant
     """
     const_type = declare_const.sort

@@ -103,7 +103,7 @@ def generate_ast(stream, prep_seed=True):
     vis = AstVisitor()
     formula = vis.visitStart(tree)
 
-    # empty file or parser preceding parser errror
+    # empty file or parser preceding parser error
     if len(formula.commands) == 0:
         return None
 

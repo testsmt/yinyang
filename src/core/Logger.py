@@ -116,7 +116,7 @@ def log_solver_timeout(args, solver_cli, i):
         str(i)
         + "/"
         + str(args.iterations)
-        + " Solver timeout occured. sol="
+        + " Solver timeout occurred. sol="
         + str(solver_cli)
     )
 

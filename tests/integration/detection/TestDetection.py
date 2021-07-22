@@ -205,7 +205,7 @@ def test_timeout():
     )
     log = open(newest_log("logs")).read()
 
-    if log.count("Solver timeout occured.") != 1:
+    if log.count("Solver timeout occurred.") != 1:
         print("[ERROR] Timeout undetected.")
         print(cmd)
         exit(1)
@@ -336,7 +336,7 @@ duplicate_list = [
 
 ignore_list = [
     "(error ",
-    "unsupport",
+    "unsupported",
     "unexpected char",
     "failed to open file",
     "Expected result sat but got unsat",

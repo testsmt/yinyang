@@ -38,7 +38,7 @@ def do_parsing(fn):
     cmd = "timeout -s 9 1 python3.7 parse.py " + fn + ";echo $?"
     out = sp.getoutput(cmd)
 
-    # To supress debug related issues
+    # To suppress debug related issues
     if "dbg" in out:
         return 0
 

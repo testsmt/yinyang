@@ -45,3 +45,6 @@ jobs:
     - name: code style and static analysis with flake 
       run: |
         bin/checkstyle.sh
+    - name: spell check 
+      run: |
+        codespell --skip="Solver.py,SMTLIBv2*,*.g4,*.tokens,*.interp,*.smt2"
