@@ -1,0 +1,111 @@
+;
+(par (A) (id A A))
+;
+; ### funs from core theory 
+;(true Bool)  
+;(false Bool)
+(not Bool Bool)
+(=> Bool Bool Bool :right-assoc)
+(and Bool Bool Bool :left-assoc)
+(or Bool Bool Bool :left-assoc)
+(xor Bool Bool Bool :left-assoc)
+;(par (A) (= A A Bool :chainable))
+;(par (A) (distinct A A Bool :pairwise))
+;(par (A) (ite Bool A A A))
+
+; ### funs from ints 
+;(NUMERAL Int) 
+(- Int Int)                 ; negation
+(- Int Int Int :left-assoc) ; subtraction
+(+ Int Int Int :left-assoc) 
+(* Int Int Int :left-assoc)
+(div Int Int Int :left-assoc)
+(mod Int Int Int)
+(abs Int Int)
+(<= Int Int Bool :chainable)
+(<  Int Int Bool :chainable)
+(>= Int Int Bool :chainable)
+(>  Int Int Bool :chainable)
+
+; ### funs from reals
+;(NUMERAL Real) 
+;(DECIMAL Real) 
+(- Real Real)                  ; negation
+(- Real Real Real :left-assoc) ; subtraction
+(+ Real Real Real :left-assoc) 
+(* Real Real Real :left-assoc)
+(/ Real Real Real :left-assoc)
+(<= Real Real Bool :chainable)
+(<  Real Real Bool :chainable)
+(>= Real Real Bool :chainable)
+(>  Real Real Bool :chainable)
+
+; ### funs from real-ints 
+;(NUMERAL Int) 
+;(- Int Int)                 ; negation
+(- Int Int Int :left-assoc) ; subtraction
+(+ Int Int Int :left-assoc) 
+(* Int Int Int :left-assoc)
+(div Int Int Int :left-assoc)
+(mod Int Int Int)
+(abs Int Int)
+(<= Int Int Bool :chainable)
+(<  Int Int Bool :chainable)
+(>= Int Int Bool :chainable)
+(>  Int Int Bool :chainable)
+;(DECIMAL Real) 
+(- Real Real)                  ; negation
+(- Real Real Real :left-assoc) ; subtraction
+(+ Real Real Real :left-assoc) 
+(* Real Real Real :left-assoc)
+(/ Real Real Real :left-assoc)
+(<= Real Real Bool :chainable)
+(<  Real Real Bool :chainable)
+(>= Real Real Bool :chainable)
+(>  Real Real Bool :chainable)
+(to_real Int Real)
+(to_int Real Int)
+(is_int Real Bool)
+
+; ### funs from strings
+;
+; ## Core functions 
+(str.++ String String String :left-assoc)
+(str.len String Int)
+(str.< String String Bool :chainable)
+;
+; ## Regular expression functions
+(str.to_re String RegLan) 
+(str.in_re String RegLan Bool) 
+(re.none RegLan)
+(re.all RegLan)
+(re.allchar RegLan)
+(re.++ RegLan RegLan RegLan :left-assoc)
+(re.union RegLan RegLan RegLan :left-assoc)
+(re.inter RegLan RegLan RegLan :left-assoc)
+(re.* RegLan RegLan) 
+;
+; ## Regular expression functions
+(str.<= String String Bool :chainable)   
+(str.at String Int String)
+(str.substr String Int Int String)
+(str.prefixof String String Bool)
+(str.suffixof String String Bool)
+(str.contains String String Bool)
+(str.indexof String String Int Int)
+(str.replace String String String String)
+(str.replace_all String String String String)
+(str.replace_re String RegLan String String) 
+(str.replace_re_all String RegLan String String) 
+(re.comp RegLan RegLan)
+(re.diff RegLan RegLan RegLan :left-assoc)
+(re.+ RegLan RegLan)
+(re.opt RegLan RegLan)
+(re.range String String RegLan)
+; 
+; ## Maps to and from integers
+(str.is_digit String Bool)
+(str.to_code String Int) 
+(str.from_code Int String) 
+(str.to_int String Int)
+(str.from_int Int String)

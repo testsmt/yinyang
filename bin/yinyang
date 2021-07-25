@@ -1,11 +1,117 @@
-#!/usr/bin/env python3
+#! /usr/bin/env python3
 
-import os
+# MIT License
+#
+# Copyright (c) [2020 - 2021] The yinyang authors
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 import sys
+import signal
+import inspect
+from pathlib import Path
 
-__root_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
-sys.path.insert(0, __root_dir)
+path = Path(__file__)
+rootpath = str(path.parent.absolute().parent)
+sys.path.append(rootpath)
 
-from src import yinyang
+from src.base.Driver import run_checks
+from src.base.Error import raise_runtime_error
+from src.base.ArgumentParser import build_yinyang_parser
+from src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_USAGE, ERR_INTERNAL
 
-yinyang.main()
+from src.core.Fuzzer import Fuzzer
+
+from config.YinyangHelptext import (
+    usage,
+    header,
+    short_description,
+    long_description,
+    options,
+)
+
+
+def main():
+    parser = build_yinyang_parser(rootpath, usage)
+
+    if len(sys.argv) == 1:
+
+        # Show medium-length description when called without args containing
+        # one example and the usage dialogue.
+        print(header + "\n\nusage:" + usage + short_description, flush=True)
+        exit(ERR_USAGE)
+
+    elif "-h" in sys.argv or "--help" in sys.argv:
+
+        # If called for help, show long description containing general
+        # information on opfuzz, two examples with in-depth explanation,
+        # and the usage dialogue.
+        print(
+            header
+            + "\n"
+            + long_description
+            + "\n"
+            + options
+            + "\n"
+            + "usage:"
+            + usage
+            + "\n",
+            flush=True,
+        )
+        exit(OK_NOBUGS)
+
+    else:
+        args = run_checks(parser, "yinyang")
+        try:
+            fuzzer = Fuzzer(args, "yinyang")
+
+            def print_stats():
+                fuzzer.statistic.printsum()
+                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
+                    exit(OK_NOBUGS)
+                exit(OK_BUGS)
+
+            def stats_control_c(sig, frame):
+                print("\b\b\rUser interrupt", flush=True)
+                print_stats()
+                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
+                    exit(OK_NOBUGS)
+                exit(OK_BUGS)
+
+            def silent_control_c(sig, frame):
+                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
+                    exit(OK_NOBUGS)
+                exit(OK_BUGS)
+
+            if not args.quiet:
+                signal.signal(signal.SIGINT, stats_control_c)
+            else:
+                signal.signal(signal.SIGINT, silent_control_c)
+                exit(OK_NOBUGS)
+
+            fuzzer.run()
+            exit(OK_NOBUGS)
+        except Exception as e:
+            trace = inspect.trace()
+            raise_runtime_error(trace, sys.argv, e)
+            exit(ERR_INTERNAL)
+
+
+if __name__ == "__main__":
+    main()

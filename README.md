@@ -16,7 +16,7 @@
 
 yinyang
 ------------
-A fuzzer for SMT solvers. Given a set of seed SMT formulas, yinyang generates mutant formulas to stress-test SMT solvers. yinyang can be used to robustify SMT solvers. It already found **1,000+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
+A fuzzer for SMT solvers. Given a set of seed SMT formulas, yinyang generates mutant formulas to stress-test SMT solvers. yinyang can be used to robustify SMT solvers. It already found **1,500+** bugs in the two state-of-the-art SMT solvers Z3 and CVC4.
 
 
 
@@ -40,7 +40,7 @@ to download the corresponding SMT-LIB 2 benchmarks. Alternatively, you can downl
 
 3. **Run yinyang** on the benchmarks e.g. with Z3 and CVC4.  
 ```bash
-python3 yinyang.py "z3 model_validate=true;cvc4 --check-models -m -i -q" benchmarks 
+bin/opfuzz "z3 model_validate=true;cvc4 --check-models -m -i -q" benchmarks 
 ```
 
 yinyang will by default randomly select formulas from the folder `./benchmarks` and generate 300 mutants per seed formula. If a bug has been found, the bug trigger is stored in `./bugs`. yinyang will run in an infinite loop. You can use the shortcut CTRL+C to terminate yinyang manually.
@@ -57,4 +57,4 @@ Additional Ressources
 ----------
 - [Citing yinyang](https://yinyang.readthedocs.io/en/latest/building_on.html#citing-yinyang)
 - [Project website](https://testsmt.github.io/) with bug statistics, talk videos, etc.
-- [Google Open Source Peer Bonus](https://opensource.googleblog.com/2021/04/announcing-first-group-of-google-open-source-peer-bonus-winners.html#:~:text=The%20Google%20Open%20Source%20Peer,exceptional%20contributions%20to%20open%20source.) 
+- [Google Open Source Peer Bonus](https://opensource.googleblog.com/2021/04/announcing-first-group-of-google-open-source-peer-bonus-winners.html#:~:text=The%20Google%20Open%20Source%20Peer,exceptional%20contributions%20to%20open%20source.) 🏆
