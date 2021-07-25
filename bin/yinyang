@@ -32,9 +32,6 @@ path = Path(__file__)
 rootpath = str(path.parent.absolute().parent)
 sys.path.append(rootpath)
 
-__root_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
-sys.path.insert(0, __root_dir)
-
 from src.base.Driver import run_checks
 from src.base.Error import raise_runtime_error
 from src.base.ArgumentParser import build_yinyang_parser
