@@ -22,6 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
 import sys
 import signal
 import inspect
@@ -30,6 +31,9 @@ from pathlib import Path
 path = Path(__file__)
 rootpath = str(path.parent.absolute().parent)
 sys.path.append(rootpath)
+
+__root_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
+sys.path.insert(0, __root_dir)
 
 from src.base.Driver import run_checks
 from src.base.Error import raise_runtime_error
