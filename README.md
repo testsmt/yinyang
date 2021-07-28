@@ -25,14 +25,14 @@ Installation
 To install a stable version of yinyang use:    
 
 ```
-pip3 install yinyang 
+pip3 install yinyang
 ```
 
 To install the most recent version, check out the repository:            
 
 ``` bash                                                                           
-git clone https://github.com/testsmt/yinyang.git                                   
-pip3 install antlr4-python3-runtime==4.9.2                                         
+git clone https://github.com/testsmt/yinyang.git                        
+pip3 install antlr4-python3-runtime==4.9.2                                   
 ``` 
 
 Note that you may want to add `yinyang/bin` to your PATH, for running yinyang conveniently without prefix.  
