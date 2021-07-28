@@ -1,4 +1,4 @@
-<p align="center"><a><img width="160" alt="portfolio_view" align="center" src="media/logo.png"></a></p>
+<p align="center"><a><img width="160" alt="portfolio_view" align="center" src="https://testsmt.github.io/img/tool_logo.png"></a></p>
 
 <br>
 <p align="center">
@@ -51,13 +51,13 @@ typefuzz "z3 model_validate=true;cvc4 --check-models -m -i -q" benchmarks
 
 yinyang will by default randomly select formulas from the folder `./benchmarks` and generate 300 mutants per seed formula. If a bug has been found, the bug trigger is stored in `./bugs`. yinyang will run in an infinite loop. You can use the shortcut CTRL+C to terminate yinyang manually.
 
-:blue_book: [Documentation](https://yinyang.readthedocs.io/en/latest/)
+📘 [Documentation](https://yinyang.readthedocs.io/en/latest/)
 
 Feedback
 ---------
 For bugs/issues/questions/feature requests please file an issue. We are always happy to receive your feedback or help you adjust yinyang to the needs of your custom solver, help you build on yinyang, etc.
  
- :memo: [Contact us](https://yinyang.readthedocs.io/en/latest/building_on.html#contact)
+📬 [Contact us](https://yinyang.readthedocs.io/en/latest/building_on.html#contact)
 
 Additional Resources
 ----------

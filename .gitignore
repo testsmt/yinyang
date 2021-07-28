@@ -1,2 +1,5 @@
 __pycache__
 .DS_Store
+build
+dist
+yinyang.egg-info
