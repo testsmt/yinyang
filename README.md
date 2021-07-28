@@ -1,4 +1,4 @@
-<p align="center"><a><img width="160" alt="portfolio_view" align="center" src="https://testsmt.github.io/img/tool_logo.png"></a></p>
+<p align="center"><a><img width="160" alt="portfolio_view" align="center" src="https://testsmt.github.io/img/tool_logo_with_name.png"></a></p>
 
 <br>
 <p align="center">
