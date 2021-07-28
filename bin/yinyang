@@ -28,8 +28,7 @@ import signal
 import inspect
 from pathlib import Path
 
-path = Path(__file__)
-rootpath = str(path.parent.absolute().parent)
+rootpath = os.getcwd()
 sys.path.append(rootpath)
 
 from src.base.Driver import run_checks
