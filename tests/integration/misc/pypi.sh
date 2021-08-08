@@ -9,5 +9,20 @@ if ! pip install yinyang; then
 fi
 
 yinyang
+
+if [ $? -ne 2 ]; then
+    exit 1
+fi
+
 opfuzz 
+
+if [ $? -ne 2 ]; then
+    exit 1
+fi
+
 typefuzz 
+
+if [ $? -ne 2 ]; then
+    exit 1
+fi
+
