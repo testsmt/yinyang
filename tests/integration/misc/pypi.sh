@@ -1,10 +1,10 @@
 #! /bin/bash
 
-if ! pip uninstall -y antlr4-python3-runtime; then
-    exit 1
-fi
+#if ! pip3 uninstall -y antlr4-python3-runtime; then
+    #exit 1
+#fi
 
-if ! pip install yinyang; then 
+if ! pip3 install yinyang; then 
     exit 1
 fi
 
@@ -28,19 +28,20 @@ fi
 
 apt-get install -y cvc4 z3
 
-bin/yinyang -o sat "z3 model_validate=true;cvc4 --check-models -m -i -q" examples/phi1.smt2 examples/phi2.smt2
+cd ..
+yinyang -o sat "z3 model_validate=true;cvc4 --check-models -m -i -q" yinyang/examples/phi1.smt2 yinyang/examples/phi2.smt2
 
 if [ $? -eq 3 ]; then
     exit 1
 fi
 
-bin/opfuzz "z3 model_validate=true;cvc4 --check-models -m -i -q" examples/phi1.smt2
+opfuzz "z3 model_validate=true;cvc4 --check-models -m -i -q" yinyang/examples/phi1.smt2
 
 if [ $? -eq 3 ]; then
     exit 1
 fi
 
-bin/typefuzz "z3 model_validate=true;cvc4 --check-models -m -i -q" examples/phi1.smt2
+typefuzz "z3 model_validate=true;cvc4 --check-models -m -i -q" yinyang/examples/phi1.smt2
 
 if [ $? -eq 3 ]; then
     exit 1
