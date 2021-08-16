@@ -36,7 +36,7 @@ class ArgumentParser(argparse.ArgumentParser):
         )
 
 
-def add_common_args(parser, rootpath):
+def add_common_args(parser, rootpath, current_dir):
     parser.add_argument(
         "SOLVER_CLIS",
         metavar="solver_clis",
@@ -50,7 +50,7 @@ def add_common_args(parser, rootpath):
         "-l",
         "--logfolder",
         metavar="path_path_to_folder",
-        default=rootpath + "/logs",
+        default=current_dir + "/logs",
     )
     parser.add_argument(
         "-h",
@@ -69,13 +69,13 @@ def add_common_args(parser, rootpath):
         "-b",
         "--bugsfolder",
         metavar="path_to_folder",
-        default=rootpath + "/bugs",
+        default=current_dir + "/bugs",
     )
     parser.add_argument(
         "-s",
         "--scratchfolder",
         metavar="path_to_folder",
-        default=rootpath + "/scratch",
+        default=current_dir + "/scratch",
     )
     parser.add_argument(
         "-q",
@@ -96,7 +96,7 @@ def add_common_args(parser, rootpath):
     )
 
 
-def add_opfuzz_args(parser, rootpath):
+def add_opfuzz_args(parser, rootpath, current_dir):
     parser.add_argument(
         "-i",
         "--iterations",
@@ -125,7 +125,7 @@ def add_opfuzz_args(parser, rootpath):
     )
 
 
-def add_typefuzz_args(parser, rootpath):
+def add_typefuzz_args(parser, rootpath, current_dir):
     parser.add_argument(
         "-i",
         "--iterations",
@@ -154,7 +154,7 @@ def add_typefuzz_args(parser, rootpath):
     )
 
 
-def add_yinyang_args(parser, rootpath):
+def add_yinyang_args(parser, rootpath, current_dir):
     parser.add_argument(
         "-o",
         "--oracle",
@@ -183,40 +183,40 @@ def add_yinyang_args(parser, rootpath):
     )
 
 
-def build_opfuzz_parser(rootpath, usage):
+def build_opfuzz_parser(rootpath, current_dir, usage):
     parser = ArgumentParser(
         description="",
         usage=usage,
         formatter_class=argparse.RawDescriptionHelpFormatter,
         add_help=False,
     )
-    add_common_args(parser, rootpath)
-    add_opfuzz_args(parser, rootpath)
+    add_common_args(parser, rootpath, current_dir)
+    add_opfuzz_args(parser, rootpath, current_dir)
 
     return parser
 
 
-def build_typefuzz_parser(rootpath, usage):
+def build_typefuzz_parser(rootpath, current_dir, usage):
     parser = ArgumentParser(
         description="",
         usage=usage,
         formatter_class=argparse.RawDescriptionHelpFormatter,
         add_help=False,
     )
-    add_common_args(parser, rootpath)
-    add_typefuzz_args(parser, rootpath)
+    add_common_args(parser, current_dir, rootpath)
+    add_typefuzz_args(parser, current_dir, rootpath)
 
     return parser
 
 
-def build_yinyang_parser(rootpath, usage):
+def build_yinyang_parser(rootpath, current_dir, usage):
     parser = ArgumentParser(
         description="",
         usage=usage,
         formatter_class=argparse.RawDescriptionHelpFormatter,
         add_help=False,
     )
-    add_common_args(parser, rootpath)
-    add_yinyang_args(parser, rootpath)
+    add_common_args(parser, current_dir, rootpath)
+    add_yinyang_args(parser, current_dir, rootpath)
 
     return parser

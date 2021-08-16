@@ -27,8 +27,11 @@ import signal
 import inspect
 from pathlib import Path
 
-rootpath = os.getcwd()
+path = Path(__file__)
+rootpath = str(path.parent.absolute().parent)
 sys.path.append(rootpath)
+
+current_dir = os.getcwd()
 
 from src.base.Driver import run_checks
 from src.base.Error import raise_runtime_error
@@ -47,7 +50,7 @@ from config.TypefuzzHelptext import (
 
 
 def main():
-    parser = build_typefuzz_parser(rootpath, usage)
+    parser = build_typefuzz_parser(rootpath, current_dir, usage)
 
     if len(sys.argv) == 1:
 
