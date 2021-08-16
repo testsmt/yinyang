@@ -20,15 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from src.base.Version import VERSION, COMMIT
+from src.base.Version import VERSION
 
 
 header = (
     "yinyang -- a differential fuzzer for SMT solvers [version: "
     + VERSION
-    + " ("
-    + COMMIT
-    + ")]"
+    + "]"
 )
 
 usage = """ yinyang [options] -o oracle solver_clis seed_file1 seed_file2 [optionally, more seed files]

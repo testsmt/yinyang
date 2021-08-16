@@ -20,15 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from src.base.Version import VERSION, COMMIT
+from src.base.Version import VERSION
 
 
 header = (
     "opfuzz -- a differential fuzzer for SMT solvers [version: "
     + VERSION
-    + " ("
-    + COMMIT
-    + ")]"
+    + "]"
 )
 
 usage = """ opfuzz [options] solver_clis seed_file   [optionally, more seed files]
