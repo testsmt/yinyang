@@ -26,7 +26,7 @@ if [ $? -ne 2 ]; then
     exit 1
 fi
 
-apt-get install -y cvc4 z3
+sudo apt-get install -y cvc4 z3
 
 cd ..
 yinyang -o sat "z3 model_validate=true;cvc4 --check-models -m -i -q" yinyang/examples/phi1.smt2 yinyang/examples/phi2.smt2
