@@ -179,7 +179,7 @@ def add_yinyang_args(parser, rootpath, current_dir):
         "-c",
         "--config",
         metavar="path_to_file",
-        default=rootpath + "/yinyang/fusion_functions.txt",
+        default=rootpath + "/yinyang/config/fusion_functions.txt",
     )
 
 
