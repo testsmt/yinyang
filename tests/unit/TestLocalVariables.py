@@ -35,7 +35,7 @@ from yinyang.src.generators.GenTypeAwareMutation.Util import *
 
 class Mockargs:
     modulo = 3
-    config_file = "config/generalization.txt"
+    config_file = "yinyang/config/generalization.txt"
 
 
 class LocalVariableMutationTestCase(unittest.TestCase):

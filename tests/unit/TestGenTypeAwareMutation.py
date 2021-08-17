@@ -34,7 +34,7 @@ from yinyang.src.mutators.GenTypeAwareMutation.Util import *
 
 class Mockargs:
     modulo = 3
-    config = "config/typefuzz_config.txt"
+    config = "yinyang/config/typefuzz_config.txt"
 
 
 class GenTypeAwareMutationTestCase(unittest.TestCase):

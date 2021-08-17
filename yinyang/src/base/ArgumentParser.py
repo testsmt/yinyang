@@ -121,7 +121,7 @@ def add_opfuzz_args(parser, rootpath, current_dir):
         "-c",
         "--config",
         metavar="path_to_file",
-        default=rootpath + "/config/operator_mutations.txt",
+        default=rootpath + "/yinyang/config/operator_mutations.txt",
     )
 
 
@@ -150,7 +150,7 @@ def add_typefuzz_args(parser, rootpath, current_dir):
         "-c",
         "--config",
         metavar="path_to_file",
-        default=rootpath + "/config/typefuzz_config.txt",
+        default=rootpath + "/yinyang/config/typefuzz_config.txt",
     )
 
 
@@ -179,7 +179,7 @@ def add_yinyang_args(parser, rootpath, current_dir):
         "-c",
         "--config",
         metavar="path_to_file",
-        default=rootpath + "/config/fusion_functions.txt",
+        default=rootpath + "/yinyang/fusion_functions.txt",
     )
 
 

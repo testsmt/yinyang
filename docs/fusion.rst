@@ -54,7 +54,7 @@ Fusion requires the seeds that are pre-categorized to be either sat or unsat. Pr
 
 Fusion functions
 ................................
-The configuration file ``config/fusion_functions.txt`` specifies fusion and inversion functions.  The format is the following:  
+The configuration file ``yinyang/config/fusion_functions.txt`` specifies fusion and inversion functions.  The format is the following:  
 
 .. code-block:: text 
 
@@ -70,7 +70,7 @@ The configuration file ``config/fusion_functions.txt`` specifies fusion and inve
 
 **Example:**
 
-The following code shows schematically fusion and inversion are described in ``config/fusion_functions.txt``.
+The following code shows schematically fusion and inversion are described in ``yinyang/config/fusion_functions.txt``.
 
 .. code-block:: text 
 

@@ -44,7 +44,7 @@ class GenTypeAwareMutation(Mutator):
     def parse_config_file(self):
         """
         Read the customizable configuration file.
-        Customize the configuration file at config/generalization.txt.
+        Customize the configuration file at yinyang/config/generalization.txt.
         Configuration file contains all the signatures of SMT-LIB operators
         and the signatures are used for operator choice during the mutation.
         """

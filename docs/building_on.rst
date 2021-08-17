@@ -30,7 +30,7 @@ The following file tree shows the most important files of typefuzz and includes 
 
 When TypeFuzz is called from the command line, it executes `bin/typefuzz` containing the main function. After parsing the command line and reading in the seeds, the method `Fuzzer.py:run` is called. It randomly pops an SMT-LIB file from the seed list (`Fuzzer.py:142`), then parses (`Fuzzer.py:98`) and type-checks (`Fuzzer.py:146`) the SMT-LIB file. Next, we compute the set of unique expressions (`Fuzzer.py:148`) from the seed and pass it to a newly created mutator GenTypeAwareMutation (`Fuzzer.py:149`). The mutator is then called in a for-loop realizing n consecutive mutations (`Fuzzer.py:171`). Each mutated formula is then passed to the SMT solvers under test which checks for soundness bugs, invalid model bugs, assertion violations, segfaults (`Fuzzer.py:185`) and dumps the bug triggers to the disk. For details on these checks, read the comments in the method `Fuzzer.py:test`.            
 
-Generative type-aware mutation's mutator class is realized in `GenTypeAwareMutation.py`. It takes a type-checked SMT-LIB script and the set of its unique expressions as arguments to the constructor. Then, we parse the configuration file (`config/typefuzz_config.txt`) containing the operator signatures. The method `mutate` implements a mutation step. First, we call the method `get_all_subterms` to return a list of all expressions (`av_expr`) and another list with their types (`expr_type`). Next, we repeatedly choose a term t1 from the formula to be substituted by a term t2 (returned by `get_replacee`). If we could successfully construct such a term, then we substitute and return the mutated formula.
+Generative type-aware mutation's mutator class is realized in `GenTypeAwareMutation.py`. It takes a type-checked SMT-LIB script and the set of its unique expressions as arguments to the constructor. Then, we parse the configuration file (`yinyang/config/typefuzz_config.txt`) containing the operator signatures. The method `mutate` implements a mutation step. First, we call the method `get_all_subterms` to return a list of all expressions (`av_expr`) and another list with their types (`expr_type`). Next, we repeatedly choose a term t1 from the formula to be substituted by a term t2 (returned by `get_replacee`). If we could successfully construct such a term, then we substitute and return the mutated formula.
 
 The `get_replacee(term)` method randomly chooses an operator from the list of candidate operators. The list of candidate operators contains all operators with a return type matching term's type and includes the identity operator `id`. Next, we pick a type-conforming expression from the set of unique expressions for every argument for the operator at hand and return the expression. The `get_replacee`method may fail, e.g., if we would have picked an operator of a conforming type but no term with conforming types to its arguments exist. To avoid this, we repeat the `get_replacee` method several times.
 
@@ -42,7 +42,7 @@ Run TypeFuzz with other SMT Solvers
 ....................................
 Besides Z3 and CVC4, TypeFuzz can be run with any other SMT solver such as [MathSAT](http://mathsat.fbk.eu), [Boolector](http://verify.inf.usi.ch/content/opensmt2), [Yices](http://yices.csl.sri.com/), and [SMT-Interpol](http://ultimate.informatik.uni-freiburg.de/smtinterpol/), etc. Since TypeFuzz is based on differential testing, it needs at least two solver configurations, ideally with a large overlap in the supported SMT logics. Furthermore, yinyang's type checker currently has stable support for string and arithmetic logics. Support for other logics is currently experimental but will be finalized shortly.
 
-Solver configurations could either be specified in the command line or in the configuration file `config/Config.py` such as:  
+Solver configurations could either be specified in the command line or in the configuration file `yinyang/config/Config.py` such as:  
 .. code-block:: text
 
     solvers = [
@@ -52,7 +52,7 @@ Solver configurations could either be specified in the command line or in the co
         "cvc4 --check-models --produce-models --incremental --strings-exp -q",
     ]
 
-To run TypeFuzz with these four solver configurations in the config file, you would need to run `typefuzz "" <benchmark-dir>`. Note, the `crash_list` in Config/config.py, which may need to be updated ensuring that crashes by the new solver(s) are caught.
+To run TypeFuzz with these four solver configurations in the config file, you would need to run `typefuzz "" <benchmark-dir>`. Note, the `crash_list` in yinyang/config/config.py, which may need to be updated ensuring that crashes by the new solver(s) are caught.
 
 Devise a custom mutator 
 .........................
