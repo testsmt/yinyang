@@ -22,8 +22,8 @@
 
 import argparse
 
-from src.base.Exitcodes import ERR_USAGE
-from src.base.Version import VERSION, COMMIT
+from yinyang.src.base.Exitcodes import ERR_USAGE
+from yinyang.src.base.Version import VERSION, COMMIT
 
 
 class ArgumentParser(argparse.ArgumentParser):

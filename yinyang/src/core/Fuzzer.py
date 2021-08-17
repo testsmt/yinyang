@@ -30,24 +30,24 @@ import signal
 import logging
 import pathlib
 
-from src.core.Statistic import Statistic
-from src.core.Solver import Solver, SolverQueryResult, SolverResult
+from yinyang.src.core.Statistic import Statistic
+from yinyang.src.core.Solver import Solver, SolverQueryResult, SolverResult
 
-from src.parsing.Parse import parse_file
-from src.parsing.Typechecker import typecheck
+from yinyang.src.parsing.Parse import parse_file
+from yinyang.src.parsing.Typechecker import typecheck
 
-from src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
-from src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
-from src.mutators.GenTypeAwareMutation.Util import get_unique_subterms
-from src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import (
+from yinyang.src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
+from yinyang.src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
+from yinyang.src.mutators.GenTypeAwareMutation.Util import get_unique_subterms
+from yinyang.src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import (
     GenTypeAwareMutation
 )
 
 
-from src.base.Utils import random_string, plain, escape
-from src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_EXHAUSTED_DISK
+from yinyang.src.base.Utils import random_string, plain, escape
+from yinyang.src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_EXHAUSTED_DISK
 
-from src.core.Logger import (
+from yinyang.src.core.Logger import (
     init_logging,
     log_strategy_num_seeds,
     log_generation_attempt,
@@ -60,7 +60,7 @@ from src.core.Logger import (
     log_soundness_trigger,
     log_invalid_mutant,
 )
-from src.core.FuzzerUtil import (
+from yinyang.src.core.FuzzerUtil import (
     get_seeds,
     grep_result,
     admissible_seed_size,

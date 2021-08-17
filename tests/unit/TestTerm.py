@@ -23,8 +23,8 @@
 import sys
 import unittest
 
-from src.parsing.Parse import parse_str
-from src.parsing.Ast import Const, Var, Expr
+from yinyang.src.parsing.Parse import parse_str
+from yinyang.src.parsing.Ast import Const, Var, Expr
 
 sys.path.append("../../")
 

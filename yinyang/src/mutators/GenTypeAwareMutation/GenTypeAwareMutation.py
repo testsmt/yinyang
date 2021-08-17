@@ -22,15 +22,15 @@
 
 import random
 
-from src.mutators.Mutator import Mutator
-from src.mutators.GenTypeAwareMutation.Operator import (
+from yinyang.src.mutators.Mutator import Mutator
+from yinyang.src.mutators.GenTypeAwareMutation.Operator import (
     Operator, handle_parametric_op, handle_non_parametric_op
 )
-from src.mutators.GenTypeAwareMutation.Util import (
+from yinyang.src.mutators.GenTypeAwareMutation.Util import (
     type2num, get_all_subterms, local_compatible
 )
-from src.parsing.Ast import Expr
-from src.parsing.Types import ALL
+from yinyang.src.parsing.Ast import Expr
+from yinyang.src.parsing.Types import ALL
 
 
 class GenTypeAwareMutation(Mutator):

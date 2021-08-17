@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from src.base.Version import VERSION, COMMIT
+from yinyang.src.base.Version import VERSION, COMMIT
 
 
 def raise_runtime_error(trace, argv, e):

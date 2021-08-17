@@ -23,8 +23,8 @@
 import random
 import copy
 
-from src.mutators.Mutator import Mutator
-from src.mutators.SemanticFusion.VariableFusion import (
+from yinyang.src.mutators.Mutator import Mutator
+from yinyang.src.mutators.SemanticFusion.VariableFusion import (
     fill_template,
     inv_x,
     inv_y,
@@ -32,14 +32,14 @@ from src.mutators.SemanticFusion.VariableFusion import (
     add_fusion_constraints,
     add_var_decls,
 )
-from src.mutators.SemanticFusion.Util import (
+from yinyang.src.mutators.SemanticFusion.Util import (
     random_var_triplets,
     disjunction,
     conjunction,
 )
-from src.base.Exitcodes import ERR_USAGE
-from src.parsing.Parse import parse_str
-from src.parsing.Ast import DeclareFun
+from yinyang.src.base.Exitcodes import ERR_USAGE
+from yinyang.src.parsing.Parse import parse_str
+from yinyang.src.parsing.Ast import DeclareFun
 
 
 class SemanticFusion(Mutator):

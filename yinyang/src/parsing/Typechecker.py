@@ -24,7 +24,7 @@ import sys
 
 sys.setrecursionlimit(100000)
 
-from src.parsing.Types import (
+from yinyang.src.parsing.Types import (
     sort2type,
     # Types
     BOOLEAN_TYPE, REAL_TYPE, INTEGER_TYPE, ROUNDINGMODE_TYPE, STRING_TYPE,
@@ -49,7 +49,7 @@ from src.parsing.Types import (
     FP_LT, FP_GEQ, FP_GT, FP_EQ, FP_MIN, FP_MAX, FP_FMA, TO_FP_UNSIGNED, TO_FP
 )
 
-from src.parsing.Ast import Assert
+from yinyang.src.parsing.Ast import Assert
 
 
 class Context:

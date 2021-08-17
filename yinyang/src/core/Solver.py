@@ -23,7 +23,7 @@
 import subprocess
 from enum import Enum
 
-from src.base.Exitcodes import ERR_USAGE
+from yinyang.src.base.Exitcodes import ERR_USAGE
 
 
 class SolverQueryResult(Enum):

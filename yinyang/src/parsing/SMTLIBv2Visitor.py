@@ -22,8 +22,8 @@
 
 # Generated from SMTLIBv2.g4 by ANTLR 4.8
 from antlr4 import *
-from src.parsing.Ast import *
-from src.parsing.SMTLIBv2Parser import SMTLIBv2Parser
+from yinyang.src.parsing.Ast import *
+from yinyang.src.parsing.SMTLIBv2Parser import SMTLIBv2Parser
 
 # This class defines a complete generic visitor for a parse tree produced by SMTLIBv2Parser.
 class SMTLIBv2Visitor(ParseTreeVisitor):

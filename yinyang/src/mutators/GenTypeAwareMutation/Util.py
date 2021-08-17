@@ -22,8 +22,8 @@
 
 import copy
 
-from src.parsing.Ast import Term
-from src.parsing.Types import (
+from yinyang.src.parsing.Ast import Term
+from yinyang.src.parsing.Types import (
     BOOLEAN_TYPE, REAL_TYPE, INTEGER_TYPE, ROUNDINGMODE_TYPE,
     STRING_TYPE, REGEXP_TYPE
 )
