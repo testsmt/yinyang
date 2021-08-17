@@ -119,7 +119,8 @@ options:
     -s <path>, --scratchfolder <path>
             temp folder to dump mutants (default: ./scratch)
     -c <file>, --config <file>
-            set custom config file. (default: yinyang/config/typefuzz_config.txt)
+            set custom config file. 
+            (default: yinyang/config/typefuzz_config.txt)
     -L <bytes>, --limit <bytes>
             file size limit on seed formula in bytes (default: 100000)
     -n, --no-log    disable logging

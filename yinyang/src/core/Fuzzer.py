@@ -249,13 +249,14 @@ class Fuzzer:
                 return False
 
             # Match stdout and stderr against the crash list
-            # (see yinyang/config/Config.py:27) which contains various crash messages
-            # such as assertion errors, check failure, invalid models, etc.
+            # (see yinyang/config/Config.py:27) which contains various
+            # crash messages such as assertion errors, check failure, 
+            # invalid models, etc.
             if in_crash_list(stdout, stderr):
 
                 # Match stdout and stderr against the duplicate list
-                # (see yinyang/config/Config.py:51) to prevent catching duplicate bug
-                # triggers.
+                # (see yinyang/config/Config.py:51) to prevent catching 
+                # duplicate bug triggers.
                 if not in_duplicate_list(stdout, stderr):
                     self.statistic.effective_calls += 1
                     self.statistic.crashes += 1
@@ -271,7 +272,8 @@ class Fuzzer:
 
                 # Check whether the solver call produced errors, e.g, related
                 # to its parser, options, type-checker etc., by matching stdout
-                # and stderr against the ignore list (see yinyang/config/Config.py:54).
+                # and stderr against the ignore list 
+                # (see yinyang/config/Config.py:54).
                 if in_ignore_list(stdout, stderr):
                     log_ignore_list_mutant(solver_cli)
                     self.statistic.invalid_mutants += 1
