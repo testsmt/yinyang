@@ -205,7 +205,7 @@ def test_timeout():
     )
     log = open(newest_log("logs")).read()
 
-    if log.count("Solver timeout occured.") != 1:
+    if log.count("Solver timeout occurred.") != 1:
         print("[ERROR] Timeout undetected.")
         print(cmd)
         exit(1)
@@ -336,7 +336,7 @@ duplicate_list = [
 
 ignore_list = [
     "(error ",
-    "unsupport",
+    "unsupported",
     "unexpected char",
     "failed to open file",
     "Expected result sat but got unsat",
@@ -349,8 +349,8 @@ ignore_list = [
 ]
 
 """
-    os.system("mv config/config.py config/config.py.orig")
-    with open("config/Config.py", "w") as f:
+    os.system("mv yinyang/config/config.py yinyang/config/config.py.orig")
+    with open("yinyang/config/Config.py", "w") as f:
         f.write(config_py)
     create_mocksolver_msg(msg, solver)
     first_config = os.path.abspath(solver)
@@ -364,7 +364,7 @@ ignore_list = [
         exit(1)
     else:
         os.system("rm -rf " + solver)
-    os.system("mv config/config.py.orig config/config.py")
+    os.system("mv yinyang/config/config.py.orig yinyang/config/config.py")
 
 
 if __name__ == "__main__":

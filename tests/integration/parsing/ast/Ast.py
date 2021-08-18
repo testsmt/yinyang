@@ -24,10 +24,10 @@ import sys
 
 from antlr4.CommonTokenStream import FileStream, CommonTokenStream
 
-from src.parsing.SMTLIBv2Lexer import SMTLIBv2Lexer
-from src.parsing.SMTLIBv2Parser import SMTLIBv2Parser
-from src.parsing.AstVisitor import AstVisitor
-from src.parsing.Parse import parse_file
+from yinyang.src.parsing.SMTLIBv2Lexer import SMTLIBv2Lexer
+from yinyang.src.parsing.SMTLIBv2Parser import SMTLIBv2Parser
+from yinyang.src.parsing.AstVisitor import AstVisitor
+from yinyang.src.parsing.Parse import parse_file
 
 sys.setrecursionlimit(100000)
 sys.path.append("../../../../")

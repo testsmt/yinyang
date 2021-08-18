@@ -30,9 +30,9 @@ import os
 
 from antlr4.CommonTokenStream import FileStream, CommonTokenStream
 
-from src.parsing.SMTLIBv2Lexer import SMTLIBv2Lexer
-from src.parsing.SMTLIBv2Parser import SMTLIBv2Parser
-from src.parsing.AstVisitor import AstVisitor
+from yinyang.src.parsing.SMTLIBv2Lexer import SMTLIBv2Lexer
+from yinyang.src.parsing.SMTLIBv2Parser import SMTLIBv2Parser
+from yinyang.src.parsing.AstVisitor import AstVisitor
 
 
 sys.setrecursionlimit(100000)

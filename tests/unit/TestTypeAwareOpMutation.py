@@ -23,8 +23,8 @@
 import sys
 import unittest
 
-from src.parsing.Parse import parse_str, parse_file
-from src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
+from yinyang.src.parsing.Parse import parse_str, parse_file
+from yinyang.src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
 
 sys.path.append("../../")
 

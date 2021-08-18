@@ -22,6 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
 import sys
 import signal
 import inspect
@@ -31,14 +32,17 @@ path = Path(__file__)
 rootpath = str(path.parent.absolute().parent)
 sys.path.append(rootpath)
 
-from src.base.Driver import run_checks
-from src.base.Error import raise_runtime_error
-from src.base.ArgumentParser import build_yinyang_parser
-from src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_USAGE, ERR_INTERNAL
+current_dir = os.getcwd()
 
-from src.core.Fuzzer import Fuzzer
+from yinyang.src.base.Driver import run_checks
+from yinyang.src.base.Error import raise_runtime_error
+from yinyang.src.base.ArgumentParser import build_yinyang_parser
+from yinyang.src.base.Exitcodes import OK_BUGS, OK_NOBUGS
+from yinyang.src.base.Exitcodes import ERR_USAGE, ERR_INTERNAL
 
-from config.YinyangHelptext import (
+from yinyang.src.core.Fuzzer import Fuzzer
+
+from yinyang.config.YinyangHelptext import (
     usage,
     header,
     short_description,
@@ -48,7 +52,7 @@ from config.YinyangHelptext import (
 
 
 def main():
-    parser = build_yinyang_parser(rootpath, usage)
+    parser = build_yinyang_parser(current_dir, usage)
 
     if len(sys.argv) == 1:
 
