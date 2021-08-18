@@ -349,8 +349,8 @@ ignore_list = [
 ]
 
 """
-    os.system("mv config/config.py config/config.py.orig")
-    with open("config/Config.py", "w") as f:
+    os.system("mv yinyang/config/config.py yinyang/config/config.py.orig")
+    with open("yinyang/config/Config.py", "w") as f:
         f.write(config_py)
     create_mocksolver_msg(msg, solver)
     first_config = os.path.abspath(solver)
@@ -364,7 +364,7 @@ ignore_list = [
         exit(1)
     else:
         os.system("rm -rf " + solver)
-    os.system("mv config/config.py.orig config/config.py")
+    os.system("mv yinyang/config/config.py.orig yinyang/config/config.py")
 
 
 if __name__ == "__main__":

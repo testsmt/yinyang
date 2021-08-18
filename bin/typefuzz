@@ -33,14 +33,15 @@ sys.path.append(rootpath)
 
 current_dir = os.getcwd()
 
-from src.base.Driver import run_checks
-from src.base.Error import raise_runtime_error
-from src.base.ArgumentParser import build_typefuzz_parser
-from src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_USAGE, ERR_INTERNAL
+from yinyang.src.base.Driver import run_checks
+from yinyang.src.base.Error import raise_runtime_error
+from yinyang.src.base.ArgumentParser import build_typefuzz_parser
+from yinyang.src.base.Exitcodes import OK_BUGS, OK_NOBUGS
+from yinyang.src.base.Exitcodes import ERR_USAGE, ERR_INTERNAL
 
-from src.core.Fuzzer import Fuzzer
+from yinyang.src.core.Fuzzer import Fuzzer
 
-from config.TypefuzzHelptext import (
+from yinyang.config.TypefuzzHelptext import (
     usage,
     header,
     short_description,
@@ -50,7 +51,7 @@ from config.TypefuzzHelptext import (
 
 
 def main():
-    parser = build_typefuzz_parser(rootpath, current_dir, usage)
+    parser = build_typefuzz_parser(current_dir, usage)
 
     if len(sys.argv) == 1:
 

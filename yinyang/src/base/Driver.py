@@ -23,16 +23,16 @@
 import os
 import sys
 from pathlib import Path
-from src.base.Exitcodes import ERR_USAGE, ERR_EXHAUSTED_DISK
+from yinyang.src.base.Exitcodes import ERR_USAGE, ERR_EXHAUSTED_DISK
 
 path = Path(__file__)
 rootpath = str(path.parent.absolute().parent)
 
 try:
     sys.path.insert(1, os.getcwd() + "/.yinyang")
-    from Config import solvers
+    from yinyang.config import solvers
 except Exception as e:
-    from config.Config import solvers
+    from yinyang.config.Config import solvers
 
 
 def check_solver_clis():

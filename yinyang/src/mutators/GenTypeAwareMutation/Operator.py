@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from src.parsing.Types import sort2type
+from yinyang.src.parsing.Types import sort2type
 
 
 class Operator:

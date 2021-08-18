@@ -24,7 +24,7 @@ import random
 import copy
 import string
 
-from src.parsing.Ast import Const, Var, Expr, Assert, DeclareConst
+from yinyang.src.parsing.Ast import Const, Var, Expr, Assert, DeclareConst
 
 
 def gen_random_string(length):

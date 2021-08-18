@@ -23,15 +23,15 @@
 import re
 import pathlib
 
-from src.base.Utils import in_list
+from yinyang.src.base.Utils import in_list
 
 try:
     sys.path.insert(1, os.getcwd() + "/.yinyang")
-    from Config import crash_list, duplicate_list, ignore_list
+    from yinyang.config import crash_list, duplicate_list, ignore_list
 except Exception as e:
-    from config.Config import crash_list, duplicate_list, ignore_list
+    from yinyang.config.Config import crash_list, duplicate_list, ignore_list
 
-from src.core.Solver import SolverResult, SolverQueryResult
+from yinyang.src.core.Solver import SolverResult, SolverQueryResult
 
 
 def in_crash_list(stdout, stderr):

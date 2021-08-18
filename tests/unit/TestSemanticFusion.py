@@ -23,8 +23,8 @@
 import sys
 import unittest
 
-from src.parsing.Parse import parse_file
-from src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
+from yinyang.src.parsing.Parse import parse_file
+from yinyang.src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
 
 sys.path.append("../../")
 

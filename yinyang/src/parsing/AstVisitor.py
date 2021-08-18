@@ -20,9 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from src.parsing.SMTLIBv2Parser import SMTLIBv2Parser
-from src.parsing.SMTLIBv2Visitor import SMTLIBv2Visitor
-from src.parsing.Ast import (
+from yinyang.src.parsing.SMTLIBv2Parser import SMTLIBv2Parser
+from yinyang.src.parsing.SMTLIBv2Visitor import SMTLIBv2Visitor
+from yinyang.src.parsing.Ast import (
     Var,
     Const,
     Expr,
@@ -52,7 +52,7 @@ from src.parsing.Ast import (
     FunDecl,
     SMTLIBCommand,
 )
-from src.parsing.Types import (
+from yinyang.src.parsing.Types import (
     BITVECTOR_TYPE,
     INTEGER_TYPE,
     REAL_TYPE,

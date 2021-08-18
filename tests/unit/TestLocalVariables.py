@@ -26,16 +26,16 @@ import os
 
 sys.path.append("../../")
 
-from src.parsing.parse import *
-from src.parsing.typechecker import Context, typecheck
-from src.generators.TypeAwareOpMutation import TypeAwareOpMutation
-from src.generators.GenTypeAwareMutation.GenTypeAwareMutation import *
-from src.generators.GenTypeAwareMutation.Util import *
+from yinyang.src.parsing.parse import *
+from yinyang.src.parsing.typechecker import Context, typecheck
+from yinyang.src.generators.TypeAwareOpMutation import TypeAwareOpMutation
+from yinyang.src.generators.GenTypeAwareMutation.GenTypeAwareMutation import *
+from yinyang.src.generators.GenTypeAwareMutation.Util import *
 
 
 class Mockargs:
     modulo = 3
-    config_file = "config/generalization.txt"
+    config_file = "yinyang/config/generalization.txt"
 
 
 class LocalVariableMutationTestCase(unittest.TestCase):

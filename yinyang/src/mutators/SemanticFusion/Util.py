@@ -23,7 +23,7 @@
 import random
 import itertools
 
-from src.parsing.Ast import (
+from yinyang.src.parsing.Ast import (
     Term,
     Script,
     Assert,

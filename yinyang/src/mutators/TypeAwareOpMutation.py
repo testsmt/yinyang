@@ -22,7 +22,7 @@
 
 import random
 
-from src.mutators.Mutator import Mutator
+from yinyang.src.mutators.Mutator import Mutator
 
 
 class TypeAwareOpMutation(Mutator):

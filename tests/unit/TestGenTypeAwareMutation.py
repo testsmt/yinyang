@@ -26,15 +26,15 @@ import sys
 sys.path.append("../../")
 import os
 
-from src.parsing.Parse import *
-from src.parsing.Typechecker import Context, typecheck
-from src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import *
-from src.mutators.GenTypeAwareMutation.Util import *
+from yinyang.src.parsing.Parse import *
+from yinyang.src.parsing.Typechecker import Context, typecheck
+from yinyang.src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import *
+from yinyang.src.mutators.GenTypeAwareMutation.Util import *
 
 
 class Mockargs:
     modulo = 3
-    config = "config/typefuzz_config.txt"
+    config = "yinyang/config/typefuzz_config.txt"
 
 
 class GenTypeAwareMutationTestCase(unittest.TestCase):

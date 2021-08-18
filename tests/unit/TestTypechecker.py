@@ -26,21 +26,21 @@ import pathlib
 
 sys.path.append("../../")
 
-from src.parsing.Ast import (
+from yinyang.src.parsing.Ast import (
     Assert,
 )
-from src.parsing.Parse import (
+from yinyang.src.parsing.Parse import (
     parse_str, parse_file
 )
 
-from src.parsing.Types import (
+from yinyang.src.parsing.Types import (
     UNKNOWN,
     BOOLEAN_TYPE,
     INTEGER_TYPE,
     STRING_TYPE,
 )
 
-from src.parsing.Typechecker import Context, typecheck_expr, typecheck
+from yinyang.src.parsing.Typechecker import Context, typecheck_expr, typecheck
 
 
 def check_type(expr):
