@@ -52,7 +52,7 @@ from yinyang.config.OpfuzzHelptext import (
 
 
 def main():
-    parser = build_opfuzz_parser(rootpath, current_dir, usage)
+    parser = build_opfuzz_parser(current_dir, usage)
 
     if len(sys.argv) == 1:
 

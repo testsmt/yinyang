@@ -51,7 +51,7 @@ from yinyang.config.TypefuzzHelptext import (
 
 
 def main():
-    parser = build_typefuzz_parser(rootpath, current_dir, usage)
+    parser = build_typefuzz_parser(current_dir, usage)
 
     if len(sys.argv) == 1:
 
