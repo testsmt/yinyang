@@ -59,6 +59,8 @@ from yinyang.src.core.Logger import (
     log_solver_timeout,
     log_soundness_trigger,
     log_invalid_mutant,
+    log_skip_seed_mutator,
+    log_skip_seed_test,
 )
 from yinyang.src.core.FuzzerUtil import (
     get_seeds,
@@ -168,6 +170,7 @@ class Fuzzer:
             log_generation_attempt(self.args)
 
             unsuccessful_gens = 0
+            successful_gens = 0
             for i in range(self.args.iterations):
                 self.print_stats()
                 mutant, success, skip_seed = self.mutator.mutate()
@@ -179,18 +182,22 @@ class Fuzzer:
                     unsuccessful_gens += 1
                     continue  # Go to next iteration.
 
+                successful_gens += 1
+
                 # Reason for mutator to skip a seed: no random components, i.e.
                 # mutant would be the same for all  iterations and hence just
                 # waste time.
                 if skip_seed:
+                    log_skip_seed_mutator(self.args, i)
                     break  # Continue to next seed.
 
                 if not self.test(mutant, i + 1):  # Continue to next seed.
-                    break
+                    log_skip_seed_test(self.args, i)
+                    break  # Continue to next seed.
 
                 self.statistic.mutants += 1
 
-            log_finished_generations(self.args, unsuccessful_gens)
+            log_finished_generations(successful_gens, unsuccessful_gens)
         self.terminate()
 
     def create_testbook(self, script):
@@ -236,7 +243,6 @@ class Fuzzer:
 
         testbook = self.create_testbook(script)
         reference = None
-
         for testitem in testbook:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
@@ -250,12 +256,12 @@ class Fuzzer:
 
             # Match stdout and stderr against the crash list
             # (see yinyang/config/Config.py:27) which contains various
-            # crash messages such as assertion errors, check failure, 
+            # crash messages such as assertion errors, check failure,
             # invalid models, etc.
             if in_crash_list(stdout, stderr):
 
                 # Match stdout and stderr against the duplicate list
-                # (see yinyang/config/Config.py:51) to prevent catching 
+                # (see yinyang/config/Config.py:51) to prevent catching
                 # duplicate bug triggers.
                 if not in_duplicate_list(stdout, stderr):
                     self.statistic.effective_calls += 1
@@ -272,7 +278,7 @@ class Fuzzer:
 
                 # Check whether the solver call produced errors, e.g, related
                 # to its parser, options, type-checker etc., by matching stdout
-                # and stderr against the ignore list 
+                # and stderr against the ignore list
                 # (see yinyang/config/Config.py:54).
                 if in_ignore_list(stdout, stderr):
                     log_ignore_list_mutant(solver_cli)

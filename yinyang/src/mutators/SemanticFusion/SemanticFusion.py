@@ -31,6 +31,7 @@ from yinyang.src.mutators.SemanticFusion.VariableFusion import (
     fusion_contraints,
     add_fusion_constraints,
     add_var_decls,
+    canonicalize_script
 )
 from yinyang.src.mutators.SemanticFusion.Util import (
     random_var_triplets,
@@ -44,8 +45,8 @@ from yinyang.src.parsing.Ast import DeclareFun
 
 class SemanticFusion(Mutator):
     def __init__(self, formula1, formula2, args):
-        self.formula1 = formula1
-        self.formula2 = formula2
+        self.formula1 = canonicalize_script(formula1)
+        self.formula2 = canonicalize_script(formula2)
         self.args = args
         self.config = self.args.config
         self.oracle = self.args.oracle
