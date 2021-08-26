@@ -48,7 +48,7 @@ jobs:
         python tests/integration/semanticfusion/SanitySemanticFusion.py
     - name: regression
       run: |
-        python tests/regression/isssue42.py
+        python tests/regression/issue42.py
     - name: code style and static analysis with flake 
       run: |
         bin/checkstyle.sh
