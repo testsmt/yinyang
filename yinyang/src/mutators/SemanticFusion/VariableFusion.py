@@ -25,7 +25,7 @@ import copy
 import string
 
 from yinyang.src.parsing.Ast import (
-        Const, Var, Expr, Assert, DeclareConst, DeclareFun, Script
+    Const, Var, Expr, Assert, DeclareConst, DeclareFun, Script
 )
 
 
