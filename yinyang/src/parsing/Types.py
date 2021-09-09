@@ -48,6 +48,12 @@ def sort2type(sort):
     if "BitVec" in sort:
         bitwith = int(sort.split(" ")[2][:-1])
         return BITVECTOR_TYPE(bitwith)
+
+    if "Array" in sort:
+        codomain = sort2type(sort.split(" ")[1])
+        domain = sort2type(sort.split(" ")[2][:-1])
+        return ARRAY_TYPE(codomain, domain)
+
     return sort
 
 
