@@ -40,6 +40,16 @@ TYPES = [
 
 
 def sort2type(sort):
+    sort = sort.strip()
+
+    if sort[0] == "(":
+        [type_constructor, _, rest] = sort[1:].partition(" ")
+
+        if type_constructor == "Array":
+            [codomain, _, domain] = rest.partition(" ")
+            domain = domain.strip()[:-1]
+            return ARRAY_TYPE(sort2type(codomain), sort2type(domain))
+
     if "FloatingPoint" in sort:
         eb = int(sort.split(" ")[2])
         sb = int(sort.split(" ")[3][:-1])
@@ -48,11 +58,6 @@ def sort2type(sort):
     if "BitVec" in sort:
         bitwith = int(sort.split(" ")[2][:-1])
         return BITVECTOR_TYPE(bitwith)
-
-    if "Array" in sort:
-        codomain = sort2type(sort.split(" ")[1])
-        domain = sort2type(sort.split(" ")[2][:-1])
-        return ARRAY_TYPE(codomain, domain)
 
     return sort
 
