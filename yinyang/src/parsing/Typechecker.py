@@ -25,7 +25,6 @@ import sys
 sys.setrecursionlimit(100000)
 
 from yinyang.src.parsing.Types import (
-    sort2type,
     # Types
     BOOLEAN_TYPE, REAL_TYPE, INTEGER_TYPE, ROUNDINGMODE_TYPE, STRING_TYPE,
     REGEXP_TYPE, UNKNOWN, ARRAY_TYPE, BITVECTOR_TYPE, FP_TYPE,
@@ -58,16 +57,10 @@ class Context:
         self.locals = locals
 
     def add_to_globals(self, var, type):
-        if isinstance(type, str):
-            self.globals[var] = sort2type(type)
-        else:
-            self.globals[var] = type
+        self.globals[var] = type
 
     def add_to_locals(self, var, type):
-        if isinstance(type, str):
-            self.locals[var] = sort2type(type)
-        else:
-            self.locals[var] = type
+        self.locals[var] = type
 
 
 class TypeCheckError(Exception):
@@ -79,7 +72,7 @@ class TypeCheckError(Exception):
             for term in subterm[1:]:
                 s += term.__str__() + " "
             s += "]"
-            self.message += "faulty subterm:\t" + subterm.__str__() + "\n"
+            self.message += "faulty subterm:\t" + s + "\n"
         else:
             self.message += "faulty subterm:\t" + subterm.__str__() + "\n"
         self.message += "expected: \t" + str(expected) + "\n"
@@ -590,8 +583,8 @@ def typecheck_binary_bool_rt(expr, ctxt):
     t1 = typecheck_expr(expr.subterms[0], ctxt)
     t2 = typecheck_expr(expr.subterms[1], ctxt)
 
-    if not isinstance(arg1, BITVECTOR_TYPE) or\
-       not isinstance(arg2, BITVECTOR_TYPE):
+    if not isinstance(t1, BITVECTOR_TYPE) or\
+       not isinstance(t2, BITVECTOR_TYPE):
         raise TypeCheckError(
             expr, [arg1, arg2], [BITVECTOR_TYPE, BITVECTOR_TYPE], [t1, t2]
         )
