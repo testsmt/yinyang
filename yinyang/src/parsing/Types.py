@@ -38,8 +38,8 @@ TYPES = [
     ROUNDINGMODE_TYPE,
 ]
 
-
 def sort2type(sort):
+
     if "FloatingPoint" in sort:
         eb = int(sort.split(" ")[2])
         sb = int(sort.split(" ")[3][:-1])
@@ -48,6 +48,7 @@ def sort2type(sort):
     if "BitVec" in sort:
         bitwith = int(sort.split(" ")[2][:-1])
         return BITVECTOR_TYPE(bitwith)
+
     return sort
 
 
@@ -63,6 +64,11 @@ class ARRAY_TYPE:
                 and self.payload_type == other.payload_type
             )
 
+    def __repr__(self):
+        return str(self)
+
+    def __str__(self):
+        return "(Array " + str(self.index_type) + " " + str(self.payload_type) + ")"
 
 class BITVECTOR_TYPE:
     def __init__(self, bitwidth):

@@ -59,6 +59,7 @@ from yinyang.src.parsing.Types import (
     STRING_TYPE,
     BOOLEAN_TYPE,
     REGEXP_TYPE,
+    ARRAY_TYPE,
     sort2type,
 )
 
@@ -84,12 +85,12 @@ class AstVisitor(SMTLIBv2Visitor):
 
     def add_to_globals(self, identifier, input_sorts, output_sort):
         if len(input_sorts) == 0:
-            if output_sort in self.sorts:
-                output_sort = self.sorts[output_sort]
-            self.global_vars[identifier] = sort2type(output_sort)
+            self.global_vars[identifier] = output_sort
         else:
-            self.global_vars[identifier] =\
-                sort2type(input_sorts + " " + output_sort)
+            # TODO: Support function types with their own type constructor
+            #self.global_vars[identifier] =\
+            #    sort2type(input_sorts + " " + output_sort)
+            pass
 
     def handleCommand(self, ctx: SMTLIBv2Parser.CommandContext):
         if ctx.cmd_assert():
@@ -116,7 +117,7 @@ class AstVisitor(SMTLIBv2Visitor):
             return Eval(self.visitTerm(ctx.term()[0], {}))
         if ctx.cmd_declareConst():
             var = self.visitSymbol(ctx.symbol()[0])
-            self.global_vars[var] = self.visitSort(ctx.sort()[0])
+            self.add_to_globals(var, [], self.visitSort(ctx.sort()[0]))
             decl = DeclareConst(
                 self.visitSymbol(ctx.symbol()[0]),
                 self.visitSort(ctx.sort()[0])
@@ -517,8 +518,11 @@ class AstVisitor(SMTLIBv2Visitor):
 
     def visitSort(self, ctx: SMTLIBv2Parser.SortContext):
         if len(ctx.sort()) >= 1:
-            s = "(" + self.visitIdentifier(ctx.identifier(), {})
-            for sort in ctx.sort():
-                s += " " + self.visitSort(sort)
-            return s + ")"
-        return self.visitIdentifier(ctx.identifier(), {})
+            type_constructor = self.visitIdentifier(ctx.identifier(), {})
+            if type_constructor == "Array":
+                # Expect exactly two type arguments
+                return ARRAY_TYPE(*map(self.visitSort, ctx.sort()))
+            if type_constructor == "_":
+                # Indexed type
+                print(ctx.sort())
+        return sort2type(self.visitIdentifier(ctx.identifier(), {}))

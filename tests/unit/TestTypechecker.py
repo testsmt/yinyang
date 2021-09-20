@@ -38,6 +38,8 @@ from yinyang.src.parsing.Types import (
     BOOLEAN_TYPE,
     INTEGER_TYPE,
     STRING_TYPE,
+    ARRAY_TYPE,
+    BITVECTOR_TYPE,
 )
 
 from yinyang.src.parsing.Typechecker import Context, typecheck_expr, typecheck
@@ -185,6 +187,21 @@ class TypecheckerTestCase(unittest.TestCase):
         oracle(formula)
         self.assertEqual(oracle(formula), True)
 
+
+    def test_typecheck_declarations(self):
+        formula_str = """
+(declare-const x1 Int)
+(declare-const x2 (Array Int Int))
+(declare-const x3 (_ BitVec 18))
+(declare-const x4 (Array (Array Int Int) Int))
+(declare-const x5 (Array (_ BitVector 7) (Array (_ BitVector 8) Bool))
+"""
+        formula, globals = parse_str(formula_str, silent=False)
+        self.assertEqual(globals['x1'], INTEGER_TYPE)
+        self.assertEqual(globals['x2'], ARRAY_TYPE(INTEGER_TYPE, INTEGER_TYPE))
+        self.assertEqual(globals['x3'], BITVECTOR_TYPE(18))
+        self.assertEqual(globals['x4'], ARRAY_TYPE(ARRAY_TYPE(INTEGER_TYPE, INTEGER_TYPE), INTEGER_TYPE))
+        self.assertEqual(globals['x5'], ARRAY_TYPE(BITVECTOR_TYPE(7), ARRAY_TYPE(BITVECTOR_TYPE(8), BOOLEAN_TYPE)))
 
 if __name__ == "__main__":
     TypecheckerTestCase.test_typechecker()

@@ -90,9 +90,9 @@ class Script:
                 vars.append(Var(cmd.symbol, cmd.sort))
                 types[cmd.symbol] = cmd.sort
             if isinstance(cmd, DeclareFun):
-                if cmd.input_sort != "":
-                    vars.append(Var(cmd.symbol, cmd.input_sort))
-                    types[cmd.symbol] = cmd.input_sort
+                if cmd.input_sorts != []:
+                    vars.append(Var(cmd.symbol, cmd.input_sorts))
+                    types[cmd.symbol] = cmd.input_sorts
         return vars, types
 
     def _prefix_free_vars(self, prefix, e):
@@ -193,9 +193,9 @@ class DeclareConst(Commands):
 
 
 class DeclareFun:
-    def __init__(self, symbol, input_sort, output_sort):
+    def __init__(self, symbol, input_sorts, output_sort):
         self.symbol = symbol
-        self.input_sort = input_sort
+        self.input_sorts = input_sorts
         self.output_sort = output_sort
 
     def __str__(self):
@@ -203,9 +203,9 @@ class DeclareFun:
             "(declare-fun "
             + self.symbol
             + " ("
-            + self.input_sort
+            + " ".join(map(str, self.input_sorts))
             + ") "
-            + self.output_sort
+            + str(self.output_sort)
             + ")"
         )
 
@@ -304,7 +304,7 @@ class DefineFunRec:
             + " ("
             + s
             + ") "
-            + self.sort
+            + str(self.sort)
             + " "
             + self.term.__str__()
             + ")"

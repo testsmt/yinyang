@@ -79,8 +79,7 @@ def log_generation_attempt(args):
     )
 
 
-def log_finished_generations(args, unsuccessful):
-    successful = args.iterations - unsuccessful
+def log_finished_generations(successful, unsuccessful):
     logging.debug(
         "Finished generations: "
         + str(successful)
@@ -137,4 +136,22 @@ def log_invalid_mutant(args, i):
         + "/"
         + str(args.iterations)
         + " Invalid mutant:no '^sat$' or '^unsat$' in output."
+    )
+
+
+def log_skip_seed_mutator(args, i):
+    logging.debug(
+        str(i)
+        + "/"
+        + str(args.iterations)
+        + " Mutator indicated to skip the seed."
+    )
+
+
+def log_skip_seed_test(args, i):
+    logging.debug(
+        str(i)
+        + "/"
+        + str(args.iterations)
+        + " Fuzzer::test indicated to skip the seed."
     )

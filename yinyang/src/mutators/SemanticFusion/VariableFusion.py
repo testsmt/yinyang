@@ -24,7 +24,9 @@ import random
 import copy
 import string
 
-from yinyang.src.parsing.Ast import Const, Var, Expr, Assert, DeclareConst
+from yinyang.src.parsing.Ast import (
+    Const, Var, Expr, Assert, DeclareConst, DeclareFun, Script
+)
 
 
 def gen_random_string(length):
@@ -184,3 +186,24 @@ def add_var_decls(formula, declare_funs):
         + declare_funs
         + formula.commands[first_ass_idx:]
     )
+
+
+def canonicalize_script(script):
+    """
+    Ensure that all variables will be declared before the first assert
+    statement.
+    """
+    first_ass_idx = get_first_assert_idx(script)
+    n_commands = len(script.commands)
+    new_commands = []
+    decls_after_ass = []
+    for idx in range(n_commands):
+        cmd = script.commands[idx]
+        if idx > first_ass_idx\
+           and isinstance(cmd, DeclareFun) or isinstance(cmd, DeclareConst):
+            decls_after_ass.append(cmd)
+        else:
+            new_commands.append(cmd)
+    script.commands = new_commands
+    add_var_decls(script, decls_after_ass)
+    return script
