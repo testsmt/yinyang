@@ -41,8 +41,8 @@ from yinyang.src.parsing.Types import (
     STR_REPLACE_RE_ALL, STR_TO_CODE, STR_TO_INT, STR_TO_RE, STR_FROM_CODE,
     STR_FROM_INT, STR_IS_DIGIT, RE_RANGE, SELECT, STORE, BV_CONCAT, BVNOT,
     BVNEG, BVAND, BVOR, BVXOR, BVADD, BVSUB, BVMUL, BVUDIV, BVUREM, BVSHL,
-    BV_EXTRACT, BV_ZERO_EXTEND, BV_SIGN_EXTEND, BVLSHR, BVASHR, BVSDIV, BVULT,
-    BVULE, BVSLT, BVSGT, FP_ABS, FP_NEG, FP_ADD, FP_SUB, FP_MUL, FP_DIV,
+    BV_EXTRACT, BV_ZERO_EXTEND, BV_SIGN_EXTEND, BVLSHR, BVASHR, BVSDIV, BVULT, BVUGT,
+    BVULE, BVUGE, BVSLT, BVSGT, BVSGE, BVSLE, FP_ABS, FP_NEG, FP_ADD, FP_SUB, FP_MUL, FP_DIV,
     FP_SQRT, FP_REM, FP_ROUND_TO_INTEGRAL, FP_NORMAL, FP_ISSUBNORMAL,
     FP_IS_ZERO, FP_ISINFINITE, FP_ISNAN, FP_ISNEGATIVE, FP_ISPOSITIVE, FP_LEQ,
     FP_LT, FP_GEQ, FP_GT, FP_EQ, FP_MIN, FP_MAX, FP_FMA, TO_FP_UNSIGNED, TO_FP
@@ -578,6 +578,11 @@ def typecheck_binary_bool_rt(expr, ctxt):
     (bvult (_ BitVec m) (_ BitVec m) Bool)
     (bvule (_ BitVec m) (_ BitVec m) Bool)
     (bvslt (_ BitVec m) (_ BitVec m) Bool)
+    (bvsle (_ BitVec m) (_ BitVec m) Bool)
+    (bvugt (_ BitVec m) (_ BitVec m) Bool)
+    (bvuge (_ BitVec m) (_ BitVec m) Bool)
+    (bvsgt (_ BitVec m) (_ BitVec m) Bool)
+    (bvsge (_ BitVec m) (_ BitVec m) Bool)
     """
     arg1, arg2 = expr.subterms[0], expr.subterms[1]
     t1 = typecheck_expr(expr.subterms[0], ctxt)
@@ -611,7 +616,7 @@ def typecheck_bv_ops(expr, ctxt):
         BVSDIV,
     ]:
         return typecheck_bv_binary(expr, ctxt)
-    if expr.op in [BVULT, BVULE, BVSLT, BVSGT]:
+    if expr.op in [BVULT, BVUGT, BVULE, BVUGE, BVSLT, BVSGT, BVSLE, BVSGE]:
         return typecheck_binary_bool_rt(expr, ctxt)
 
 
