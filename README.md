@@ -9,7 +9,7 @@
     <a href="https://opensource.org/licenses/MIT" alt="License">
         <img src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
     <a href="https://twitter.com/testsmtsolvers" alt="Social">
-        <img src="https://img.shields.io/twitter/follow/testsmtsolvers?style=social" /></a>
+        <img src="https://img.shields.io/twitter/url?label=%40testsmtsolvers&style=social&url=https%3A%2F%2Ftwitter.com%2Ftestsmtsolvers" /></a>
 </p>
 
 
