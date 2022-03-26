@@ -171,6 +171,7 @@ class Fuzzer:
 
             unsuccessful_gens = 0
             successful_gens = 0
+            self.timeout_of_current_seed = 0
             for i in range(self.args.iterations):
                 self.print_stats()
                 mutant, success, skip_seed = self.mutator.mutate()
