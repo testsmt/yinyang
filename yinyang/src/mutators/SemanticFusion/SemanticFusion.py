@@ -90,7 +90,6 @@ class SemanticFusion(Mutator):
                 self.templates[sort].append(template)
 
     def fuse(self, formula1, formula2, triplets):
-
         fusion_vars = []
         fusion_constr = []
         for triplet in triplets:
@@ -120,7 +119,6 @@ class SemanticFusion(Mutator):
         else:
             formula = conjunction(formula1, formula2)
         add_var_decls(formula, fusion_vars)
-
         return formula
 
     def mutate(self):
