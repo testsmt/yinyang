@@ -75,14 +75,14 @@ The following code shows schematically fusion and inversion are described in ``y
 .. code-block:: text 
 
     #begin
-    (declare-const z Real)
-    (declare-const y Real)
     (declare-const x Real)
+    (declare-const y Real)
+    (declare-const z Real)
     (declare-const c Real)
     (declare-const c1 Real)
     (assert (= z (* (- (- y c) x) c1)))
-    (assert (= y (+ (+ (/ z c1) x) c)))
     (assert (= x (- (- y c) (/ z c1))))
+    (assert (= y (+ (+ (/ z c1) x) c)))
     #end
 
 
