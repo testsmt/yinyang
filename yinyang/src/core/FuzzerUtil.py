@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import random
 import re
 import pathlib
 
@@ -84,6 +85,8 @@ def get_seeds(args, strategy):
             seeds = [(args.PATH_TO_SEEDS[0], args.PATH_TO_SEEDS[1])]
         else:
             assert False
+        if args.randomize:
+            random.shuffle(seeds)
     else:
         assert False
 
