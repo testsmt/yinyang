@@ -188,6 +188,11 @@ def add_yinyang_args(parser, rootpath, current_dir):
         metavar="path_to_file",
         default=rootpath + "/yinyang/config/fusion_functions.txt",
     )
+    parser.add_argument(
+        "-r",
+        "--randomize",
+        action='store_true',
+    )
 
 
 def build_opfuzz_parser(current_dir, usage):

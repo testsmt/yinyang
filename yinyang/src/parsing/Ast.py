@@ -203,9 +203,9 @@ class DeclareFun:
             "(declare-fun "
             + self.symbol
             + " ("
-            + self.input_sort
+            + str(self.input_sort)
             + ") "
-            + self.output_sort
+            + str(self.output_sort)
             + ")"
         )
 
@@ -257,7 +257,7 @@ class DefineConst:
             "(define-const "
             + self.symbol
             + " "
-            + self.sort
+            + str(self.sort)
             + " "
             + self.term.__str__()
             + ")"
@@ -278,7 +278,7 @@ class DefineFun:
             + " ("
             + self.sorted_vars
             + ") "
-            + self.sort
+            + str(self.sort)
             + " "
             + self.term.__str__()
             + ")"
@@ -304,7 +304,7 @@ class DefineFunRec:
             + " ("
             + s
             + ") "
-            + self.sort
+            + str(self.sort)
             + " "
             + self.term.__str__()
             + ")"
@@ -321,7 +321,7 @@ class FunDecl:
         s = self.sorted_vars[0]
         for svar in self.sorted_vars[1:]:
             s += " " + svar
-        return "(" + self.symbol + " (" + s + ") " + self.sort + ")"
+        return "(" + self.symbol + " (" + s + ") " + str(self.sort) + ")"
 
 
 class DefineFunsRec:

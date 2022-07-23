@@ -78,7 +78,7 @@ MAX_TIMEOUTS = 32
 class Fuzzer:
     def __init__(self, args, strategy):
         self.args = args
-        self.currentseeds = ""
+        self.currentseeds = []
         self.strategy = strategy
         self.statistic = Statistic()
         self.generator = None
@@ -96,7 +96,7 @@ class Fuzzer:
             logging.debug("Skip invalid seed: exceeds max file size")
             return None, None
 
-        self.currentseeds = pathlib.Path(seed).stem
+        self.currentseeds.append(pathlib.Path(seed).stem)
         script, glob = parse_file(seed, silent=True)
 
         if not script:
@@ -112,6 +112,7 @@ class Fuzzer:
         seed = seeds.pop(random.randrange(len(seeds)))
         logging.debug("Processing seed " + seed)
         self.statistic.total_seeds += 1
+        self.currentseeds = []
         return self.process_seed(seed)
 
     def get_script_pair(self, seeds):
@@ -120,6 +121,7 @@ class Fuzzer:
         seed2 = seed[1]
         logging.debug("Processing seeds " + seed1 + " " + seed2)
         self.statistic.total_seeds += 2
+        self.currentseeds = []
         script1, glob1 = self.process_seed(seed1)
         script2, glob2 = self.process_seed(seed2)
         return script1, glob1, script2, glob2
@@ -211,7 +213,7 @@ class Fuzzer:
         testbook = []
         testcase = "%s/%s-%s-%s.smt2" % (
             self.args.scratchfolder,
-            escape(self.currentseeds),
+            escape("-".join(self.currentseeds)),
             self.name,
             random_string(),
         )
@@ -370,6 +372,7 @@ class Fuzzer:
 
                         log_soundness_trigger(self.args, iteration, path)
                         return False  # Stop testing.
+            os.remove(scratchfile)
         return True  # Continue to next seed.
 
     def report(self, scratchfile, bugtype, cli, stdout, stderr):
@@ -379,7 +382,7 @@ class Fuzzer:
             self.args.bugsfolder,
             bugtype,
             plain_cli,
-            escape(self.currentseeds),
+            escape("-".join(self.currentseeds)),
             random_string(),
         )
         try:
@@ -391,7 +394,7 @@ class Fuzzer:
             self.args.bugsfolder,
             bugtype,
             plain_cli,
-            escape(self.currentseeds),
+            escape("-".join(self.currentseeds)),
             random_string(),
         )
         with open(logpath, "w") as log:
@@ -419,7 +422,7 @@ class Fuzzer:
             self.args.bugsfolder,
             bugtype,
             plain_cli,
-            escape(self.currentseeds),
+            escape("-".join(self.currentseeds)),
             random_string(),
         )
         try:
@@ -432,7 +435,7 @@ class Fuzzer:
             self.args.bugsfolder,
             bugtype,
             plain_cli,
-            escape(self.currentseeds),
+            escape("-".join(self.currentseeds)),
             random_string(),
         )
         with open(logpath, "w") as log:

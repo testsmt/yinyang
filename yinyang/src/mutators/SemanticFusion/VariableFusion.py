@@ -22,11 +22,16 @@
 
 import random
 import copy
+import re
 import string
 
 from yinyang.src.parsing.Ast import (
     Const, Var, Expr, Assert, DeclareConst, DeclareFun, Script
 )
+from yinyang.src.parsing.Types import BITVECTOR_TYPE
+
+
+constant_name_pattern = re.compile(r"^c[0-9]*$")
 
 
 def gen_random_string(length):
@@ -54,6 +59,34 @@ def get_last_assert_idx(template):
     last_idx = len(template.commands)
     for i, cmd in enumerate(template.commands):
         if isinstance(cmd, Assert):
+            last_idx = i
+
+    return last_idx
+
+
+def get_first_constant_idx(template):
+    """
+    Finds first constant index in the template or -1 if none found.
+    :template:
+    :returns: returns index of first constant and -1 if there is no constant
+    """
+    for idx, decl in enumerate(template.commands):
+        if not isinstance(decl, DeclareConst):
+            break
+        if constant_name_pattern.match(decl.symbol) != None:
+            return idx
+    return -1
+
+
+def get_last_constant_idx(template):
+    """
+    Finds last constant index in the template or -1 if none found.
+    :template:
+    :returns: returns index of last constant and -1 if there is no constant
+    """
+    last_idx = -1
+    for i, decl in enumerate(template.commands):
+        if isinstance(decl, DeclareConst) and constant_name_pattern.match(decl.symbol) != None:
             last_idx = i
 
     return last_idx
@@ -103,8 +136,12 @@ def get_constant_value(declare_const):
         length = random.randint(0, 20)
         return Const('"' + gen_random_string(length) + '"', type=const_type)
 
+    if isinstance(const_type, BITVECTOR_TYPE):
+        length = const_type.bitwidth
+        return Const(f"#b{random.getrandbits(length):0{length}b}", type=const_type)
 
-def fill_template(x, y, template, var_type):
+
+def fill_template(x, y, template):
     """
     Binds the variable name to the template.
     :x: variable name of first formula
@@ -113,45 +150,75 @@ def fill_template(x, y, template, var_type):
     """
     filled_template = copy.deepcopy(template)
     first_ass_idx = get_first_assert_idx(filled_template)
-    z = Var(x + "_" + y + "_fused", var_type)
+    z = Var(x + "_" + y + "_fused", z_sort(template))
 
     # Detect whether template includes random variable c
-    random_constant_idx = get_constant_idx(template)
-    if random_constant_idx != -1:
-        declare_const = template.commands[random_constant_idx]
-        const_type = declare_const.sort
-        const_expr = get_constant_value(declare_const)
+    first_random_constant_idx = get_first_constant_idx(template)
+    if first_random_constant_idx != -1:
+        last_random_constant_idx = get_last_constant_idx(template)
+        assert first_ass_idx == last_random_constant_idx + 1
+        for i in range(first_random_constant_idx, last_random_constant_idx + 1):
+            declare_const = template.commands[i]
+            const_type = declare_const.sort
+            const_expr = get_constant_value(declare_const)
 
-        for ass in filled_template.commands[first_ass_idx:]:
-            ass.term.substitute(Var("c", const_type), const_expr)
+            for ass in filled_template.commands[first_ass_idx:]:
+                ass.term.substitute(
+                    Var(declare_const.symbol, const_type), const_expr)
 
     # Bind occurrences x,y to template
     for ass in filled_template.commands[first_ass_idx:]:
         ass.term.substitute(Var("z", z.type), z)
-        ass.term.substitute(Var("x", var_type), Var(x, var_type))
-        ass.term.substitute(Var("y", var_type), Var(y, var_type))
+        ass.term.substitute(Var("x", x_sort(template)),
+                            Var(x, x_sort(template)))
+        ass.term.substitute(Var("y", y_sort(template)),
+                            Var(y, y_sort(template)))
 
     return filled_template
+
+
+def x_sort(template):
+    """
+    returns: returns the sort of variable x
+    """
+    if template.commands[0].symbol != 'x':
+        ValueError(
+            'Expected x variable declaration as first command in the fusion function.')
+    return template.commands[0].sort
+
+
+def y_sort(template):
+    """
+    returns: returns the sort of variable x
+    """
+    if template.commands[1].symbol != 'y':
+        ValueError(
+            'Expected y variable declaration as first command in the fusion function.')
+    return template.commands[1].sort
+
+
+def z_sort(template):
+    """
+    returns: returns the sort of variable x
+    """
+    if template.commands[2].symbol != 'z':
+        ValueError(
+            'Expected z variable declaration as first command in the fusion function.')
+    return template.commands[2].sort
 
 
 def inv_x(template):
     """
     :returns: inversion function term for variable occurrence x
     """
-    if get_constant_idx(template) != -1:
-        return template.commands[5].term.subterms[1]
-
-    return template.commands[4].term.subterms[1]
+    return template.commands[-2].term.subterms[1]
 
 
 def inv_y(template):
     """
     :returns: inversion function term for variable occurrence y
     """
-    if get_constant_idx(template) != -1:
-        return template.commands[6].term.subterms[1]
-
-    return template.commands[5].term.subterms[1]
+    return template.commands[-1].term.subterms[1]
 
 
 def fusion_contraints(template, var_type):

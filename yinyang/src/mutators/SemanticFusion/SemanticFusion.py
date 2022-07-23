@@ -31,7 +31,10 @@ from yinyang.src.mutators.SemanticFusion.VariableFusion import (
     fusion_contraints,
     add_fusion_constraints,
     add_var_decls,
-    canonicalize_script
+    canonicalize_script,
+    x_sort,
+    y_sort,
+    z_sort
 )
 from yinyang.src.mutators.SemanticFusion.Util import (
     random_var_triplets,
@@ -82,7 +85,8 @@ class SemanticFusion(Mutator):
 
         for i, mr in enumerate(_mrs):
             template, _ = parse_str(mr)
-            sort = template.commands[0].sort
+            # Use the type information of x and y.
+            sort = (str(x_sort(template)), str(y_sort(template)))
 
             if sort not in self.templates:
                 self.templates[sort] = [template]
@@ -90,16 +94,15 @@ class SemanticFusion(Mutator):
                 self.templates[sort].append(template)
 
     def fuse(self, formula1, formula2, triplets):
-
         fusion_vars = []
         fusion_constr = []
         for triplet in triplets:
-            x, y, template, var_type =\
-                triplet[0], triplet[1], triplet[2], triplet[3]
-            z = DeclareFun(x + "_" + y + "_fused", "", var_type)
+            x, y, template =\
+                triplet[0], triplet[1], triplet[2]
+            z = DeclareFun(x + "_" + y + "_fused", "", z_sort(template))
             fusion_vars.append(z)
-            template = fill_template(x, y, template, var_type)
-            fusion_constr += fusion_contraints(template, var_type)
+            template = fill_template(x, y, template)
+            fusion_constr += fusion_contraints(template, z_sort(template))
 
             occs_x = [occ for occ in formula1.free_var_occs if occ.name == x]
             occs_y = [occ for occ in formula2.free_var_occs if occ.name == y]
@@ -120,7 +123,6 @@ class SemanticFusion(Mutator):
         else:
             formula = conjunction(formula1, formula2)
         add_var_decls(formula, fusion_vars)
-
         return formula
 
     def mutate(self):
