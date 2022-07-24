@@ -372,7 +372,7 @@ class Fuzzer:
 
                         log_soundness_trigger(self.args, iteration, path)
                         return False  # Stop testing.
-            os.remove(scratchfile)
+            # os.remove(scratchfile)
         return True  # Continue to next seed.
 
     def report(self, scratchfile, bugtype, cli, stdout, stderr):
