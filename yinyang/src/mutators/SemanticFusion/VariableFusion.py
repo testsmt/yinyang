@@ -73,7 +73,7 @@ def get_first_constant_idx(template):
     for idx, decl in enumerate(template.commands):
         if not isinstance(decl, DeclareConst):
             break
-        if constant_name_pattern.match(decl.symbol) != None:
+        if constant_name_pattern.match(decl.symbol) is not None:
             return idx
     return -1
 
@@ -86,7 +86,8 @@ def get_last_constant_idx(template):
     """
     last_idx = -1
     for i, decl in enumerate(template.commands):
-        if isinstance(decl, DeclareConst) and constant_name_pattern.match(decl.symbol) != None:
+        if isinstance(decl, DeclareConst) and \
+                constant_name_pattern.match(decl.symbol) is not None:
             last_idx = i
 
     return last_idx
@@ -138,7 +139,10 @@ def get_constant_value(declare_const):
 
     if isinstance(const_type, BITVECTOR_TYPE):
         length = const_type.bitwidth
-        return Const(f"#b{random.getrandbits(length):0{length}b}", type=const_type)
+        return Const(
+            f"#b{random.getrandbits(length):0{length}b}",
+            type=const_type,
+        )
 
 
 def fill_template(x, y, template):
@@ -157,7 +161,8 @@ def fill_template(x, y, template):
     if first_random_constant_idx != -1:
         last_random_constant_idx = get_last_constant_idx(template)
         assert first_ass_idx == last_random_constant_idx + 1
-        for i in range(first_random_constant_idx, last_random_constant_idx + 1):
+        for i in range(first_random_constant_idx,
+                       last_random_constant_idx + 1):
             declare_const = template.commands[i]
             const_type = declare_const.sort
             const_expr = get_constant_value(declare_const)
@@ -182,8 +187,8 @@ def x_sort(template):
     returns: returns the sort of variable x
     """
     if template.commands[0].symbol != 'x':
-        ValueError(
-            'Expected x variable declaration as first command in the fusion function.')
+        ValueError('Expected x variable declaration as first ' +
+                   'command in the fusion function.')
     return template.commands[0].sort
 
 
@@ -193,7 +198,8 @@ def y_sort(template):
     """
     if template.commands[1].symbol != 'y':
         ValueError(
-            'Expected y variable declaration as first command in the fusion function.')
+            'Expected y variable declaration as ' +
+            'second command in the fusion function.')
     return template.commands[1].sort
 
 
@@ -203,7 +209,8 @@ def z_sort(template):
     """
     if template.commands[2].symbol != 'z':
         ValueError(
-            'Expected z variable declaration as first command in the fusion function.')
+            'Expected z variable declaration as third ' +
+            'command in the fusion function.')
     return template.commands[2].sort
 
 

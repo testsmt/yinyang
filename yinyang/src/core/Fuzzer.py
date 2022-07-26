@@ -194,11 +194,13 @@ class Fuzzer:
                     log_skip_seed_mutator(self.args, i)
                     break  # Continue to next seed.
 
-                if not self.test(mutant, i + 1):  # Continue to next seed.
+                (mutate_further, scratchfile) = self.test(mutant, i + 1)
+                if not mutate_further:  # Continue to next seed.
                     log_skip_seed_test(self.args, i)
                     break  # Continue to next seed.
 
                 self.statistic.mutants += 1
+                os.remove(scratchfile)
 
             log_finished_generations(successful_gens, unsuccessful_gens)
         self.terminate()
@@ -246,6 +248,7 @@ class Fuzzer:
 
         testbook = self.create_testbook(script)
         reference = None
+        scratchfile = None
         for testitem in testbook:
             solver_cli, scratchfile = testitem[0], testitem[1]
             solver = Solver(solver_cli)
@@ -255,7 +258,7 @@ class Fuzzer:
             )
 
             if self.max_timeouts_reached():
-                return False
+                return (False, scratchfile)
 
             # Match stdout and stderr against the crash list
             # (see yinyang/config/Config.py:27) which contains various
@@ -270,13 +273,13 @@ class Fuzzer:
                     self.statistic.effective_calls += 1
                     self.statistic.crashes += 1
                     path = self.report(
-                        scratchfile, "crash", solver_cli, stdout, stderr
+                        script, "crash", solver_cli, stdout, stderr
                     )
                     log_crash_trigger(path)
                 else:
                     self.statistic.duplicates += 1
                     log_duplicate_trigger()
-                return False  # Stop testing.
+                return (False, scratchfile)  # Stop testing.
             else:
 
                 # Check whether the solver call produced errors, e.g, related
@@ -295,7 +298,7 @@ class Fuzzer:
                         self.statistic.effective_calls += 1
                         self.statistic.crashes += 1
                         path = self.report(
-                            scratchfile, "segfault", solver_cli, stdout, stderr
+                            script, "segfault", solver_cli, stdout, stderr
                         )
                         log_segfault_trigger(self.args, path, iteration)
                         return False  # Stop testing.
@@ -336,7 +339,7 @@ class Fuzzer:
                         # For differential testing (opfuzz), the first solver
                         # is set as the reference, its result to be the oracle.
                         oracle = result
-                        reference = (solver_cli, scratchfile, stdout, stderr)
+                        reference = (solver_cli, stdout, stderr)
 
                     # Comparing with the oracle (yinyang) or with other
                     # non-erroneous solver runs (opfuzz) for soundness bugs.
@@ -352,7 +355,7 @@ class Fuzzer:
                             ref_stdout = reference[1]
                             ref_stderr = reference[2]
                             path = self.report_diff(
-                                scratchfile,
+                                script,
                                 "incorrect",
                                 ref_cli,
                                 ref_stdout,
@@ -366,16 +369,15 @@ class Fuzzer:
                             # Produce a bug report if the query result differs
                             # from the pre-set oracle (yinyang).
                             path = self.report(
-                                scratchfile, "incorrect", solver_cli,
+                                script, "incorrect", solver_cli,
                                 stdout, stderr
                             )
 
                         log_soundness_trigger(self.args, iteration, path)
-                        return False  # Stop testing.
-            os.remove(scratchfile)
-        return True  # Continue to next seed.
+                        return (False, scratchfile)  # Stop testing.
+        return (True, scratchfile)  # Continue to next seed.
 
-    def report(self, scratchfile, bugtype, cli, stdout, stderr):
+    def report(self, script, bugtype, cli, stdout, stderr):
         plain_cli = plain(cli)
         # format: <solver><{crash,wrong,invalid_model}><seed>.<random-str>.smt2
         report = "%s/%s-%s-%s-%s.smt2" % (
@@ -386,7 +388,8 @@ class Fuzzer:
             random_string(),
         )
         try:
-            shutil.copy(scratchfile, report)
+            with open(report, "w") as report_writer:
+                report_writer.write(script.__str__())
         except Exception:
             logging.error("error: couldn't copy scratchfile to bugfolder.")
             exit(ERR_EXHAUSTED_DISK)
@@ -407,7 +410,7 @@ class Fuzzer:
 
     def report_diff(
         self,
-        scratchfile,
+        script,
         bugtype,
         ref_cli,
         ref_stdout,
@@ -426,7 +429,8 @@ class Fuzzer:
             random_string(),
         )
         try:
-            shutil.copy(scratchfile, report)
+            with open(report, "w") as report_writer:
+                report_writer.write(script.__str__())
         except Exception:
             logging.error("error: couldn't copy scratchfile to bugfolder.")
             exit(ERR_EXHAUSTED_DISK)
