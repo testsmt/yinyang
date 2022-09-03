@@ -194,6 +194,13 @@ def add_yinyang_args(parser, rootpath, current_dir):
         default=rootpath + "/yinyang/config/fusion_functions.txt",
     )
     parser.add_argument(
+        "-g",
+        "--generate-functions",
+        metavar="<ffg>",
+        default=0,
+        type=int,
+    )
+    parser.add_argument(
         "-r",
         "--randomize",
         action='store_true',

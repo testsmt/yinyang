@@ -200,7 +200,7 @@ class Fuzzer:
                     break  # Continue to next seed.
 
                 self.statistic.mutants += 1
-                if not self.args.keep_seeds:
+                if not self.args.keep_mutants:
                     os.remove(scratchfile)
 
             log_finished_generations(successful_gens, unsuccessful_gens)

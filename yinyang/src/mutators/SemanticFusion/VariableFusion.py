@@ -28,7 +28,7 @@ import string
 from yinyang.src.parsing.Ast import (
     Const, Var, Expr, Assert, DeclareConst, DeclareFun, Script
 )
-from yinyang.src.parsing.Types import BITVECTOR_TYPE
+from yinyang.src.parsing.Types import BITVECTOR_TYPE, BOOLEAN_TYPE, INTEGER_TYPE, REAL_TYPE, STRING_TYPE
 
 
 constant_name_pattern = re.compile(r"^c[0-9]*$")
@@ -114,7 +114,7 @@ def get_constant_value(declare_const):
     """
     const_type = declare_const.sort
 
-    if const_type == "Int":
+    if const_type == INTEGER_TYPE:
         r = random.randint(-1000, 1000)
         if r < 0:
             return Expr(op="-",
@@ -122,7 +122,7 @@ def get_constant_value(declare_const):
         else:
             return Const(name=str(r), type=const_type)
 
-    if const_type == "Real":
+    if const_type == REAL_TYPE:
         r = round(random.uniform(-1000, 1000), 5)
         if r < 0:
             return Expr(op="-",
@@ -130,10 +130,10 @@ def get_constant_value(declare_const):
         else:
             return Const(str(r), type=const_type)
 
-    if const_type == "Bool":
+    if const_type == BOOLEAN_TYPE:
         return Const(random.choice(["true", "false"]), type=const_type)
 
-    if const_type == "String":
+    if const_type == STRING_TYPE:
         length = random.randint(0, 20)
         return Const('"' + gen_random_string(length) + '"', type=const_type)
 
