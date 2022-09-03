@@ -79,7 +79,7 @@ def add_common_args(parser, rootpath, current_dir):
         default=current_dir + "/bugs",
     )
     parser.add_argument(
-        "-k"
+        "-k",
         "--keep-mutants",
         action="store_true",
     )
