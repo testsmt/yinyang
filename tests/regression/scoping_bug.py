@@ -19,17 +19,19 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
 import sys
 
 sys.path.append("../../")
 
 from yinyang.src.parsing.Parse import parse_str
 
-script, _  = parse_str("""\
+script, _ = parse_str("""\
 (declare-fun t () String)
 (declare-fun t1 () String)
 (declare-fun t2 () String)
-(assert (forall ((t1 String) (t2 String))(=> (= (str.++ t1 t2) t) (= (= t1 s) false))))
-(check-sat)""",silent=False)
+(assert (forall ((t1 String) (t2 String))(=> (= (str.++ t1 t2) t)
+        (= (= t1 s) false))))
+(check-sat)""")
 script.prefix_vars("scr1_")
 assert("(str.++ t1 t2)" in script.__str__())
