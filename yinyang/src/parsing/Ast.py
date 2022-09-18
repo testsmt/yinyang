@@ -63,8 +63,8 @@ class Script:
             return
         if e.quantifier:
             for var in list(global_vars):
-                for quantified_var in e.quantified_vars:
-                    if var == quantified_var[0]:
+                for quantified_var in e.quantified_vars[0]:
+                    if var == quantified_var:
                         global_vars.pop(var)
 
         if e.var_binders:

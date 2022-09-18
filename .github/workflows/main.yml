@@ -49,6 +49,7 @@ jobs:
     - name: regression
       run: |
         python tests/regression/issue42.py
+        cd tests/regression && python scoping_bug.py
     - name: code style and static analysis with flake 
       run: |
         bin/checkstyle.sh

@@ -130,7 +130,7 @@ def local_defs(term, local):
     term: term object
     local: list of local variables defined in the parent terms
 
-    :returns: list of local vairables to be considered within the term
+    :returns: list of local variables to be considered within the term
     """
     term = term.parent
     if term:
