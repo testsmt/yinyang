@@ -29,7 +29,7 @@ header = (
     + "]"
 )
 
-usage = """ opfuzz [options] solver_clis seed_file   [optionally, more seed files]
+usage = """opfuzz [options] solver_clis seed_file [optionally, more seed files]
        opfuzz [options] solver_clis seed_folder [optionally, more seed folders]
        solver_clis := "solver_cli1;solver_cli2;...;solver_clik"
 """

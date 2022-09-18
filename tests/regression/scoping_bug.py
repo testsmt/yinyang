@@ -34,4 +34,4 @@ script, _ = parse_str("""\
         (= (= t1 s) false))))
 (check-sat)""")
 script.prefix_vars("scr1_")
-assert("(str.++ t1 t2)" in script.__str__())
+assert ("(str.++ t1 t2)" in script.__str__())
