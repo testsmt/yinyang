@@ -311,7 +311,7 @@ class Fuzzer:
 
                 # Check if the stdout contains a valid solver query result,
                 # i.e., contains lines with 'sat', 'unsat' or 'unknown'.
-                elif (
+                if (
                     not re.search("^unsat$", stdout, flags=re.MULTILINE)
                     and not re.search("^sat$", stdout, flags=re.MULTILINE)
                     and not re.search("^unknown$", stdout, flags=re.MULTILINE)
