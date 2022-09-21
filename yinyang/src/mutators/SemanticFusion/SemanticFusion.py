@@ -133,7 +133,6 @@ class SemanticFusion(Mutator):
         formula1.prefix_vars("scr1_")
         formula2.prefix_vars("scr2_")
 
-        # For now just create one formula for the type provided
         templates = generate_fusion_function_templates(formula1.global_vars,
                                                        formula2.global_vars,
                                                        self.generate_functions_size) \
