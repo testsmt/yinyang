@@ -19,7 +19,8 @@ jobs:
         pip install codespell
         python -m pip install flake8
         python -m pip install --upgrade pip 
-        python -m pip install antlr4-python3-runtime==4.9.2  
+        python -m pip install antlr4-python3-runtime==4.9.2 
+        python -m pip install ffg 
     - name: Spell check 
       run: |
         codespell --skip="Solver.py,SMTLIBv2*,*.g4,*.tokens,*.interp,*.smt2"
