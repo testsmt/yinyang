@@ -119,7 +119,7 @@ class AstVisitor(SMTLIBv2Visitor):
             self.global_vars[var] = self.visitSort(ctx.sort()[0])
             decl = DeclareConst(
                 self.visitSymbol(ctx.symbol()[0]),
-                self.visitSort(ctx.sort()[0])
+                sort2type(self.visitSort(ctx.sort()[0]))
             )
             return decl
         if ctx.cmd_declareFun():

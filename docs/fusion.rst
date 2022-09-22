@@ -58,14 +58,14 @@ The configuration file ``yinyang/config/fusion_functions.txt`` specifies fusion 
 
 .. code-block:: text 
 
-    #begin  
+    #begin
     <declaration of x>
     <declaration of y>
     <declaration of z>
-    [<declaration of c>]
+    [<declaration of c_i>*]
     <assert fusion function>
-    <assert inversion function> 
-    <assert inversion function> 
+    <assert inversion function>
+    <assert inversion function>
     #end
 
 **Example:**
@@ -75,14 +75,16 @@ The following code shows schematically fusion and inversion are described in ``y
 .. code-block:: text 
 
     #begin
-    (declare-const x Int)
-    (declare-const y Int)
-    (declare-const z Int)
-    (declare-const c Int)
-    (assert (= z (+ (+ x y) c)))
-    (assert (= x (- (- z y) c)))
-    (assert (= y (- (- z x) c)))
+    (declare-const x Real)
+    (declare-const y Real)
+    (declare-const z Real)
+    (declare-const c Real)
+    (declare-const c1 Real)
+    (assert (= z (* (- (- y c) x) c1)))
+    (assert (= x (- (- y c) (/ z c1))))
+    (assert (= y (+ (+ (/ z c1) x) c)))
     #end
 
 
-The example realizes a fusion function for integer variables.  First, the variables x,y,z are declared. Variable c will be substituted by a random but fixed integer constant. Then fusion function :math:`z = f(x,y) =  x + y + c` is defined in the first assert block. Its corresponding inversion functions for x and y are described in the second and third asserts.     
+
+The example realizes a fusion function for integer variables.  First, the variables x,y,z are declared. Variables c_i will be substituted by a random but fixed real constant each. Then fusion function :math:`z = f(x, y) = ((y - c) - x) * c1` is defined in the first assert block. Its corresponding inversion functions for x and y are described in the second and third asserts.     

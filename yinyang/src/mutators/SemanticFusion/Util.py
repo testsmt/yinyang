@@ -103,11 +103,11 @@ def disjunction(script1, script2):
 def type_var_map(global_vars):
     mapping = {}
     for var in global_vars:
-        if global_vars[var] not in mapping:
-            mapping[global_vars[var]] = [var]
+        if str(global_vars[var]) not in mapping:
+            mapping[str(global_vars[var])] = [var]
         else:
-            if var not in mapping[global_vars[var]]:
-                mapping[global_vars[var]].append(var)
+            if var not in mapping[str(global_vars[var])]:
+                mapping[str(global_vars[var])].append(var)
     return mapping
 
 
@@ -143,12 +143,13 @@ def random_var_triplets(global_vars1, global_vars2, templates):
     """
     m1, m2 = type_var_map(global_vars1), type_var_map(global_vars2)
     mapping = []
-    for t in templates:
-        if t not in m1:
+    for (t1, t2) in templates:
+        if t1 not in m1:
             continue
-        if t not in m2:
+        if t2 not in m2:
             continue
-        random_tuples = random_tuple_list(m1[t], m2[t])
+        random_tuples = random_tuple_list(m1[t1], m2[t2])
         for tup in random_tuples:
-            mapping.append((tup[0], tup[1], random.choice(templates[t]), t))
+            mapping.append(
+                (tup[0], tup[1], random.choice(templates[(t1, t2)])))
     return mapping
