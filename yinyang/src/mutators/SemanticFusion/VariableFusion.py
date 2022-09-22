@@ -28,7 +28,13 @@ import string
 from yinyang.src.parsing.Ast import (
     Const, Var, Expr, Assert, DeclareConst, DeclareFun, Script
 )
-from yinyang.src.parsing.Types import BITVECTOR_TYPE, BOOLEAN_TYPE, INTEGER_TYPE, REAL_TYPE, STRING_TYPE
+from yinyang.src.parsing.Types import (
+    BITVECTOR_TYPE,
+    BOOLEAN_TYPE,
+    INTEGER_TYPE,
+    REAL_TYPE,
+    STRING_TYPE,
+)
 
 
 constant_name_pattern = re.compile(r"^c[0-9]*$")

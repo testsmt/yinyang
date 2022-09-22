@@ -34,7 +34,12 @@ from yinyang.src.parsing.Ast import (
     SMTLIBCommand,
 )
 from yinyang.src.parsing.Parse import parse_str
-from yinyang.src.parsing.Types import ARRAY_TYPE, BITVECTOR_TYPE, FP_TYPE, type2ffg
+from yinyang.src.parsing.Types import (
+    ARRAY_TYPE,
+    BITVECTOR_TYPE,
+    FP_TYPE,
+    type2ffg,
+)
 
 from ffg.gen import gen_configuration
 from ffg.gen.tree_generation import generate_tree
