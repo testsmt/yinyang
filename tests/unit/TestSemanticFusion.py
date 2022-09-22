@@ -32,6 +32,7 @@ sys.path.append("../../")
 class Mockargs:
     oracle = ""
     config = ""
+    generate_functions = 0
 
 
 class SemanticFusionTestCase(unittest.TestCase):
