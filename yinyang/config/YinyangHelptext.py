@@ -134,9 +134,13 @@ options:
             set custom fusion function file
     -L <bytes>, --limit <bytes>
             file size limit on seed formula in bytes (default: 100000)
-    -n, --no-log    disable logging
-    -q, --quiet     do not print statistics and other output
-    -r, --randomize randomize processing order of the seeds
-    -v, --version   show version number and exit
-    -h, --help      show this help message and exit
+    -g <ffg>, --generate-functions <ffg>
+            dimension of the fusion functions to generate, if greater than 
+            0 do not take into account --config option. (default: 0)
+    -k, --keep-mutants          do not delete scratch file
+    -n, --no-log                disable logging
+    -q, --quiet                 do not print statistics and other output
+    -r, --randomize             randomize processing order of the seeds
+    -v, --version               show version number and exit
+    -h, --help                  show this help message and exit
 """

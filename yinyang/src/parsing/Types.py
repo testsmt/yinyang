@@ -20,6 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from ffg.gen.gen_configuration import (
+    BOOLEAN_OPTION,
+    REAL_OPTION,
+    INT_OPTION,
+    STRING_OPTION,
+    BITVECTOR_OPTION
+)
+
 BOOLEAN_TYPE = "Bool"
 REAL_TYPE = "Real"
 INTEGER_TYPE = "Int"
@@ -37,6 +45,22 @@ TYPES = [
     REGEXP_TYPE,
     ROUNDINGMODE_TYPE,
 ]
+
+
+def type2ffg(typ):
+    if typ == BOOLEAN_TYPE:
+        return BOOLEAN_OPTION
+    elif typ == REAL_TYPE:
+        return REAL_OPTION
+    elif typ == INTEGER_TYPE:
+        return INT_OPTION
+    elif typ == STRING_TYPE:
+        return STRING_OPTION
+    elif isinstance(typ, BITVECTOR_OPTION):
+        # TODO: manage also the size
+        return BITVECTOR_OPTION
+    else:
+        raise ValueError(f"The type {typ} is not supported by the generator")
 
 
 def sort2type(sort):

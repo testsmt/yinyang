@@ -32,11 +32,11 @@ from yinyang.src.mutators.SemanticFusion.VariableFusion import (
     add_fusion_constraints,
     add_var_decls,
     canonicalize_script,
-    x_sort,
-    y_sort,
     z_sort
 )
 from yinyang.src.mutators.SemanticFusion.Util import (
+    generate_fusion_function_templates,
+    populate_template_map,
     random_var_triplets,
     disjunction,
     conjunction,
@@ -52,9 +52,12 @@ class SemanticFusion(Mutator):
         self.formula2 = canonicalize_script(formula2)
         self.args = args
         self.config = self.args.config
+        self.generate_functions = self.args.generate_functions > 0
+        self.generate_functions_size = self.args.generate_functions
         self.oracle = self.args.oracle
         self.templates = {}
-        self._parse_mrs()
+        if not self.generate_functions:
+            self._parse_mrs()
 
         if not self.oracle:
             print("error: No oracle {sat,unsat} specified")
@@ -83,15 +86,9 @@ class SemanticFusion(Mutator):
             if started:
                 curr.append(line)
 
-        for i, mr in enumerate(_mrs):
+        for _, mr in enumerate(_mrs):
             template, _ = parse_str(mr)
-            # Use the type information of x and y.
-            sort = (str(x_sort(template)), str(y_sort(template)))
-
-            if sort not in self.templates:
-                self.templates[sort] = [template]
-            else:
-                self.templates[sort].append(template)
+            populate_template_map(self.templates, template)
 
     def fuse(self, formula1, formula2, triplets):
         fusion_vars = []
@@ -136,8 +133,16 @@ class SemanticFusion(Mutator):
         formula1.prefix_vars("scr1_")
         formula2.prefix_vars("scr2_")
 
+        templates = generate_fusion_function_templates(
+            formula1.global_vars,
+            formula2.global_vars,
+            self.generate_functions_size
+        ) \
+            if self.generate_functions \
+            else self.templates
+
         triplets = random_var_triplets(
-            formula1.global_vars, formula2.global_vars, self.templates
+            formula1.global_vars, formula2.global_vars, templates
         )
         fused = self.fuse(formula1, formula2, triplets)
         return fused, True, skip_seed

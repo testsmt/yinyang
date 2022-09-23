@@ -20,8 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import io
 import random
 import itertools
+from yinyang.src.mutators.SemanticFusion.VariableFusion import x_sort, y_sort
 
 from yinyang.src.parsing.Ast import (
     Term,
@@ -31,6 +33,17 @@ from yinyang.src.parsing.Ast import (
     DeclareFun,
     SMTLIBCommand,
 )
+from yinyang.src.parsing.Parse import parse_str
+from yinyang.src.parsing.Types import (
+    ARRAY_TYPE,
+    BITVECTOR_TYPE,
+    FP_TYPE,
+    type2ffg,
+)
+
+from ffg.gen import gen_configuration
+from ffg.gen.tree_generation import generate_tree
+from ffg.emitter.yinyang_emitter import emit_function
 
 
 def cvars(occs):
@@ -153,3 +166,65 @@ def random_var_triplets(global_vars1, global_vars2, templates):
             mapping.append(
                 (tup[0], tup[1], random.choice(templates[(t1, t2)])))
     return mapping
+
+
+def _type_list(global_vars):
+    """
+    Return a list of variable types that can be used to 
+    generate new fusion functions.
+    """
+    mapping = {}
+    for var in global_vars:
+        if isinstance(global_vars[var], ARRAY_TYPE) or \
+            isinstance(global_vars[var], FP_TYPE) or \
+                isinstance(global_vars[var], BITVECTOR_TYPE):
+            continue
+        if str(global_vars[var]) not in mapping:
+            mapping[str(global_vars[var])] = global_vars[var]
+    return mapping
+
+
+def populate_template_map(templates, template):
+    """
+    Given a template and a template map, insert this 
+    template inside the map using as index the tuple
+    containing the sorts of the input variables.
+    """
+    # Use the type information of x and y.
+    sort = (str(x_sort(template)), str(y_sort(template)))
+
+    if sort not in templates:
+        templates[sort] = [template]
+    else:
+        templates[sort].append(template)
+
+
+def generate_fusion_function_templates(global_vars1, global_vars2, size=25):
+    """
+    Create random variables mapping of variables from the seeds
+    and new fusion functions to fuse them. Returns the templates
+    used to perform the fuse step.
+    """
+    # Solve BitVec problem with a best effort approach:
+    # try to generate formulas until you get the right bitvector type.
+    tlist1 = _type_list(global_vars1)
+    tlist2 = _type_list(global_vars2)
+    templates = {}
+
+    for t1 in tlist1:
+        type1 = tlist1[t1]
+        for t2 in tlist2:
+            type2 = tlist2[t2]
+
+            theories = [type2ffg(type1), type2ffg(type2)]
+            gen_configuration.set_available_theories(theories)
+            operator_types = gen_configuration.get_theories()
+            root_type = random.choice(operator_types)
+            tree, _ = generate_tree(root_type, size, ['x', 'y'], 'z')
+            output = io.StringIO()
+            emit_function(tree, output, is_wrapped=False)
+
+            template, _ = parse_str(output.getvalue())
+            populate_template_map(templates, template)
+
+    return templates

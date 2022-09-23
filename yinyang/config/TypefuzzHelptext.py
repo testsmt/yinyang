@@ -123,6 +123,7 @@ options:
             (default: yinyang/config/typefuzz_config.txt)
     -L <bytes>, --limit <bytes>
             file size limit on seed formula in bytes (default: 100000)
+    -k, --keep-mutants  do not delete scratch files
     -n, --no-log    disable logging
     -q, --quiet     do not print statistics and other output
     -v, --version   show version number and exit

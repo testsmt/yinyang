@@ -19,10 +19,14 @@ jobs:
         pip install codespell
         python -m pip install flake8
         python -m pip install --upgrade pip 
-        python -m pip install antlr4-python3-runtime==4.9.2  
+        python -m pip install antlr4-python3-runtime==4.9.2 
+        python -m pip install ffg 
     - name: Spell check 
       run: |
         codespell --skip="Solver.py,SMTLIBv2*,*.g4,*.tokens,*.interp,*.smt2"
+    - name: code style and static analysis with flake 
+      run: |
+        bin/checkstyle.sh
     - name: Run Unittests
       run: |
         python -m unittest tests/RunUnitTests.py
@@ -50,9 +54,6 @@ jobs:
       run: |
         python tests/regression/issue42.py
         cd tests/regression && python scoping_bug.py
-    - name: code style and static analysis with flake 
-      run: |
-        bin/checkstyle.sh
     - name: pypi check  
       run: |
         tests/integration/misc/pypi.sh

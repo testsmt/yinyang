@@ -79,6 +79,11 @@ def add_common_args(parser, rootpath, current_dir):
         default=current_dir + "/bugs",
     )
     parser.add_argument(
+        "-k",
+        "--keep-mutants",
+        action="store_true",
+    )
+    parser.add_argument(
         "-s",
         "--scratchfolder",
         metavar="path_to_folder",
@@ -187,6 +192,13 @@ def add_yinyang_args(parser, rootpath, current_dir):
         "--config",
         metavar="path_to_file",
         default=rootpath + "/yinyang/config/fusion_functions.txt",
+    )
+    parser.add_argument(
+        "-g",
+        "--generate-functions",
+        metavar="<ffg>",
+        default=0,
+        type=int,
     )
     parser.add_argument(
         "-r",
