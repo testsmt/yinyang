@@ -33,6 +33,7 @@ class Mockargs:
     oracle = ""
     config = ""
     generate_functions = 0
+    multiple_variables = 2
 
 
 class SemanticFusionTestCase(unittest.TestCase):
