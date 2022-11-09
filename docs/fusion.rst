@@ -59,8 +59,7 @@ The configuration file ``yinyang/config/fusion_functions.txt`` specifies fusion 
 .. code-block:: text 
 
     #begin
-    <declaration of x>
-    <declaration of y>
+    [<declaration of x_i>]*
     <declaration of z>
     [<declaration of c_i>*]
     <assert fusion function>
