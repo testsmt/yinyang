@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import enum
 import random
 import copy
 import re
@@ -151,16 +152,33 @@ def get_constant_value(declare_const):
         )
 
 
-def fill_template(x, y, template):
+def get_variables_by_sort(template):
+    m = {}
+    for _, decl in enumerate(template.commands):
+        if not isinstance(decl, DeclareConst):
+            break
+        if decl.symbol == "z":
+            break
+        if constant_name_pattern.match(decl.symbol) is not None:
+            break
+        if decl.sort not in m:
+            m[decl.sort] = [decl]
+        else:
+            m[decl.sort].append(decl)
+    return m
+
+
+def fill_template(xs, ys, z_name, template):
     """
     Binds the variable name to the template.
-    :x: variable name of first formula
-    :y: variable name of second formula
+    :xs: variable names of first formula
+    :ys: variable names of second formula
     :returns: bindded template
     """
+    # xs and ys map variables to template variable names.
     filled_template = copy.deepcopy(template)
     first_ass_idx = get_first_assert_idx(filled_template)
-    z = Var(x + "_" + y + "_fused", z_sort(template))
+    z = Var(z_name, z_sort(template))
 
     # Detect whether template includes random variable c
     first_random_constant_idx = get_first_constant_idx(template)
@@ -177,15 +195,42 @@ def fill_template(x, y, template):
                 ass.term.substitute(
                     Var(declare_const.symbol, const_type), const_expr)
 
-    # Bind occurrences x,y to template
+    # Bind occurrences of variables to template
+    tvars = variables_to_decls(template)
     for ass in filled_template.commands[first_ass_idx:]:
+        # spin a for loop to cover all the replacement
         ass.term.substitute(Var("z", z.type), z)
-        ass.term.substitute(Var("x", x_sort(template)),
-                            Var(x, x_sort(template)))
-        ass.term.substitute(Var("y", y_sort(template)),
-                            Var(y, y_sort(template)))
+        for x in xs:
+            ass.term.substitute(Var(xs[x], tvars[xs[x]].sort),
+                                Var(x, tvars[xs[x]].sort))
+        for y in ys:
+            ass.term.substitute(Var(ys[y], tvars[ys[y]].sort),
+                                Var(y, tvars[ys[y]].sort))
 
     return filled_template
+
+
+def get_z_idx(template) -> int:
+    """
+    :returns: the index of the output variable z.
+    """
+    for idx, decl in enumerate(template.commands):
+        if not isinstance(decl, DeclareConst):
+            break
+        if constant_name_pattern.match(decl.symbol) is not None:
+            break
+    return idx - 1
+
+
+def get_variable_by_idx(template, idx: int):
+    if (get_z_idx(template) > idx):
+        ValueError('Parameter variables come before than ' +
+                   'the output variable.')
+    return template.commands[idx]
+
+
+def get_variable_sort_by_idx(template, idx: int):
+    return get_variable_by_idx(template, idx).sort
 
 
 def x_sort(template):
@@ -200,7 +245,7 @@ def x_sort(template):
 
 def y_sort(template):
     """
-    returns: returns the sort of variable x
+    returns: returns the sort of variable y
     """
     if template.commands[1].symbol != 'y':
         ValueError(
@@ -211,36 +256,47 @@ def y_sort(template):
 
 def z_sort(template):
     """
-    returns: returns the sort of variable x
+    returns: returns the sort of variable z
     """
-    if template.commands[2].symbol != 'z':
+    z_idx = get_z_idx(template)
+    if template.commands[z_idx].symbol != 'z':
         ValueError(
-            'Expected z variable declaration as third ' +
-            'command in the fusion function.')
-    return template.commands[2].sort
+            'Expected z variable declaration to appear as ' +
+            z_idx + ' command in the fusion function.')
+    return template.commands[z_idx].sort
 
 
-def inv_x(template):
-    """
-    :returns: inversion function term for variable occurrence x
-    """
-    return template.commands[-2].term.subterms[1]
+def inv_by_name(template, name: str):
+    for idx, decl in enumerate(template.commands):
+        if (decl.symbol != name):
+            continue
+        if not isinstance(decl, DeclareConst):
+            break
+        if constant_name_pattern.match(decl.symbol) is not None:
+            break
+    idx = get_first_assert_idx(template) + idx + 1
+    return template.commands[idx]
 
 
-def inv_y(template):
-    """
-    :returns: inversion function term for variable occurrence y
-    """
-    return template.commands[-1].term.subterms[1]
+def variables_to_decls(template):
+    m = {}
+    for idx, decl in enumerate(template.commands):
+        if not isinstance(decl, DeclareConst):
+            break
+        if constant_name_pattern.match(decl.symbol) is not None:
+            break
+        m[decl.symbol] = decl
+    return m
 
 
-def fusion_contraints(template, var_type):
+def fusion_contraints(template, var_types):
     """
     :returns: fusion constraints (i.e. last three asserts from filled template)
     """
-    if var_type == "Int" or var_type == "Real":
-        return template.commands[-3:]
-    return template.commands[-3:-2]
+    arity = get_z_idx(template)
+    if "Int" in var_types or "Real" in var_types:
+        return template.commands[-(arity + 1):]
+    return template.commands[-(arity + 1):-arity]
 
 
 def add_fusion_constraints(formula, asserts):

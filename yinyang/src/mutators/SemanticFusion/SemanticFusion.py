@@ -26,8 +26,8 @@ import copy
 from yinyang.src.mutators.Mutator import Mutator
 from yinyang.src.mutators.SemanticFusion.VariableFusion import (
     fill_template,
-    inv_x,
-    inv_y,
+    get_z_idx,
+    inv_by_name,
     fusion_contraints,
     add_fusion_constraints,
     add_var_decls,
@@ -54,6 +54,7 @@ class SemanticFusion(Mutator):
         self.config = self.args.config
         self.generate_functions = self.args.generate_functions > 0
         self.generate_functions_size = self.args.generate_functions
+        self.multiple_variables = self.args.multiple_variables
         self.oracle = self.args.oracle
         self.templates = {}
         if not self.generate_functions:
@@ -88,31 +89,35 @@ class SemanticFusion(Mutator):
 
         for _, mr in enumerate(_mrs):
             template, _ = parse_str(mr)
+            if (get_z_idx(template) != self.multiple_variables):
+                continue
             populate_template_map(self.templates, template)
 
     def fuse(self, formula1, formula2, triplets):
         fusion_vars = []
         fusion_constr = []
         for triplet in triplets:
-            x, y, template =\
+            # xs and ys map variables to template variable names.
+            xs, ys, template =\
                 triplet[0], triplet[1], triplet[2]
-            z = DeclareFun(x + "_" + y + "_fused", "", z_sort(template))
+            z_name = "_".join(xs + ys + "fused")
+            z = DeclareFun(z_name, "", z_sort(template))
             fusion_vars.append(z)
-            template = fill_template(x, y, template)
-            fusion_constr += fusion_contraints(template, z_sort(template))
+            template = fill_template(xs, ys, z_name, template)
+            # Should I look at both input and output sorts?
+            fusion_constr += fusion_contraints(template, z_sort())
 
-            occs_x = [occ for occ in formula1.free_var_occs if occ.name == x]
-            occs_y = [occ for occ in formula2.free_var_occs if occ.name == y]
-
-            k = random.randint(0, len(occs_x))
-            occs_x = random.sample(occs_x, k)
-            k = random.randint(0, len(occs_y))
-            occs_y = random.sample(occs_y, k)
-
-            for occ in occs_x:
-                occ.substitute(occ, inv_x(template))
-            for occ in occs_y:
-                occ.substitute(occ, inv_y(template))
+            def _random_substitute(formula, name):
+                occs = [occ for occ in formula.free_var_occs
+                        if occ.name == name]
+                k = random.randint(0, len(occs))
+                occs = random.sample(occs, k)
+                for occ in occs:
+                    occ.substitute(occ, inv_by_name(template, name))
+            for x in xs:
+                _random_substitute(formula1, xs[x])
+            for y in ys:
+                _random_substitute(formula2, ys[y])
 
         if self.oracle == "unsat":
             formula = disjunction(formula1, formula2)
@@ -136,13 +141,16 @@ class SemanticFusion(Mutator):
         templates = generate_fusion_function_templates(
             formula1.global_vars,
             formula2.global_vars,
+            self.multiple_variables,
             self.generate_functions_size
         ) \
             if self.generate_functions \
             else self.templates
 
         triplets = random_var_triplets(
-            formula1.global_vars, formula2.global_vars, templates
+            formula1.global_vars,
+            formula2.global_vars,
+            templates
         )
         fused = self.fuse(formula1, formula2, triplets)
         return fused, True, skip_seed

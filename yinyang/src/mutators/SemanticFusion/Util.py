@@ -20,11 +20,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import io
-import random
-import itertools
-from yinyang.src.mutators.SemanticFusion.VariableFusion import x_sort, y_sort
-
+from ffg.emitter.yinyang_emitter import emit_function
+from ffg.gen.tree_generation import generate_tree
+from ffg.gen import gen_configuration
+from yinyang.src.parsing.Types import (
+    ARRAY_TYPE,
+    BITVECTOR_TYPE,
+    FP_TYPE,
+    type2ffg,
+)
+from yinyang.src.parsing.Parse import parse_str
 from yinyang.src.parsing.Ast import (
     Term,
     Script,
@@ -33,17 +38,15 @@ from yinyang.src.parsing.Ast import (
     DeclareFun,
     SMTLIBCommand,
 )
-from yinyang.src.parsing.Parse import parse_str
-from yinyang.src.parsing.Types import (
-    ARRAY_TYPE,
-    BITVECTOR_TYPE,
-    FP_TYPE,
-    type2ffg,
+from yinyang.src.mutators.SemanticFusion.VariableFusion import (
+    get_variable_sort_by_idx,
+    get_variables_by_sort,
+    get_z_idx
 )
-
-from ffg.gen import gen_configuration
-from ffg.gen.tree_generation import generate_tree
-from ffg.emitter.yinyang_emitter import emit_function
+import copy
+import io
+import random
+import itertools
 
 
 def cvars(occs):
@@ -156,15 +159,42 @@ def random_var_triplets(global_vars1, global_vars2, templates):
     """
     m1, m2 = type_var_map(global_vars1), type_var_map(global_vars2)
     mapping = []
-    for (t1, t2) in templates:
-        if t1 not in m1:
-            continue
-        if t2 not in m2:
-            continue
-        random_tuples = random_tuple_list(m1[t1], m2[t2])
-        for tup in random_tuples:
-            mapping.append(
-                (tup[0], tup[1], random.choice(templates[(t1, t2)])))
+
+    def _random_couples(template):
+        template_var_by_sort = get_variables_by_sort(template)
+        arity = get_z_idx(template)
+        # remaining = len(all_sorts) - len(template_var_by_sort.keys())
+        # for sort in template_var_by_sort:
+        #    try:
+        #        all_sorts.remove(sort)
+        #    except ValueError:
+        #        break
+        # if (remaining == len(all_sorts)):
+        # template can be used (possibly,
+        # let's find a valid assignment,
+        # i.e. at least one variable in
+        # each seed).
+        vars = [0, 0]
+        maps = [copy.deepcopy(m1), copy.deepcopy(m2)]
+        output = [{}, {}]
+        # Create a map from sorts of the template to variables.
+        for sort in template_var_by_sort:
+            for template_var in template_var_by_sort[sort]:
+                map_index = random.choice([0, 1])
+                if (sort not in maps[map_index]):
+                    map_index = (map_index + 1) % 2
+                if (sort not in maps[map_index]):
+                    break
+                vars[map_index] += 1
+                var = random.choice(maps[map_index][sort])
+                maps[map_index][sort].remove(var)
+                output[map_index][var] = template_var
+        if (len(output[0]) + len(output[1]) == len(arity) and
+                not len(output[0]) == 0 and not len(output[1]) == 0):
+            mapping.append((output[0], output[1], template))
+
+    for template in templates:
+        _random_couples(template)
     return mapping
 
 
@@ -189,17 +219,25 @@ def populate_template_map(templates, template):
     Given a template and a template map, insert this 
     template inside the map using as index the tuple
     containing the sorts of the input variables.
+    Do nothing if the arity of the fusion function is
+    different from the number of variables requested.
     """
     # Use the type information of x and y.
-    sort = (str(x_sort(template)), str(y_sort(template)))
-
+    arity = get_z_idx(template)
+    sort = tuple(sorted([str(get_variable_sort_by_idx(template, i))
+                         for i in range(arity)]))
     if sort not in templates:
         templates[sort] = [template]
     else:
         templates[sort].append(template)
 
 
-def generate_fusion_function_templates(global_vars1, global_vars2, size=25):
+def generate_fusion_function_templates(
+        global_vars1,
+        global_vars2,
+        variables: int,
+        size=25
+):
     """
     Create random variables mapping of variables from the seeds
     and new fusion functions to fuse them. Returns the templates
@@ -215,15 +253,14 @@ def generate_fusion_function_templates(global_vars1, global_vars2, size=25):
         type1 = tlist1[t1]
         for t2 in tlist2:
             type2 = tlist2[t2]
-
             theories = [type2ffg(type1), type2ffg(type2)]
             gen_configuration.set_available_theories(theories)
             operator_types = gen_configuration.get_theories()
             root_type = random.choice(operator_types)
-            tree, _ = generate_tree(root_type, size, ['x', 'y'], 'z')
+            tree, _ = generate_tree(
+                root_type, size, [f"x{i}" for i in range(variables)], 'z')
             output = io.StringIO()
             emit_function(tree, output, is_wrapped=False)
-
             template, _ = parse_str(output.getvalue())
             populate_template_map(templates, template)
 
