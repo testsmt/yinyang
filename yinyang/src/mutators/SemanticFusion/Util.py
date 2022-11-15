@@ -163,17 +163,6 @@ def random_var_triplets(global_vars1, global_vars2, templates):
     def _random_couples(template):
         template_var_by_sort = get_variables_by_sort(template)
         arity = get_z_idx(template)
-        # remaining = len(all_sorts) - len(template_var_by_sort.keys())
-        # for sort in template_var_by_sort:
-        #    try:
-        #        all_sorts.remove(sort)
-        #    except ValueError:
-        #        break
-        # if (remaining == len(all_sorts)):
-        # template can be used (possibly,
-        # let's find a valid assignment,
-        # i.e. at least one variable in
-        # each seed).
         vars = [0, 0]
         maps = [copy.deepcopy(m1), copy.deepcopy(m2)]
         output = [{}, {}]
