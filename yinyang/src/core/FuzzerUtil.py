@@ -73,10 +73,9 @@ def grep_result(stdout):
 def get_seeds(args, strategy):
     initial_seeds = args.PATH_TO_SEEDS
 
-    if args.randomize:
-        random.shuffle(initial_seeds)
-
     if strategy == "yinyang":
+        if args.randomize:
+            random.shuffle(initial_seeds)
         assert len(initial_seeds) >= 2
         return [(a, b) for a in initial_seeds for b in initial_seeds]
     else:
