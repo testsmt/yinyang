@@ -249,7 +249,7 @@ def generate_fusion_function_templates(
             tree, _ = generate_tree(
                 root_type, size, [f"x{i}" for i in range(variables)], 'z')
             output = io.StringIO()
-            emit_function(tree, output, is_wrapped=False)
+            emit_function(tree, output, wrap=False)
             template, _ = parse_str(output.getvalue())
             populate_template_map(templates, template)
 
