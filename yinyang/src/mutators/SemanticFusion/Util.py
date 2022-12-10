@@ -158,32 +158,43 @@ def random_var_triplets(global_vars1, global_vars2, templates):
     Create a random variable mapping of variables with same type
     """
     m1, m2 = type_var_map(global_vars1), type_var_map(global_vars2)
+    type_var_maps = [copy.deepcopy(m1), copy.deepcopy(m2)]
     mapping = []
 
     def _random_couples(template):
         template_var_by_sort = get_variables_by_sort(template)
         arity = get_z_idx(template)
-        vars = [0, 0]
-        maps = [copy.deepcopy(m1), copy.deepcopy(m2)]
+        maps = copy.deepcopy(type_var_maps)
+        map_index = 0
+        map_length = len(maps)
+        vars = [0] * map_length
         output = [{}, {}]
         # Create a map from sorts of the template to variables.
         for sort in template_var_by_sort:
             for template_var in template_var_by_sort[sort]:
-                map_index = random.choice([0, 1])
-                if (sort not in maps[map_index]):
-                    map_index = (map_index + 1) % 2
-                if (sort not in maps[map_index]):
-                    break
+                starting = map_index
+                while True:
+                    # Ensure at each iteration to change the map from
+                    # where we pick, to try to equally distribute the
+                    # variables in the seed formulas.
+                    map_index = (map_index + 1) % map_length
+                    if (sort in maps[map_index]):
+                        break
+                    if starting == map_index:
+                        # This template cannot be instantiated with 
+                        # those seeds.
+                        return
                 vars[map_index] += 1
+                print(vars)
                 var = random.choice(maps[map_index][sort])
                 maps[map_index][sort].remove(var)
                 output[map_index][var] = template_var
-        if (len(output[0]) + len(output[1]) == len(arity) and
-                not len(output[0]) == 0 and not len(output[1]) == 0):
+        if sum(vars) == arity: 
             mapping.append((output[0], output[1], template))
 
-    for template in templates:
-        _random_couples(template)
+    for sort_index in templates:
+        for template in templates[sort_index]:
+            _random_couples(template)
     return mapping
 
 
