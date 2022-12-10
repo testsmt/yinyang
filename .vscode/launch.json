@@ -4,12 +4,23 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
-      "name": "Python: Module",
+      "name": "Unit tests",
       "type": "python",
       "request": "launch",
       "module": "unittest",
-      "args": ["tests/RunUnitTests.py"],
+      "args": [
+        "tests/RunUnitTests.py"
+      ],
+      "justMyCode": true
+    },
+    {
+      "name": "Python File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
       "justMyCode": true
     }
   ]
