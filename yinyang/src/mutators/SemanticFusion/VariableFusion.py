@@ -196,16 +196,17 @@ def fill_template(xs, ys, z_name, template):
                     Var(declare_const.symbol, const_type), const_expr)
 
     # Bind occurrences of variables to template
-    tvars = variables_to_decls(template)
     for ass in filled_template.commands[first_ass_idx:]:
-        # spin a for loop to cover all the replacement
         ass.term.substitute(Var("z", z.type), z)
         for x in xs:
-            ass.term.substitute(Var(xs[x], tvars[xs[x]].sort),
-                                Var(x, tvars[xs[x]].sort))
+            # To be valid, an assignment of variables of the
+            # template variables to the seeds variables
+            # preserve the sort.
+            ass.term.substitute(Var(xs[x].symbol, xs[x].sort),
+                                Var(x, [xs[x]].sort))
         for y in ys:
-            ass.term.substitute(Var(ys[y], tvars[ys[y]].sort),
-                                Var(y, tvars[ys[y]].sort))
+            ass.term.substitute(Var(ys[y].symbol, ys[y].sort),
+                                Var(y, ys[y].sort))
 
     return filled_template
 

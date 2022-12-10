@@ -97,15 +97,15 @@ class SemanticFusion(Mutator):
         fusion_vars = []
         fusion_constr = []
         for triplet in triplets:
-            # xs and ys map variables to template variable names.
+            # xs and ys map variables names to template variable declarations.
             xs, ys, template =\
                 triplet[0], triplet[1], triplet[2]
-            z_name = "_".join(xs + ys + "fused")
+            z_name = "_".join(list(xs.keys()) + list(ys.keys()) + ["fused"])
             z = DeclareFun(z_name, "", z_sort(template))
             fusion_vars.append(z)
             template = fill_template(xs, ys, z_name, template)
             # Should I look at both input and output sorts?
-            fusion_constr += fusion_contraints(template, z_sort())
+            fusion_constr += fusion_contraints(template, z_sort(template))
 
             def _random_substitute(formula, name):
                 occs = [occ for occ in formula.free_var_occs
