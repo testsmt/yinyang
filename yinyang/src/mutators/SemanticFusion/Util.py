@@ -185,7 +185,6 @@ def random_var_triplets(global_vars1, global_vars2, templates):
                         # those seeds.
                         return
                 vars[map_index] += 1
-                print(vars)
                 var = random.choice(maps[map_index][sort])
                 maps[map_index][sort].remove(var)
                 output[map_index][var] = template_var
