@@ -161,10 +161,10 @@ def get_variables_by_sort(template):
             break
         if constant_name_pattern.match(decl.symbol) is not None:
             break
-        if decl.sort not in m:
-            m[decl.sort] = [decl]
+        if str(decl.sort) not in m:
+            m[str(decl.sort)] = [decl]
         else:
-            m[decl.sort].append(decl)
+            m[str(decl.sort)].append(decl)
     return m
 
 
