@@ -32,7 +32,7 @@ To install the most recent version, check out the repository:
 
 ``` bash                                                                           
 git clone https://github.com/testsmt/yinyang.git                        
-pip3 install antlr4-python3-runtime==4.9.2                                   
+pip3 install antlr4-python3-runtime==4.9.2 ffg                                  
 ``` 
 
 Note that you may want to add `yinyang/bin` to your PATH, for running yinyang conveniently without prefix.  
