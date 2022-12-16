@@ -16,7 +16,7 @@
       "justMyCode": true
     },
     {
-      "name": "Python File",
+      "name": "Current File",
       "type": "python",
       "request": "launch",
       "program": "${file}",
