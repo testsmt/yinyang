@@ -113,7 +113,8 @@ class SemanticFusion(Mutator):
                 k = random.randint(0, len(occs))
                 occs = random.sample(occs, k)
                 for occ in occs:
-                    occ.substitute(occ, inv_by_name(template, name_map[name].symbol))
+                    occ.substitute(occ, inv_by_name(
+                        template, name_map[name].symbol))
             for x in xs:
                 _random_substitute(formula1, xs, x)
                 _random_substitute(formula2, xs, x)
