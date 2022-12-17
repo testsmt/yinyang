@@ -168,7 +168,7 @@ def random_var_triplets(global_vars1, global_vars2, templates):
         map_index = 0
         map_length = len(maps)
         vars = [0] * map_length
-        output = [{}, {}]
+        output = [{}] * map_length
         # Create a map from sorts of the template to variables.
         for sort in template_var_by_sort:
             random.shuffle(template_var_by_sort[sort])
@@ -182,14 +182,14 @@ def random_var_triplets(global_vars1, global_vars2, templates):
                     if (sort in maps[map_index]):
                         break
                     if starting == map_index:
-                        # This template cannot be instantiated with 
+                        # This template cannot be instantiated with
                         # those seeds.
                         return
                 vars[map_index] += 1
                 var = random.choice(maps[map_index][sort])
                 maps[map_index][sort].remove(var)
                 output[map_index][var] = template_var
-        if sum(vars) == arity: 
+        if sum(vars) == arity:
             mapping.append((output[0], output[1], template))
 
     for sort_index in templates:

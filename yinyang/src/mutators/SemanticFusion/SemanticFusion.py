@@ -98,29 +98,29 @@ class SemanticFusion(Mutator):
         fusion_constr = []
         for triplet in triplets:
             # xs and ys map variables names to template variable declarations.
-            xs, ys, template =\
+            mapped_var1, mapped_var2, template =\
                 triplet[0], triplet[1], triplet[2]
-            z_name = "_".join(list(xs.keys()) + list(ys.keys()) + ["fused"])
+            z_name = "_".join(list(mapped_var1.keys()) +
+                              list(mapped_var2.keys()) + ["fused"])
             z = DeclareFun(z_name, "", z_sort(template))
             fusion_vars.append(z)
-            template = fill_template(xs, ys, z_name, template)
+            template = fill_template(
+                mapped_var1, mapped_var2, z_name, template)
             # Should I look at both input and output sorts?
             fusion_constr += fusion_contraints(template, z_sort(template))
 
-            def _random_substitute(formula, name_map, name):
+            def _random_substitute(formula, mapped_vars, formula_var_name):
                 occs = [occ for occ in formula.free_var_occs
-                        if occ.name == name]
+                        if occ.name == formula_var_name]
                 k = random.randint(0, len(occs))
                 occs = random.sample(occs, k)
                 for occ in occs:
                     occ.substitute(occ, inv_by_name(
-                        template, name_map[name].symbol))
-            for x in xs:
-                _random_substitute(formula1, xs, x)
-                _random_substitute(formula2, xs, x)
-            for y in ys:
-                _random_substitute(formula1, ys, y)
-                _random_substitute(formula2, ys, y)
+                        template, mapped_vars[formula_var_name].symbol))
+            for formula1_var_name in mapped_var1:
+                _random_substitute(formula1, mapped_var1, formula1_var_name)
+            for formula2_var_name in mapped_var2:
+                _random_substitute(formula2, mapped_var2, formula2_var_name)
 
         if self.oracle == "unsat":
             formula = disjunction(formula1, formula2)
