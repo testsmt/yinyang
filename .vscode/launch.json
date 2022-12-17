@@ -4,7 +4,15 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-
+    {
+      "name": "SanitySemanticFusion case",
+      "type": "python",
+      "request": "launch",
+      "program": "bin/yinyang",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "args": ["-k", "-s", "fusion", "-o", "unsat", "/home/nicola/Documents/eth/studies/ast/yinyang/cvc4-1.6-x86_64-linux-opt --strings-exp", "tests/integration/semanticfusion/gIxXB_cvc4_bug_incorrect_script1.smt2", "tests/integration/semanticfusion/gIxXB_cvc4_bug_incorrect_script2.smt2"]
+    },
     {
       "name": "Unit tests",
       "type": "python",
@@ -21,7 +29,7 @@
       "request": "launch",
       "program": "${file}",
       "console": "integratedTerminal",
-      "justMyCode": true
+      "justMyCode": false
     }
   ]
 }
