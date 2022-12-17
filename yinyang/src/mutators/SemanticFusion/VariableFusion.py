@@ -269,14 +269,14 @@ def z_sort(template):
 
 def inv_by_name(template, name: str):
     for idx, decl in enumerate(template.commands):
-        if (decl.symbol != name):
-            continue
         if not isinstance(decl, DeclareConst):
+            break
+        if (decl.symbol == name):
             break
         if constant_name_pattern.match(decl.symbol) is not None:
             break
     idx = get_first_assert_idx(template) + idx + 1
-    return template.commands[idx]
+    return template.commands[idx].term.subterms[1]
 
 
 def variables_to_decls(template):

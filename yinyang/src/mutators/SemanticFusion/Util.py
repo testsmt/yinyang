@@ -171,6 +171,7 @@ def random_var_triplets(global_vars1, global_vars2, templates):
         output = [{}, {}]
         # Create a map from sorts of the template to variables.
         for sort in template_var_by_sort:
+            random.shuffle(template_var_by_sort[sort])
             for template_var in template_var_by_sort[sort]:
                 starting = map_index
                 while True:

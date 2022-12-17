@@ -107,17 +107,19 @@ class SemanticFusion(Mutator):
             # Should I look at both input and output sorts?
             fusion_constr += fusion_contraints(template, z_sort(template))
 
-            def _random_substitute(formula, name):
+            def _random_substitute(formula, name_map, name):
                 occs = [occ for occ in formula.free_var_occs
                         if occ.name == name]
                 k = random.randint(0, len(occs))
                 occs = random.sample(occs, k)
                 for occ in occs:
-                    occ.substitute(occ, inv_by_name(template, name))
+                    occ.substitute(occ, inv_by_name(template, name_map[name].symbol))
             for x in xs:
-                _random_substitute(formula1, xs[x])
+                _random_substitute(formula1, xs, x)
+                _random_substitute(formula2, xs, x)
             for y in ys:
-                _random_substitute(formula2, ys[y])
+                _random_substitute(formula1, ys, y)
+                _random_substitute(formula2, ys, y)
 
         if self.oracle == "unsat":
             formula = disjunction(formula1, formula2)
@@ -125,6 +127,7 @@ class SemanticFusion(Mutator):
         else:
             formula = conjunction(formula1, formula2)
         add_var_decls(formula, fusion_vars)
+        print(formula)
         return formula
 
     def mutate(self):
