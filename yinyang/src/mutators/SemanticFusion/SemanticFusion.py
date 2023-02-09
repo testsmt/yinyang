@@ -95,6 +95,7 @@ class SemanticFusion(Mutator):
 
     def fuse(self, formula1, formula2, triplets):
         fusion_vars = []
+        fusion_vars_names = []
         fusion_constr = []
         for triplet in triplets:
             # xs and ys map variables names to template variable declarations.
@@ -102,6 +103,10 @@ class SemanticFusion(Mutator):
                 triplet[0], triplet[1], triplet[2]
             z_name = "_".join(list(mapped_var1.keys()) +
                               list(mapped_var2.keys()) + ["fused"])
+            if z_name in fusion_vars_names:
+                continue
+            
+            fusion_vars_names.append(z_name)
             z = DeclareFun(z_name, "", z_sort(template))
             fusion_vars.append(z)
             template = fill_template(
