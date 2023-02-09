@@ -133,7 +133,6 @@ class SemanticFusion(Mutator):
         else:
             formula = conjunction(formula1, formula2)
         add_var_decls(formula, fusion_vars)
-        print(formula)
         return formula
 
     def mutate(self):
