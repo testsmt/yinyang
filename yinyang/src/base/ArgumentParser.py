@@ -201,6 +201,13 @@ def add_yinyang_args(parser, rootpath, current_dir):
         type=int,
     )
     parser.add_argument(
+        "-m",
+        "--multiple-variables",
+        metavar="<vars>",
+        default=2,
+        type=int,
+    )
+    parser.add_argument(
         "-r",
         "--randomize",
         action='store_true',

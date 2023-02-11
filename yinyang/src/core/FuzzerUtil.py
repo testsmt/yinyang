@@ -19,7 +19,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
 import random
 import re
 import pathlib
@@ -53,9 +52,7 @@ def admissible_seed_size(seed, args):
     :returns: True if that is the case and False otherwise.
     """
     seed_size_in_bytes = pathlib.Path(seed).stat().st_size
-    if seed_size_in_bytes >= args.file_size_limit:
-        return False
-    return True
+    return seed_size_in_bytes < args.file_size_limit
 
 
 def grep_result(stdout):
@@ -74,23 +71,16 @@ def grep_result(stdout):
 
 
 def get_seeds(args, strategy):
-    if strategy in ["opfuzz", "typefuzz"]:
-        seeds = args.PATH_TO_SEEDS
-    elif strategy == "yinyang":
-        if len(args.PATH_TO_SEEDS) > 2:
-            seeds = [(a, b)
-                     for a in args.PATH_TO_SEEDS
-                     for b in args.PATH_TO_SEEDS]
-        elif len(args.PATH_TO_SEEDS) == 2:
-            seeds = [(args.PATH_TO_SEEDS[0], args.PATH_TO_SEEDS[1])]
-        else:
-            assert False
-        if args.randomize:
-            random.shuffle(seeds)
-    else:
-        assert False
+    initial_seeds = args.PATH_TO_SEEDS
 
-    return seeds
+    if strategy == "yinyang":
+        if args.randomize:
+            random.shuffle(initial_seeds)
+        assert len(initial_seeds) >= 2
+        return [(a, b) for a in initial_seeds for b in initial_seeds]
+    else:
+        assert strategy in ["opfuzz", "typefuzz"]
+        return initial_seeds
 
 
 def init_oracle(args):

@@ -26,8 +26,8 @@ import copy
 from yinyang.src.mutators.Mutator import Mutator
 from yinyang.src.mutators.SemanticFusion.VariableFusion import (
     fill_template,
-    inv_x,
-    inv_y,
+    get_z_idx,
+    inv_by_name,
     fusion_contraints,
     add_fusion_constraints,
     add_var_decls,
@@ -54,6 +54,7 @@ class SemanticFusion(Mutator):
         self.config = self.args.config
         self.generate_functions = self.args.generate_functions > 0
         self.generate_functions_size = self.args.generate_functions
+        self.multiple_variables = self.args.multiple_variables
         self.oracle = self.args.oracle
         self.templates = {}
         if not self.generate_functions:
@@ -88,31 +89,43 @@ class SemanticFusion(Mutator):
 
         for _, mr in enumerate(_mrs):
             template, _ = parse_str(mr)
+            if (get_z_idx(template) != self.multiple_variables):
+                continue
             populate_template_map(self.templates, template)
 
     def fuse(self, formula1, formula2, triplets):
         fusion_vars = []
+        fusion_vars_names = []
         fusion_constr = []
         for triplet in triplets:
-            x, y, template =\
+            # xs and ys map variables names to template variable declarations.
+            mapped_var1, mapped_var2, template =\
                 triplet[0], triplet[1], triplet[2]
-            z = DeclareFun(x + "_" + y + "_fused", "", z_sort(template))
+            z_name = "_".join(list(mapped_var1.keys()) +
+                              list(mapped_var2.keys()) + ["fused"])
+            if z_name in fusion_vars_names:
+                continue
+            
+            fusion_vars_names.append(z_name)
+            z = DeclareFun(z_name, "", z_sort(template))
             fusion_vars.append(z)
-            template = fill_template(x, y, template)
+            template = fill_template(
+                mapped_var1, mapped_var2, z_name, template)
+            # Should I look at both input and output sorts?
             fusion_constr += fusion_contraints(template, z_sort(template))
 
-            occs_x = [occ for occ in formula1.free_var_occs if occ.name == x]
-            occs_y = [occ for occ in formula2.free_var_occs if occ.name == y]
-
-            k = random.randint(0, len(occs_x))
-            occs_x = random.sample(occs_x, k)
-            k = random.randint(0, len(occs_y))
-            occs_y = random.sample(occs_y, k)
-
-            for occ in occs_x:
-                occ.substitute(occ, inv_x(template))
-            for occ in occs_y:
-                occ.substitute(occ, inv_y(template))
+            def _random_substitute(formula, mapped_vars, formula_var_name):
+                occs = [occ for occ in formula.free_var_occs
+                        if occ.name == formula_var_name]
+                k = random.randint(0, len(occs))
+                occs = random.sample(occs, k)
+                for occ in occs:
+                    occ.substitute(occ, inv_by_name(
+                        template, mapped_vars[formula_var_name].symbol))
+            for formula1_var_name in mapped_var1:
+                _random_substitute(formula1, mapped_var1, formula1_var_name)
+            for formula2_var_name in mapped_var2:
+                _random_substitute(formula2, mapped_var2, formula2_var_name)
 
         if self.oracle == "unsat":
             formula = disjunction(formula1, formula2)
@@ -136,13 +149,16 @@ class SemanticFusion(Mutator):
         templates = generate_fusion_function_templates(
             formula1.global_vars,
             formula2.global_vars,
+            self.multiple_variables,
             self.generate_functions_size
         ) \
             if self.generate_functions \
             else self.templates
 
         triplets = random_var_triplets(
-            formula1.global_vars, formula2.global_vars, templates
+            formula1.global_vars,
+            formula2.global_vars,
+            templates
         )
         fused = self.fuse(formula1, formula2, triplets)
         return fused, True, skip_seed

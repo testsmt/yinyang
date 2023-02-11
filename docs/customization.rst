@@ -13,8 +13,10 @@ yinyang provides the following options. Please consult ``typefuzz --help`` for a
 * ``-bugs BUGSFOLDER`` (default: ./bugs) 
 * ``-scratch SCRATCHFOLDER`` specifies where the mutant formulas are temporarily stored. Note, if you run yinyang with several processes in parallel, each instance should have its own scratch folder. (default: ./scratch)      
 * ``-km --keep-mutants`` do not delete the mutants from the scratch folder. Warning: beware that this can quickly exhaust your entire disk space.
+* ``-g, --generate-functions`` dimension of the fusion functions to generate, if greater than 0 do not take into account --config option. (default: 0)
+* ``-m, --multiple-variables`` try to fuse at least vars variables, if possible, distributing the variables evenly as possible between the seeds (default: 2)
 * ``-q --quiet`` do not output statistics and other output.
-* ``-fl", "--file-size-limit`` file size limit on seed formula in bytes. (default: 20000)
+* ``-fl, --file-size-limit`` file size limit on seed formula in bytes. (default: 20000)
 
 
 

@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
@@ -39,6 +39,9 @@ jobs:
         python tests/integration/misc/FileSizeLimit.py
         python tests/integration/misc/NoSolvers.py
         python tests/integration/misc/DirectoryMode.py
+    - name: semanticfusion
+      run: |
+        python tests/integration/semanticfusion/SanitySemanticFusion.py
     - name: typefuzz 
       run: |
         python tests/integration/typefuzz/SanityTypeFuzz.py
@@ -47,9 +50,6 @@ jobs:
       run: |
         python tests/integration/opfuzz/SanityOpFuzz.py
         python tests/integration/misc/Usage.py
-    - name: semanticfusion
-      run: |
-        python tests/integration/semanticfusion/SanitySemanticFusion.py
     - name: regression
       run: |
         python tests/regression/issue42.py

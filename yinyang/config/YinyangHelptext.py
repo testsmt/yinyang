@@ -137,6 +137,9 @@ options:
     -g <ffg>, --generate-functions <ffg>
             dimension of the fusion functions to generate, if greater than 
             0 do not take into account --config option. (default: 0)
+    -m <vars>, --multiple-variables <vars>
+            try to fuse at least vars variables, if possible, distributing
+            the variables evenly as possible between the seeds (default: 2)
     -k, --keep-mutants          do not delete scratch file
     -n, --no-log                disable logging
     -q, --quiet                 do not print statistics and other output

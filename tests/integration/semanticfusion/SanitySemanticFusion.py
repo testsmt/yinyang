@@ -31,6 +31,7 @@ python = sys.executable
 def call_fuzzer(first_config, fn, opts):
     cmd = python + " bin/yinyang "\
         + '"' + first_config + '" ' + opts + " " + fn
+    print(cmd)
     output = subprocess.getoutput(cmd)
     print(output)
     soundness_issues = 0
@@ -84,7 +85,7 @@ cvc4 = get_cvc4()
 #
 first_config = z3
 fn = "tests/integration/semanticfusion/intersection-example-simple.proof-node75884.smt2 tests/integration/semanticfusion/water_tank-node5020.smt2"  # noqa: E501
-opts = "-o unsat -s fusion"
+opts = "-o unsat -s fusion -k"
 
 print("Trying to sanitize unsat fusion...")
 bug_catched = False
@@ -101,7 +102,7 @@ if bug_catched:
 
 first_config = z3
 fn = "tests/integration/semanticfusion/37315_issue-1694.smt2 tests/integration/semanticfusion/37315_issue-1694.smt2"  # noqa: E501
-opts = "-o sat -s fusion"
+opts = "-o sat -s fusion -k"
 
 print("Trying to sanitize sat fusion...")
 bug_catched = False
@@ -122,7 +123,7 @@ if bug_catched:
 print("Trying to retrigger bug with unsat fusion...")
 first_config = cvc4 + " --strings-exp -q"
 fn = "tests/integration/semanticfusion/gIxXB_cvc4_bug_incorrect_script1.smt2 tests/integration/semanticfusion/gIxXB_cvc4_bug_incorrect_script2.smt2"  # noqa: E501
-opts = "-o unsat -s fusion"
+opts = "-o unsat -s fusion -k"
 
 for _ in range(1000):
     soundness_issues, crash_issues, cmd = call_fuzzer(first_config, fn, opts)
@@ -135,12 +136,12 @@ if not bug_catched:
     print(cmd)
     exit(1)
 
-# 4. retrigger bug with unsat fusion
+# 4. retrigger bug with sat fusion
 #
 print("Trying to retrigger bug with sat fusion...")
 first_config = z3
 fn = "tests/integration/semanticfusion/5jby0_z3_bug_incorrect_script1.smt2 tests/integration/semanticfusion/5jby0_z3_bug_incorrect_script2.smt2"  # noqa: E501
-opts = "-o sat -s fusion"
+opts = "-o sat -s fusion -k"
 
 for _ in range(1000):
     soundness_issues, crash_issues, cmd = call_fuzzer(first_config, fn, opts)
@@ -152,7 +153,6 @@ if not bug_catched:
     print("[ERROR] Bug not found by sat fusion.")
     print(cmd)
     exit(1)
-
 
 cleanup()
 

@@ -4,3 +4,4 @@ build
 dist
 logs
 yinyang.egg-info
+env
