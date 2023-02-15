@@ -179,7 +179,10 @@ def random_var_triplets(global_vars1, global_vars2, templates):
                     # where we pick, to try to equally distribute the
                     # variables in the seed formulas.
                     map_index = (map_index + 1) % map_length
-                    if (sort in maps[map_index]):
+                    # We need at least a variable to be available 
+                    # for allocation
+                    if (sort in maps[map_index] 
+                            and len(maps[map_index][sort]) > 0):
                         break
                     if starting == map_index:
                         # This template cannot be instantiated with
