@@ -19,6 +19,6 @@ SMT solvers
 
 To run typefuzz or opfuzz, you need to install two or more SMT solvers.   
 The SMT-LIB initiative provides a comprehensive `list of SMT solvers <http://smtlib.cs.uiowa.edu/solvers.shtml>`_.
-Make sure that all SMT solver you consider for testing supports the chosen seeds. 
+Make sure that all SMT solvers you consider for testing support the chosen seeds. 
 
 If you can only use one SMT solver consider :doc:`fusion`.   
