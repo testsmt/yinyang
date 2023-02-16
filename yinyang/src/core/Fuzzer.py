@@ -108,15 +108,13 @@ class Fuzzer:
 
         return script, glob
 
-    def get_script(self, seeds):
-        seed = seeds.pop(random.randrange(len(seeds)))
+    def get_script(self, seed):
         logging.debug("Processing seed " + seed)
         self.statistic.total_seeds += 1
         self.currentseeds = []
         return self.process_seed(seed)
 
-    def get_script_pair(self, seeds):
-        seed = seeds.pop(random.randrange(len(seeds)))
+    def get_script_pair(self, seed):
         seed1 = seed[0]
         seed2 = seed[1]
         logging.debug("Processing seeds " + seed1 + " " + seed2)
@@ -138,12 +136,13 @@ class Fuzzer:
         mutator and then generates `self.args.iterations` many iterations per
         seed.
         """
-        seeds = get_seeds(self.args, self.strategy)
-        log_strategy_num_seeds(self.strategy, seeds, self.args.SOLVER_CLIS)
+        seeds, num_seeds = get_seeds(self.args, self.strategy)
+        num_targets = len(self.args.SOLVER_CLIS)
+        log_strategy_num_seeds(self.strategy, num_seeds, num_targets)
 
-        while len(seeds) != 0:
+        for seed in seeds:
             if self.strategy == "typefuzz":
-                script, glob = self.get_script(seeds)
+                script, glob = self.get_script(seed)
                 if not script:
                     continue
 
@@ -155,13 +154,13 @@ class Fuzzer:
                 )
 
             elif self.strategy == "opfuzz":
-                script, _ = self.get_script(seeds)
+                script, _ = self.get_script(seed)
                 if not script:
                     continue
                 self.mutator = TypeAwareOpMutation(script, self.args)
 
             elif self.strategy == "yinyang":
-                script1, _, script2, _ = self.get_script_pair(seeds)
+                script1, _, script2, _ = self.get_script_pair(seed)
                 if not script1 or not script2:
                     continue
                 self.mutator = SemanticFusion(script1, script2, self.args)

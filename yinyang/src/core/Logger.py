@@ -59,9 +59,7 @@ def init_logging(strategy, quiet_mode, name, args):
         logging.getLogger().addHandler(console)
 
 
-def log_strategy_num_seeds(strategy, seeds, targets):
-    num_targets = len(targets)
-    num_seeds = len(seeds)
+def log_strategy_num_seeds(strategy, num_seeds, num_targets):
     logging.info(
         "Strategy: "
         + strategy

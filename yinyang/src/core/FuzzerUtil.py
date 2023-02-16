@@ -72,15 +72,24 @@ def grep_result(stdout):
 
 def get_seeds(args, strategy):
     initial_seeds = args.PATH_TO_SEEDS
+    num_initial = len(initial_seeds)
+    random.shuffle(initial_seeds)
 
     if strategy == "yinyang":
-        if args.randomize:
-            random.shuffle(initial_seeds)
         assert len(initial_seeds) >= 2
-        return [(a, b) for a in initial_seeds for b in initial_seeds]
+        gen = get_permutation_generator(initial_seeds)
+        return gen, num_initial**2
     else:
         assert strategy in ["opfuzz", "typefuzz"]
-        return initial_seeds
+        return initial_seeds, num_initial
+
+
+def get_permutation_generator(seeds):
+    seeds_copy = [seed for seed in seeds]
+    for a in seeds:
+        random.shuffle(seeds_copy)
+        for b in seeds_copy:
+            yield a, b
 
 
 def init_oracle(args):
