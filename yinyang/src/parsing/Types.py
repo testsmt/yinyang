@@ -56,11 +56,12 @@ def type2ffg(typ):
         return INT_OPTION
     elif typ == STRING_TYPE:
         return STRING_OPTION
-    elif isinstance(typ, BITVECTOR_OPTION):
+    elif isinstance(typ, BITVECTOR_TYPE):
         # TODO: manage also the size
         return BITVECTOR_OPTION
     else:
-        raise ValueError(f"The type {typ} is not supported by the generator")
+        # If the type is not supported by ffg.
+        return None    
 
 
 def sort2type(sort):
