@@ -246,17 +246,14 @@ def generate_fusion_function_templates(
     and new fusion functions to fuse them. Returns the templates
     used to perform the fuse step.
     """
-    # Solve BitVec problem with a best effort approach:
+    # TODO Solve BitVec problem with a best effort approach:
     # try to generate formulas until you get the right bitvector type.
-    tlist1 = _type_list(global_vars1)
-    tlist2 = _type_list(global_vars2)
     templates = {}
-
-    for t1 in tlist1:
-        type1 = tlist1[t1]
-        for t2 in tlist2:
-            type2 = tlist2[t2]
-            theories = [type2ffg(type1), type2ffg(type2)]
+    options1 = _map_to_ffg_theories(global_vars1)
+    options2 = _map_to_ffg_theories(global_vars2)
+    for op1 in options1:
+        for op2 in options2:
+            theories = [op1, op2]
             gen_configuration.set_available_theories(theories)
             operator_types = gen_configuration.get_theories()
             root_type = random.choice(operator_types)
@@ -268,3 +265,14 @@ def generate_fusion_function_templates(
             populate_template_map(templates, template)
 
     return templates
+
+
+def _map_to_ffg_theories(global_vars):
+    """
+    Filter only theories supported by ffg and maps them
+    to options for it to be used in generate_tree.
+    """
+    ts = _type_list(global_vars)
+    options = [type2ffg(ts[t]) for t in ts]
+    options = list(filter(lambda t: t is not None, options))
+    return options
