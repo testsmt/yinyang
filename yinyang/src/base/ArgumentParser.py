@@ -164,6 +164,13 @@ def add_typefuzz_args(parser, rootpath, current_dir):
         metavar="path_to_file",
         default=rootpath + "/yinyang/config/typefuzz_config.txt",
     )
+    parser.add_argument(
+        "--seed",
+        metavar="<N>",
+        type=int,
+        default=None,
+        help="random seed for reproducible runs",
+    )
 
 
 def add_yinyang_args(parser, rootpath, current_dir):
