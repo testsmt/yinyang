@@ -83,7 +83,7 @@ The testing approaches implemented in yinyang are based on following two papers.
 
 .. code-block:: latex 
 
-    @article{winterer-zhang-su-oopsla2020
+    @article{winterer-zhang-su-oopsla2020,
       author    = {Dominik Winterer and
                    Chengyu Zhang and
                    Zhendong Su},
