@@ -25,6 +25,7 @@ import os
 import sys
 import signal
 import inspect
+import random
 from pathlib import Path
 
 path = Path(__file__)
@@ -81,6 +82,8 @@ def main():
 
     else:
         args = run_checks(parser, "typefuzz")
+        if args.seed is not None:
+            random.seed(args.seed)
         try:
             fuzzer = Fuzzer(args, "typefuzz")
 
