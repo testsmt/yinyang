@@ -109,7 +109,6 @@ def main():
                 signal.signal(signal.SIGINT, stats_control_c)
             else:
                 signal.signal(signal.SIGINT, silent_control_c)
-                exit(OK_NOBUGS)
 
             fuzzer.run()
         except Exception as e:
