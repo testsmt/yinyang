@@ -87,8 +87,28 @@ class Fuzzer:
         self.first_status_bar_printed = False
         self.name = random_string()
         self.timeout_of_current_seed = 0
+        self.header_comments = ""  # Store header comments to preserve in mutants
 
         init_logging(strategy, self.args.quiet, self.name, args)
+
+    def extract_header_comments(self, seed_file):
+        """
+        Extract header comments (lines starting with ;) that appear before
+        the first SMT-LIB command. These typically include EXPECT, COMMAND-LINE, etc.
+        """
+        header = []
+        try:
+            with open(seed_file, 'r') as f:
+                for line in f:
+                    stripped = line.strip()
+                    if stripped.startswith(';'):
+                        header.append(line.rstrip('\n'))
+                    elif stripped and not stripped.startswith(';'):
+                        # First non-comment, non-empty line - stop collecting headers
+                        break
+        except Exception:
+            pass
+        return '\n'.join(header) + ('\n' if header else '')
 
     def process_seed(self, seed):
         if not admissible_seed_size(seed, self.args):
@@ -97,6 +117,8 @@ class Fuzzer:
             return None, None
 
         self.currentseeds.append(pathlib.Path(seed).stem)
+        # Extract header comments before parsing
+        self.header_comments = self.extract_header_comments(seed)
         script, glob = parse_file(seed, silent=True)
 
         if not script:
@@ -220,6 +242,9 @@ class Fuzzer:
             random_string(),
         )
         with open(testcase, "w") as testcase_writer:
+            # Prepend header comments if they exist
+            if self.header_comments:
+                testcase_writer.write(self.header_comments)
             testcase_writer.write(script.__str__())
 
         for cli in self.args.SOLVER_CLIS:
@@ -477,6 +502,7 @@ class Fuzzer:
         exit(OK_BUGS)
 
     def __del__(self):
-        for fn in os.listdir(self.args.scratchfolder):
-            if self.name in fn:
-                os.remove(os.path.join(self.args.scratchfolder, fn))
+        if not self.args.keep_mutants:
+            for fn in os.listdir(self.args.scratchfolder):
+                if self.name in fn:
+                    os.remove(os.path.join(self.args.scratchfolder, fn))
