@@ -87,14 +87,15 @@ class Fuzzer:
         self.first_status_bar_printed = False
         self.name = random_string()
         self.timeout_of_current_seed = 0
-        self.header_comments = ""  # Store header comments to preserve in mutants
+        self.header_comments = ""  # header comments to preserve in mutants
 
         init_logging(strategy, self.args.quiet, self.name, args)
 
     def extract_header_comments(self, seed_file):
         """
         Extract header comments (lines starting with ;) that appear before
-        the first SMT-LIB command. These typically include EXPECT, COMMAND-LINE, etc.
+        the first SMT-LIB command. These typically include EXPECT,
+        COMMAND-LINE, etc.
         """
         header = []
         try:
@@ -104,7 +105,7 @@ class Fuzzer:
                     if stripped.startswith(';'):
                         header.append(line.rstrip('\n'))
                     elif stripped and not stripped.startswith(';'):
-                        # First non-comment, non-empty line - stop collecting headers
+                        # First non-comment, non-empty line - stop here
                         break
         except Exception:
             pass

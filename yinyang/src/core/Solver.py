@@ -60,9 +60,9 @@ class SolverResult:
         self.lst.append(result)
 
     def equals(self, rhs):
-        if type(rhs) == SolverQueryResult:
+        if isinstance(rhs, SolverQueryResult):
             return len(self.lst) == 1 and self.lst[0] == rhs
-        elif type(rhs) == SolverResult:
+        elif isinstance(rhs, SolverResult):
             if len(self.lst) != len(rhs.lst):
                 return False
             for index in range(0, len(self.lst)):

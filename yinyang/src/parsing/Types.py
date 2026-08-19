@@ -88,7 +88,8 @@ def _split_toplevel(s):
 
 
 def sort2type(sort):
-    if isinstance(sort, str) and sort.startswith("(Array ") and sort.endswith(")"):
+    if isinstance(sort, str) and sort.startswith("(Array ") \
+            and sort.endswith(")"):
         args = _split_toplevel(sort[len("(Array "):-1])
         if len(args) == 2:
             return ARRAY_TYPE(sort2type(args[0]), sort2type(args[1]))
