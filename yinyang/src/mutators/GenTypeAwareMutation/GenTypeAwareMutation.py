@@ -29,7 +29,7 @@ from yinyang.src.mutators.GenTypeAwareMutation.Operator import (
 from yinyang.src.mutators.GenTypeAwareMutation.Util import (
     type2num, get_all_subterms, local_compatible
 )
-from yinyang.src.parsing.Ast import Expr
+from yinyang.src.parsing.Ast import Const, Expr
 from yinyang.src.parsing.Types import ALL
 
 
@@ -146,6 +146,12 @@ class GenTypeAwareMutation(Mutator):
 
                 arg = random.choice(choices)
                 args.append(arg)
+
+            if len(op.arg_types) == 0:
+                # Nullary operators (e.g. re.none, re.all, re.allchar) are
+                # constants, not function applications, and must not be
+                # printed with parentheses around them.
+                return Const(name=op.name, type=op.rtype)
 
             exp = Expr(op=op.name, subterms=args)
             exp.type = op.rtype

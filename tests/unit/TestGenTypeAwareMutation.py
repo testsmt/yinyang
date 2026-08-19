@@ -29,6 +29,7 @@ import os
 from yinyang.src.parsing.Parse import *
 from yinyang.src.parsing.Typechecker import Context, typecheck
 from yinyang.src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import *
+from yinyang.src.mutators.GenTypeAwareMutation.Operator import Operator
 from yinyang.src.mutators.GenTypeAwareMutation.Util import *
 
 
@@ -62,6 +63,32 @@ class GenTypeAwareMutationTestCase(unittest.TestCase):
         gen = GenTypeAwareMutation(script, args, unique_expr)
         gen.generate()
         os.system("rm " + formulafile)
+
+    def test_issue31_nullary_regex_op(self):
+        # re.none, re.all, and re.allchar are 0-ary regex constants, not
+        # function applications: the generated replacement must print as
+        # a bare "re.none" rather than "(re.none )".
+        formula = """
+        (declare-fun s () String)
+        (assert (str.in_re s re.none))
+        (check-sat)
+        """
+        script, glob = parse_str(formula)
+        typecheck(script, glob)
+        args = Mockargs()
+        args.name = "formula"
+        unique_expr = get_unique_subterms(script)
+        gen = GenTypeAwareMutation(script, args, unique_expr)
+
+        regexp_term = script.assert_cmd[0].term.subterms[1]
+
+        for op_name in ("re.none", "re.all", "re.allchar"):
+            op = Operator(op_name, ["RegLan"], [])
+            gen.get_candidate_ops = lambda term, op=op: [op]
+            replacee = gen.get_replacee(regexp_term)
+            self.assertIsNotNone(replacee)
+            self.assertTrue(replacee.is_const)
+            self.assertEqual(replacee.__str__(), op_name)
 
 
 if __name__ == "__main__":
