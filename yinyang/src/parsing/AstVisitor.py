@@ -292,15 +292,9 @@ class AstVisitor(SMTLIBv2Visitor):
         | binary
         | string
         | b_value
-        | ParOpen GRW_Underscore ' bv' numeral numeral ParClose
+        | reg_const
         ;
         """
-        if ctx.ParOpen():
-            X, n = (
-                ctx.numeral()[0].getText(),
-                ctx.numeral()[1].getText().encode("utf-8").decode("utf-8")
-            )
-            return "(_ bv" + X + " " + n + ")", BITVECTOR_TYPE(int(n))
         if ctx.numeral():
             return ctx.getText().encode("utf-8").decode("utf-8"), INTEGER_TYPE
         if ctx.decimal():
@@ -322,7 +316,7 @@ class AstVisitor(SMTLIBv2Visitor):
         : spec_constant
         | qual_identifier
         | ParOpen qual_identifier term+ ParClose
-        | ParOpen GRW_Underscore ' bv' numeral numeral ParClose
+        | ParOpen GRW_Underscore symbol numeral ParClose
         | ParOpen ParOpen GRW_Underscore qual_identifier term+ ParClose
           ParClose
         | ParOpen GRW_Let ParOpen var_binding+ ParClose term ParClose
@@ -356,14 +350,12 @@ class AstVisitor(SMTLIBv2Visitor):
             )
 
         if len(ctx.ParOpen()) == 1 and ctx.GRW_Underscore() and ctx.numeral():
-            bitwidth = ctx.symbol().getText().strip("bv")
-            value = ctx.numeral().getText()
-            return Const(name="(_ bv" + bitwidth + " " + value + ")")
-
-        if len(ctx.ParOpen()) == 1 and ctx.GRW_Underscore() and ctx.numeral():
-            bitwidth = ctx.symbol().getText().strip("bv")
-            value = ctx.numeral().getText()
-            return Const(name="(_ bv" + bitwidth + " " + value + ")")
+            bv_value = ctx.symbol().getText()[len("bv"):]
+            bitwidth = ctx.numeral().getText()
+            return Const(
+                name="(_ bv" + bv_value + " " + bitwidth + ")",
+                type=BITVECTOR_TYPE(int(bitwidth)),
+            )
 
         if (
             len(ctx.ParOpen()) == 2

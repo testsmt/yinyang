@@ -56,6 +56,14 @@ class ParsingTestCase(unittest.TestCase):
         self.assertEqual(glob, {"x": "Int"})
         typecheck(formula, glob)
 
+    def test_issue25(self):
+        # A declared variable named "bv" (or with a "bv" prefix) must not
+        # be swallowed by the bitvector-literal lexing rule, and bitvector
+        # literals such as (_ bv96 8) must still parse and typecheck.
+        formula, glob = parse_file("tests/res/issue25.smt2", silent=False)
+        self.assertIn("bv", glob)
+        typecheck(formula, glob)
+
 
 #     def test_issue25(self):
 # script = """\

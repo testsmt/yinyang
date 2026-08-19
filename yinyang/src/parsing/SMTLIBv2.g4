@@ -722,8 +722,7 @@ spec_constant
     | binary
     | string
     | b_value
-    | reg_const 
-    | ParOpen GRW_Underscore ' bv' numeral numeral ParClose
+    | reg_const
     ;
 
 s_expr
