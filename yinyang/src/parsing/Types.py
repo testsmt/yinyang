@@ -64,7 +64,35 @@ def type2ffg(typ):
         return None    
 
 
+def _split_toplevel(s):
+    """Split s on spaces, ignoring spaces nested inside parentheses."""
+    parts = []
+    depth = 0
+    current = ""
+    for ch in s:
+        if ch == "(":
+            depth += 1
+            current += ch
+        elif ch == ")":
+            depth -= 1
+            current += ch
+        elif ch == " " and depth == 0:
+            if current:
+                parts.append(current)
+            current = ""
+        else:
+            current += ch
+    if current:
+        parts.append(current)
+    return parts
+
+
 def sort2type(sort):
+    if isinstance(sort, str) and sort.startswith("(Array ") and sort.endswith(")"):
+        args = _split_toplevel(sort[len("(Array "):-1])
+        if len(args) == 2:
+            return ARRAY_TYPE(sort2type(args[0]), sort2type(args[1]))
+
     if "FloatingPoint" in sort:
         eb = int(sort.split(" ")[2])
         sb = int(sort.split(" ")[3][:-1])

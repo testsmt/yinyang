@@ -64,6 +64,18 @@ class ParsingTestCase(unittest.TestCase):
         self.assertIn("bv", glob)
         typecheck(formula, glob)
 
+    def test_issue60(self):
+        # Array sorts whose index/payload sorts are themselves compound
+        # (e.g. bitvectors) must typecheck to a proper ARRAY_TYPE instead
+        # of being misparsed as a bitvector sort or an opaque string.
+        from yinyang.src.parsing.Types import ARRAY_TYPE, BITVECTOR_TYPE
+
+        formula, glob = parse_file("tests/res/issue60.smt2", silent=False)
+        self.assertIsInstance(glob["a_0"], ARRAY_TYPE)
+        self.assertIsInstance(glob["a_0"].index_type, BITVECTOR_TYPE)
+        self.assertIsInstance(glob["a_0"].payload_type, BITVECTOR_TYPE)
+        typecheck(formula, glob)
+
 
 #     def test_issue25(self):
 # script = """\

@@ -504,7 +504,7 @@ def typecheck_select(expr, ctxt):
     (select (Array X Y) X Y)
     """
     array_type = typecheck_expr(expr.subterms[0], ctxt)
-    if isinstance(array_type, ARRAY_TYPE):
+    if not isinstance(array_type, ARRAY_TYPE):
         raise TypeCheckError(expr, expr, ARRAY_TYPE, array_type)
     x_type = typecheck_expr(expr.subterms[1], ctxt)
     if x_type != array_type.index_type:
@@ -517,11 +517,11 @@ def typecheck_store(expr, ctxt):
     (store (Array X Y) X Y (Array X Y)))
     """
     array_type = typecheck_expr(expr.subterms[0], ctxt)
-    if isinstance(array_type, ARRAY_TYPE):
+    if not isinstance(array_type, ARRAY_TYPE):
         raise TypeCheckError(expr, expr, ARRAY_TYPE, array_type)
     x_type = typecheck_expr(expr.subterms[1], ctxt)
     y_type = typecheck_expr(expr.subterms[2], ctxt)
-    if x_type != array_type.index_type and y_type != array_type.payload_type:
+    if x_type != array_type.index_type or y_type != array_type.payload_type:
         raise TypeCheckError(
             expr,
             expr,
