@@ -107,8 +107,13 @@ def create_mocksolver_msg(msg, script_fn):
 
 
 def create_mocksolver_segfault(script_fn):
+    # Deliberately unbounded recursion used to rely on blowing the C stack
+    # to raise a genuine SIGSEGV, but CPython 3.11+ enforces a C stack
+    # depth check that raises RecursionError before that happens, so the
+    # process no longer actually segfaults. Send SIGSEGV directly instead,
+    # which is deterministic and portable across Python versions.
     code = "#! /usr/bin/env python3\n"
-    code += "import sys;sys.setrecursionlimit(1<<30);f=lambda f:f(f);f(f)"
+    code += "import os, signal; os.kill(os.getpid(), signal.SIGSEGV)"
     open(script_fn, "w").write(code)
     os.system("chmod +x " + script_fn)
 
