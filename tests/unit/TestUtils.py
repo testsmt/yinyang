@@ -20,18 +20,41 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import sys
 import unittest
+import sys
 
-from tests.unit.TestTerm import TermTestCase
-from tests.unit.TestParsing import ParsingTestCase
-from tests.unit.TestTypechecker import TypecheckerTestCase
-from tests.unit.TestSemanticFusion import SemanticFusionTestCase
-from tests.unit.TestTypeAwareOpMutation import TypeAwareOpMutationTestCase
-from tests.unit.TestGenTypeAwareMutation import GenTypeAwareMutationTestCase
-from tests.unit.TestUtils import UtilsTestCase
+sys.path.append("../../")
 
-sys.path.append("../")
+from yinyang.src.base.Utils import deepcopy_safe
+
+
+class Node:
+    def __init__(self, v, children=None):
+        self.v = v
+        self.children = children or []
+
+
+class UtilsTestCase(unittest.TestCase):
+    def test_deepcopy_safe_produces_independent_copy(self):
+        root = Node(1, [Node(2), Node(3, [Node(4)])])
+        cp = deepcopy_safe(root)
+        self.assertIsNot(cp, root)
+        self.assertEqual(cp.v, 1)
+        self.assertEqual(cp.children[1].children[0].v, 4)
+
+        # mutating the copy must not affect the original (i.e. it's a
+        # real deep copy, not a shallow/shared reference).
+        cp.children[1].children[0].v = 999
+        self.assertEqual(root.children[1].children[0].v, 4)
+
+    def test_deepcopy_safe_propagates_exceptions(self):
+        class Boom:
+            def __deepcopy__(self, memo):
+                raise ValueError("boom")
+
+        with self.assertRaises(ValueError):
+            deepcopy_safe(Boom())
+
 
 if __name__ == "__main__":
     unittest.main()

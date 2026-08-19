@@ -20,12 +20,54 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import copy
 import random
 import string
+import threading
 
 
 def random_string(length=5):
     return "".join(random.sample(string.ascii_letters + string.digits, length))
+
+
+def deepcopy_safe(obj, stack_size=256 * 1024 * 1024):
+    """
+    copy.deepcopy() recurses once per nested/linked object it visits, and
+    each level of that recursion burns several C stack frames internally
+    (_reconstruct -> deepcopy -> _deepcopy_dict/_deepcopy_list -> deepcopy
+    -> ...). For a large or deeply nested AST, that can exceed the
+    process's actual OS thread stack well before Python's own (very high,
+    see sys.setrecursionlimit in Typechecker.py) recursion limit ever
+    triggers a catchable RecursionError -- crashing the interpreter with a
+    silent segfault instead. Run the deepcopy on a worker thread with a
+    much larger stack to avoid that.
+    """
+    result = {}
+
+    def _work():
+        try:
+            result["value"] = copy.deepcopy(obj)
+        except BaseException as e:
+            result["error"] = e
+
+    old_stack_size = threading.stack_size()
+    try:
+        threading.stack_size(stack_size)
+    except (ValueError, RuntimeError):
+        pass
+    try:
+        t = threading.Thread(target=_work)
+        t.start()
+        t.join()
+    finally:
+        try:
+            threading.stack_size(old_stack_size)
+        except (ValueError, RuntimeError):
+            pass
+
+    if "error" in result:
+        raise result["error"]
+    return result["value"]
 
 
 def plain(cli):

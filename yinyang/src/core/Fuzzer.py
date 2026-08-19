@@ -22,7 +22,6 @@
 
 import os
 import re
-import copy
 import time
 import shutil
 import random
@@ -44,7 +43,7 @@ from yinyang.src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import (
 )
 
 
-from yinyang.src.base.Utils import random_string, plain, escape
+from yinyang.src.base.Utils import random_string, plain, escape, deepcopy_safe
 from yinyang.src.base.Exitcodes import OK_BUGS, OK_NOBUGS, ERR_EXHAUSTED_DISK
 
 from yinyang.src.core.Logger import (
@@ -170,7 +169,7 @@ class Fuzzer:
                     continue
 
                 typecheck(script, glob)
-                script_cp = copy.deepcopy(script)
+                script_cp = deepcopy_safe(script)
                 unique_expr = get_unique_subterms(script_cp)
                 self.mutator = GenTypeAwareMutation(
                     script, self.args, unique_expr

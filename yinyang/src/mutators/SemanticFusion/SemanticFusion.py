@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 import random
-import copy
 
 from yinyang.src.mutators.Mutator import Mutator
 from yinyang.src.mutators.SemanticFusion.VariableFusion import (
@@ -42,6 +41,7 @@ from yinyang.src.mutators.SemanticFusion.Util import (
     conjunction,
 )
 from yinyang.src.base.Exitcodes import ERR_USAGE
+from yinyang.src.base.Utils import deepcopy_safe
 from yinyang.src.parsing.Parse import parse_str
 from yinyang.src.parsing.Ast import DeclareFun
 
@@ -142,7 +142,7 @@ class SemanticFusion(Mutator):
             skip_seed = True
 
         formula1, formula2 =\
-            copy.deepcopy(self.formula1), copy.deepcopy(self.formula2)
+            deepcopy_safe(self.formula1), deepcopy_safe(self.formula2)
         formula1.prefix_vars("scr1_")
         formula2.prefix_vars("scr2_")
 
