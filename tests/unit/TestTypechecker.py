@@ -37,7 +37,9 @@ from yinyang.src.parsing.Types import (
     UNKNOWN,
     BOOLEAN_TYPE,
     INTEGER_TYPE,
+    REAL_TYPE,
     STRING_TYPE,
+    FP_TYPE,
 )
 
 from yinyang.src.parsing.Typechecker import Context, typecheck_expr, typecheck
@@ -184,6 +186,87 @@ class TypecheckerTestCase(unittest.TestCase):
         typecheck(formula, glob)
         oracle(formula)
         self.assertEqual(oracle(formula), True)
+
+    def test_to_real_to_int_is_int(self):
+        # to_real/to_int/is_int used to recurse into typecheck_expr on
+        # themselves instead of their argument, crashing with a
+        # RecursionError on any use.
+        formula_str = """
+(declare-fun i () Int)
+(declare-fun r () Real)
+(assert (= (to_real i) r))
+(assert (= (to_int r) i))
+(assert (is_int r))
+(check-sat)
+"""
+        formula, glob = parse_str(formula_str)
+        typecheck(formula, glob)
+        self.assertEqual(formula.commands[2].term.subterms[0].type, REAL_TYPE)
+        self.assertEqual(
+            formula.commands[3].term.subterms[0].type, INTEGER_TYPE
+        )
+        self.assertEqual(formula.commands[4].term.type, BOOLEAN_TYPE)
+
+        # to_int/is_int also had a tautological condition
+        # (`t != REAL_TYPE or t != INTEGER_TYPE`) that always raised, so a
+        # correctly-typed Real argument must not be rejected either.
+        with self.assertRaises(Exception):
+            bad, glob = parse_str("""
+(declare-fun s () String)
+(assert (is_int (to_int s)))
+(check-sat)
+""")
+            typecheck(bad, glob)
+
+    def test_to_fp_ops(self):
+        # to_fp/to_fp_unsigned compared the RoundingMode argument with
+        # isinstance() against ROUNDINGMODE_TYPE, a plain string constant
+        # rather than a class, crashing with TypeError; to_fp's 2-arg
+        # branch was also a tautology (require the 2nd arg be FP, Real,
+        # and BitVec simultaneously) that always raised, and
+        # to_fp_unsigned's BitVec check was inverted. Also, the dispatch
+        # in typecheck_expr checked "to_fp" (a substring of
+        # "to_fp_unsigned") first, so to_fp_unsigned was unreachable.
+        formula_str = """
+(declare-fun rm () RoundingMode)
+(declare-fun bv () (_ BitVec 32))
+(assert (= ((_ to_fp 8 24) rm bv) ((_ to_fp_unsigned 8 24) rm bv)))
+(check-sat)
+"""
+        formula, glob = parse_str(formula_str)
+        typecheck(formula, glob)
+        eq = formula.commands[2].term
+        to_fp, to_fp_unsigned = eq.subterms[0], eq.subterms[1]
+        self.assertEqual(to_fp.type, FP_TYPE(8, 24))
+        self.assertEqual(to_fp_unsigned.type, FP_TYPE(8, 24))
+
+        with self.assertRaises(Exception):
+            bad, glob = parse_str("""
+(declare-fun x () Bool)
+(declare-fun rm () RoundingMode)
+(assert (= ((_ to_fp 8 24) rm x) ((_ to_fp 8 24) rm x)))
+(check-sat)
+""")
+            typecheck(bad, glob)
+
+    def test_quantifier_let_scope_does_not_leak(self):
+        # A quantified/let-bound variable's type used to stay in
+        # ctxt.locals forever (never scoped/popped), so any later use of
+        # the same name -- even an unrelated global of a different type
+        # -- silently resolved to the stale binding instead of raising or
+        # using the correct type.
+        formula_str = """
+(declare-fun x () Bool)
+(declare-fun y () Bool)
+(assert (and (forall ((x Int)) (> x 0)) y))
+(assert (let ((x 1)) (> x 0)))
+(assert x)
+(check-sat)
+"""
+        formula, glob = parse_str(formula_str)
+        ctxt = typecheck(formula, glob)
+        self.assertEqual(ctxt.locals, {})
+        self.assertEqual(formula.commands[4].term.type, BOOLEAN_TYPE)
 
 
 if __name__ == "__main__":

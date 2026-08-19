@@ -222,25 +222,25 @@ def typecheck_comp_ops(expr, ctxt):
 
 def typecheck_to_real(expr, ctxt):
     """(to_real Int Real)"""
-    t = typecheck_expr(expr, ctxt)
+    t = typecheck_expr(expr.subterms[0], ctxt)
     if t != INTEGER_TYPE:
-        raise TypeCheckError(expr, expr, INTEGER_TYPE, t)
+        raise TypeCheckError(expr, expr.subterms[0], INTEGER_TYPE, t)
     return REAL_TYPE
 
 
 def typecheck_to_int(expr, ctxt):
     """(to_int Real Int)"""
-    t = typecheck_expr(expr, ctxt)
-    if t != REAL_TYPE or t != INTEGER_TYPE:
-        raise TypeCheckError(expr, expr, REAL_TYPE, t)
+    t = typecheck_expr(expr.subterms[0], ctxt)
+    if t not in [REAL_TYPE, INTEGER_TYPE]:
+        raise TypeCheckError(expr, expr.subterms[0], REAL_TYPE, t)
     return INTEGER_TYPE
 
 
 def typecheck_is_int(expr, ctxt):
     """(is_int Real Bool)"""
-    t = typecheck_expr(expr, ctxt)
-    if t != REAL_TYPE or t != INTEGER_TYPE:
-        raise TypeCheckError(expr, expr, REAL_TYPE, t)
+    t = typecheck_expr(expr.subterms[0], ctxt)
+    if t not in [REAL_TYPE, INTEGER_TYPE]:
+        raise TypeCheckError(expr, expr.subterms[0], REAL_TYPE, t)
     return BOOLEAN_TYPE
 
 
@@ -763,10 +763,23 @@ def typecheck_fp_ops(expr, ctxt):
 def typecheck_quantifiers(expr, ctxt):
     vars = expr.quantified_vars[0]
     types = expr.quantified_vars[1]
+    # Bindings must not leak into the surrounding scope: a quantified
+    # variable can shadow a global (or an enclosing binder) of the same
+    # name, so we save whatever was there before and restore it once the
+    # quantifier's body has been checked.
+    saved = []
     for i in range(len(vars)):
         var, type = vars[i], types[i]
+        had_prev = var in ctxt.locals
+        prev = ctxt.locals.get(var)
         ctxt.add_to_locals(var, type)
+        saved.append((var, had_prev, prev))
     t = typecheck_expr(expr.subterms[0], ctxt)
+    for var, had_prev, prev in reversed(saved):
+        if had_prev:
+            ctxt.locals[var] = prev
+        else:
+            del ctxt.locals[var]
     if t != BOOLEAN_TYPE:
         raise TypeCheckError(expr, expr.subterms[0], BOOLEAN_TYPE, t)
     return BOOLEAN_TYPE
@@ -813,11 +826,25 @@ def typecheck_real_ints_ops(expr, ctxt):
 
 def typecheck_let_expression(expr, ctxt):
     n_var_binders = len(expr.var_binders)
+    # Bindings must not leak into the surrounding scope: a let-bound
+    # variable can shadow a global (or an enclosing binder) of the same
+    # name, so we save whatever was there before and restore it once the
+    # let body has been checked.
+    saved = []
     for i in range(n_var_binders):
         var = expr.var_binders[i]
         t = typecheck_expr(expr.let_terms[i], ctxt)
+        had_prev = var in ctxt.locals
+        prev = ctxt.locals.get(var)
         ctxt.add_to_locals(var, t)
-    return typecheck_expr(expr.subterms[0], ctxt)
+        saved.append((var, had_prev, prev))
+    result = typecheck_expr(expr.subterms[0], ctxt)
+    for var, had_prev, prev in reversed(saved):
+        if had_prev:
+            ctxt.locals[var] = prev
+        else:
+            del ctxt.locals[var]
+    return result
 
 
 def typecheck_label(expr, ctxt):
@@ -831,9 +858,10 @@ def typecheck_to_fp_unsigned(expr, ctxt):
     eb, sb = int(expr.op.split(" ")[2]), int(expr.op.split(" ")[3].strip(")"))
     t1 = typecheck_expr(expr.subterms[0], ctxt)
     t2 = typecheck_expr(expr.subterms[1], ctxt)
-    if not isinstance(t1, ROUNDINGMODE_TYPE)\
-       or isinstance(t2, BITVECTOR_TYPE):
-        raise TypeCheckError(expr)
+    if t1 != ROUNDINGMODE_TYPE or not isinstance(t2, BITVECTOR_TYPE):
+        raise TypeCheckError(
+            expr, expr.subterms, [ROUNDINGMODE_TYPE, BITVECTOR_TYPE], [t1, t2]
+        )
     return FP_TYPE(eb, sb)
 
 
@@ -854,15 +882,17 @@ def typecheck_to_fp(expr, ctxt):
     if len(expr.subterms) == 2:
         t1 = typecheck_expr(expr.subterms[0], ctxt)
         t2 = typecheck_expr(expr.subterms[1], ctxt)
-        if (
-            not (isinstance(t1, ROUNDINGMODE_TYPE) and isinstance(t2, FP_TYPE))
-            or not (isinstance(t1, ROUNDINGMODE_TYPE) and t2 == REAL_TYPE)
-            or not (
-                isinstance(t1, ROUNDINGMODE_TYPE) and
-                isinstance(t2, BITVECTOR_TYPE)
-            )
+        if t1 != ROUNDINGMODE_TYPE or not (
+            isinstance(t2, FP_TYPE)
+            or t2 == REAL_TYPE
+            or isinstance(t2, BITVECTOR_TYPE)
         ):
-            raise TypeCheckError(expr)
+            raise TypeCheckError(
+                expr,
+                expr.subterms,
+                [ROUNDINGMODE_TYPE, [FP_TYPE, REAL_TYPE, BITVECTOR_TYPE]],
+                [t1, t2],
+            )
 
     return FP_TYPE(eb, sb)
 
@@ -911,11 +941,14 @@ def typecheck_expr(expr, ctxt=Context({}, {})):
             return annotate(typecheck_bv_ops, expr, ctxt)
 
         # FP infix ops
-        if TO_FP in expr.op:
-            return annotate(typecheck_to_fp, expr, ctxt)
-
+        # TO_FP_UNSIGNED ("to_fp_unsigned") must be checked before TO_FP
+        # ("to_fp"), since the latter is a substring of the former and
+        # would otherwise swallow every to_fp_unsigned operator.
         if TO_FP_UNSIGNED in expr.op:
             return annotate(typecheck_to_fp_unsigned, expr, ctxt)
+
+        if TO_FP in expr.op:
+            return annotate(typecheck_to_fp, expr, ctxt)
 
         # BV infix ops
         if (
