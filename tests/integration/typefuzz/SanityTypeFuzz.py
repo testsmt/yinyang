@@ -56,13 +56,15 @@ def call_fuzzer(first_config, second_config, fn, opts):
 
 
 def get_cvc4_1_8():
-    cvc4_link = (
-        "https://github.com/CVC4/CVC4/releases/download/1.8/"
-        + "cvc4-1.8-x86_64-linux-opt"
+    # CVC4/CVC4 was renamed to cvc5/cvc5 and its old direct release-asset
+    # links no longer resolve; fetch the legacy 1.8 binary via gh instead.
+    asset = "cvc4-1.8-x86_64-linux-opt"
+    subprocess.getoutput(
+        "gh release download 1.8 --repo cvc5/cvc5 --pattern " + asset
+        + " --clobber"
     )
-    subprocess.getoutput("wget " + cvc4_link)
-    subprocess.getoutput("chmod +x cvc4-1.8-x86_64-linux-opt")
-    return os.path.abspath("cvc4-1.8-x86_64-linux-opt")
+    subprocess.getoutput("chmod +x " + asset)
+    return os.path.abspath(asset)
 
 
 def get_z3_4_8_6():

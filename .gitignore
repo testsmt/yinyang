@@ -5,3 +5,4 @@ dist
 logs
 yinyang.egg-info
 env
+.vscode
