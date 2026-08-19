@@ -24,6 +24,7 @@ import unittest
 import sys
 
 from yinyang.src.parsing.Parse import parse_str, parse_file
+from yinyang.src.parsing.Typechecker import typecheck
 
 sys.path.append("../../")
 
@@ -46,6 +47,14 @@ class ParsingTestCase(unittest.TestCase):
 (assert (= a b))
 (check-sat)"""
         self.assertEqual(oracle, formula.__str__())
+
+    def test_issue34(self):
+        # A global variable shadowed by a quantified/let-bound variable of
+        # the same name must not be typechecked as Unknown outside the
+        # quantifier's scope.
+        formula, glob = parse_file("tests/res/issue34.smt2", silent=False)
+        self.assertEqual(glob, {"x": "Int"})
+        typecheck(formula, glob)
 
 
 #     def test_issue25(self):

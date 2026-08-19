@@ -27,7 +27,7 @@ class Script:
     def __init__(self, commands, global_vars):
         self.commands = commands
         self.vars, self.types = self._decl_commands()
-        self.global_vars = global_vars
+        self.global_vars = copy.deepcopy(global_vars)
         self.free_var_occs = []
         self.op_occs = []
         self.assert_cmd = []
