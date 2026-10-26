@@ -940,6 +940,15 @@ def typecheck_expr(expr, ctxt=Context({}, {})):
         if expr.op in BV_OPS:
             return annotate(typecheck_bv_ops, expr, ctxt)
 
+        # Applications of declared functions carry a Var/Term op, not a str
+        if not isinstance(expr.op, str):
+            key = expr.op.__str__()
+            if key in ctxt.globals:
+                t = ctxt.globals[key].split(" ")[-1]
+                expr.type = t
+                return t
+            raise UnknownOperator(expr.op)
+
         # FP infix ops
         # TO_FP_UNSIGNED ("to_fp_unsigned") must be checked before TO_FP
         # ("to_fp"), since the latter is a substring of the former and

@@ -56,6 +56,10 @@ jobs:
       run: |
         python tests/regression/issue42.py
         cd tests/regression && python scoping_bug.py
+        python annotation_local_vars.py
+        python declared_fun_typecheck.py
+        python declared_sort_mutation.py
+        python bound_var_leak.py
     - name: pypi check  
       run: |
         tests/integration/misc/pypi.sh

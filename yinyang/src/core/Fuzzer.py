@@ -64,6 +64,7 @@ from yinyang.src.core.Logger import (
 from yinyang.src.core.FuzzerUtil import (
     get_seeds,
     grep_result,
+    szs_to_result,
     admissible_seed_size,
     in_crash_list,
     in_duplicate_list,
@@ -281,6 +282,7 @@ class Fuzzer:
             stdout, stderr, exitcode = solver.solve(
                 scratchfile, self.args.timeout
             )
+            stdout = szs_to_result(stdout)
 
             if self.max_timeouts_reached():
                 return (False, scratchfile)

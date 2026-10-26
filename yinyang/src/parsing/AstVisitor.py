@@ -170,8 +170,7 @@ class AstVisitor(SMTLIBv2Visitor):
                 self.visitSymbol(ctx.function_def().symbol()),
                 sorted_vars,
                 self.visitSort(ctx.function_def().sort()),
-                self.visitTerm(ctx.function_def().term()),
-                {},
+                self.visitTerm(ctx.function_def().term(), {}),
             )
 
         if ctx.cmd_defineFunsRec():
@@ -334,9 +333,8 @@ class AstVisitor(SMTLIBv2Visitor):
             and len(ctx.attribute()) >= 1
             and ctx.ParClose()
         ):
-            term, label = self.visitTerm(ctx.term()[0]), self.visitAttribute(
-                ctx.attribute()[0]
-            )
+            term = self.visitTerm(ctx.term()[0], local_vars)
+            label = self.visitAttribute(ctx.attribute()[0])
             return LabeledTerm(label, [term])
 
         if (

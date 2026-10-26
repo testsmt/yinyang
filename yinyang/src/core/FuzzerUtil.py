@@ -55,6 +55,23 @@ def admissible_seed_size(seed, args):
     return seed_size_in_bytes < args.file_size_limit
 
 
+def szs_to_result(stdout):
+    """
+    Append an SMT-LIB result line for each TPTP "% SZS status" line, so that
+    provers such as iProver can be compared with SMT solvers.
+    """
+    szs = {
+        "Unsatisfiable": "unsat",
+        "Theorem": "unsat",
+        "Satisfiable": "sat",
+        "CounterSatisfiable": "sat",
+    }
+    for status in re.findall(r"^% SZS status (\w+)", stdout, re.MULTILINE):
+        if status in szs:
+            stdout += "\n" + szs[status]
+    return stdout
+
+
 def grep_result(stdout):
     """
     Grep the result from the stdout of a solver.

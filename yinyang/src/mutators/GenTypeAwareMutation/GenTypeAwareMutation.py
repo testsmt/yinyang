@@ -79,6 +79,8 @@ class GenTypeAwareMutation(Mutator):
         for t in set(types):
             if t == ALL:
                 continue
+            if t not in type2num:
+                return False
             type_id = type2num[t]
             if len(self.unique_expr[type_id]) == 0:
                 return False
@@ -116,6 +118,9 @@ class GenTypeAwareMutation(Mutator):
 
         :returns: newly generated expression for substitution
         """
+        # Terms of declared (uninterpreted) sorts are not supported
+        if term.type not in type2num:
+            return None
         candidate_ops = self.get_candidate_ops(term)
 
         if len(candidate_ops) == 0:
@@ -139,7 +144,11 @@ class GenTypeAwareMutation(Mutator):
         else:
             for t in op.arg_types:
                 typ_id = type2num[t]
-                choices = [tPrime for tPrime in self.unique_expr[typ_id]]
+                choices = [
+                    tPrime
+                    for tPrime in self.unique_expr[typ_id]
+                    if local_compatible(term, tPrime)
+                ]
 
                 if len(choices) == 0:
                     return None

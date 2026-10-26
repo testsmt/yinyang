@@ -135,8 +135,9 @@ def local_defs(term, local):
     term = term.parent
     if term:
         if term.quantifier:
-            for q_var in term.quantified_vars[0]:
-                local.add(q_var)
+            # Same-named variables of different quantifiers may differ in sort
+            for q_var, q_type in zip(*term.quantified_vars):
+                local.add((q_var, str(q_type)))
         if term.let_terms:
             for var in term.var_binders:
                 local.add(var)
