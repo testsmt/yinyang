@@ -55,6 +55,7 @@ from yinyang.src.core.Logger import (
     log_ignore_list_mutant,
     log_duplicate_trigger,
     log_segfault_trigger,
+    log_signal_trigger,
     log_solver_timeout,
     log_soundness_trigger,
     log_invalid_mutant,
@@ -68,6 +69,7 @@ from yinyang.src.core.FuzzerUtil import (
     in_crash_list,
     in_duplicate_list,
     in_ignore_list,
+    crash_signal,
     init_oracle,
 )
 
@@ -307,6 +309,28 @@ class Fuzzer:
                 return (False, scratchfile)  # Stop testing.
             else:
 
+                # Check whether the solver crashed with a signal such as
+                # SIGSEGV or SIGABRT. This is checked before the ignore list:
+                # a solver that prints an error and then crashes is still
+                # buggy.
+                sig = crash_signal(exitcode)
+                if sig is not None:
+                    self.statistic.effective_calls += 1
+                    self.statistic.crashes += 1
+                    if sig == signal.SIGSEGV:
+                        path = self.report(
+                            script, "segfault", solver_cli, stdout, stderr
+                        )
+                        log_segfault_trigger(self.args, path, iteration)
+                    else:
+                        path = self.report(
+                            script, "crash", solver_cli, stdout, stderr
+                        )
+                        log_signal_trigger(
+                            self.args, path, iteration, sig.name
+                        )
+                    return (False, scratchfile)  # Stop testing.
+
                 # Check whether the solver call produced errors, e.g, related
                 # to its parser, options, type-checker etc., by matching stdout
                 # and stderr against the ignore list
@@ -318,18 +342,8 @@ class Fuzzer:
 
                 if exitcode != 0:
 
-                    # Check whether the solver crashed with a segfault.
-                    if exitcode == -signal.SIGSEGV or exitcode == 245:
-                        self.statistic.effective_calls += 1
-                        self.statistic.crashes += 1
-                        path = self.report(
-                            script, "segfault", solver_cli, stdout, stderr
-                        )
-                        log_segfault_trigger(self.args, path, iteration)
-                        return False  # Stop testing.
-
                     # Check whether the solver timed out.
-                    elif exitcode == 137:
+                    if exitcode == 137:
                         self.statistic.timeout += 1
                         self.timeout_of_current_seed += 1
                         log_solver_timeout(self.args, solver_cli, iteration)

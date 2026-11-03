@@ -47,7 +47,7 @@ def is_sound(res1, res2):
     return True
 
 
-def call_fuzzer(first_config, second_config, fn, opts):
+def run_fuzzer(first_config, second_config, fn, opts):
     cmd = (
         python
         + " bin/opfuzz "
@@ -60,9 +60,14 @@ def call_fuzzer(first_config, second_config, fn, opts):
         + " "
         + fn
     )
-    output = subprocess.getoutput(cmd)
+    status, output = subprocess.getstatusoutput(cmd)
     print("$", cmd)
     print(output, flush=True)
+    return status, output, cmd
+
+
+def call_fuzzer(first_config, second_config, fn, opts):
+    status, output, cmd = run_fuzzer(first_config, second_config, fn, opts)
     crash_issues = 0
     soundness_issues = 0
     segfault_issues = 0
@@ -114,6 +119,24 @@ def create_mocksolver_segfault(script_fn):
     # which is deterministic and portable across Python versions.
     code = "#! /usr/bin/env python3\n"
     code += "import os, signal; os.kill(os.getpid(), signal.SIGSEGV)"
+    open(script_fn, "w").write(code)
+    os.system("chmod +x " + script_fn)
+
+
+def create_mocksolver_signal(script_fn, signame, msg=""):
+    # Mock solver that prints msg and then kills itself with signal signame.
+    code = "#! /usr/bin/env python3\n"
+    code += "import os, signal\n"
+    code += "print(" + repr(msg) + ", flush=True)\n"
+    code += "os.kill(os.getpid(), signal." + signame + ")"
+    open(script_fn, "w").write(code)
+    os.system("chmod +x " + script_fn)
+
+
+def create_mocksolver_exitcode(script_fn, exitcode):
+    # Mock solver that exits like a shell wrapper whose child got a signal.
+    code = "#! /usr/bin/env python3\n"
+    code += "import sys; sys.exit(" + str(exitcode) + ")"
     open(script_fn, "w").write(code)
     os.system("chmod +x " + script_fn)
 
@@ -192,8 +215,56 @@ def test_segfault():
         print("[ERROR] Segfault undetected.")
         print(cmd)
         exit(1)
-    else:
-        os.system("rm -rf " + solver)
+
+    # The fuzzer must also survive the segfault and finish the run normally.
+    status, output, cmd = run_fuzzer(first_config, second_config, FN, OPTS)
+    if status != 10 or "All seeds processed" not in output:
+        print("[ERROR] Fuzzer did not finish normally after a segfault.")
+        print(cmd)
+        exit(1)
+    os.system("rm -rf " + solver)
+
+
+def test_crash_signals():
+    print("*** (8) Test crash signals")
+    solver = "signal_solver.py"
+    cases = [
+        ("SIGABRT", ""),
+        ("SIGFPE", ""),
+        ("SIGBUS", ""),
+        ("SIGILL", ""),
+        # A crash must not be hidden by the ignore list.
+        ("SIGABRT", '(error "unsupported")'),
+    ]
+    for signame, msg in cases:
+        create_mocksolver_signal(solver, signame, msg)
+        first_config = os.path.abspath(solver)
+        status, output, cmd = run_fuzzer(first_config, first_config, FN, OPTS)
+        if (output.count("Detected crash bug (" + signame + ")") != 1
+                or status != 10):
+            print("[ERROR] Crash by " + signame + " undetected.")
+            print(cmd)
+            exit(1)
+
+    # Exit code 128 + N, as reported by a shell wrapper.
+    for exitcode in [134, 139]:
+        create_mocksolver_exitcode(solver, exitcode)
+        first_config = os.path.abspath(solver)
+        status, output, cmd = run_fuzzer(first_config, first_config, FN, OPTS)
+        if status != 10:
+            print("[ERROR] Exit code " + str(exitcode) + " undetected.")
+            print(cmd)
+            exit(1)
+
+    # Signals sent from outside the solver are not crashes.
+    create_mocksolver_signal(solver, "SIGTERM")
+    first_config = os.path.abspath(solver)
+    status, output, cmd = run_fuzzer(first_config, first_config, FN, OPTS)
+    if status != 0 or "Detected crash bug" in output:
+        print("[ERROR] SIGTERM reported as a crash.")
+        print(cmd)
+        exit(1)
+    os.system("rm -rf " + solver)
 
 
 def test_timeout():
@@ -304,7 +375,7 @@ def test_soundness():
 
 
 def test_duplicate_list():
-    print("*** (8) Test duplicate list")
+    print("*** (9) Test duplicate list")
     solver = "crash.py"
     msg = """
 Fatal failure within void CVC4::SmtEngine::checkUnsatCore() at src/smt/smt_mock.cpp:1489
@@ -390,5 +461,7 @@ if __name__ == "__main__":
     test_unsoundness()
     print()
     test_soundness()
+    print()
+    test_crash_signals()
     print()
     test_duplicate_list()
