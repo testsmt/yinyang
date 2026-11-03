@@ -24,13 +24,11 @@ import re
 import signal
 import pathlib
 
-from yinyang.src.base.Utils import in_list
+from yinyang.src.base.Utils import in_list, load_config
 
-try:
-    sys.path.insert(1, os.getcwd() + "/.yinyang")
-    from yinyang.config import crash_list, duplicate_list, ignore_list
-except Exception as e:
-    from yinyang.config.Config import crash_list, duplicate_list, ignore_list
+crash_list = load_config("crash_list")
+duplicate_list = load_config("duplicate_list")
+ignore_list = load_config("ignore_list")
 
 from yinyang.src.core.Solver import SolverResult, SolverQueryResult
 
