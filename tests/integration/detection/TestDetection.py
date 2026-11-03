@@ -377,70 +377,49 @@ def test_soundness():
 def test_duplicate_list():
     print("*** (9) Test duplicate list")
     solver = "crash.py"
+    # The crash location is not in the default duplicate_list, so the crash
+    # is only a duplicate if the user's .yinyang/Config.py is loaded.
     msg = """
-Fatal failure within void CVC4::SmtEngine::checkUnsatCore() at src/smt/smt_mock.cpp:1489
+Fatal failure within void CVC4::SmtEngine::checkUnsatCore() at src/smt/smt_custom.cpp:42
 Internal error detectedSmtEngine::checkMock(): produced core was satisfiable.
 Aborted
 """  # noqa: E501
     config_py = """
-solvers = []
-crash_list = [
-    "Exception",
-    "lang.AssertionError",
-    "lang.Error",
-    "runtime error",
-    "LEAKED",
-    "Leaked",
-    "Segmentation fault",
-    "segmentation fault",
-    "segfault",
-    "ASSERTION",
-    "Assertion",
-    "Fatal failure",
-    "Internal error detected",
-    "an invalid model was generated",
-    "Failed to verify",
-    "failed to verify",
-    "ERROR: AddressSanitizer:",
-    "invalid expression",
-    "Aborted"
-]
-
 duplicate_list = [
-    "src/smt/smt_mock.cpp:1489"
+    "src/smt/smt_custom.cpp:42"
 ]
-
-ignore_list = [
-    "(error ",
-    "unsupported",
-    "unexpected char",
-    "failed to open file",
-    "Expected result sat but got unsat",
-    "Expected result unsat but got sat",
-    "Parse Error",
-    "Cannot get model",
-    "Symbol 'str.to-re' not declared as a variable",
-    "Symbol 'str.to.re' not declared as a variable",
-    "Unimplemented code encountered",
-]
-
 """
-    os.system("mv yinyang/config/config.py yinyang/config/config.py.orig")
-    with open("yinyang/config/Config.py", "w") as f:
-        f.write(config_py)
     create_mocksolver_msg(msg, solver)
     first_config = os.path.abspath(solver)
     second_config = os.path.abspath(solver)
+
+    # Without a user config the crash is reported as a new bug.
     crash, soundness, segfault, duplicate, timeout, ignored, cmd = call_fuzzer(
         first_config, second_config, FN, OPTS
     )
-    log = open(newest_log("logs")).read()
-    if log.count("Duplicate.") != 1:
-        print("[ERROR] Duplicate crash cannot be captured.")
+    if crash != 1 or duplicate != 0:
+        print("[ERROR] Crash with default config cannot be captured.")
+        print(cmd)
         exit(1)
-    else:
-        os.system("rm -rf " + solver)
-    os.system("mv yinyang/config/config.py.orig yinyang/config/config.py")
+
+    if os.path.exists(".yinyang"):
+        os.rename(".yinyang", ".yinyang.orig")
+    os.mkdir(".yinyang")
+    with open(".yinyang/Config.py", "w") as f:
+        f.write(config_py)
+    try:
+        crash, soundness, segfault, duplicate, timeout, ignored, cmd = \
+            call_fuzzer(first_config, second_config, FN, OPTS)
+        log = open(newest_log("logs")).read()
+    finally:
+        os.system("rm -rf .yinyang")
+        if os.path.exists(".yinyang.orig"):
+            os.rename(".yinyang.orig", ".yinyang")
+    if log.count("Duplicate.") != 1 or crash != 0:
+        print("[ERROR] Duplicate crash cannot be captured.")
+        print(cmd)
+        exit(1)
+    os.system("rm -rf " + solver)
 
 
 if __name__ == "__main__":
