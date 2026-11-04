@@ -54,7 +54,10 @@ cleanup()
 print("Download Z3")
 z3 = get_z3()
 print("Call fuzzer")
-call_fuzzer(z3, "tests/regression/53.smt2 tests/regression/55.smt2", "-o sat")
+# Many mutants make z3 time out; a short timeout cuts this test from about
+# 170 s to about 60 s and does not affect the ignore-list check below.
+call_fuzzer(z3, "tests/regression/53.smt2 tests/regression/55.smt2",
+            "-o sat -t 2")
 
 logfile = glob.glob("logs/*")[0]
 if "Invalid mutant:ignore_list" in open(logfile).read():

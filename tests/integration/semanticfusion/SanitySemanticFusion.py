@@ -141,7 +141,9 @@ if not bug_catched:
 print("Trying to retrigger bug with sat fusion...")
 first_config = z3
 fn = "tests/integration/semanticfusion/5jby0_z3_bug_incorrect_script1.smt2 tests/integration/semanticfusion/5jby0_z3_bug_incorrect_script2.smt2"  # noqa: E501
-opts = "-o sat -s fusion -k"
+# Most of these mutants make z3 time out, so a short timeout cuts this step
+# from about 170 s to about 50 s; the bug is still found every time.
+opts = "-o sat -s fusion -k -t 2"
 
 for _ in range(1000):
     soundness_issues, crash_issues, cmd = call_fuzzer(first_config, fn, opts)

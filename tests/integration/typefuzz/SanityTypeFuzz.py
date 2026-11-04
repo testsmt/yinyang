@@ -26,6 +26,11 @@ import subprocess
 
 python = sys.executable
 
+# Building z3 from source takes about 9 minutes, so the binary is kept in
+# this directory (cached between CI runs, see .github/workflows/main.yml) and
+# reused when present.
+SOLVER_CACHE = os.path.expanduser("~/.cache/yinyang-ci")
+
 
 def call_fuzzer(first_config, second_config, fn, opts):
     cmd = (
@@ -49,7 +54,7 @@ def call_fuzzer(first_config, second_config, fn, opts):
     for line in output.split("\n"):
         if "Detected soundness bug" in line:
             soundness_issues += 1
-        if "Detected crash bug" in line or "Detected segfault":
+        if "Detected crash bug" in line or "Detected segfault" in line:
             crash_issues += 1
 
     return soundness_issues, crash_issues, cmd
@@ -83,15 +88,21 @@ def execute(cmd):
 
 
 def get_z3_trunk(commit_id):
+    z3 = os.path.join(SOLVER_CACHE, "z3-" + commit_id)
+    if os.path.isfile(z3):
+        print("Using cached " + z3, flush=True)
+        return z3
     execute("git clone https://github.com/Z3Prover/z3.git " + commit_id)
+    os.makedirs(SOLVER_CACHE, exist_ok=True)
     cmd = ("cd " + commit_id + ";"
            + "git checkout " + commit_id + ";"
            + "./configure;"
            + "cd build;"
-           + "make -j 10;"
-           + "mv z3 ../../z3-" + commit_id)
+           + "make -j $(nproc);"
+           + "mv z3 " + z3)
     execute(cmd)
-    return os.path.abspath("z3-" + commit_id)
+    execute("rm -rf " + commit_id)
+    return z3
 
 
 def get_cvc4_trunk(commit_id):
