@@ -20,10 +20,36 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
 import copy
 import random
 import string
 import threading
+import importlib.util
+
+
+USER_CONFIG = os.path.join(".yinyang", "Config.py")
+_user_config = None
+
+
+def load_config(name):
+    """
+    Returns the setting `name` (e.g. "solvers" or "crash_list") from the
+    user's ./.yinyang/Config.py if that file exists and defines it, and
+    from yinyang/config/Config.py otherwise.
+    """
+    global _user_config
+    path = os.path.join(os.getcwd(), USER_CONFIG)
+    if _user_config is None and os.path.isfile(path):
+        spec = importlib.util.spec_from_file_location("yinyang_user_config",
+                                                      path)
+        _user_config = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(_user_config)
+    if _user_config is not None and hasattr(_user_config, name):
+        return getattr(_user_config, name)
+
+    from yinyang.config import Config
+    return getattr(Config, name)
 
 
 def random_string(length=5):

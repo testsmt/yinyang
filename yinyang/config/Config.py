@@ -44,9 +44,7 @@ crash_list = [
     "Aborted"
 ]
 
-duplicate_list = [
-    "src/smt/smt_mock.cpp:1489"
-]
+duplicate_list = []
 
 ignore_list = [
     "(error ",

@@ -21,18 +21,14 @@
 # SOFTWARE.
 
 import os
-import sys
 from pathlib import Path
 from yinyang.src.base.Exitcodes import ERR_USAGE, ERR_EXHAUSTED_DISK
+from yinyang.src.base.Utils import load_config
 
 path = Path(__file__)
 rootpath = str(path.parent.absolute().parent)
 
-try:
-    sys.path.insert(1, os.getcwd() + "/.yinyang")
-    from yinyang.config import solvers
-except Exception as e:
-    from yinyang.config.Config import solvers
+solvers = load_config("solvers")
 
 
 def check_solver_clis():
