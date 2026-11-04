@@ -21,15 +21,14 @@
 # SOFTWARE.
 import random
 import re
+import signal
 import pathlib
 
-from yinyang.src.base.Utils import in_list
+from yinyang.src.base.Utils import in_list, load_config
 
-try:
-    sys.path.insert(1, os.getcwd() + "/.yinyang")
-    from yinyang.config import crash_list, duplicate_list, ignore_list
-except Exception as e:
-    from yinyang.config.Config import crash_list, duplicate_list, ignore_list
+crash_list = load_config("crash_list")
+duplicate_list = load_config("duplicate_list")
+ignore_list = load_config("ignore_list")
 
 from yinyang.src.core.Solver import SolverResult, SolverQueryResult
 
@@ -44,6 +43,33 @@ def in_duplicate_list(stdout, stderr):
 
 def in_ignore_list(stdout, stderr):
     return in_list(stdout, stderr, ignore_list)
+
+
+# Signals raised by the solver process itself when it crashes. SIGKILL,
+# SIGTERM, SIGINT, etc. are left out: they usually come from outside the
+# solver (timeouts, the OOM killer, the user).
+CRASH_SIGNALS = [
+    getattr(signal, name)
+    for name in ["SIGSEGV", "SIGABRT", "SIGFPE", "SIGBUS", "SIGILL",
+                 "SIGTRAP", "SIGSYS"]
+    if hasattr(signal, name)
+]
+
+
+def crash_signal(exitcode):
+    """
+    Checks whether a solver exit code means the solver died from a crash
+    signal. The exit code is -N if the solver was killed by signal N, and
+    128 + N if a shell wrapper around the solver reports it. 245 is kept
+    as a segfault for backward compatibility.
+    :returns: the signal (signal.Signals) or None.
+    """
+    if exitcode == 245:
+        return signal.SIGSEGV
+    for sig in CRASH_SIGNALS:
+        if exitcode == -sig or exitcode == 128 + sig:
+            return signal.Signals(sig)
+    return None
 
 
 def admissible_seed_size(seed, args):

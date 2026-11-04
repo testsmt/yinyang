@@ -108,6 +108,16 @@ def log_segfault_trigger(args, path, i):
     logging.info(BOLD + WARNING + "Detected segfault: " + path + ENDC)
 
 
+def log_signal_trigger(args, path, i, signame):
+    logging.debug(
+        str(i) + "/" + str(args.iterations)
+        + " Solver killed by " + signame + "! Stop testing on this seed."
+    )
+    logging.info(
+        BOLD + WARNING + "Detected crash bug (" + signame + "): " + path + ENDC
+    )
+
+
 def log_solver_timeout(args, solver_cli, i):
     logging.debug(
         str(i)
