@@ -1,0 +1,7 @@
+(set-logic QF_LIA)
+(declare-fun a () Int)
+(declare-fun b () Int)
+(assert (> a (+ b 2)))
+(assert (< (* 2 a) (+ (* 2 b) 5)))
+(check-sat)
+(exit)

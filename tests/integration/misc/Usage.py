@@ -37,6 +37,10 @@ python = sys.executable
 
 TIME_LIMIT = 30
 
+# The SMT-LIB GitLab server that the README's clone script used is gone, so
+# use a few small QF_LIA seeds shipped with the tests instead.
+BENCHMARK_DIR = os.path.join(import_path, "tests", "res", "QF_LIA")
+
 
 def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
     timeout = "timeout --signal=INT " + str(timeout_limit) + " "
@@ -88,7 +92,6 @@ def get_z3():
 def cleanup():
     subprocess.getoutput("rm -rf cvc4*")
     subprocess.getoutput("rm -rf z3*")
-    subprocess.getoutput("rm -rf QF_LIA")
 
 
 def get_dir(benchmark):
@@ -102,9 +105,10 @@ def get_dir(benchmark):
 cleanup()
 
 print("(1) Get SMT-LIB 2 benchmark", flush=True)
-cmd = "git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_LIA.git"  # noqa: E501
-print(cmd)
-subprocess.getoutput(cmd)
+print("Using " + BENCHMARK_DIR)
+if not os.listdir(BENCHMARK_DIR):
+    print("No benchmarks found in " + BENCHMARK_DIR)
+    exit(1)
 print("-" * 100)
 
 print("(2) Get and build SMT solvers.", flush=True)
@@ -115,7 +119,9 @@ print("-" * 100)
 print("(3) Run Yin-Yang on the benchmarks e.g. with Z3 and CVC4.", flush=True)
 first_config = z3 + " model_validate=true"
 second_config = cvc4 + " --check-models -m -i -q"
-output, cmd = run_opfuzz(first_config, second_config, "QF_LIA", "", TIME_LIMIT)
+output, cmd = run_opfuzz(
+    first_config, second_config, BENCHMARK_DIR, "", TIME_LIMIT
+)
 print(output, flush=True)
 if error(output):
     print("An error occurred!")
