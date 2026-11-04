@@ -37,9 +37,11 @@ python = sys.executable
 
 TIME_LIMIT = 30
 
-# The SMT-LIB GitLab server that the README's clone script used is gone, so
-# use a few small QF_LIA seeds shipped with the tests instead.
-BENCHMARK_DIR = os.path.join(import_path, "tests", "res", "QF_LIA")
+# The SMT-LIB GitLab server (clc-gitlab.cs.uiowa.edu) is gone, so fetch only
+# the QF_LIA seeds from testsmt/semantic-fusion-seeds with a sparse clone.
+SEEDS_REPO = "https://github.com/testsmt/semantic-fusion-seeds.git"
+SEEDS_CLONE = "semantic-fusion-seeds"
+BENCHMARK_DIR = os.path.join(SEEDS_CLONE, "QF_LIA")
 
 
 def run_opfuzz(first_config, second_config, directory, opts, timeout_limit):
@@ -92,6 +94,7 @@ def get_z3():
 def cleanup():
     subprocess.getoutput("rm -rf cvc4*")
     subprocess.getoutput("rm -rf z3*")
+    subprocess.getoutput("rm -rf " + SEEDS_CLONE)
 
 
 def get_dir(benchmark):
@@ -105,9 +108,15 @@ def get_dir(benchmark):
 cleanup()
 
 print("(1) Get SMT-LIB 2 benchmark", flush=True)
-print("Using " + BENCHMARK_DIR)
-if not os.listdir(BENCHMARK_DIR):
-    print("No benchmarks found in " + BENCHMARK_DIR)
+cmd = (
+    "git clone --depth 1 --filter=blob:none --sparse " + SEEDS_REPO + " "
+    + SEEDS_CLONE + " && cd " + SEEDS_CLONE
+    + " && git sparse-checkout set QF_LIA"
+)
+print(cmd)
+print(subprocess.getoutput(cmd))
+if not os.path.isdir(BENCHMARK_DIR):
+    print("error: could not download the benchmarks to " + BENCHMARK_DIR)
     exit(1)
 print("-" * 100)
 
