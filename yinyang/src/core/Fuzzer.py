@@ -34,6 +34,12 @@ from yinyang.src.core.Solver import Solver, SolverQueryResult, SolverResult
 
 from yinyang.src.parsing.Parse import parse_file
 from yinyang.src.parsing.Typechecker import typecheck
+from yinyang.src.parsing.Logic import (
+    parse_logic,
+    infer_logic,
+    logic_name,
+    is_difference_logic,
+)
 
 from yinyang.src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
 from yinyang.src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
@@ -60,6 +66,7 @@ from yinyang.src.core.Logger import (
     log_invalid_mutant,
     log_skip_seed_mutator,
     log_skip_seed_test,
+    log_skip_out_of_logic,
 )
 from yinyang.src.core.FuzzerUtil import (
     get_seeds,
@@ -87,6 +94,9 @@ class Fuzzer:
         self.name = random_string()
         self.timeout_of_current_seed = 0
         self.header_comments = ""  # header comments to preserve in mutants
+        self.seed_logic = None  # set-logic emitted for mutants of the seed
+        self.logic_base = None  # features allowed by self.seed_logic
+        self.current_logic = None  # set-logic emitted for the current mutant
 
         init_logging(strategy, self.args.quiet, self.name, args)
 
@@ -168,6 +178,7 @@ class Fuzzer:
                 if not script:
                     continue
 
+                self.init_logic([script])
                 typecheck(script, glob)
                 script_cp = deepcopy_safe(script)
                 unique_expr = get_unique_subterms(script_cp)
@@ -179,12 +190,14 @@ class Fuzzer:
                 script, _ = self.get_script(seed)
                 if not script:
                     continue
+                self.init_logic([script])
                 self.mutator = TypeAwareOpMutation(script, self.args)
 
             elif self.strategy == "yinyang":
                 script1, _, script2, _ = self.get_script_pair(seed)
                 if not script1 or not script2:
                     continue
+                self.init_logic([script1, script2])
                 self.mutator = SemanticFusion(script1, script2, self.args)
 
             else:
@@ -215,6 +228,13 @@ class Fuzzer:
                     log_skip_seed_mutator(self.args, i)
                     break  # Continue to next seed.
 
+                logic, in_logic = self.mutant_logic(mutant)
+                if not in_logic:
+                    self.statistic.out_of_logic += 1
+                    log_skip_out_of_logic(self.args, i, self.seed_logic)
+                    continue  # Go to next iteration.
+                self.current_logic = logic
+
                 (mutate_further, scratchfile) = self.test(mutant, i + 1)
                 if not mutate_further:  # Continue to next seed.
                     log_skip_seed_test(self.args, i)
@@ -226,6 +246,72 @@ class Fuzzer:
 
             log_finished_generations(successful_gens, unsuccessful_gens)
         self.terminate()
+
+    def init_logic(self, scripts):
+        """
+        Determine the logic for the mutants of the given seed scripts from
+        their set-logic commands (stored in script.logic by prepare_seed).
+
+        Seeds without set-logic, and --logic-mode strip, give no set-logic.
+        For logics that Logic.py does not understand (e.g. ALL) the logic is
+        kept as is when all seeds agree and replaced by ALL otherwise.
+        Difference logics are replaced by LIA/LRA as mutants rarely stay in
+        difference form.
+        """
+        self.seed_logic, self.logic_base = None, None
+        names = [script.logic for script in scripts]
+        if self.args.logic_mode == "strip" or None in names:
+            return
+        bases = [parse_logic(name) for name in names]
+        if None in bases:
+            self.seed_logic = names[0] if len(set(names)) == 1 else "ALL"
+            return
+
+        # The features inferred from the seeds are added to the base, so
+        # that imprecisions of infer_logic on the seeds themselves do not
+        # cause widening or skipping.
+        base = frozenset().union(
+            *bases, *[infer_logic(script) for script in scripts]
+        )
+        self.logic_base = base
+        if len(set(names)) == 1 and not is_difference_logic(names[0]):
+            self.seed_logic = names[0]
+        else:
+            self.seed_logic = logic_name(base)
+
+    def mutant_logic(self, mutant):
+        """
+        Determine the set-logic for a mutant. If the mutant uses features
+        outside of the seed's logic, the logic is widened to include them
+        (--logic-mode widen) or the mutant is rejected (--logic-mode skip).
+
+        :returns: (logic, in_logic) where logic is the logic name or None
+                  for no set-logic, and in_logic is False if the mutant
+                  should be skipped.
+        """
+        if self.logic_base is None:
+            return self.seed_logic, True
+        needed = infer_logic(mutant)
+        if needed <= self.logic_base:
+            return self.seed_logic, True
+        if self.args.logic_mode == "skip":
+            return None, False
+        return logic_name(self.logic_base | needed), True
+
+    def script_str(self, script):
+        """
+        Print a mutant, with the set-logic command for the current mutant
+        inserted after the leading set-option commands (some solvers reject
+        set-option after set-logic).
+        """
+        if self.current_logic is None:
+            return script.__str__()
+        cmds = [cmd.__str__() for cmd in script.commands]
+        i = 0
+        while i < len(cmds) and cmds[i].lstrip().startswith("(set-option"):
+            i += 1
+        cmds.insert(i, "(set-logic " + self.current_logic + ")")
+        return "\n".join(cmds)
 
     def create_testbook(self, script):
         """
@@ -245,7 +331,7 @@ class Fuzzer:
             # Prepend header comments if they exist
             if self.header_comments:
                 testcase_writer.write(self.header_comments)
-            testcase_writer.write(script.__str__())
+            testcase_writer.write(self.script_str(script))
 
         for cli in self.args.SOLVER_CLIS:
             testbook.append((cli, testcase))
@@ -414,7 +500,7 @@ class Fuzzer:
         )
         try:
             with open(report, "w") as report_writer:
-                report_writer.write(script.__str__())
+                report_writer.write(self.script_str(script))
         except Exception:
             logging.error("error: couldn't copy scratchfile to bugfolder.")
             exit(ERR_EXHAUSTED_DISK)
@@ -455,7 +541,7 @@ class Fuzzer:
         )
         try:
             with open(report, "w") as report_writer:
-                report_writer.write(script.__str__())
+                report_writer.write(self.script_str(script))
         except Exception:
             logging.error("error: couldn't copy scratchfile to bugfolder.")
             exit(ERR_EXHAUSTED_DISK)

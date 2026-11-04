@@ -140,6 +140,11 @@ options:
     -m <vars>, --multiple-variables <vars>
             try to fuse at least vars variables, if possible, distributing
             the variables evenly as possible between the seeds (default: 2)
+    --logic-mode <mode>
+            how to handle set-logic of the seeds (default: widen)
+            widen: keep the seed's logic, widen it if a mutant needs more
+            skip:  keep the seed's logic, skip mutants that need more
+            strip: remove set-logic from all mutants
     -k, --keep-mutants          do not delete scratch file
     -n, --no-log                disable logging
     -q, --quiet                 do not print statistics and other output

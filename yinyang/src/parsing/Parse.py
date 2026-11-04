@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import re
 import sys
 import traceback
 import logging
@@ -44,12 +45,37 @@ class ErrorListener(ErrorListener):
                       % (line, column), flush=True)
 
 
+# Commands removed from seeds: set-info may raise warning messages, the
+# others produce output that may mislead the bug detection logic.
+DROPPED_COMMANDS = [
+    "set-info",
+    "get-model",
+    "get-assertions",
+    "get-proof",
+    "get-unsat-assumptions",
+    "get-unsat-core",
+    "get-value",
+    "echo",
+    "simplify",
+]
+
+
+def command_name(cmd):
+    """
+    Returns the name of an SMT-LIB command, e.g. "set-logic" for
+    "(set-logic QF_LIA)".
+    """
+    match = re.match(r"\s*\(\s*([^\s()]+)", cmd.__str__())
+    return match.group(1) if match else ""
+
+
 def prepare_seed(formula):
     """
     Prepare seed script for fuzzing. Remove set-logic, set-info and other
-    output-producing commands. Set-logic and set-info may raise warning
-    messages from SMT solvers. Output-producing commands may cause errors,
-    e.g., get-model, get-proof etc. Errors such as
+    output-producing commands. The logic is stored in formula.logic, so that
+    the fuzzer can emit a set-logic command that suits each mutant. Set-info
+    may raise warning messages from SMT solvers. Output-producing commands
+    may cause errors, e.g., get-model, get-proof etc. Errors such as
 
                 (error "line X column Y: msg")
 
@@ -58,32 +84,19 @@ def prepare_seed(formula):
     soundness issues being ignored, e.g. if the error occurred after a faulty
     check-sat result. Hence, we remove all output-producing SMT-LIB commands
     from the script.
+
+    Commands are matched by name, not by substring, so that e.g.
+    (declare-fun echo_x () Int) is kept.
     """
     new_cmds = []
     for cmd in formula.commands:
-        if "set-info" in cmd.__str__():
+        name = command_name(cmd)
+        if name == "set-logic":
+            tokens = cmd.__str__().replace("(", " ").replace(")", " ").split()
+            if len(tokens) > 1:
+                formula.logic = tokens[1]
             continue
-        if "set-logic" in cmd.__str__():
-            continue
-
-        # Ignore output-producing commands to make sure the detection logic
-        # won't be mislead
-        #
-        if "get-model" in cmd.__str__():
-            continue
-        if "get-assertions" in cmd.__str__():
-            continue
-        if "get-proof" in cmd.__str__():
-            continue
-        if "get-unsat-assumptions" in cmd.__str__():
-            continue
-        if "get-unsat-core" in cmd.__str__():
-            continue
-        if "get-value" in cmd.__str__():
-            continue
-        if "echo" in cmd.__str__():
-            continue
-        if "simplify" in cmd.__str__():
+        if name in DROPPED_COMMANDS:
             continue
         new_cmds.append(cmd)
 
