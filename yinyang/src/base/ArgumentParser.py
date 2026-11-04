@@ -106,6 +106,11 @@ def add_common_args(parser, rootpath, current_dir):
         default=100000,
         type=int,
     )
+    parser.add_argument(
+        "--logic-mode",
+        choices=["widen", "skip", "strip"],
+        default="widen",
+    )
 
 
 def add_opfuzz_args(parser, rootpath, current_dir):
