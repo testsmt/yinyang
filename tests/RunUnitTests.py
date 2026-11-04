@@ -30,6 +30,7 @@ from tests.unit.TestSemanticFusion import SemanticFusionTestCase
 from tests.unit.TestTypeAwareOpMutation import TypeAwareOpMutationTestCase
 from tests.unit.TestGenTypeAwareMutation import GenTypeAwareMutationTestCase
 from tests.unit.TestUtils import UtilsTestCase
+from tests.unit.TestLogic import LogicTestCase
 
 sys.path.append("../")
 
