@@ -156,6 +156,15 @@ def log_skip_seed_mutator(args, i):
     )
 
 
+def log_skip_out_of_logic(args, i, logic):
+    logging.debug(
+        str(i)
+        + "/"
+        + str(args.iterations)
+        + " Mutant is not in logic " + str(logic) + ", skipped."
+    )
+
+
 def log_skip_seed_test(args, i):
     logging.debug(
         str(i)

@@ -31,6 +31,7 @@ class Statistic:
         self.invalid_seeds = 0
         self.total_generations = 0
         self.unsuccessful_generations = 0
+        self.out_of_logic = 0
         self.mutants = 0
         self.invalid_mutants = 0
         self.crashes = 0
