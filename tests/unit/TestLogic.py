@@ -37,6 +37,7 @@ def infer(formula):
 
 class Args:
     logic_mode = "widen"
+    keep_mutants = True  # read by Fuzzer.__del__
 
 
 def make_fuzzer(logic_mode):

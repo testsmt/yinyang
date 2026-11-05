@@ -54,11 +54,16 @@ from yinyang.src.parsing.Ast import (
 )
 from yinyang.src.parsing.Types import (
     BITVECTOR_TYPE,
+    FP_TYPE,
+    FUNCTION_TYPE,
     INTEGER_TYPE,
     REAL_TYPE,
     STRING_TYPE,
     BOOLEAN_TYPE,
     REGEXP_TYPE,
+    ROUNDINGMODE_TYPE,
+    ROUNDING_MODES,
+    FP_INDEXED_CONSTANTS,
     sort2type,
 )
 
@@ -71,7 +76,8 @@ class AstVisitor(SMTLIBv2Visitor):
     def __init__(self, strict=True):
         self.strict = strict
         self.global_vars = {}
-        self.sorts = {}
+        self.sorts = {}  # sort aliases from define-sort
+        self.constants = {}  # nullary datatype constructors and their sort
 
     def visitStart(self, ctx: SMTLIBv2Parser.StartContext):
         return self.visitScript(ctx.script())
@@ -83,13 +89,56 @@ class AstVisitor(SMTLIBv2Visitor):
         return Script(cmds, self.global_vars)
 
     def add_to_globals(self, identifier, input_sorts, output_sort):
+        """
+        Add a declared or defined symbol to the global variables, with its
+        type for constants and a FUNCTION_TYPE for functions.
+
+        input_sorts: list of the argument sorts
+        """
         if len(input_sorts) == 0:
-            if output_sort in self.sorts:
-                output_sort = self.sorts[output_sort]
             self.global_vars[identifier] = sort2type(output_sort)
         else:
-            self.global_vars[identifier] =\
-                sort2type(input_sorts + " " + output_sort)
+            self.global_vars[identifier] = FUNCTION_TYPE(
+                [sort2type(sort) for sort in input_sorts],
+                sort2type(output_sort)
+            )
+
+    def visitSorted_vars(self, sorted_var_ctxs):
+        """
+        :returns: list of the (symbol, sort) pairs and dict of their types
+        """
+        params = [
+            (self.visitSymbol(var.symbol()), self.visitSort(var.sort()))
+            for var in sorted_var_ctxs
+        ]
+        return params, {symbol: sort2type(sort) for symbol, sort in params}
+
+    def add_datatypes(self, names, datatype_decs):
+        """
+        Add the constructors, selectors and testers of the datatypes to the
+        global variables. Nullary constructors are constants. Parametric
+        datatypes are not supported.
+        """
+        for name, dec in zip(names, datatype_decs):
+            if name is None or dec.GRW_Par():
+                continue
+            for cons in dec.constructor_dec():
+                cons_name = self.visitSymbol(cons.symbol())
+                selectors = [
+                    (self.visitSymbol(sel.symbol()),
+                     self.visitSort(sel.sort()))
+                    for sel in cons.selector_dec()
+                ]
+                if selectors:
+                    self.add_to_globals(
+                        cons_name, [sort for _, sort in selectors], name
+                    )
+                else:
+                    self.constants[cons_name] = name
+                for sel_name, sort in selectors:
+                    self.add_to_globals(sel_name, [name], sort)
+                for tester in ["(_ is " + cons_name + ")", "is-" + cons_name]:
+                    self.add_to_globals(tester, [name], BOOLEAN_TYPE)
 
     def handleCommand(self, ctx: SMTLIBv2Parser.CommandContext):
         if ctx.cmd_assert():
@@ -116,21 +165,35 @@ class AstVisitor(SMTLIBv2Visitor):
             return Eval(self.visitTerm(ctx.term()[0], {}))
         if ctx.cmd_declareConst():
             var = self.visitSymbol(ctx.symbol()[0])
-            self.global_vars[var] = self.visitSort(ctx.sort()[0])
-            decl = DeclareConst(
-                self.visitSymbol(ctx.symbol()[0]),
-                sort2type(self.visitSort(ctx.sort()[0]))
-            )
-            return decl
+            sort = self.visitSort(ctx.sort()[0])
+            self.add_to_globals(var, [], sort)
+            return DeclareConst(var, sort2type(sort))
         if ctx.cmd_declareFun():
             input_sorts = []
             for sort in ctx.sort()[:-1]:
                 input_sorts.append(self.visitSort(sort))
             output_sort = self.visitSort(ctx.sort()[-1])
-            input_sorts = " ".join(input_sorts)
             identifier = self.visitSymbol(ctx.symbol()[0])
             self.add_to_globals(identifier, input_sorts, output_sort)
-            return DeclareFun(identifier, input_sorts, output_sort)
+            return DeclareFun(identifier, " ".join(input_sorts), output_sort)
+
+        # Declarations that are printed as they are, after recording the
+        # symbols and sorts they declare.
+        if ctx.cmd_declareDatatypes():
+            names = [self.visitSymbol(dec.symbol()) for dec in ctx.sort_dec()]
+            arities = [dec.numeral().getText() for dec in ctx.sort_dec()]
+            names = [n if a == "0" else None for n, a in zip(names, arities)]
+            self.add_datatypes(names, ctx.datatype_dec())
+            return None
+        if ctx.cmd_declareDatatype():
+            self.add_datatypes(
+                [self.visitSymbol(ctx.symbol()[0])], ctx.datatype_dec()
+            )
+            return None
+        if ctx.cmd_defineSort() and len(ctx.symbol()) == 1:
+            self.sorts[self.visitSymbol(ctx.symbol()[0])] = \
+                self.visitSort(ctx.sort()[0])
+            return None
 
         if ctx.cmd_define():
             return Define(
@@ -139,48 +202,46 @@ class AstVisitor(SMTLIBv2Visitor):
             )
 
         if ctx.cmd_defineConst():
-            return DefineConst(
-                self.visitSymbol(ctx.symbol()[0]),
-                self.visitSort(ctx.sort()[0]),
-                self.visitTerm(ctx.term()[0], {}),
-            )
+            identifier = self.visitSymbol(ctx.symbol()[0])
+            sort = self.visitSort(ctx.sort()[0])
+            term = self.visitTerm(ctx.term()[0], {})
+            self.add_to_globals(identifier, [], sort)
+            return DefineConst(identifier, sort, term)
 
-        if ctx.cmd_defineFun():
-            sorted_vars = []
-            for var in ctx.function_def().sorted_var():
-                sorted_vars.append(self.visitSorted_var(var))
-            identifier = self.visitSymbol(ctx.function_def().symbol())
-            sorted_vars = " ".join(sorted_vars)
-            self.add_to_globals(
-                identifier, sorted_vars,
-                self.visitSort(ctx.function_def().sort())
-            )
-            return DefineFun(
-                identifier,
-                sorted_vars,
-                self.visitSort(ctx.function_def().sort()),
-                self.visitTerm(ctx.function_def().term(), {}),
-            )
-
-        if ctx.cmd_defineFunRec():
-            sorted_vars = []
-            for var in ctx.function_def().sorted_var():
-                sorted_vars.append(self.visitSorted_var(var))
-            return DefineFunRec(
-                self.visitSymbol(ctx.function_def().symbol()),
-                sorted_vars,
-                self.visitSort(ctx.function_def().sort()),
-                self.visitTerm(ctx.function_def().term()),
-                {},
-            )
+        if ctx.cmd_defineFun() or ctx.cmd_defineFunRec():
+            fun_def = ctx.function_def()
+            identifier = self.visitSymbol(fun_def.symbol())
+            params, local_vars = self.visitSorted_vars(fun_def.sorted_var())
+            sort = self.visitSort(fun_def.sort())
+            sorted_vars = [
+                self.visitSorted_var(var) for var in fun_def.sorted_var()
+            ]
+            if ctx.cmd_defineFunRec():
+                # The body may call the function itself.
+                self.add_to_globals(
+                    identifier, [s for _, s in params], sort
+                )
+                term = self.visitTerm(fun_def.term(), local_vars)
+                return DefineFunRec(identifier, sorted_vars, sort, term)
+            term = self.visitTerm(fun_def.term(), local_vars)
+            self.add_to_globals(identifier, [s for _, s in params], sort)
+            return DefineFun(identifier, " ".join(sorted_vars), sort, term)
 
         if ctx.cmd_defineFunsRec():
             decls = []
+            scopes = []
             for decl in ctx.function_dec():
                 decls.append(self.visitFunction_dec(decl))
+                params, local_vars = self.visitSorted_vars(decl.sorted_var())
+                self.add_to_globals(
+                    self.visitSymbol(decl.symbol()),
+                    [s for _, s in params],
+                    self.visitSort(decl.sort()),
+                )
+                scopes.append(local_vars)
             terms = []
-            for term in ctx.term():
-                terms.append(self.visitTerm(term, {}))
+            for term, local_vars in zip(ctx.term(), scopes):
+                terms.append(self.visitTerm(term, local_vars))
             return DefineFunsRec(decls, terms)
 
         if ctx.cmd_checkSat():
@@ -261,7 +322,16 @@ class AstVisitor(SMTLIBv2Visitor):
                 return cmd
 
     def visitAttribute(self, ctx: SMTLIBv2Parser.AttributeContext):
-        return (ctx.keyword().getText(), ctx.attribute_value().getText())
+        """
+        :returns: (keyword, value), value is the text of the attribute value
+                  as in the input (getText() would drop the whitespace in
+                  e.g. :pattern ((f x))) or None if there is no value
+        """
+        value = ctx.attribute_value()
+        return (
+            ctx.keyword().getText(),
+            self.getString(value) if value else None,
+        )
 
     def handle_quantifier(
             self,
@@ -300,9 +370,13 @@ class AstVisitor(SMTLIBv2Visitor):
         if ctx.decimal():
             return ctx.getText().encode("utf-8").decode("utf-8"), REAL_TYPE
         if ctx.hexadecimal():
-            return ctx.getText().encode("utf-8").decode("utf-8"), INTEGER_TYPE
+            # #xF0: a bit-vector of 4 bits per hexadecimal digit
+            text = ctx.getText()
+            return text, BITVECTOR_TYPE(4 * (len(text) - 2))
         if ctx.binary():
-            return ctx.getText().encode("utf-8").decode("utf-8"), INTEGER_TYPE
+            # #b101: a bit-vector of 1 bit per binary digit
+            text = ctx.getText()
+            return text, BITVECTOR_TYPE(len(text) - 2)
         if ctx.string():
             return ctx.getText().encode("utf-8").decode("utf-8"), STRING_TYPE
         if ctx.b_value():
@@ -334,10 +408,9 @@ class AstVisitor(SMTLIBv2Visitor):
             and len(ctx.attribute()) >= 1
             and ctx.ParClose()
         ):
-            term, label = self.visitTerm(ctx.term()[0]), self.visitAttribute(
-                ctx.attribute()[0]
-            )
-            return LabeledTerm(label, [term])
+            term = self.visitTerm(ctx.term()[0], local_vars)
+            attributes = [self.visitAttribute(a) for a in ctx.attribute()]
+            return LabeledTerm(attributes, [term])
 
         if (
             len(ctx.ParOpen()) == 2
@@ -435,7 +508,14 @@ class AstVisitor(SMTLIBv2Visitor):
             and ctx.sort()
             and ctx.ParClose()
         ):
-            raise AstException("ParOpen GRW_As identifier sort ParClose")
+            # Qualified identifier, e.g. (as const (Array Int Int)) or
+            # (as nil (List Int))
+            identifier = self.identifier_text(ctx.identifier())
+            sort = self.visitSort(ctx.sort())
+            name = "(as " + identifier + " " + sort + ")"
+            if identifier in self.constants:
+                return Const(name=name, type=sort2type(sort))
+            return name
 
         if ctx.identifier():
             return self.visitIdentifier(ctx.identifier(), local_vars)
@@ -481,16 +561,18 @@ class AstVisitor(SMTLIBv2Visitor):
             and ctx.ParClose()
         ):
             symbol = self.visitSymbol(ctx.symbol())
-            index = ctx.index()[0].getText()
-            for ind in ctx.index()[1:]:
-                index += " " + ind.getText()
-            name = "(_ " + symbol + " " + index + ")"
+            indices = [ind.getText() for ind in ctx.index()]
+            name = self.identifier_text(ctx)
             if name in local_vars:
                 return Var(name=name, type=local_vars[name],
                            is_indexed_id=True)
             elif name in self.global_vars:
                 return Var(name=name, type=self.global_vars[name],
                            is_indexed_id=True)
+            elif symbol in FP_INDEXED_CONSTANTS and len(indices) == 2:
+                # (_ +zero eb sb), (_ NaN eb sb), ...
+                return Const(name=name, type=FP_TYPE(int(indices[0]),
+                                                     int(indices[1])))
             else:
                 return name
 
@@ -500,17 +582,33 @@ class AstVisitor(SMTLIBv2Visitor):
                 return Var(name=name, type=local_vars[name])
             elif name in self.global_vars:
                 return Var(name=name, type=self.global_vars[name])
+            elif name in self.constants:
+                return Const(name=name, type=sort2type(self.constants[name]))
+            elif name in ROUNDING_MODES:
+                return Const(name=name, type=ROUNDINGMODE_TYPE)
             else:
-                return self.visitSymbol(ctx.symbol())
+                return name
         raise AstException("No match for identifier: ... |... |... ")
+
+    def identifier_text(self, ctx: SMTLIBv2Parser.IdentifierContext):
+        """
+        :returns: the identifier as a string, e.g. "x" or "(_ extract 7 4)"
+        """
+        symbol = self.visitSymbol(ctx.symbol())
+        if ctx.GRW_Underscore():
+            indices = [ind.getText() for ind in ctx.index()]
+            return "(_ " + symbol + " " + " ".join(indices) + ")"
+        return symbol
 
     def visitTerminal(self, ctx):
         return ctx.getText()
 
     def visitSort(self, ctx: SMTLIBv2Parser.SortContext):
         if len(ctx.sort()) >= 1:
-            s = "(" + self.visitIdentifier(ctx.identifier(), {})
+            s = "(" + self.identifier_text(ctx.identifier())
             for sort in ctx.sort():
                 s += " " + self.visitSort(sort)
             return s + ")"
-        return self.visitIdentifier(ctx.identifier(), {})
+        name = self.identifier_text(ctx.identifier())
+        # Sort aliases from define-sort (without parameters)
+        return self.sorts.get(name, name)

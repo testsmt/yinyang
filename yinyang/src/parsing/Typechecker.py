@@ -25,10 +25,10 @@ import sys
 sys.setrecursionlimit(100000)
 
 from yinyang.src.parsing.Types import (
-    sort2type,
+    sort2type, parse_sexpr, sexpr2str,
     # Types
     BOOLEAN_TYPE, REAL_TYPE, INTEGER_TYPE, ROUNDINGMODE_TYPE, STRING_TYPE,
-    REGEXP_TYPE, UNKNOWN, ARRAY_TYPE, BITVECTOR_TYPE, FP_TYPE,
+    REGEXP_TYPE, UNKNOWN, ARRAY_TYPE, BITVECTOR_TYPE, FP_TYPE, FUNCTION_TYPE,
     # Operator lists
     CORE_OPS, NUMERICAL_OPS, REAL_OPS, INT_OPS, REAL_INTS, STRING_OPS,
     ARRAY_OPS, BV_OPS, FP_OPS,
@@ -41,15 +41,15 @@ from yinyang.src.parsing.Types import (
     STR_SUBSTR, STR_INDEXOF, STR_REPLACE, STR_REPLACE_ALL, STR_REPLACE_RE,
     STR_REPLACE_RE_ALL, STR_TO_CODE, STR_TO_INT, STR_TO_RE, STR_FROM_CODE,
     STR_FROM_INT, STR_IS_DIGIT, RE_RANGE, SELECT, STORE, BV_CONCAT, BVNOT,
-    BVNEG, BVAND, BVOR, BVXOR, BVADD, BVSUB, BVMUL, BVUDIV, BVUREM, BVSHL,
-    BV_EXTRACT, BV_ZERO_EXTEND, BV_SIGN_EXTEND, BVLSHR, BVASHR, BVSDIV, BVULT,
-    BVULE, BVSLT, BVSGT, FP_ABS, FP_NEG, FP_ADD, FP_SUB, FP_MUL, FP_DIV,
-    FP_SQRT, FP_REM, FP_ROUND_TO_INTEGRAL, FP_NORMAL, FP_ISSUBNORMAL,
-    FP_IS_ZERO, FP_ISINFINITE, FP_ISNAN, FP_ISNEGATIVE, FP_ISPOSITIVE, FP_LEQ,
-    FP_LT, FP_GEQ, FP_GT, FP_EQ, FP_MIN, FP_MAX, FP_FMA, TO_FP_UNSIGNED, TO_FP
+    BVNEG, BVCOMP, BV_BINARY_OPS, BV_COMPARISON_OPS, BV_INDEXED_OPS,
+    FP_ABS, FP_NEG, FP_ADD, FP_SUB, FP_MUL, FP_DIV, FP_SQRT, FP_REM,
+    FP_ROUND_TO_INTEGRAL, FP_NORMAL, FP_ISSUBNORMAL, FP_IS_ZERO,
+    FP_ISINFINITE, FP_ISNAN, FP_ISNEGATIVE, FP_ISPOSITIVE, FP_LEQ, FP_LT,
+    FP_GEQ, FP_GT, FP_EQ, FP_MIN, FP_MAX, FP_FMA, FP_TO_REAL, FP_CTOR,
+    FP_INDEXED_OPS,
 )
 
-from yinyang.src.parsing.Ast import Assert
+from yinyang.src.parsing.Ast import Assert, Term
 
 
 class Context:
@@ -72,16 +72,11 @@ class Context:
 
 class TypeCheckError(Exception):
     def __init__(self, expr, subterm=None, expected=None, actual=None):
-        self.message = "Ill-typed expression \nterm: \t \t"\
-                       + expr.__str__() + "\n"
+        self.message = "Ill-typed expression \nterm: \t \t"\
+                       + str(expr) + "\n"
         if isinstance(subterm, list):
-            s = "[" + subterm[0].__str__() + " "
-            for term in subterm[1:]:
-                s += term.__str__() + " "
-            s += "]"
-            self.message += "faulty subterm:\t" + subterm.__str__() + "\n"
-        else:
-            self.message += "faulty subterm:\t" + subterm.__str__() + "\n"
+            subterm = "[" + " ".join(str(term) for term in subterm) + "]"
+        self.message += "faulty subterm:\t" + str(subterm) + "\n"
         self.message += "expected: \t" + str(expected) + "\n"
         self.message += "actual: \t" + str(actual)
         super().__init__(self.message)
@@ -89,16 +84,49 @@ class TypeCheckError(Exception):
 
 class UnknownOperator(Exception):
     def __init__(self, op):
-        self.message = "unknown function/constant " + op
+        self.message = "unknown function/constant " + str(op)
         # sys.tracebacklimit = 0
         super().__init__(self.message)
 
 
+def is_subtype(t, tprime):
+    """
+    Int is accepted where Real is expected: z3 and cvc5 accept mixed
+    Int/Real arithmetic, e.g. (+ x 1) with x Real.
+    """
+    return t == INTEGER_TYPE and tprime == REAL_TYPE
+
+
+def compatible(t, tprime):
+    return t == tprime or is_subtype(t, tprime) or is_subtype(tprime, t)
+
+
+def join(t, tprime):
+    """The common type of two compatible types."""
+    return REAL_TYPE if REAL_TYPE in (t, tprime) and t != tprime else t
+
+
+def check_arg(expr, term, expected, ctxt):
+    """Typecheck term, an argument of expr, against the expected type."""
+    t = typecheck_expr(term, ctxt)
+    if not (t == expected or is_subtype(t, expected)):
+        raise TypeCheckError(expr, term, expected, t)
+    return t
+
+
+def check_arity(expr, n, at_least=False):
+    m = len(expr.subterms)
+    if m < n or (m != n and not at_least):
+        raise TypeCheckError(
+            expr, expr, ("at least " if at_least else "") + "%d arguments" % n,
+            "%d arguments" % m
+        )
+
+
 def typecheck_not(expr, ctxt=[]):
     """(not Bool Bool)"""
-    typ = typecheck_expr(expr.subterms[0], ctxt)
-    if typ != BOOLEAN_TYPE:
-        raise TypeCheckError(expr, expr.subterms[0], typ, BOOLEAN_TYPE)
+    check_arity(expr, 1)
+    check_arg(expr, expr.subterms[0], BOOLEAN_TYPE, ctxt)
     return BOOLEAN_TYPE
 
 
@@ -111,7 +139,7 @@ def typecheck_unary_minus(expr, ctxt=[]):
         raise TypeCheckError(
             expr, expr.subterms[0], [INTEGER_TYPE, REAL_TYPE], typ
         )
-    return typecheck_expr(expr.subterms[0], ctxt)
+    return typ
 
 
 def typecheck_nary_numeral_ret(expr, ctxt=[]):
@@ -121,17 +149,17 @@ def typecheck_nary_numeral_ret(expr, ctxt=[]):
     (- Real Real Real :left-assoc)
     (+ Real Real Real :left-assoc)
     (* Real Real Real :left-assoc)
-    (/ Real Real Real :left-assoc)
+
+    The result is Real if any argument is Real (mixed Int/Real arithmetic
+    as accepted by z3 and cvc5), Int otherwise.
     """
-    typ = typecheck_expr(expr.subterms[0], ctxt)
-    if typ not in [INTEGER_TYPE, REAL_TYPE]:
-        raise TypeCheckError(
-            expr, expr.subterms[0], [INTEGER_TYPE, REAL_TYPE], typ
-        )
-    for term in expr.subterms[1:]:
+    check_arity(expr, 2, at_least=True)
+    typ = INTEGER_TYPE
+    for term in expr.subterms:
         t = typecheck_expr(term, ctxt)
         if t not in [INTEGER_TYPE, REAL_TYPE]:
-            raise TypeCheckError(expr, term, typ, t)
+            raise TypeCheckError(expr, term, [INTEGER_TYPE, REAL_TYPE], t)
+        typ = join(typ, t)
     return typ
 
 
@@ -147,40 +175,28 @@ def typecheck_nary_int_ret(expr, ctxt=[]):
     return INTEGER_TYPE
 
 
-def is_subtype(t, tprime):
-    if t == INTEGER_TYPE and tprime == REAL_TYPE:
-        return True
-    if isinstance(t, BITVECTOR_TYPE) and isinstance(tprime, BITVECTOR_TYPE):
-        return True
-    return False
-
-
 def typecheck_eq(expr, ctxt=[]):
     """(par (A) (= A A Bool :chainable))
     (par (A) (distinct A A Bool :pairwise))
     """
+    check_arity(expr, 2, at_least=True)
     typ = typecheck_expr(expr.subterms[0], ctxt)
     for term in expr.subterms[1:]:
         t = typecheck_expr(term, ctxt)
-        if t != typ:
-            if not (is_subtype(t, typ) or is_subtype(typ, t)):
-                raise TypeCheckError(expr, term, typ, t)
+        if not compatible(t, typ):
+            raise TypeCheckError(expr, term, typ, t)
     return BOOLEAN_TYPE
 
 
 def typecheck_ite(expr, ctxt=[]):
     """(par (A) (ite Bool A A A))"""
-    typ = typecheck_expr(expr.subterms[0], ctxt)
-    if typecheck_expr(expr.subterms[0], ctxt) != BOOLEAN_TYPE:
-        t = typecheck_expr(expr.subterms[1], ctxt)
-        if not (is_subtype(t, typ) or is_subtype(typ, t)):
-            raise TypeCheckError(expr, expr.subterms[0], typ, BOOLEAN_TYPE)
+    check_arity(expr, 3)
+    check_arg(expr, expr.subterms[0], BOOLEAN_TYPE, ctxt)
     t1 = typecheck_expr(expr.subterms[1], ctxt)
     t2 = typecheck_expr(expr.subterms[2], ctxt)
-    if t1 != t2:
-        if not (is_subtype(t1, t2) or is_subtype(t2, t1)):
-            raise TypeCheckError(expr, expr.subterms[2], t1, t2)
-    return typecheck_expr(expr.subterms[1], ctxt)
+    if not compatible(t1, t2):
+        raise TypeCheckError(expr, expr.subterms[2], t1, t2)
+    return join(t1, t2)
 
 
 def typecheck_nary_bool(expr, ctxt=[]):
@@ -188,11 +204,10 @@ def typecheck_nary_bool(expr, ctxt=[]):
     (and Bool Bool Bool :left-assoc)
     (or Bool Bool Bool :left-assoc)
     (xor Bool Bool Bool :left-assoc)
+    (=> Bool Bool Bool :right-assoc)
     """
     for term in expr.subterms:
-        typ = typecheck_expr(term, ctxt)
-        if typ != BOOLEAN_TYPE:
-            raise TypeCheckError(expr, term, BOOLEAN_TYPE, typ)
+        check_arg(expr, term, BOOLEAN_TYPE, ctxt)
     return BOOLEAN_TYPE
 
 
@@ -207,13 +222,8 @@ def typecheck_comp_ops(expr, ctxt):
     (>= Real Real Bool :chainable)
     (>  Real Real Bool :chainable)
     """
-    typ = typecheck_expr(expr.subterms[0], ctxt)
-    if typ not in [INTEGER_TYPE, REAL_TYPE]:
-        raise TypeCheckError(
-            expr, expr.subterms[0], [INTEGER_TYPE, REAL_TYPE], typ
-        )
-
-    for term in expr.subterms[1:]:
+    check_arity(expr, 2, at_least=True)
+    for term in expr.subterms:
         t = typecheck_expr(term, ctxt)
         if t not in [INTEGER_TYPE, REAL_TYPE]:
             raise TypeCheckError(expr, term, [INTEGER_TYPE, REAL_TYPE], t)
@@ -249,7 +259,7 @@ def typecheck_real_div(expr, ctxt):
     for term in expr.subterms:
         t = typecheck_expr(term, ctxt)
         if t not in [REAL_TYPE, INTEGER_TYPE]:
-            raise TypeCheckError(expr, expr, REAL_TYPE, t)
+            raise TypeCheckError(expr, term, REAL_TYPE, t)
     return REAL_TYPE
 
 
@@ -503,12 +513,12 @@ def typecheck_select(expr, ctxt):
     """
     (select (Array X Y) X Y)
     """
+    check_arity(expr, 2)
     array_type = typecheck_expr(expr.subterms[0], ctxt)
     if not isinstance(array_type, ARRAY_TYPE):
-        raise TypeCheckError(expr, expr, ARRAY_TYPE, array_type)
-    x_type = typecheck_expr(expr.subterms[1], ctxt)
-    if x_type != array_type.index_type:
-        raise TypeCheckError(expr, expr, array_type.index_type, x_type)
+        raise TypeCheckError(expr, expr.subterms[0], "(Array X Y)",
+                             array_type)
+    check_arg(expr, expr.subterms[1], array_type.index_type, ctxt)
     return array_type.payload_type
 
 
@@ -516,18 +526,13 @@ def typecheck_store(expr, ctxt):
     """
     (store (Array X Y) X Y (Array X Y)))
     """
+    check_arity(expr, 3)
     array_type = typecheck_expr(expr.subterms[0], ctxt)
     if not isinstance(array_type, ARRAY_TYPE):
-        raise TypeCheckError(expr, expr, ARRAY_TYPE, array_type)
-    x_type = typecheck_expr(expr.subterms[1], ctxt)
-    y_type = typecheck_expr(expr.subterms[2], ctxt)
-    if x_type != array_type.index_type or y_type != array_type.payload_type:
-        raise TypeCheckError(
-            expr,
-            expr,
-            [array_type.index_type, array_type.payload_type],
-            [x_type, y_type],
-        )
+        raise TypeCheckError(expr, expr.subterms[0], "(Array X Y)",
+                             array_type)
+    check_arg(expr, expr.subterms[1], array_type.index_type, ctxt)
+    check_arg(expr, expr.subterms[2], array_type.payload_type, ctxt)
     return array_type
 
 
@@ -538,226 +543,184 @@ def typecheck_array_ops(expr, ctxt):
         return typecheck_store(expr, ctxt)
 
 
-def typecheck_bv_concat(expr, ctxt):
+def bv_args(expr, ctxt, same_width=True):
     """
-    (concat (_ BitVec i) (_ BitVec j) (_ BitVec m))
+    Typecheck the arguments of expr as bit-vectors.
+    :returns: the list of their types
     """
-    arg1, arg2 = expr.subterms[0], expr.subterms[1]
-    t1 = typecheck_expr(expr.subterms[0], ctxt)
-    t2 = typecheck_expr(expr.subterms[1], ctxt)
-    if not isinstance(t1, BITVECTOR_TYPE) or\
-       not isinstance(t2, BITVECTOR_TYPE):
-        raise TypeCheckError(
-            expr, [arg1, arg2], [BITVECTOR_TYPE, BITVECTOR_TYPE], [t1, t2]
-        )
-    bitwidth = t1.bitwidth + t2.bitwidth
-    return BITVECTOR_TYPE(bitwidth)
-
-
-def typecheck_bv_unary(expr, ctxt):
-    """
-    (op1 (_ BitVec m) (_ BitVec m))
-    """
-    arg = expr.subterms[0]
-    t = typecheck_expr(expr.subterms[0], ctxt)
-    if not isinstance(t, BITVECTOR_TYPE):
-        raise TypeCheckError(expr, arg, BITVECTOR_TYPE, t)
-    return t
-
-
-def typecheck_bv_binary(expr, ctxt):
-    """
-    (op2 (_ BitVec m) (_ BitVec m) (_ BitVec m))
-    """
-    arg1, _ = expr.subterms[0], expr.subterms[1]
-    t1 = typecheck_expr(expr.subterms[0], ctxt)
-    t2 = typecheck_expr(expr.subterms[1], ctxt)
-    if not isinstance(t1, BITVECTOR_TYPE) or\
-       not isinstance(t2, BITVECTOR_TYPE):
-        expected = "[" + str(BITVECTOR_TYPE) + "," + str(BITVECTOR_TYPE) + "]"
-        actual = "[" + str(t1) + "," + str(t2) + "]"
-        raise TypeCheckError(expr, arg1, expected, actual)
-    return BITVECTOR_TYPE(t1.bitwidth)
-
-
-def typecheck_binary_bool_rt(expr, ctxt):
-    """
-    (bvult (_ BitVec m) (_ BitVec m) Bool)
-    (bvule (_ BitVec m) (_ BitVec m) Bool)
-    (bvslt (_ BitVec m) (_ BitVec m) Bool)
-    """
-    arg1, arg2 = expr.subterms[0], expr.subterms[1]
-    t1 = typecheck_expr(expr.subterms[0], ctxt)
-    t2 = typecheck_expr(expr.subterms[1], ctxt)
-
-    if not isinstance(arg1, BITVECTOR_TYPE) or\
-       not isinstance(arg2, BITVECTOR_TYPE):
-        raise TypeCheckError(
-            expr, [arg1, arg2], [BITVECTOR_TYPE, BITVECTOR_TYPE], [t1, t2]
-        )
-    return BOOLEAN_TYPE
+    types = []
+    for term in expr.subterms:
+        t = typecheck_expr(term, ctxt)
+        if not isinstance(t, BITVECTOR_TYPE):
+            raise TypeCheckError(expr, term, "(_ BitVec m)", t)
+        if same_width and types and t != types[0]:
+            raise TypeCheckError(expr, term, types[0], t)
+        types.append(t)
+    return types
 
 
 def typecheck_bv_ops(expr, ctxt):
+    """
+    (concat (_ BitVec i) (_ BitVec j) (_ BitVec i+j))
+    (bvnot (_ BitVec m) (_ BitVec m)), also bvneg
+    (bvand (_ BitVec m) (_ BitVec m) (_ BitVec m)), also BV_BINARY_OPS
+    (bvult (_ BitVec m) (_ BitVec m) Bool), also BV_COMPARISON_OPS
+    (bvcomp (_ BitVec m) (_ BitVec m) (_ BitVec 1))
+    """
     if expr.op == BV_CONCAT:
-        return typecheck_bv_concat(expr, ctxt)
+        check_arity(expr, 2, at_least=True)
+        types = bv_args(expr, ctxt, same_width=False)
+        return BITVECTOR_TYPE(sum(t.bitwidth for t in types))
     if expr.op in [BVNOT, BVNEG]:
-        return typecheck_bv_unary(expr, ctxt)
-    if expr.op in [
-        BVAND,
-        BVOR,
-        BVXOR,
-        BVADD,
-        BVSUB,
-        BVMUL,
-        BVUDIV,
-        BVUREM,
-        BVSHL,
-        BVLSHR,
-        BVASHR,
-        BVSDIV,
-    ]:
-        return typecheck_bv_binary(expr, ctxt)
-    if expr.op in [BVULT, BVULE, BVSLT, BVSGT]:
-        return typecheck_binary_bool_rt(expr, ctxt)
+        check_arity(expr, 1)
+        return bv_args(expr, ctxt)[0]
+    if expr.op in BV_BINARY_OPS:
+        # z3 and cvc5 also accept more than two arguments
+        check_arity(expr, 2, at_least=True)
+        return bv_args(expr, ctxt)[0]
+    if expr.op in BV_COMPARISON_OPS:
+        check_arity(expr, 2)
+        bv_args(expr, ctxt)
+        return BOOLEAN_TYPE
+    if expr.op == BVCOMP:
+        check_arity(expr, 2)
+        bv_args(expr, ctxt)
+        return BITVECTOR_TYPE(1)
 
 
-def typecheck_fp_unary(expr, ctxt):
+def typecheck_bv_indexed(expr, ctxt, name, indices):
     """
-    (fp.abs (_ FloatingPoint eb sb) (_ FloatingPoint eb sb))
-    (fp.neg (_ FloatingPoint eb sb) (_ FloatingPoint eb sb))
+    ((_ extract i j) (_ BitVec m) (_ BitVec i-j+1)), m > i >= j >= 0
+    ((_ zero_extend i) (_ BitVec m) (_ BitVec m+i)), also sign_extend
+    ((_ repeat i) (_ BitVec m) (_ BitVec i*m))
+    ((_ rotate_left i) (_ BitVec m) (_ BitVec m)), also rotate_right
     """
-    arg = expr.subterms[0]
-    t = typecheck_expr(expr.subterms[0], ctxt)
-    if not isinstance(t, FP_TYPE):
-        raise TypeCheckError(expr, arg, FP_TYPE, t)
-    return typecheck_expr(expr.subterms[0], ctxt)
+    check_arity(expr, 1)
+    m = bv_args(expr, ctxt)[0].bitwidth
+    if name == "extract":
+        i, j = indices
+        if not m > i >= j >= 0:
+            raise TypeCheckError(expr, expr.subterms[0],
+                                 "(_ BitVec m) with m > %d" % i,
+                                 BITVECTOR_TYPE(m))
+        return BITVECTOR_TYPE(i - j + 1)
+    if name in ["zero_extend", "sign_extend"]:
+        return BITVECTOR_TYPE(m + indices[0])
+    if name == "repeat":
+        return BITVECTOR_TYPE(m * indices[0])
+    return BITVECTOR_TYPE(m)
 
 
-def typecheck_fp_binary_arith(expr, ctxt):
+def fp_args(expr, terms, ctxt):
     """
-     (fp.add RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
-      (_ FloatingPoint eb sb))
-
-    (fp.sub RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
-      (_ FloatingPoint eb sb))
-
-    (fp.mul RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
-      (_ FloatingPoint eb sb))
-
-    (fp.div RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
-      (_ FloatingPoint eb sb))
+    Typecheck terms, arguments of expr, as floating-point numbers of the
+    same sort.
+    :returns: their type
     """
-    arg1 = expr.subterms[0]
-    arg2 = expr.subterms[1]
-    arg3 = expr.subterms[2]
-    t1 = typecheck_expr(arg1, ctxt)
-    if t1 != ROUNDINGMODE_TYPE:
-        raise TypeCheckError(expr, arg1, ROUNDINGMODE_TYPE, t1)
-
-    t1 = typecheck_expr(arg2, ctxt)
-    t2 = typecheck_expr(arg3, ctxt)
-    if not isinstance(t1, FP_TYPE) or not isinstance(t2, FP_TYPE):
-        raise TypeCheckError(expr, [arg2, arg3], [FP_TYPE, FP_TYPE])
-    return typecheck_expr(arg2, ctxt)
-
-
-def typecheck_fp_unary_bool_rt(expr, ctxt):
-    """
-    (fp.isNormal (_ FloatingPoint eb sb) Bool)
-    (fp.isSubnormal (_ FloatingPoint eb sb) Bool)
-    (fp.isZero (_ FloatingPoint eb sb) Bool)
-    (fp.isInfinite (_ FloatingPoint eb sb) Bool)
-    (fp.isNaN (_ FloatingPoint eb sb) Bool)
-    (fp.isNegative (_ FloatingPoint eb sb) Bool)
-    (fp.isPositive (_ FloatingPoint eb sb) Bool)
-    """
-    arg = expr.subterms[0]
-    typ = typecheck_expr(arg, ctxt)
-    if not isinstance(typ, FP_TYPE):
-        raise TypeCheckError(expr, arg, FP_TYPE, typ)
-    return BOOLEAN_TYPE
-
-
-def typecheck_fp_comparison(expr, ctxt):
-    """
-    (fp.leq (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool :chainable)
-    (fp.lt  (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool :chainable)
-    (fp.geq (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool :chainable)
-    (fp.gt  (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool :chainable)
-    (fp.eq (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool :chainable)
-    """
-    arg1 = expr.subterms[0]
-    arg2 = expr.subterms[1]
-    typ1 = typecheck_expr(arg1, ctxt)
-    typ2 = typecheck_expr(arg2, ctxt)
-    if not isinstance(typ1, FP_TYPE) or not isinstance(typ2, FP_TYPE):
-        args = "[" + arg1.__str__() + "," + arg2.__str__() + "]"
-        expected = "[" + str(FP_TYPE) + "," + str(FP_TYPE) + "]"
-        actual = "[" + typ1.__str__() + "," + typ2.__str__() + "]"
-        raise TypeCheckError(expr, args, expected, actual)
-    return BOOLEAN_TYPE
-
-
-def typecheck_fp_minmax(expr, ctxt):
-    """
-    (fp.min (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)) 
-    (fp.max (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) (_ FloatingPoint eb sb))
-    """ # noqa E501
-    arg1 = expr.subterms[0]
-    arg2 = expr.subterms[1]
-    if not isinstance(typecheck_expr(arg1, ctxt), FP_TYPE) or not isinstance(
-        typecheck_expr(arg2, ctxt), FP_TYPE
-    ):
-        raise TypeCheckError(expr)
-    return typecheck_expr(arg1, ctxt)
-
-
-def typecheck_fp_fma(expr, ctxt):
-    """
-    (fp.fma RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) (_ FloatingPoint eb sb))
-    """ # noqa E501
-    arg1 = expr.subterms[0]
-    arg2 = expr.subterms[1]
-    arg3 = expr.subterms[2]
-    if (
-        not isinstance(typecheck_expr(arg1, ctxt), FP_TYPE)
-        or not isinstance(typecheck_expr(arg2, ctxt), FP_TYPE)
-        or not isinstance(typecheck_expr(arg3, ctxt), FP_TYPE)
-    ):
-        raise TypeCheckError(expr)
-    return typecheck_expr(arg1, ctxt)
+    typ = None
+    for term in terms:
+        t = typecheck_expr(term, ctxt)
+        if not isinstance(t, FP_TYPE):
+            raise TypeCheckError(expr, term, "(_ FloatingPoint eb sb)", t)
+        if typ is not None and t != typ:
+            raise TypeCheckError(expr, term, typ, t)
+        typ = t
+    return typ
 
 
 def typecheck_fp_ops(expr, ctxt):
-    if expr.op in [FP_ABS, FP_NEG]:
-        return typecheck_fp_unary(expr, ctxt)
-    if expr.op in [
-        FP_ADD,
-        FP_SUB,
-        FP_MUL,
-        FP_DIV,
-        FP_SQRT,
-        FP_REM,
-        FP_ROUND_TO_INTEGRAL,
-    ]:
-        return typecheck_fp_binary_arith(expr, ctxt)
-    if expr.op in [
-        FP_NORMAL,
-        FP_ISSUBNORMAL,
-        FP_IS_ZERO,
-        FP_ISINFINITE,
-        FP_ISNAN,
-        FP_ISNEGATIVE,
-        FP_ISPOSITIVE,
-    ]:
-        return typecheck_fp_unary_bool_rt(expr, ctxt)
-    if expr.op in [FP_LEQ, FP_LT, FP_GEQ, FP_GT, FP_EQ]:
-        return typecheck_fp_comparison(expr, ctxt)
-    if expr.op in [FP_MIN, FP_MAX]:
-        return typecheck_fp_minmax(expr, ctxt)
-    if expr.op == FP_FMA:
-        return typecheck_fp_fma(expr, ctxt)
+    """
+    (fp.abs (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)), also fp.neg
+    (fp.add RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
+        (_ FloatingPoint eb sb)), also fp.sub, fp.mul, fp.div
+    (fp.fma RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
+        (_ FloatingPoint eb sb) (_ FloatingPoint eb sb))
+    (fp.sqrt RoundingMode (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)),
+        also fp.roundToIntegral
+    (fp.rem (_ FloatingPoint eb sb) (_ FloatingPoint eb sb)
+        (_ FloatingPoint eb sb)), also fp.min, fp.max
+    (fp.leq (_ FloatingPoint eb sb) (_ FloatingPoint eb sb) Bool
+        :chainable), also fp.lt, fp.geq, fp.gt, fp.eq
+    (fp.isNormal (_ FloatingPoint eb sb) Bool), also the other fp.is*
+    (fp.to_real (_ FloatingPoint eb sb) Real)
+    """
+    op, args = expr.op, expr.subterms
+    if op in [FP_ABS, FP_NEG]:
+        check_arity(expr, 1)
+        return fp_args(expr, args, ctxt)
+    if op in [FP_ADD, FP_SUB, FP_MUL, FP_DIV, FP_FMA, FP_SQRT,
+              FP_ROUND_TO_INTEGRAL]:
+        n = {FP_FMA: 4, FP_SQRT: 2, FP_ROUND_TO_INTEGRAL: 2}.get(op, 3)
+        check_arity(expr, n)
+        check_arg(expr, args[0], ROUNDINGMODE_TYPE, ctxt)
+        return fp_args(expr, args[1:], ctxt)
+    if op in [FP_REM, FP_MIN, FP_MAX]:
+        check_arity(expr, 2)
+        return fp_args(expr, args, ctxt)
+    if op in [FP_LEQ, FP_LT, FP_GEQ, FP_GT, FP_EQ]:
+        check_arity(expr, 2, at_least=True)
+        fp_args(expr, args, ctxt)
+        return BOOLEAN_TYPE
+    if op in [FP_NORMAL, FP_ISSUBNORMAL, FP_IS_ZERO, FP_ISINFINITE,
+              FP_ISNAN, FP_ISNEGATIVE, FP_ISPOSITIVE]:
+        check_arity(expr, 1)
+        fp_args(expr, args, ctxt)
+        return BOOLEAN_TYPE
+    if op == FP_TO_REAL:
+        check_arity(expr, 1)
+        fp_args(expr, args, ctxt)
+        return REAL_TYPE
+
+
+def typecheck_fp_ctor(expr, ctxt):
+    """
+    (fp (_ BitVec 1) (_ BitVec eb) (_ BitVec i) (_ FloatingPoint eb i+1))
+    """
+    check_arity(expr, 3)
+    sign, exponent, significand = bv_args(expr, ctxt, same_width=False)
+    if sign.bitwidth != 1:
+        raise TypeCheckError(expr, expr.subterms[0], BITVECTOR_TYPE(1), sign)
+    return FP_TYPE(exponent.bitwidth, significand.bitwidth + 1)
+
+
+def typecheck_fp_indexed(expr, ctxt, name, indices):
+    """
+    ((_ to_fp eb sb) (_ BitVec m) (_ FloatingPoint eb sb))
+    ((_ to_fp eb sb) RoundingMode (_ FloatingPoint mb nb)
+        (_ FloatingPoint eb sb))
+    ((_ to_fp eb sb) RoundingMode Real (_ FloatingPoint eb sb))
+    ((_ to_fp eb sb) RoundingMode (_ BitVec m) (_ FloatingPoint eb sb))
+    ((_ to_fp_unsigned eb sb) RoundingMode (_ BitVec m)
+        (_ FloatingPoint eb sb))
+    ((_ fp.to_ubv m) RoundingMode (_ FloatingPoint eb sb) (_ BitVec m)),
+        also fp.to_sbv
+    """
+    args = expr.subterms
+    if name in ["fp.to_ubv", "fp.to_sbv"]:
+        check_arity(expr, 2)
+        check_arg(expr, args[0], ROUNDINGMODE_TYPE, ctxt)
+        fp_args(expr, args[1:], ctxt)
+        return BITVECTOR_TYPE(indices[0])
+
+    eb, sb = indices
+    if name == "to_fp" and len(args) == 1:
+        t = typecheck_expr(args[0], ctxt)
+        if t != BITVECTOR_TYPE(eb + sb):
+            raise TypeCheckError(expr, args[0], BITVECTOR_TYPE(eb + sb), t)
+        return FP_TYPE(eb, sb)
+
+    check_arity(expr, 2)
+    check_arg(expr, args[0], ROUNDINGMODE_TYPE, ctxt)
+    t = typecheck_expr(args[1], ctxt)
+    if name == "to_fp_unsigned":
+        allowed = isinstance(t, BITVECTOR_TYPE)
+    else:
+        allowed = isinstance(t, (FP_TYPE, BITVECTOR_TYPE)) or \
+            t in [REAL_TYPE, INTEGER_TYPE]
+    if not allowed:
+        raise TypeCheckError(expr, args[1], "FloatingPoint, Real or BitVec",
+                             t)
+    return FP_TYPE(eb, sb)
 
 
 def typecheck_quantifiers(expr, ctxt):
@@ -803,6 +766,8 @@ def typecheck_numeral(expr, ctxt):
         return typecheck_nary_numeral_ret(expr, ctxt)
     if expr.op in [GT, GTE, LT, LTE]:
         return typecheck_comp_ops(expr, ctxt)
+    if expr.op == ABS:
+        return typecheck_nary_int_ret(expr, ctxt)
 
 
 def typecheck_int_ops(expr, ctxt):
@@ -829,14 +794,15 @@ def typecheck_let_expression(expr, ctxt):
     # Bindings must not leak into the surrounding scope: a let-bound
     # variable can shadow a global (or an enclosing binder) of the same
     # name, so we save whatever was there before and restore it once the
-    # let body has been checked.
+    # let body has been checked. The bound terms are checked in the
+    # enclosing scope (let is parallel).
+    types = [typecheck_expr(term, ctxt) for term in expr.let_terms]
     saved = []
     for i in range(n_var_binders):
         var = expr.var_binders[i]
-        t = typecheck_expr(expr.let_terms[i], ctxt)
         had_prev = var in ctxt.locals
         prev = ctxt.locals.get(var)
-        ctxt.add_to_locals(var, t)
+        ctxt.add_to_locals(var, types[i])
         saved.append((var, had_prev, prev))
     result = typecheck_expr(expr.subterms[0], ctxt)
     for var, had_prev, prev in reversed(saved):
@@ -851,119 +817,130 @@ def typecheck_label(expr, ctxt):
     return typecheck_expr(expr.subterms[0], ctxt)
 
 
-def typecheck_to_fp_unsigned(expr, ctxt):
+def typecheck_app(expr, ctxt, name, ftype):
     """
-    ((_ to_fp_unsigned eb sb) RoundingMode (_ BitVec m) (_ FloatingPoint eb sb))
-    """  # noqa: 501
-    eb, sb = int(expr.op.split(" ")[2]), int(expr.op.split(" ")[3].strip(")"))
-    t1 = typecheck_expr(expr.subterms[0], ctxt)
-    t2 = typecheck_expr(expr.subterms[1], ctxt)
-    if t1 != ROUNDINGMODE_TYPE or not isinstance(t2, BITVECTOR_TYPE):
-        raise TypeCheckError(
-            expr, expr.subterms, [ROUNDINGMODE_TYPE, BITVECTOR_TYPE], [t1, t2]
-        )
-    return FP_TYPE(eb, sb)
-
-
-def typecheck_to_fp(expr, ctxt):
+    Application of a declared or defined function, or of a datatype
+    constructor, selector or tester: (f t1 ... tn) with f of type
+    (T1 ... Tn) T.
     """
-    ((_ to_fp eb sb) (_ BitVec m) (_ FloatingPoint eb sb))
-    ((_ to_fp eb sb) RoundingMode (_ FloatingPoint mb nb) (_ FloatingPoint eb sb))
-    ((_ to_fp eb sb) RoundingMode Real (_ FloatingPoint eb sb))
-    ((_ to_fp eb sb) RoundingMode (_ BitVec m) (_ FloatingPoint eb sb))
-    """  # noqa: E501
-    eb, sb = int(expr.op.split(" ")[2]), int(expr.op.split(" ")[3].strip(")"))
-    if len(expr.subterms) == 1:
-        bv = expr.subterms[0]
-        t = typecheck_expr(expr.subterms[0], ctxt)
-        if not isinstance(t, BITVECTOR_TYPE):
-            raise TypeCheckError(expr, bv, BITVECTOR_TYPE, t)
-
-    if len(expr.subterms) == 2:
-        t1 = typecheck_expr(expr.subterms[0], ctxt)
-        t2 = typecheck_expr(expr.subterms[1], ctxt)
-        if t1 != ROUNDINGMODE_TYPE or not (
-            isinstance(t2, FP_TYPE)
-            or t2 == REAL_TYPE
-            or isinstance(t2, BITVECTOR_TYPE)
-        ):
-            raise TypeCheckError(
-                expr,
-                expr.subterms,
-                [ROUNDINGMODE_TYPE, [FP_TYPE, REAL_TYPE, BITVECTOR_TYPE]],
-                [t1, t2],
-            )
-
-    return FP_TYPE(eb, sb)
+    if len(expr.subterms) != len(ftype.arg_types):
+        raise TypeCheckError(expr, expr, "%d arguments for %s" % (
+            len(ftype.arg_types), name), "%d arguments" % len(expr.subterms))
+    for term, arg_type in zip(expr.subterms, ftype.arg_types):
+        check_arg(expr, term, arg_type, ctxt)
+    return ftype.ret_type
 
 
-def annotate(f, expr, ctxt):
+def typecheck_as(expr, ctxt, tree):
+    """
+    Application of a qualified identifier, e.g.
+    ((as const (Array X Y)) Y (Array X Y))
+    """
+    typ = sort2type(sexpr2str(tree[2]))
+    if tree[1] == "const":
+        check_arity(expr, 1)
+        if not isinstance(typ, ARRAY_TYPE):
+            raise TypeCheckError(expr, expr, "(Array X Y)", typ)
+        check_arg(expr, expr.subterms[0], typ.payload_type, ctxt)
+        return typ
+    for term in expr.subterms:
+        typecheck_expr(term, ctxt)
+    return typ
+
+
+def typecheck_indexed(expr, ctxt, op):
+    """
+    Application of an indexed operator, e.g. ((_ extract 7 4) x).
+    :returns: its type, None if the operator is unknown
+    """
+    tree = parse_sexpr(op)
+    if tree[0] == "as" and len(tree) == 3:
+        return typecheck_as(expr, ctxt, tree)
+    if tree[0] != "_" or len(tree) < 3:
+        return None
+    name = tree[1]
+    try:
+        indices = [int(index) for index in tree[2:]]
+    except ValueError:
+        return None
+    if name in BV_INDEXED_OPS:
+        return typecheck_bv_indexed(expr, ctxt, name, indices)
+    if name in FP_INDEXED_OPS:
+        return typecheck_fp_indexed(expr, ctxt, name, indices)
+    if name in ["re.loop", "re.^"]:
+        # ((_ re.loop i j) RegLan RegLan), ((_ re.^ n) RegLan RegLan)
+        check_arity(expr, 1)
+        check_arg(expr, expr.subterms[0], REGEXP_TYPE, ctxt)
+        return REGEXP_TYPE
+    return None
+
+
+def annotate(f, expr, ctxt, *args):
     """
     f: function argument
     expr: expression
     ctxt: context
     :returns: type of expr
     """
-    t = f(expr, ctxt)
+    t = f(expr, ctxt, *args)
+    if t is None:
+        raise UnknownOperator(expr.op)
     expr.type = t
     return t
 
 
+def lookup(name, ctxt):
+    if name in ctxt.locals:
+        return ctxt.locals[name]
+    return ctxt.globals.get(name)
+
+
 def typecheck_expr(expr, ctxt=Context({}, {})):
+    if isinstance(expr, str):
+        # Symbols that the parser could not resolve
+        raise UnknownOperator(expr)
     if expr.is_const:
         return expr.type
     if expr.is_var or expr.is_indexed_id:
-        if expr.name in ctxt.locals:
-            expr.type = ctxt.locals[expr.name]
-            return ctxt.locals[expr.name]
-        elif expr.name in ctxt.globals:
-            expr.type = ctxt.globals[expr.name]
-            return ctxt.globals[expr.name]
-        return UNKNOWN
+        typ = lookup(expr.name, ctxt)
+        if typ is None:
+            return UNKNOWN
+        expr.type = typ
+        return typ
     elif expr.op:
-        if expr.op in CORE_OPS:
+        op = expr.op
+        if isinstance(op, Term):
+            # The parser resolves declared function symbols to variables.
+            op = op.name
+        ftype = lookup(op, ctxt)
+        if isinstance(ftype, FUNCTION_TYPE):
+            return annotate(typecheck_app, expr, ctxt, op, ftype)
+        if not isinstance(expr.op, str):
+            raise UnknownOperator(op)
+
+        if op in CORE_OPS:
             return annotate(typecheck_core, expr, ctxt)
-        if expr.op in NUMERICAL_OPS:
+        if op in NUMERICAL_OPS:
             return annotate(typecheck_numeral, expr, ctxt)
-        if expr.op in INT_OPS:
+        if op in INT_OPS:
             return annotate(typecheck_int_ops, expr, ctxt)
-        if expr.op in REAL_OPS:
+        if op in REAL_OPS:
             return annotate(typecheck_real_ops, expr, ctxt)
-        if expr.op in REAL_INTS:
+        if op in REAL_INTS:
             return annotate(typecheck_real_ints_ops, expr, ctxt)
-        if expr.op in STRING_OPS:
+        if op in STRING_OPS:
             return annotate(typecheck_string_ops, expr, ctxt)
-        if expr.op in ARRAY_OPS:
+        if op in ARRAY_OPS:
             return annotate(typecheck_array_ops, expr, ctxt)
-        if expr.op in FP_OPS:
+        if op in FP_OPS:
             return annotate(typecheck_fp_ops, expr, ctxt)
-        if expr.op in BV_OPS:
+        if op == FP_CTOR:
+            return annotate(typecheck_fp_ctor, expr, ctxt)
+        if op in BV_OPS:
             return annotate(typecheck_bv_ops, expr, ctxt)
-
-        # FP infix ops
-        # TO_FP_UNSIGNED ("to_fp_unsigned") must be checked before TO_FP
-        # ("to_fp"), since the latter is a substring of the former and
-        # would otherwise swallow every to_fp_unsigned operator.
-        if TO_FP_UNSIGNED in expr.op:
-            return annotate(typecheck_to_fp_unsigned, expr, ctxt)
-
-        if TO_FP in expr.op:
-            return annotate(typecheck_to_fp, expr, ctxt)
-
-        # BV infix ops
-        if (
-            BV_EXTRACT in expr.op
-            or BV_ZERO_EXTEND in expr.op
-            or BV_SIGN_EXTEND in expr.op
-        ):
-            return annotate(typecheck_bv_unary, expr, ctxt)
-
-        key = expr.op.__str__()
-        if key in ctxt.globals:
-            t = ctxt.globals[key].split(" ")[-1]
-            expr.type = t
-            return t
-        raise UnknownOperator(expr.op)
+        if op.startswith("("):
+            return annotate(typecheck_indexed, expr, ctxt, op)
+        raise UnknownOperator(op)
 
     elif expr.quantifier:
         return annotate(typecheck_quantifiers, expr, ctxt)
