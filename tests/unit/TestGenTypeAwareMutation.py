@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import copy
+import random
 import unittest
 import sys
 
@@ -89,6 +91,50 @@ class GenTypeAwareMutationTestCase(unittest.TestCase):
             self.assertIsNotNone(replacee)
             self.assertTrue(replacee.is_const)
             self.assertEqual(replacee.__str__(), op_name)
+
+    def test_all_sorts(self):
+        # Terms of any sort can be mutated, not only Bool, Int, Real,
+        # String, RegLan and RoundingMode. Each sort, e.g. each bit-vector
+        # width, is a type of its own, so mutants stay well-typed.
+        formulas = [
+            "(declare-fun x () (_ BitVec 8))(declare-fun y () (_ BitVec 8))"
+            "(declare-fun z () (_ BitVec 4))(assert (bvult (bvadd x y) x))"
+            "(assert (= ((_ extract 3 0) x) (bvor z #x1)))",
+            "(declare-fun a () Float32)(declare-fun b () Float32)"
+            "(assert (fp.lt (fp.add RNE a b) (fp.mul RTZ a a)))",
+            "(declare-fun m () (Array Int Int))(declare-fun i () Int)"
+            "(assert (= (select (store m i 1) 0) (select m (+ i 1))))",
+            "(declare-datatypes ((L 0)) (((nil) (cons (hd Int) (tl L)))))"
+            "(declare-fun l () L)(assert (= (tl (cons 1 l)) nil))"
+            "(assert (> (hd l) (hd (tl l))))",
+            "(declare-sort U 0)(declare-fun f (U) U)(declare-fun u () U)"
+            "(assert (distinct (f u) (f (f u)) u))",
+        ]
+        random.seed(0)
+        args = Mockargs()
+        for formula in formulas:
+            script, glob = parse_str(formula, silent=False)
+            typecheck(script, glob)
+            unique_expr = get_unique_subterms(copy.deepcopy(script))
+            gen = GenTypeAwareMutation(script, args, unique_expr)
+            mutated = 0
+            for _ in range(30):
+                mutant, success, _ = gen.mutate()
+                if not success:
+                    continue
+                mutated += 1
+                reparsed, glob2 = parse_str(mutant.__str__(), silent=False)
+                self.assertIsNotNone(reparsed, mutant.__str__())
+                typecheck(reparsed, glob2)  # raises if ill-typed
+            self.assertGreater(mutated, 0, formula)
+
+        script, glob = parse_str(formulas[0])
+        typecheck(script, glob)
+        unique_expr = get_unique_subterms(script)
+        # x, y, (bvadd x y)
+        self.assertEqual(len(unique_expr["(_ BitVec 8)"]), 3)
+        # ((_ extract 3 0) x), z, #x1, (bvor z #x1)
+        self.assertEqual(len(unique_expr["(_ BitVec 4)"]), 4)
 
 
 if __name__ == "__main__":

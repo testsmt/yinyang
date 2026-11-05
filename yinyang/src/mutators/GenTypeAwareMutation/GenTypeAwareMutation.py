@@ -27,7 +27,7 @@ from yinyang.src.mutators.GenTypeAwareMutation.Operator import (
     Operator, handle_parametric_op, handle_non_parametric_op
 )
 from yinyang.src.mutators.GenTypeAwareMutation.Util import (
-    type2num, get_all_subterms, local_compatible
+    get_all_subterms, local_compatible
 )
 from yinyang.src.parsing.Ast import Const, Expr
 from yinyang.src.parsing.Types import ALL
@@ -79,8 +79,7 @@ class GenTypeAwareMutation(Mutator):
         for t in set(types):
             if t == ALL:
                 continue
-            type_id = type2num[t]
-            if len(self.unique_expr[type_id]) == 0:
+            if not self.unique_expr.get(t):
                 return False
         return True
 
@@ -124,13 +123,11 @@ class GenTypeAwareMutation(Mutator):
         op = random.choice(candidate_ops)
         args = []
         if op.name == "id":
-            typ_id = type2num[term.type]
-            if self.unique_expr[typ_id]:
-                choices = [
-                    termPrime
-                    for termPrime in self.unique_expr[typ_id]
-                    if termPrime != term and local_compatible(term, termPrime)
-                ]
+            choices = [
+                termPrime
+                for termPrime in self.unique_expr.get(term.type, [])
+                if termPrime != term and local_compatible(term, termPrime)
+            ]
 
             if len(choices) == 0:
                 return None
@@ -138,8 +135,7 @@ class GenTypeAwareMutation(Mutator):
             return random.choice(choices)
         else:
             for t in op.arg_types:
-                typ_id = type2num[t]
-                choices = [tPrime for tPrime in self.unique_expr[typ_id]]
+                choices = self.unique_expr.get(t, [])
 
                 if len(choices) == 0:
                     return None
