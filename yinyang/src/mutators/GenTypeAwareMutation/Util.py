@@ -23,20 +23,7 @@
 import copy
 
 from yinyang.src.parsing.Ast import Term
-from yinyang.src.parsing.Types import (
-    BOOLEAN_TYPE, REAL_TYPE, INTEGER_TYPE, ROUNDINGMODE_TYPE,
-    STRING_TYPE, REGEXP_TYPE
-)
-
-type2num = {
-    "Bool": 0,
-    "Real": 1,
-    "Int": 2,
-    "RoundingMode": 3,
-    "String": 4,
-    "RegLan": 5,
-    "Unknown": 6,
-}
+from yinyang.src.parsing.Types import UNKNOWN
 
 
 def get_subterms(expr):
@@ -86,42 +73,21 @@ def get_all_subterms(formula):
 
 def get_unique_subterms(formula):
     """
-    Get all the unique expressions within a formula.
-    :returns: unique_expr list of lists of unique expression for
-     different types
+    Get all the unique expressions within a formula, grouped by type.
+    Any type is supported (Bool, Int, (_ BitVec 8), (Array Int Int), user
+    sorts, ...); expressions of unknown type are left out.
+    :returns: unique_expr dict mapping each type to the list of unique
+              expressions of that type, in order of first occurrence
     """
     av_expr, expr_type = get_all_subterms(formula)
 
-    # Below index indicates what type of expressions are stored in each list
-    # 0: Bool, 1: Real, 2: Int, 3: RoundingMode, 4: String, 5: Regex, 6: Ukn
-    unique_expr = [[], [], [], [], [], []]
-    for i in range(len(expr_type)):
-        if expr_type[i] == BOOLEAN_TYPE:
-            unique_expr[0].append(copy.deepcopy(av_expr[i]))
-        elif expr_type[i] == REAL_TYPE:
-            unique_expr[1].append(copy.deepcopy(av_expr[i]))
-        elif expr_type[i] == INTEGER_TYPE:
-            unique_expr[2].append(copy.deepcopy(av_expr[i]))
-        elif expr_type[i] == ROUNDINGMODE_TYPE:
-            unique_expr[3].append(copy.deepcopy(av_expr[i]))
-        elif expr_type[i] == STRING_TYPE:
-            unique_expr[4].append(copy.deepcopy(av_expr[i]))
-        elif expr_type[i] == REGEXP_TYPE:
-            unique_expr[5].append(copy.deepcopy(av_expr[i]))
-
-    for i in range(6):
-        if unique_expr[i]:
-            temp = []
-            temp.append(unique_expr[i][0])
-            for j in range(1, len(unique_expr[i])):
-                flag = 0
-                for exp in temp:
-                    if unique_expr[i][j] == exp:
-                        flag = 1
-                        pass
-                if flag == 0:
-                    temp.append(unique_expr[i][j])
-            unique_expr[i] = temp
+    unique_expr = {}
+    for expr, typ in zip(av_expr, expr_type):
+        if typ is None or typ == UNKNOWN:
+            continue
+        exprs = unique_expr.setdefault(typ, [])
+        if not any(expr == e for e in exprs):
+            exprs.append(copy.deepcopy(expr))
     return unique_expr
 
 

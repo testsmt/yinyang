@@ -225,8 +225,11 @@ class AssertSoft:
         self.attr = attr
 
     def __str__(self):
-        for a in self.attr:
-            attr_s = " " + a[0] + " " + a[1]
+        attr_s = ""
+        for keyword, value in self.attr:
+            attr_s += " " + keyword
+            if value is not None:
+                attr_s += " " + value
         return "(assert-soft " + self.term.__str__() + attr_s + ")"
 
 
@@ -706,17 +709,19 @@ class Term:
             return s + ")"
 
         elif self.label:
+            # label: list of attributes (keyword, value or None)
             subs_str = self.__get_subterm_str__()
-            return "(! "\
-                   + subs_str + " "\
-                   + self.label[0] + " " + self.label[1] + ")"
+            attrs = ""
+            for keyword, value in self.label:
+                attrs += " " + keyword
+                if value is not None:
+                    attrs += " " + value
+            return "(! " + subs_str + attrs + ")"
         else:
             subs_str = self.__get_subterm_str__()
             return "(" + self.op.__str__() + " " + subs_str + ")"
 
     def __repr__(self):
-        if self.is_const:
-            return self.name
-
         if self.is_var:
-            return self.name + ":" + self.type
+            return self.name + ":" + str(self.type)
+        return self.__str__()

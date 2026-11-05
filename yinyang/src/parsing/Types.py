@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import re
+
 from ffg.gen.gen_configuration import (
     BOOLEAN_OPTION,
     REAL_OPTION,
@@ -61,93 +63,147 @@ def type2ffg(typ):
         return BITVECTOR_OPTION
     else:
         # If the type is not supported by ffg.
-        return None    
+        return None
 
 
-def _split_toplevel(s):
-    """Split s on spaces, ignoring spaces nested inside parentheses."""
-    parts = []
-    depth = 0
-    current = ""
-    for ch in s:
-        if ch == "(":
-            depth += 1
-            current += ch
-        elif ch == ")":
-            depth -= 1
-            current += ch
-        elif ch == " " and depth == 0:
-            if current:
-                parts.append(current)
-            current = ""
+def parse_sexpr(s):
+    """
+    Parse an s-expression such as a sort, e.g. "(Array Int (_ BitVec 8))",
+    into nested lists of tokens: ["Array", "Int", ["_", "BitVec", "8"]].
+    Quoted symbols (|...|) are kept as one token.
+
+    :raises ValueError: if the parentheses are not balanced
+    """
+    tokens = re.findall(r"\|[^|]*\||[()]|[^\s()|]+", s)
+    stack = [[]]
+    for token in tokens:
+        if token == "(":
+            stack.append([])
+        elif token == ")":
+            if len(stack) == 1:
+                raise ValueError("unbalanced s-expression: " + s)
+            closed = stack.pop()
+            stack[-1].append(closed)
         else:
-            current += ch
-    if current:
-        parts.append(current)
-    return parts
+            stack[-1].append(token)
+    if len(stack) != 1 or len(stack[0]) != 1:
+        raise ValueError("not a single s-expression: " + s)
+    return stack[0][0]
+
+
+def sexpr2str(tree):
+    if isinstance(tree, list):
+        return "(" + " ".join(sexpr2str(t) for t in tree) + ")"
+    return tree
+
+
+# Sort aliases of the FloatingPoint theory and their (eb, sb).
+FP_SORT_ALIASES = {
+    "Float16": (5, 11),
+    "Float32": (8, 24),
+    "Float64": (11, 53),
+    "Float128": (15, 113),
+}
+
+
+def _tree2type(tree):
+    if isinstance(tree, str):
+        if tree in FP_SORT_ALIASES:
+            return FP_TYPE(*FP_SORT_ALIASES[tree])
+        return tree
+    if len(tree) == 3 and tree[:2] == ["_", "BitVec"]:
+        return BITVECTOR_TYPE(int(tree[2]))
+    if len(tree) == 4 and tree[:2] == ["_", "FloatingPoint"]:
+        return FP_TYPE(int(tree[2]), int(tree[3]))
+    if len(tree) == 3 and tree[0] == "Array":
+        return ARRAY_TYPE(_tree2type(tree[1]), _tree2type(tree[2]))
+    # Other parametric sorts, e.g. (Seq Int) or user-defined (List Int).
+    return sexpr2str(tree)
 
 
 def sort2type(sort):
-    if isinstance(sort, str) and sort.startswith("(Array ") \
-            and sort.endswith(")"):
-        args = _split_toplevel(sort[len("(Array "):-1])
-        if len(args) == 2:
-            return ARRAY_TYPE(sort2type(args[0]), sort2type(args[1]))
-
-    if "FloatingPoint" in sort:
-        eb = int(sort.split(" ")[2])
-        sb = int(sort.split(" ")[3][:-1])
-        return FP_TYPE(eb, sb)
-
-    if "BitVec" in sort:
-        bitwith = int(sort.split(" ")[2][:-1])
-        return BITVECTOR_TYPE(bitwith)
-    return sort
+    """
+    Convert a sort, e.g. "(_ BitVec 8)", "Float32" or "(Array Int Real)",
+    into a type: BITVECTOR_TYPE, FP_TYPE, ARRAY_TYPE, or the sort string
+    itself for all other sorts (Int, Bool, user-defined sorts, ...).
+    """
+    if not isinstance(sort, str):
+        return sort
+    try:
+        tree = parse_sexpr(sort)
+        return _tree2type(tree)
+    except (ValueError, IndexError):
+        return sort
 
 
-class ARRAY_TYPE:
+class _SortType:
+    """
+    Base class of the structured types. Types are compared and hashed by
+    their SMT-LIB sort, and compare equal to the sort string, e.g.
+    BITVECTOR_TYPE(8) == "(_ BitVec 8)".
+    """
+
+    def __eq__(self, other):
+        if isinstance(other, (_SortType, str)):
+            return str(self) == str(other)
+        return NotImplemented
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return result
+        return not result
+
+    def __hash__(self):
+        return hash(str(self))
+
+    def __repr__(self):
+        return str(self)
+
+
+class ARRAY_TYPE(_SortType):
     def __init__(self, index_type, payload_type):
         self.index_type = index_type
         self.payload_type = payload_type
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return (
-                self.index_type == other.index_type
-                and self.payload_type == other.payload_type
-            )
+    def __str__(self):
+        # (Array index_type payload_type)
+        return "(Array %s %s)" % (self.index_type, self.payload_type)
 
 
-class BITVECTOR_TYPE:
+class BITVECTOR_TYPE(_SortType):
     def __init__(self, bitwidth):
         self.bitwidth = bitwidth
-
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.bitwidth == other.bitwidth
-
-        if isinstance(other, str):
-            return self.__str__() == other
 
     def __str__(self):
         #  (_ BitVec bitwidth)
         return "(_ BitVec " + str(self.bitwidth) + ")"
 
 
-class FP_TYPE:
+class FP_TYPE(_SortType):
     def __init__(self, eb, sb):
         self.eb = eb
         self.sb = sb
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.eb == other.eb and self.sb == other.sb
-        if isinstance(other, str):
-            return self.__str__() == other
-
     def __str__(self):
         # (_ FloatingPoint eb sb)
         return "(_ FloatingPoint " + str(self.eb) + " " + str(self.sb) + ")"
+
+
+class FUNCTION_TYPE(_SortType):
+    """
+    Type of a function symbol: declared and defined functions, datatype
+    constructors, selectors and testers.
+    """
+
+    def __init__(self, arg_types, ret_type):
+        self.arg_types = list(arg_types)
+        self.ret_type = ret_type
+
+    def __str__(self):
+        # (arg_type1 ... arg_typen) ret_type
+        return "(%s) %s" % (" ".join(str(t) for t in self.arg_types),
+                            self.ret_type)
 
 
 # Core ops
@@ -262,6 +318,7 @@ STRING_OPS = [
     RE_OPT,
     RE_RANGE,
     STR_IS_DIGIT,
+    STR_TO_CODE,
     STR_TO_INT,
     STR_FROM_CODE,
     STR_FROM_INT,
@@ -279,53 +336,48 @@ BVNEG = "bvneg"
 BVAND = "bvand"
 BVOR = "bvor"
 BVXOR = "bvxor"
+BVNAND = "bvnand"
+BVNOR = "bvnor"
+BVXNOR = "bvxnor"
 BVADD = "bvadd"
 BVSUB = "bvsub"
 BVMUL = "bvmul"
 BVUDIV = "bvudiv"
 BVUREM = "bvurem"
+BVSDIV = "bvsdiv"
+BVSREM = "bvsrem"
+BVSMOD = "bvsmod"
 BVSHL = "bvshl"
 BVLSHR = "bvlshr"
 BVASHR = "bvashr"
+BVCOMP = "bvcomp"
 BVULT = "bvult"
 BVULE = "bvule"
+BVUGT = "bvugt"
+BVUGE = "bvuge"
 BVSLT = "bvslt"
+BVSLE = "bvsle"
 BVSGT = "bvsgt"
-BVSDIV = "bvsdiv"
+BVSGE = "bvsge"
 
-
-BV_OPS = [
-    BV_CONCAT,
-    BVNOT,
-    BVNEG,
-    BVAND,
-    BVOR,
-    BVXOR,
-    BVADD,
-    BVSUB,
-    BVMUL,
-    BVUDIV,
-    BVUREM,
-    BVSHL,
-    BVASHR,
-    BVLSHR,
-    BVULT,
-    BVULE,
-    BVSLT,
-    BVSGT,
-    BVSDIV,
+# (op (_ BitVec m) (_ BitVec m) (_ BitVec m))
+BV_BINARY_OPS = [
+    BVAND, BVOR, BVXOR, BVNAND, BVNOR, BVXNOR, BVADD, BVSUB, BVMUL, BVUDIV,
+    BVUREM, BVSDIV, BVSREM, BVSMOD, BVSHL, BVLSHR, BVASHR,
 ]
 
-"""
-All function symbols with declaration of the form
+# (op (_ BitVec m) (_ BitVec m) Bool)
+BV_COMPARISON_OPS = [
+    BVULT, BVULE, BVUGT, BVUGE, BVSLT, BVSLE, BVSGT, BVSGE,
+]
 
-  ((_ extract i j) (_ BitVec m) (_ BitVec n))
+BV_OPS = [BV_CONCAT, BVNOT, BVNEG, BVCOMP] + BV_BINARY_OPS + BV_COMPARISON_OPS
 
-where
-- i, j, m, n are numerals
-- m > i >= j >= 0,
-- n = i - j + 1
-"""
+# Indexed ops ((_ op i ...) (_ BitVec m) ...), by their name
+BV_INDEXED_OPS = [
+    "extract", "zero_extend", "sign_extend", "repeat", "rotate_left",
+    "rotate_right",
+]
 
 BV_EXTRACT = "(_ extract"
 BV_ZERO_EXTEND = "(_ zero_extend"
@@ -384,9 +436,22 @@ FP_OPS = [
     FP_ISPOSITIVE,
 ]
 
-# FP infix ops
+FP_TO_REAL = "fp.to_real"
+FP_CTOR = "fp"
+FP_OPS.append(FP_TO_REAL)
+
+# Indexed FP ops ((_ op i ...) ...), by their name
 TO_FP = "to_fp"
 TO_FP_UNSIGNED = "to_fp_unsigned"
+FP_INDEXED_OPS = [TO_FP, TO_FP_UNSIGNED, "fp.to_ubv", "fp.to_sbv"]
+
+# Rounding modes and indexed FP constants such as (_ +zero 8 24)
+ROUNDING_MODES = [
+    "RNE", "RNA", "RTP", "RTN", "RTZ", "roundNearestTiesToEven",
+    "roundNearestTiesToAway", "roundTowardPositive", "roundTowardNegative",
+    "roundTowardZero",
+]
+FP_INDEXED_CONSTANTS = ["+zero", "-zero", "+oo", "-oo", "NaN"]
 
 # Quantifiers
 EXISTS = "exists"
