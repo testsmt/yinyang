@@ -111,6 +111,13 @@ def add_common_args(parser, rootpath, current_dir):
         choices=["widen", "skip", "strip"],
         default="widen",
     )
+    parser.add_argument(
+        "--seed",
+        metavar="<N>",
+        type=int,
+        default=None,
+        help="random seed for reproducible runs",
+    )
 
 
 def add_opfuzz_args(parser, rootpath, current_dir):
@@ -168,13 +175,6 @@ def add_typefuzz_args(parser, rootpath, current_dir):
         "--config",
         metavar="path_to_file",
         default=rootpath + "/yinyang/config/typefuzz_config.txt",
-    )
-    parser.add_argument(
-        "--seed",
-        metavar="<N>",
-        type=int,
-        default=None,
-        help="random seed for reproducible runs",
     )
 
 

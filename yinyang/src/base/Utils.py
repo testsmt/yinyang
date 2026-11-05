@@ -52,8 +52,16 @@ def load_config(name):
     return getattr(Config, name)
 
 
+# File names are drawn from their own generator, so that they neither
+# consume nor depend on the random state seeded by --seed: runs with the same
+# --seed generate the same mutants but do not overwrite each other's files.
+_name_random = random.Random()
+
+
 def random_string(length=5):
-    return "".join(random.sample(string.ascii_letters + string.digits, length))
+    return "".join(
+        _name_random.sample(string.ascii_letters + string.digits, length)
+    )
 
 
 def deepcopy_safe(obj, stack_size=256 * 1024 * 1024):

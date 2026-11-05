@@ -20,7 +20,7 @@ yinyang is a mutation-based fuzzer, i.e. it mutates a set of seed formulas using
     $ typefuzz "z3 model_validate=true;cvc4 --check-models -m -i -q" benchmarks 
 
 
-yinyang will by default randomly select formulas from the folder ``./benchmarks``. By default SMT-LIB files larger than 20k will be ignored.  yinyang will generate 300 mutants per seed formula and will run in an infinite loop. You can use the shortcut ``CTRL+C`` to terminate yinyang manually. If a bug has been found, the bug trigger is stored in ``./bugs``.
+yinyang will by default randomly select formulas from the folder ``./benchmarks``. By default SMT-LIB files of 100 KB or larger will be ignored (see ``-L``).  yinyang will generate 300 mutants per seed formula and will run in an infinite loop. You can use the shortcut ``CTRL+C`` to terminate yinyang manually. If a bug has been found, the bug trigger is stored in ``./bugs``.
 
 .. note::
    To catch invalid model bugs, you have to supply options to enable model validation in ``<solver_clis>``. Also consider that you may need to supply options to enable model production and incremental mode to command lines in ``<solver_clis>``.

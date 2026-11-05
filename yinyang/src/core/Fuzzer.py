@@ -65,6 +65,7 @@ from yinyang.src.core.Logger import (
     log_solver_timeout,
     log_soundness_trigger,
     log_invalid_mutant,
+    log_skip_oversized_seed,
     log_skip_seed_mutator,
     log_skip_seed_test,
     log_skip_out_of_logic,
@@ -101,6 +102,8 @@ class Fuzzer:
         self.current_logic = None  # set-logic emitted for the current mutant
 
         init_logging(strategy, self.args.quiet, self.name, args)
+        if args.seed is not None:
+            random.seed(args.seed)
 
     def extract_header_comments(self, seed_file):
         """
@@ -125,7 +128,10 @@ class Fuzzer:
     def process_seed(self, seed):
         if not admissible_seed_size(seed, self.args):
             self.statistic.invalid_seeds += 1
-            logging.debug("Skip invalid seed: exceeds max file size")
+            self.statistic.oversized_seeds += 1
+            log_skip_oversized_seed(
+                seed, pathlib.Path(seed).stat().st_size, self.args
+            )
             return None, None
 
         self.currentseeds.append(pathlib.Path(seed).stem)
@@ -502,29 +508,32 @@ class Fuzzer:
                         return (False, scratchfile)  # Stop testing.
         return (True, scratchfile)  # Continue to next seed.
 
-    def report(self, script, bugtype, cli, stdout, stderr):
-        plain_cli = plain(cli)
-        # format: <solver><{crash,wrong,invalid_model}><seed>.<random-str>.smt2
-        report = "%s/%s-%s-%s-%s.smt2" % (
+    def write_bug_trigger(self, script, bugtype, cli):
+        """
+        Write the bug trigger to the bug folder. The .smt2 file and the
+        .output file written by the caller share one name:
+        <bugtype>-<solver>-<seeds>-<random-str>.{smt2,output}
+
+        :returns:   (path of the .smt2 file, path of the .output file)
+        """
+        base = "%s/%s-%s-%s-%s" % (
             self.args.bugsfolder,
             bugtype,
-            plain_cli,
+            plain(cli),
             escape("-".join(self.currentseeds)),
             random_string(),
         )
+        report = base + ".smt2"
         try:
             with open(report, "w") as report_writer:
                 report_writer.write(self.script_str(script))
         except Exception:
             logging.error("error: couldn't copy scratchfile to bugfolder.")
             exit(ERR_EXHAUSTED_DISK)
-        logpath = "%s/%s-%s-%s-%s.output" % (
-            self.args.bugsfolder,
-            bugtype,
-            plain_cli,
-            escape("-".join(self.currentseeds)),
-            random_string(),
-        )
+        return report, base + ".output"
+
+    def report(self, script, bugtype, cli, stdout, stderr):
+        report, logpath = self.write_bug_trigger(script, bugtype, cli)
         with open(logpath, "w") as log:
             log.write("command: " + cli + "\n")
             log.write("stderr:\n")
@@ -544,29 +553,7 @@ class Fuzzer:
         sol_stdout,
         sol_stderr,
     ):
-        plain_cli = plain(sol_cli)
-        # format: <solver><{crash,wrong,invalid_model}><seed>.<random-str>.smt2
-        report = "%s/%s-%s-%s-%s.smt2" % (
-            self.args.bugsfolder,
-            bugtype,
-            plain_cli,
-            escape("-".join(self.currentseeds)),
-            random_string(),
-        )
-        try:
-            with open(report, "w") as report_writer:
-                report_writer.write(self.script_str(script))
-        except Exception:
-            logging.error("error: couldn't copy scratchfile to bugfolder.")
-            exit(ERR_EXHAUSTED_DISK)
-
-        logpath = "%s/%s-%s-%s-%s.output" % (
-            self.args.bugsfolder,
-            bugtype,
-            plain_cli,
-            escape("-".join(self.currentseeds)),
-            random_string(),
-        )
+        report, logpath = self.write_bug_trigger(script, bugtype, sol_cli)
         with open(logpath, "w") as log:
             log.write("*** REFERENCE \n")
             log.write("command: " + ref_cli + "\n")

@@ -29,6 +29,7 @@ class Statistic:
         self.starttime = time.time()
         self.total_seeds = 0
         self.invalid_seeds = 0
+        self.oversized_seeds = 0  # included in invalid_seeds
         self.total_generations = 0
         self.unsuccessful_generations = 0
         self.out_of_logic = 0
@@ -69,9 +70,15 @@ class Statistic:
     def printsum(self):
         valid_seeds = self.total_seeds - self.invalid_seeds
         num_bugs = self.crashes + self.soundness
+        oversized = ""
+        if self.oversized_seeds:
+            oversized = " (%d over the file size limit)" % (
+                self.oversized_seeds
+            )
         summary = (
             "\b\b%d seeds processed, \
-%d valid, %d invalid \n%d bug triggers found"
-            % (self.total_seeds, valid_seeds, self.invalid_seeds, num_bugs)
+%d valid, %d invalid%s \n%d bug triggers found"
+            % (self.total_seeds, valid_seeds, self.invalid_seeds, oversized,
+               num_bugs)
         )
         print(summary)

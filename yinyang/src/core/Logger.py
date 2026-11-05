@@ -156,6 +156,13 @@ def log_skip_seed_mutator(args, i):
     )
 
 
+def log_skip_oversized_seed(seed, size, args):
+    logging.info(
+        "Skip seed " + seed + ": " + str(size) + " bytes, the file size"
+        " limit is " + str(args.file_size_limit) + " bytes (-L)"
+    )
+
+
 def log_skip_out_of_logic(args, i, logic):
     logging.debug(
         str(i)
