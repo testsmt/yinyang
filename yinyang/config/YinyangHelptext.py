@@ -132,8 +132,11 @@ options:
             temp folder to dump mutants. (default: ./scratch)
     -c <file>, --config <file>
             set custom fusion function file
-    -L <bytes>, --limit <bytes>
-            file size limit on seed formula in bytes (default: 100000)
+    -L <bytes>, --file-size-limit <bytes>
+            skip seeds of this size or larger, counted as invalid seeds
+            (default: 100000)
+    --seed <N>
+            random seed for reproducible runs
     -g <ffg>, --generate-functions <ffg>
             dimension of the fusion functions to generate, if greater than 
             0 do not take into account --config option. (default: 0)

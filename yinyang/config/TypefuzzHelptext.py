@@ -121,10 +121,11 @@ options:
     -c <file>, --config <file>
             set custom config file. 
             (default: yinyang/config/typefuzz_config.txt)
+    -L <bytes>, --file-size-limit <bytes>
+            skip seeds of this size or larger, counted as invalid seeds
+            (default: 100000)
     --seed <N>
             random seed for reproducible runs
-    -L <bytes>, --limit <bytes>
-            file size limit on seed formula in bytes (default: 100000)
     --logic-mode <mode>
             how to handle set-logic of the seeds (default: widen)
             widen: keep the seed's logic, widen it if a mutant needs more

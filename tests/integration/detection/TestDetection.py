@@ -26,7 +26,9 @@ Script to test bug detection logic of yinyang (src/core/Fuzzer.py).
 import os
 import sys
 import random
+import shutil
 import subprocess
+import tempfile
 
 python = sys.executable
 script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -422,6 +424,32 @@ duplicate_list = [
     os.system("rm -rf " + solver)
 
 
+def test_bug_files():
+    print("*** (10) Bug trigger and its .output share one name")
+    segfault = os.path.abspath("segfault.py")
+    create_mocksolver_segfault(segfault)
+    sat = os.path.abspath("sat.py")
+    create_mocksolver_msg("sat", sat)
+    unsat = os.path.abspath("unsat.py")
+    create_mocksolver_msg("unsat", unsat)
+    # report() for crashes, report_diff() for soundness bugs
+    for first_config, second_config in [(segfault, segfault), (sat, unsat)]:
+        bugs = tempfile.mkdtemp()
+        status, output, cmd = run_fuzzer(
+            first_config, second_config, FN, OPTS + "-b " + bugs + " "
+        )
+        files = os.listdir(bugs)
+        stems = set(os.path.splitext(fn)[0] for fn in files)
+        if len(files) != 2 or len(stems) != 1:
+            print("[ERROR] Expected one .smt2 and one .output with the same"
+                  " name, got: " + str(sorted(files)))
+            print(cmd)
+            exit(1)
+        shutil.rmtree(bugs)
+    for solver in [segfault, sat, unsat]:
+        os.remove(solver)
+
+
 if __name__ == "__main__":
     # Create empty mock.smt2, set fuzzer opts
     FN = "mock.smt2"
@@ -444,3 +472,5 @@ if __name__ == "__main__":
     test_crash_signals()
     print()
     test_duplicate_list()
+    print()
+    test_bug_files()

@@ -16,7 +16,8 @@ yinyang provides the following options. Please consult ``typefuzz --help`` for a
 * ``-g, --generate-functions`` dimension of the fusion functions to generate, if greater than 0 do not take into account --config option. (default: 0)
 * ``-m, --multiple-variables`` try to fuse at least vars variables, if possible, distributing the variables evenly as possible between the seeds (default: 2)
 * ``-q --quiet`` do not output statistics and other output.
-* ``-fl, --file-size-limit`` file size limit on seed formula in bytes. (default: 20000)
+* ``-L, --file-size-limit`` skip seeds of this size in bytes or larger. They are counted as invalid seeds and listed in the log. (default: 100000)
+* ``--seed`` random seed for reproducible runs. Runs with the same seed, seed files and options generate the same mutants.
 
 
 

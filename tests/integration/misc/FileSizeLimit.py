@@ -61,6 +61,12 @@ opts = "-i 1 -m 1"
 FN = os.path.dirname(os.path.realpath(__file__)) + "/too_large.smt2"
 
 out, cmd = call_fuzzer(first_config, second_config, FN, opts)
-if "1 seeds processed, 0 valid, 1 invalid" not in out:
+expected = [
+    "1 seeds processed, 0 valid, 1 invalid "
+    "(1 over the file size limit)",
+    "Skip seed " + FN + ": " + str(os.path.getsize(FN)) + " bytes, "
+    "the file size limit is 100000 bytes (-L)",
+]
+if any(line not in out for line in expected):
     print(cmd)
     exit(1)
