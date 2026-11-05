@@ -41,6 +41,7 @@ jobs:
         python tests/integration/misc/FileSizeLimit.py
         python tests/integration/misc/NoSolvers.py
         python tests/integration/misc/SeedReproducibility.py
+        python tests/integration/misc/QuietMode.py
 
   # Integration tests with real solvers. Their run time goes into
   # downloading, building and running solvers, which does not depend on the
