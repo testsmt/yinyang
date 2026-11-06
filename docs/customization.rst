@@ -18,6 +18,8 @@ yinyang provides the following options. Please consult ``typefuzz --help`` for a
 * ``-q --quiet`` do not output statistics and other output.
 * ``-L, --file-size-limit`` skip seeds of this size in bytes or larger. They are counted as invalid seeds and listed in the log. (default: 100000)
 * ``--seed`` random seed for reproducible runs. Runs with the same seed, seed files and options generate the same mutants.
+* ``--logic-mode`` how to handle the set-logic command of the seeds: ``widen`` keeps the seed's logic and widens it if a mutant needs more, ``skip`` keeps the seed's logic and skips mutants that need more, ``strip`` removes set-logic from all mutants. (default: widen)
+* ``--div-by-zero`` how to handle mutants that divide by a literal zero, e.g. ``(/ x 0.0)`` or ``(mod x 0)``. Division by zero is undefined in SMT-LIB, and solvers disagree on whether such terms are linear. ``nonlinear`` makes them need a non-linear logic, as in cvc5 (see ``--logic-mode``), ``linear`` treats them as linear, as in z3, ``skip`` skips them. (default: nonlinear)
 
 
 

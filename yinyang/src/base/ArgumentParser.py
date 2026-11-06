@@ -25,6 +25,7 @@ import argparse
 
 from yinyang.src.base.Exitcodes import ERR_USAGE
 from yinyang.src.base.Version import VERSION, COMMIT
+from yinyang.src.parsing.Logic import DIV_BY_ZERO_MODES
 
 from pathlib import Path
 
@@ -110,6 +111,11 @@ def add_common_args(parser, rootpath, current_dir):
         "--logic-mode",
         choices=["widen", "skip", "strip"],
         default="widen",
+    )
+    parser.add_argument(
+        "--div-by-zero",
+        choices=DIV_BY_ZERO_MODES,
+        default="nonlinear",
     )
     parser.add_argument(
         "--seed",

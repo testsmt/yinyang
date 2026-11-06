@@ -37,6 +37,7 @@ from yinyang.src.parsing.Typechecker import typecheck
 from yinyang.src.parsing.Logic import (
     parse_logic,
     infer_logic,
+    divides_by_zero,
     logic_name,
     is_difference_logic,
 )
@@ -69,6 +70,7 @@ from yinyang.src.core.Logger import (
     log_skip_seed_mutator,
     log_skip_seed_test,
     log_skip_out_of_logic,
+    log_skip_div_by_zero,
 )
 from yinyang.src.core.FuzzerUtil import (
     get_seeds,
@@ -236,6 +238,12 @@ class Fuzzer:
                     log_skip_seed_mutator(self.args, i)
                     break  # Continue to next seed.
 
+                if self.args.div_by_zero == "skip" and \
+                        divides_by_zero(mutant):
+                    self.statistic.div_by_zero += 1
+                    log_skip_div_by_zero(self.args, i)
+                    continue  # Go to next iteration.
+
                 logic, in_logic = self.mutant_logic(mutant)
                 if not in_logic:
                     self.statistic.out_of_logic += 1
@@ -279,7 +287,9 @@ class Fuzzer:
         # that imprecisions of infer_logic on the seeds themselves do not
         # cause widening or skipping.
         base = frozenset().union(
-            *bases, *[infer_logic(script) for script in scripts]
+            *bases,
+            *[infer_logic(script, self.args.div_by_zero)
+              for script in scripts]
         )
         self.logic_base = base
         if len(set(names)) == 1 and not is_difference_logic(names[0]):
@@ -299,7 +309,7 @@ class Fuzzer:
         """
         if self.logic_base is None:
             return self.seed_logic, True
-        needed = infer_logic(mutant)
+        needed = infer_logic(mutant, self.args.div_by_zero)
         if needed <= self.logic_base:
             return self.seed_logic, True
         if self.args.logic_mode == "skip":

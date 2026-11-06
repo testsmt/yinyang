@@ -165,6 +165,13 @@ options:
             widen: keep the seed's logic, widen it if a mutant needs more
             skip:  keep the seed's logic, skip mutants that need more
             strip: remove set-logic from all mutants
+    --div-by-zero <mode>
+            how to handle mutants that divide by a literal zero, e.g.
+            (/ x 0.0) or (mod x 0) (default: nonlinear)
+            nonlinear: they need a non-linear logic (as in cvc5), see
+                       --logic-mode
+            linear:    they are linear (as in z3)
+            skip:      skip them
     -k, --keep-mutants  do not delete scratch files
     -n, --no-log    disable logging
     -q, --quiet     do not print statistics and other output
