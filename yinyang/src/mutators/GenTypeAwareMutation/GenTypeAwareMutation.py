@@ -218,8 +218,13 @@ class GenTypeAwareMutation(Mutator):
                 # printed with parentheses around them.
                 return Const(name=op.name, type=op.rtype)
 
+            # Expr makes the arguments point to exp; they are terms of
+            # unique_expr, whose parents are needed for their scope.
+            parents = [arg.parent for arg in args]
             exp = Expr(op=op.name, subterms=args)
             exp.type = op.rtype
+            for arg, parent in zip(args, parents):
+                arg.parent = parent
 
             return exp
         return None

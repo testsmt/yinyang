@@ -24,7 +24,7 @@ import random
 import unittest
 
 from yinyang.src.base.Utils import deepcopy_safe
-from yinyang.src.parsing.Ast import Term
+from yinyang.src.parsing.Ast import Expr, Term
 from yinyang.src.parsing.Parse import parse_str
 from yinyang.src.parsing.Typechecker import typecheck
 from yinyang.src.parsing.Types import INTEGER_TYPE, BOOLEAN_TYPE
@@ -181,6 +181,42 @@ class LocalVariableMutationTestCase(unittest.TestCase):
         for t in get_all_subterms_of(script.assert_cmd[0].term):
             for sub in t.subterms or []:
                 self.assertIs(sub.parent, t)
+
+        # A replacement using the same term twice, e.g. (and t t), gives
+        # two copies: a later mutation of one must not change the other.
+        hole = find(script, "(> 1 0)")
+        arg = find(script, "(= (select c 1) x)")
+        hole.substitute(hole, Expr(op="and", subterms=[arg, arg]))
+        self.assertIsNot(hole.subterms[0], hole.subterms[1])
+        self.assertIs(hole.subterms[1].parent, hole)
+
+    def test_unique_terms(self):
+        # The unique terms are taken from one copy of the formula, which
+        # the mutations do not change: their parents give their scope.
+        for seed in range(20):
+            random.seed(seed)
+            script = self.parse(LOCALS)
+            unique_expr = get_unique_subterms(script)
+            terms = [t for ts in unique_expr.values() for t in ts]
+            texts = [str(t) for t in terms]
+            parents = [t.parent for t in terms]
+            roots = set()
+            for t in terms:
+                self.assertIsNot(t, find(script, str(t)))
+                while t.parent is not None:
+                    t = t.parent
+                roots.add(id(t))
+            self.assertEqual(len(roots), len(script.assert_cmd))
+
+            gen = GenTypeAwareMutation(script, Mockargs(), unique_expr)
+            for _ in range(10):
+                gen.mutate()
+                for cmd in script.assert_cmd:
+                    for t in get_all_subterms_of(cmd.term):
+                        for sub in t.subterms or []:
+                            self.assertIs(sub.parent, t, str(cmd))
+            self.assertEqual([str(t) for t in terms], texts)
+            self.assertEqual([t.parent for t in terms], parents)
 
 
 def get_all_subterms_of(term):

@@ -20,8 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import copy
-
+from yinyang.src.base.Utils import deepcopy_safe
 from yinyang.src.parsing.Ast import (
     Assert, DeclareConst, DeclareFun, DefineConst, DefineFun, DefineFunRec,
     DefineFunsRec, Pop, Push, Term
@@ -74,23 +73,59 @@ def get_all_subterms(formula):
     return av_expr, expr_type
 
 
+def term_key(term, keys):
+    """
+    term: term object
+    keys: dict from id(t) to the key of t, for the terms seen so far
+
+    :returns: a hashable key for term such that two terms have the same
+              key if and only if they are equal (Term.__eq__), computed in
+              time linear in the size of term with the keys of its subterms
+              shared through keys
+    """
+    if isinstance(term, str):
+        return term
+    key = keys.get(id(term))
+    if key is None:
+        op = term.op
+        if isinstance(op, Term):
+            op = term_key(op, keys)
+        key = (
+            term.name, str(term.type), term.is_const, term.is_var,
+            repr(term.label), repr(term.indices), term.quantifier,
+            repr(term.quantified_vars), op, term.is_indexed_id,
+            tuple(term_key(sub, keys) for sub in term.subterms or []),
+        )
+        keys[id(term)] = key
+    return key
+
+
 def get_unique_subterms(formula):
     """
     Get all the unique expressions within a formula, grouped by type.
     Any type is supported (Bool, Int, (_ BitVec 8), (Array Int Int), user
     sorts, ...); expressions of unknown type are left out.
+
+    The expressions are taken from one copy of the formula, so they keep
+    their context (parent pointers) and do not change when the formula is
+    mutated.
+
     :returns: unique_expr dict mapping each type to the list of unique
               expressions of that type, in order of first occurrence
     """
-    av_expr, expr_type = get_all_subterms(formula)
+    av_expr, expr_type = get_all_subterms(deepcopy_safe(formula))
 
     unique_expr = {}
+    seen = set()
+    keys = {}
     for expr, typ in zip(av_expr, expr_type):
         if typ is None or typ == UNKNOWN:
             continue
-        exprs = unique_expr.setdefault(typ, [])
-        if not any(expr == e for e in exprs):
-            exprs.append(copy.deepcopy(expr))
+        key = term_key(expr, keys)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique_expr.setdefault(typ, []).append(expr)
     return unique_expr
 
 
