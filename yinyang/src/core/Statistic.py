@@ -30,6 +30,8 @@ class Statistic:
         self.total_seeds = 0
         self.invalid_seeds = 0
         self.oversized_seeds = 0  # included in invalid_seeds
+        self.failed_seeds = 0  # error in yinyang, included in invalid_seeds
+        self.mutator_errors = 0  # seeds stopped by an error in the mutator
         self.total_generations = 0
         self.unsuccessful_generations = 0
         self.out_of_logic = 0
@@ -71,15 +73,24 @@ class Statistic:
     def printsum(self):
         valid_seeds = self.total_seeds - self.invalid_seeds
         num_bugs = self.crashes + self.soundness
-        oversized = ""
+        reasons = []
         if self.oversized_seeds:
-            oversized = " (%d over the file size limit)" % (
-                self.oversized_seeds
-            )
+            reasons.append(
+                "%d over the file size limit" % self.oversized_seeds)
+        if self.failed_seeds:
+            reasons.append("%d failed in yinyang" % self.failed_seeds)
+        invalid = " (%s)" % ", ".join(reasons) if reasons else ""
         summary = (
             "\b\b%d seeds processed, \
 %d valid, %d invalid%s \n%d bug triggers found"
-            % (self.total_seeds, valid_seeds, self.invalid_seeds, oversized,
+            % (self.total_seeds, valid_seeds, self.invalid_seeds, invalid,
                num_bugs)
         )
+        if self.mutator_errors:
+            summary += (
+                "\n%d seeds stopped by an error in the mutator"
+                % self.mutator_errors
+            )
+        if self.failed_seeds or self.mutator_errors:
+            summary += "\nSee the log for the errors."
         print(summary)

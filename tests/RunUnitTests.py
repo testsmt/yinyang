@@ -33,6 +33,7 @@ from tests.unit.TestUtils import UtilsTestCase
 from tests.unit.TestLogic import LogicTestCase
 from tests.unit.TestTheories import TheoriesTestCase
 from tests.unit.TestLocalVariables import LocalVariableMutationTestCase
+from tests.unit.TestSeedErrors import SeedErrorsTestCase
 
 sys.path.append("../")
 
