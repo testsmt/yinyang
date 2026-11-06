@@ -516,6 +516,10 @@ def LabeledTerm(label, subterms):
     return Term(label=label, subterms=subterms)
 
 
+def _copy_sub(term, parent):
+    return term.copy_tree(parent) if isinstance(term, Term) else term
+
+
 class Term:
     def __init__(
         self,
@@ -607,6 +611,28 @@ class Term:
                 else:
                     sub.find_all(e, occs)
 
+    def copy_tree(self, parent=None):
+        """
+        Copy the term with its subterms. Unlike copy.deepcopy, parent
+        pointers are not followed: the copy points to parent and each
+        copied subterm (and bound term of a let) to its copied parent, so
+        neither the context of self nor its parent pointers are copied.
+        Types are shared, they are not modified in place.
+        """
+        t = copy.copy(self)
+        t.parent = parent
+        t.label = copy.deepcopy(self.label)
+        t.indices = copy.deepcopy(self.indices)
+        t.quantified_vars = copy.deepcopy(self.quantified_vars)
+        t.var_binders = copy.deepcopy(self.var_binders)
+        if isinstance(self.op, Term):
+            t.op = self.op.copy_tree()
+        if self.let_terms is not None:
+            t.let_terms = [_copy_sub(lt, t) for lt in self.let_terms]
+        if self.subterms is not None:
+            t.subterms = [_copy_sub(sub, t) for sub in self.subterms]
+        return t
+
     def substitute(self, e, repl):
         """
         Substitute all expressions e in self by repl.
@@ -614,26 +640,11 @@ class Term:
         occs = []
         self.find_all(e, occs)
         for occ in occs:
-            # The copies of repl's subterms point to occ as their parent,
-            # not to a copy of repl and of the formula repl comes from.
-            memo = {id(repl): occ}
-            occ._initialize(
-                name=copy.deepcopy(repl.name, memo),
-                type=copy.deepcopy(repl.type, memo),
-                is_const=copy.deepcopy(repl.is_const, memo),
-                is_var=copy.deepcopy(repl.is_var, memo),
-                label=copy.deepcopy(repl.label, memo),
-                indices=copy.deepcopy(repl.indices, memo),
-                quantifier=copy.deepcopy(repl.quantifier, memo),
-                quantified_vars=copy.deepcopy(repl.quantified_vars, memo),
-                var_binders=copy.deepcopy(repl.var_binders, memo),
-                let_terms=copy.deepcopy(repl.let_terms, memo),
-                op=copy.deepcopy(repl.op, memo),
-                subterms=copy.deepcopy(repl.subterms, memo),
-                is_indexed_id=copy.deepcopy(repl.is_indexed_id, memo),
-                parent=occ.parent,
-            )
-            occ._add_parent_pointer()
+            new = repl.copy_tree(occ.parent)
+            occ.__dict__.update(new.__dict__)
+            for sub in (occ.subterms or []) + (occ.let_terms or []):
+                if isinstance(sub, Term):
+                    sub.parent = occ
 
     def __eq__(self, other):
         if not isinstance(other, Term):
