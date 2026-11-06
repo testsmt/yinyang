@@ -1,89 +1,67 @@
-# This is a basic script which checks out all of the SMT-LIB library.
-# Non-incremental benchmarks are checked out at the top level, while
-# incremental benchmarks are checked out in the subdirectory incremental.
+#!/bin/sh
+# Download SMT-LIB benchmarks from the SMT-LIB releases on Zenodo
+# (https://smt-lib.org/benchmarks.shtml, https://zenodo.org/communities/smt-lib).
+# The git repositories on clc-gitlab.cs.uiowa.edu that this script used to
+# clone are no longer available.
+#
+# Usage: scripts/SMT-LIB-clone.sh LOGIC...
+#   Downloads the non-incremental benchmarks of each LOGIC (e.g. QF_LIA)
+#   to non-incremental/LOGIC/ in the current directory.
+#   Without arguments, lists the logics of the release.
+#
+# Environment variables:
+#   INCREMENTAL=1   download the incremental benchmarks instead, to
+#                   incremental/LOGIC/
+#   RELEASE=2024    use another release (2023, 2024 or 2025, default 2025)
+#   RECORD=<id>     use another Zenodo record, e.g. a newer release
+#
+# Requires curl, tar and zstd.
 
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/ABVFP.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/ALIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/AUFBVDTLIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/AUFDTLIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/AUFLIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/AUFLIRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/AUFNIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/AUFNIRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/BV.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/BVFP.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/FP.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/LIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/LRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/NIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/NRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_ABV.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_ABVFP.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_ALIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_ANIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_AUFBV.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_AUFLIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_AUFNIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_AX.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_BV.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_BVFP.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_BVFPLRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_DT.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_FP.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_FPLRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_IDL.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_LIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_LIRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_LRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_NIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_NIRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_NRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_RDL.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_S.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_SLIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_UF.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_UFBV.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_UFIDL.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_UFLIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_UFLRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_UFNIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/QF_UFNRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/UF.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/UFBV.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/UFDT.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/UFDTLIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/UFDTNIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/UFIDL.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/UFLIA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/UFLRA.git
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks/UFNIA.git
-# mkdir incremental
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/ABVFP.git incremental/ABVFP
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/ALIA.git incremental/ALIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/ANIA.git incremental/ANIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/AUFNIRA.git incremental/AUFNIRA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/BV.git incremental/BV
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/BVFP.git incremental/BVFP
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/LIA.git incremental/LIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/LRA.git incremental/LRA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_ABV.git incremental/QF_ABV
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_ABVFP.git incremental/QF_ABVFP
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_ALIA.git incremental/QF_ALIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_ANIA.git incremental/QF_ANIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_AUFBV.git incremental/QF_AUFBV
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_AUFBVLIA.git incremental/QF_AUFBVLIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_AUFBVNIA.git incremental/QF_AUFBVNIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_AUFLIA.git incremental/QF_AUFLIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_BV.git incremental/QF_BV
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_BVFP.git incremental/QF_BVFP
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_FP.git incremental/QF_FP
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_LIA.git incremental/QF_LIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_LRA.git incremental/QF_LRA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_NIA.git incremental/QF_NIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_UF.git incremental/QF_UF
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_UFBV.git incremental/QF_UFBV
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_UFBVLIA.git incremental/QF_UFBVLIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_UFLIA.git incremental/QF_UFLIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_UFLRA.git incremental/QF_UFLRA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/QF_UFNIA.git incremental/QF_UFNIA
-# git clone https://clc-gitlab.cs.uiowa.edu:2443/SMT-LIB-benchmarks-inc/UFLRA.git incremental/UFLRA
+set -e
+
+RELEASE=${RELEASE:-2025}
+if [ -z "$RECORD" ]; then
+    case "$RELEASE-${INCREMENTAL:-0}" in
+        2025-0) RECORD=16740866 ;;
+        2025-1) RECORD=15493096 ;;
+        2024-0) RECORD=11061097 ;;
+        2024-1) RECORD=11186591 ;;
+        2023-0) RECORD=10607722 ;;
+        2023-1) RECORD=10607775 ;;
+        *)
+            echo "error: unknown release $RELEASE, set RECORD to the" \
+                 "Zenodo record of the release" >&2
+            exit 1 ;;
+    esac
+fi
+
+for tool in curl tar zstd; do
+    if ! command -v $tool > /dev/null 2>&1; then
+        echo "error: $tool is required" >&2
+        exit 1
+    fi
+done
+
+if [ $# -eq 0 ]; then
+    echo "usage: $0 LOGIC..."
+    echo "logics in Zenodo record $RECORD:"
+    curl -fsSL "https://zenodo.org/api/records/$RECORD" \
+        | grep -o '"key": *"[^"]*\.tar\.zst"' \
+        | sed 's/.*"\([^"]*\)\.tar\.zst"/\1/' | sort | tr '\n' ' '
+    echo
+    exit 0
+fi
+
+archive=$(mktemp)
+trap 'rm -f "$archive"' EXIT
+for logic in "$@"; do
+    echo "Downloading $logic (Zenodo record $RECORD)"
+    if ! curl -fSL -o "$archive" \
+            "https://zenodo.org/records/$RECORD/files/$logic.tar.zst?download=1"
+    then
+        echo "error: cannot download $logic, run $0 without arguments" \
+             "for the list of logics" >&2
+        exit 1
+    fi
+    zstd -dc "$archive" | tar -x
+done
