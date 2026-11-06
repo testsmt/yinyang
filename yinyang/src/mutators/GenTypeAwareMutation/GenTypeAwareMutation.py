@@ -27,7 +27,8 @@ from yinyang.src.mutators.GenTypeAwareMutation.Operator import (
     Operator, handle_parametric_op, handle_non_parametric_op
 )
 from yinyang.src.mutators.GenTypeAwareMutation.Util import (
-    get_all_subterms, local_compatible
+    get_all_subterms, binder_types, defines_names, free_symbols,
+    visible_symbols
 )
 from yinyang.src.parsing.Ast import Const, Expr
 from yinyang.src.parsing.Types import ALL
@@ -40,6 +41,73 @@ class GenTypeAwareMutation(Mutator):
         self.unique_expr = unique_expr
         self.operators = []
         self.parse_config_file()
+        self.visible, self.declared = visible_symbols(formula.commands)
+        self.free = {}  # id(term) -> scope information of unique_expr terms
+        self.scope = None  # see set_scope
+        self.choices = {}  # type -> terms that can be placed at the hole
+
+    def set_scope(self, hole):
+        """
+        Restrict the terms used for replacing hole to those that are well
+        scoped at the position of hole, see in_scope.
+        """
+        root = hole
+        while root.parent is not None:
+            root = root.parent
+        self.scope = (
+            binder_types(hole),
+            self.visible.get(id(root), self.declared),
+        )
+        self.choices = {}
+
+    def in_scope(self, term):
+        """
+        term: term object from unique_expr
+
+        A term can be placed at the hole (see set_scope) if each of its
+        free variables is
+        (1) bound at the hole by a quantifier or let with the same type, or
+        (2) a global symbol (declared in the formula, not bound in the
+            context of term) that is declared before the assert of the hole
+            and not shadowed at the hole,
+        and each declared function it applies is declared before the
+        assert of the hole and not shadowed at the hole. Terms with :named
+        attributes are never used, as their copies would define the names
+        a second time.
+        """
+        env, visible = self.scope
+        if id(term) not in self.free:
+            self.free[id(term)] = (
+                free_symbols(term) + (binder_types(term),)
+                if not defines_names(term) else None
+            )
+        if self.free[id(term)] is None:
+            return False
+        variables, functions, term_env = self.free[id(term)]
+        for name, typ in variables.items():
+            if name in env:
+                if env[name] != typ:
+                    return False
+            elif name in term_env:
+                return False  # bound in the context of term only
+            elif name in self.declared and name not in visible:
+                return False
+        for name in functions:
+            if name in env or (name in self.declared and
+                               name not in visible):
+                return False
+        return True
+
+    def get_choices(self, typ):
+        """
+        :returns: the terms of type typ that can be placed at the hole
+        """
+        if typ not in self.choices:
+            self.choices[typ] = [
+                term for term in self.unique_expr.get(typ, [])
+                if self.scope is None or self.in_scope(term)
+            ]
+        return self.choices[typ]
 
     def parse_config_file(self):
         """
@@ -79,7 +147,7 @@ class GenTypeAwareMutation(Mutator):
         for t in set(types):
             if t == ALL:
                 continue
-            if not self.unique_expr.get(t):
+            if not self.get_choices(t):
                 return False
         return True
 
@@ -115,6 +183,7 @@ class GenTypeAwareMutation(Mutator):
 
         :returns: newly generated expression for substitution
         """
+        self.set_scope(term)
         candidate_ops = self.get_candidate_ops(term)
 
         if len(candidate_ops) == 0:
@@ -125,8 +194,8 @@ class GenTypeAwareMutation(Mutator):
         if op.name == "id":
             choices = [
                 termPrime
-                for termPrime in self.unique_expr.get(term.type, [])
-                if termPrime != term and local_compatible(term, termPrime)
+                for termPrime in self.get_choices(term.type)
+                if termPrime != term
             ]
 
             if len(choices) == 0:
@@ -135,7 +204,7 @@ class GenTypeAwareMutation(Mutator):
             return random.choice(choices)
         else:
             for t in op.arg_types:
-                choices = self.unique_expr.get(t, [])
+                choices = self.get_choices(t)
 
                 if len(choices) == 0:
                     return None
