@@ -295,7 +295,8 @@ def fusion_contraints(template, var_types):
     :returns: fusion constraints (i.e. last three asserts from filled template)
     """
     arity = get_z_idx(template)
-    if "Int" in var_types or "Real" in var_types:
+    # var_types is the sort of z, e.g. "Int" or a BITVECTOR_TYPE.
+    if str(var_types) in ("Int", "Real"):
         return template.commands[-(arity + 1):]
     return template.commands[-(arity + 1):-arity]
 
@@ -336,8 +337,8 @@ def canonicalize_script(script):
     decls_after_ass = []
     for idx in range(n_commands):
         cmd = script.commands[idx]
-        if idx > first_ass_idx\
-           and isinstance(cmd, DeclareFun) or isinstance(cmd, DeclareConst):
+        if idx > first_ass_idx and \
+                isinstance(cmd, (DeclareFun, DeclareConst)):
             decls_after_ass.append(cmd)
         else:
             new_commands.append(cmd)
