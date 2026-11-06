@@ -163,6 +163,15 @@ def log_skip_oversized_seed(seed, size, args):
     )
 
 
+def log_skip_div_by_zero(args, i):
+    logging.debug(
+        str(i)
+        + "/"
+        + str(args.iterations)
+        + " Mutant divides by a literal zero, skipped."
+    )
+
+
 def log_skip_out_of_logic(args, i, logic):
     logging.debug(
         str(i)

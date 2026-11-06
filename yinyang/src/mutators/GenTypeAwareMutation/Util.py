@@ -22,8 +22,11 @@
 
 import copy
 
-from yinyang.src.parsing.Ast import Term
-from yinyang.src.parsing.Types import UNKNOWN
+from yinyang.src.parsing.Ast import (
+    Assert, DeclareConst, DeclareFun, DefineConst, DefineFun, DefineFunRec,
+    DefineFunsRec, Pop, Push, Term
+)
+from yinyang.src.parsing.Types import UNKNOWN, sort2type
 
 
 def get_subterms(expr):
@@ -91,34 +94,129 @@ def get_unique_subterms(formula):
     return unique_expr
 
 
-def local_defs(term, local):
+def binder_types(term):
     """
     term: term object
-    local: list of local variables defined in the parent terms
 
-    :returns: list of local variables to be considered within the term
+    :returns: dict mapping the variables bound by the quantifiers and lets
+              enclosing term to their types; for a name bound more than
+              once, the innermost binding
     """
-    term = term.parent
-    if term:
-        if term.quantifier:
-            for q_var in term.quantified_vars[0]:
-                local.add(q_var)
-        if term.let_terms:
-            for var in term.var_binders:
-                local.add(var)
-        if term.parent:
-            local_defs(term, local)
-    return local
+    env = {}
+    child, node = term, term.parent
+    while node is not None:
+        if node.quantifier:
+            for name, sort in zip(*node.quantified_vars):
+                env.setdefault(name, sort2type(sort))
+        elif node.var_binders and not any(
+            child is t for t in node.let_terms
+        ):
+            # let bindings are not in scope in the bound terms
+            for name, t in zip(node.var_binders, node.let_terms):
+                env.setdefault(name, t.type)
+        child, node = node, node.parent
+    return env
 
 
-def local_compatible(t1, t2):
+def free_symbols(term):
     """
-    t1: term object
-    t2: term object
+    term: term object
 
-    :returns: local compatibility of t2 for t, e.g. ,every local variables in
-              t2 is defined in t1
+    :returns: (variables, functions) where variables maps the variables
+              occurring free in term to their types and functions is the
+              set of the declared functions applied in term
     """
-    loc_t1 = local_defs(t1, set())
-    loc_t2 = local_defs(t2, set())
-    return loc_t2.issubset(loc_t1)
+    variables, functions = {}, set()
+
+    def visit(t, bound):
+        if isinstance(t, str) or t.is_const:
+            return
+        if t.is_var:
+            if t.name not in bound:
+                variables.setdefault(t.name, t.type)
+            return
+        if isinstance(t.op, Term):
+            functions.add(t.op.name)
+        if t.quantifier:
+            bound = bound | set(t.quantified_vars[0])
+        if t.var_binders:
+            for let_term in t.let_terms:
+                visit(let_term, bound)
+            bound = bound | set(t.var_binders)
+        for sub in t.subterms or []:
+            visit(sub, bound)
+
+    visit(term, frozenset())
+    return variables, functions
+
+
+def defines_names(term):
+    """
+    term: term object
+
+    :returns: True if term contains a (! ... :named n) attribute, i.e. a
+              copy of term would define n a second time
+    """
+    if isinstance(term, str):
+        return False
+    if term.label and any(key == ":named" for key, _ in term.label):
+        return True
+    return any(defines_names(sub) for sub in term.subterms or [])
+
+
+def declared_symbols(cmd):
+    """
+    :returns: the symbols declared or defined by the command cmd
+    """
+    if isinstance(cmd, (DeclareConst, DeclareFun, DefineConst, DefineFun,
+                        DefineFunRec)):
+        return [cmd.symbol]
+    if isinstance(cmd, DefineFunsRec):
+        return [decl.symbol for decl in cmd.fun_decls]
+    return []
+
+
+def num_levels(cmd):
+    """
+    :returns: the number of assertion levels pushed or popped by cmd
+    """
+    if cmd.terms:
+        try:
+            return int(str(cmd.terms[0]))
+        except ValueError:
+            pass
+    return 1
+
+
+def visible_symbols(commands):
+    """
+    Determine which declared symbols each assert can use: a symbol is
+    visible after its declaration until the pop of the assertion level it
+    was declared in.
+
+    :returns: (visible, declared) where visible maps id(assert.term) to the
+              set of symbols visible in the assert and declared is the set
+              of all declared symbols
+    """
+    levels = [set()]
+    declared = set()
+    visible = {}
+    current = frozenset()
+    for cmd in commands:
+        symbols = declared_symbols(cmd)
+        if symbols:
+            levels[-1].update(symbols)
+            declared.update(symbols)
+            current = None
+        elif isinstance(cmd, Push):
+            levels += [set() for _ in range(num_levels(cmd))]
+        elif isinstance(cmd, Pop):
+            n = min(num_levels(cmd), len(levels) - 1)
+            if n > 0:
+                del levels[-n:]
+                current = None
+        elif isinstance(cmd, Assert):
+            if current is None:
+                current = frozenset().union(*levels)
+            visible[id(cmd.term)] = current
+    return visible, declared

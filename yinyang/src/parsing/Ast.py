@@ -614,22 +614,26 @@ class Term:
         occs = []
         self.find_all(e, occs)
         for occ in occs:
+            # The copies of repl's subterms point to occ as their parent,
+            # not to a copy of repl and of the formula repl comes from.
+            memo = {id(repl): occ}
             occ._initialize(
-                name=copy.deepcopy(repl.name),
-                type=copy.deepcopy(repl.type),
-                is_const=copy.deepcopy(repl.is_const),
-                is_var=copy.deepcopy(repl.is_var),
-                label=copy.deepcopy(repl.label),
-                indices=copy.deepcopy(repl.indices),
-                quantifier=copy.deepcopy(repl.quantifier),
-                quantified_vars=copy.deepcopy(repl.quantified_vars),
-                var_binders=copy.deepcopy(repl.var_binders),
-                let_terms=copy.deepcopy(repl.let_terms),
-                op=copy.deepcopy(repl.op),
-                subterms=copy.deepcopy(repl.subterms),
-                is_indexed_id=copy.deepcopy(repl.is_indexed_id),
+                name=copy.deepcopy(repl.name, memo),
+                type=copy.deepcopy(repl.type, memo),
+                is_const=copy.deepcopy(repl.is_const, memo),
+                is_var=copy.deepcopy(repl.is_var, memo),
+                label=copy.deepcopy(repl.label, memo),
+                indices=copy.deepcopy(repl.indices, memo),
+                quantifier=copy.deepcopy(repl.quantifier, memo),
+                quantified_vars=copy.deepcopy(repl.quantified_vars, memo),
+                var_binders=copy.deepcopy(repl.var_binders, memo),
+                let_terms=copy.deepcopy(repl.let_terms, memo),
+                op=copy.deepcopy(repl.op, memo),
+                subterms=copy.deepcopy(repl.subterms, memo),
+                is_indexed_id=copy.deepcopy(repl.is_indexed_id, memo),
                 parent=occ.parent,
             )
+            occ._add_parent_pointer()
 
     def __eq__(self, other):
         if not isinstance(other, Term):

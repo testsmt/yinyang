@@ -24,27 +24,31 @@ import unittest
 import sys
 
 from yinyang.src.parsing.Parse import parse_str
-from yinyang.src.parsing.Logic import parse_logic, logic_name, infer_logic
+from yinyang.src.parsing.Logic import (
+    parse_logic, logic_name, infer_logic, divides_by_zero
+)
 from yinyang.src.core.Fuzzer import Fuzzer
 
 sys.path.append("../../")
 
 
-def infer(formula):
+def infer(formula, div_by_zero="nonlinear"):
     script, _ = parse_str(formula, silent=False)
-    return set(infer_logic(script))
+    return set(infer_logic(script, div_by_zero))
 
 
 class Args:
     logic_mode = "widen"
+    div_by_zero = "nonlinear"
     keep_mutants = True  # read by Fuzzer.__del__
 
 
-def make_fuzzer(logic_mode):
+def make_fuzzer(logic_mode, div_by_zero="nonlinear"):
     # Bypass Fuzzer.__init__, which sets up logging and folders.
     fuzzer = Fuzzer.__new__(Fuzzer)
     fuzzer.args = Args()
     fuzzer.args.logic_mode = logic_mode
+    fuzzer.args.div_by_zero = div_by_zero
     fuzzer.current_logic = None
     return fuzzer
 
@@ -178,6 +182,43 @@ class LogicTestCase(unittest.TestCase):
         fuzzer.init_logic([seed])
         self.assertEqual(fuzzer.mutant_logic(nonlinear), (None, True))
         self.assertNotIn("set-logic", fuzzer.script_str(seed))
+
+    def test_div_by_zero(self):
+        # Division by a literal zero is undefined in SMT-LIB; cvc5 rejects
+        # it in linear logics ("A non-linear fact was asserted to
+        # arithmetic in a linear logic"), z3 accepts it.
+        for formula in [
+            INT_XY + "(assert (= (mod x 0) y))",
+            INT_XY + "(assert (= (div x (- 0)) y))",
+            REAL_R + "(assert (= (/ r 0.0) r))",
+            REAL_R + "(assert (= (/ r 2 0.00) r))",
+        ]:
+            self.assertIn("NL", infer(formula), formula)
+            self.assertNotIn("NL", infer(formula, "linear"), formula)
+            self.assertNotIn("NL", infer(formula, "skip"), formula)
+            script, _ = parse_str(formula)
+            self.assertTrue(divides_by_zero(script), formula)
+        for formula in [
+            INT_XY + "(assert (= (div x 3) y))",
+            INT_XY + "(assert (= (div 0 x) y))",
+            REAL_R + "(assert (= (/ r 10.0) r))",
+        ]:
+            script, _ = parse_str(formula)
+            self.assertFalse(divides_by_zero(script), formula)
+
+        seed, _ = parse_str("(set-logic QF_LIA)" + INT_XY +
+                            "(assert (= (div x 3) y))")
+        mutant, _ = parse_str(INT_XY + "(assert (= (mod x 0) y))")
+        fuzzer = make_fuzzer("widen")
+        fuzzer.init_logic([seed])
+        self.assertEqual(fuzzer.mutant_logic(mutant), ("QF_NIA", True))
+        fuzzer = make_fuzzer("skip")
+        fuzzer.init_logic([seed])
+        self.assertEqual(fuzzer.mutant_logic(mutant), (None, False))
+        for mode in ["linear", "skip"]:
+            fuzzer = make_fuzzer("widen", mode)
+            fuzzer.init_logic([seed])
+            self.assertEqual(fuzzer.mutant_logic(mutant), ("QF_LIA", True))
 
     def test_seed_logic(self):
         def seed(logic, body=INT_XY):

@@ -20,140 +20,173 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import random
 import unittest
-import sys
-import os
 
-sys.path.append("../../")
-
-from yinyang.src.parsing.parse import *
-from yinyang.src.parsing.typechecker import Context, typecheck
-from yinyang.src.generators.TypeAwareOpMutation import TypeAwareOpMutation
-from yinyang.src.generators.GenTypeAwareMutation.GenTypeAwareMutation import *
-from yinyang.src.generators.GenTypeAwareMutation.Util import *
+from yinyang.src.base.Utils import deepcopy_safe
+from yinyang.src.parsing.Ast import Term
+from yinyang.src.parsing.Parse import parse_str
+from yinyang.src.parsing.Typechecker import typecheck
+from yinyang.src.parsing.Types import INTEGER_TYPE, BOOLEAN_TYPE
+from yinyang.src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import (
+    GenTypeAwareMutation
+)
+from yinyang.src.mutators.GenTypeAwareMutation.Util import (
+    binder_types, free_symbols, get_all_subterms, get_unique_subterms,
+    visible_symbols
+)
 
 
 class Mockargs:
-    modulo = 3
-    config_file = "yinyang/config/generalization.txt"
+    config = "yinyang/config/typefuzz_config.txt"
+
+
+# Lets binding the same name to different sorts, a quantified variable,
+# and a quantified variable shadowing a global of another sort.
+LOCALS = """
+(declare-fun x () Int)
+(declare-fun a () (Array Int Int))
+(assert (let ((c (+ x 1))) (> c 2)))
+(assert (let ((c (store a 0 x))) (= (select c 1) x)))
+(assert (forall ((y Int)) (=> (> y x) (> (* y 2) x))))
+(assert (exists ((x Bool)) (and x (> 1 0))))
+(check-sat)
+"""
+
+# Symbols declared after an assert or inside a popped assertion level.
+GLOBALS = """
+(declare-fun f (Int) Int)
+(declare-fun x () Int)
+(assert (> (f x) 0))
+(push 1)
+(declare-fun g (Int) Int)
+(declare-fun y () Int)
+(assert (< (g y) (f x)))
+(pop 1)
+(declare-fun z () Int)
+(assert (= (f z) (+ z 1)))
+(check-sat)
+"""
+
+
+def find(script, text):
+    """:returns: the first subterm of an assert of script printed as text"""
+    av_expr, _ = get_all_subterms(script)
+    return next(t for t in av_expr if str(t) == text)
 
 
 class LocalVariableMutationTestCase(unittest.TestCase):
-    def test_local_defs_quantifier(self):
-        formula = """
-        (declare-fun |old(~a10~0)| () Int)
-        (declare-fun ~a1~0 () Int)
-        (assert (not (and (exists ((v_prenex_1 Int)) (and (not (= 0 (mod v_prenex_1 5))) (< v_prenex_1 0) (<= v_prenex_1 218) (<= (+ (div v_prenex_1 5) 449583) ~a1~0) (< 38 v_prenex_1))) (<= 2 |old(~a10~0)|))))
-        (assert (not (and (<= 2 |old(~a10~0)|) (exists ((v_prenex_2 Int)) (and (<= (+ (div v_prenex_2 5) 449582) ~a1~0) (< 218 v_prenex_2) (<= 0 v_prenex_2))))))
-        (assert (not (and (<= 3 |old(~a10~0)|) (exists ((v_prenex_4 Int)) (and (<= (+ (div v_prenex_4 5) 449582) ~a1~0) (= 0 (mod v_prenex_4 5)) (<= (+ v_prenex_4 13) 0))))))
-        (assert (not (and (exists ((v_prenex_5 Int)) (and (<= 0 v_prenex_5) (<= (+ (div v_prenex_5 5) 449582) ~a1~0) (< 38 v_prenex_5) (<= v_prenex_5 218))) (<= 2 |old(~a10~0)|))))
-        (assert (not (and (exists ((v_prenex_3 Int)) (and (= 0 (mod v_prenex_3 5)) (< 38 v_prenex_3) (<= (+ (div v_prenex_3 5) 449582) ~a1~0) (<= v_prenex_3 218))) (<= 2 |old(~a10~0)|))))
-        (assert (and (<= 3 |old(~a10~0)|) (exists ((v_prenex_6 Int)) (and (<= (+ v_prenex_6 13) 0) (< v_prenex_6 0) (not (= 0 (mod v_prenex_6 5))) (<= (+ (div v_prenex_6 5) 449583) ~a1~0)))))
-        (check-sat)
-        (exit)
-        """  # noqa: E501
-        formula, glob = parse_str(formula)
-        typecheck(formula, glob)
-        loc1 = formula.assert_cmd[0].term.subterms[0].subterms[0]
-        loc1_sub = loc1.subterms[0]
-        not_loc = formula.assert_cmd[0].term.subterms[0].subterms[1]
-        loc2 = formula.assert_cmd[1].term.subterms[0].subterms[1].subterms[0]
-        if not local_compatible(loc1_sub, loc1):
-            return False
-        if not local_compatible(not_loc, loc1):
-            return False
-        if local_compatible(loc1, loc2):
-            return False
-        return True
+    def parse(self, formula):
+        script, glob = parse_str(formula)
+        typecheck(script, glob)
+        return script
 
-    def test_local_defs_let(self):
-        formula = """
-        (declare-fun skoX () Real)
-        (declare-fun skoS () Real)
-        (declare-fun skoC () Real)
-        (assert (let ((?v_2 (<= skoX 0))(?v_0 (* skoC (/ (- 235) 42)))) (let ((?v_1 (<= ?v_0 skoS))) (and (<= (* skoX (+ (/ (- 207) 6250000) (* skoX (/ 207 207)))) (/ (- 69) 250)) (and (not ?v_1) (and (or (not (<= skoS ?v_0)) ?v_2) (and (or ?v_1 ?v_2) (and (= (* skoS skoS) (+ 1 (* skoC (* skoC (- 1))))) (and (<= skoX 289) (<= 0 skoX))))))))))
-        (check-sat)
-        (exit)
-        """  # noqa: E501
-        formula, glob = parse_str(formula)
-        typecheck(formula, glob)
-        let1 = formula.assert_cmd[0].term
-        let2 = let1.subterms[0]
-        let2_sub = let2.subterms[0]
-        if local_compatible(let1, let2):
-            return False
-        if not local_compatible(let2, let1):
-            return False
-        if local_compatible(let2, let2_sub):
-            return False
-        return True
+    def test_binder_types(self):
+        script = self.parse(LOCALS)
+        self.assertEqual(binder_types(find(script, "(> c 2)")),
+                         {"c": INTEGER_TYPE})
+        self.assertEqual(str(binder_types(find(script, "(select c 1)"))["c"]),
+                         "(Array Int Int)")
+        self.assertEqual(binder_types(find(script, "(* y 2)")),
+                         {"y": INTEGER_TYPE})
+        self.assertEqual(binder_types(find(script, "(and x (> 1 0))")),
+                         {"x": BOOLEAN_TYPE})
+        self.assertEqual(binder_types(script.assert_cmd[0].term), {})
 
-    def test_local_defs_simple(self):
-        formula1 = """
-        (declare-fun a () Real)
-        (assert (exists ((ts0uscore1 Real)) (> ts0uscore1 a)))
+    def test_free_symbols(self):
+        script = self.parse(LOCALS)
+        self.assertEqual(free_symbols(script.assert_cmd[0].term),
+                         ({"x": INTEGER_TYPE}, set()))
+        self.assertEqual(free_symbols(find(script, "(> c 2)")),
+                         ({"c": INTEGER_TYPE}, set()))
+        self.assertEqual(free_symbols(script.assert_cmd[3].term), ({}, set()))
+        script = self.parse(GLOBALS)
+        variables, functions = free_symbols(find(script, "(< (g y) (f x))"))
+        self.assertEqual(set(variables), {"x", "y"})
+        self.assertEqual(functions, {"f", "g"})
+
+    def test_visible_symbols(self):
+        script = self.parse(GLOBALS)
+        visible, declared = visible_symbols(script.commands)
+        self.assertEqual(declared, {"f", "g", "x", "y", "z"})
+        self.assertEqual(
+            [visible[id(cmd.term)] for cmd in script.assert_cmd],
+            [{"f", "x"}, {"f", "g", "x", "y"}, {"f", "x", "z"}],
+        )
+
+    def check_scoping(self, script):
+        """
+        Each variable of each assert is bound with its type by an enclosing
+        quantifier or let, or declared before the assert and not popped.
+        """
+        visible, _ = visible_symbols(script.commands)
+        for cmd in script.assert_cmd:
+            for t in get_all_subterms_of(cmd.term):
+                env = binder_types(t)
+                if t.is_var:
+                    if t.name in env:
+                        self.assertEqual(env[t.name], t.type, str(cmd))
+                    else:
+                        self.assertIn(t.name, visible[id(cmd.term)],
+                                      str(cmd))
+                if isinstance(t.op, Term):
+                    self.assertNotIn(t.op.name, env, str(cmd))
+                    self.assertIn(t.op.name, visible[id(cmd.term)],
+                                  str(cmd))
+
+    def test_mutants_well_scoped(self):
+        # typefuzz used to move let- and quantifier-bound variables out of
+        # their scope, to put a let variable where the same name is bound
+        # to another sort, and to use symbols before their declaration or
+        # after the pop of their assertion level.
+        for formula in [LOCALS, GLOBALS]:
+            for seed in range(20):
+                random.seed(seed)
+                script = self.parse(formula)
+                unique_expr = get_unique_subterms(deepcopy_safe(script))
+                gen = GenTypeAwareMutation(script, Mockargs(), unique_expr)
+                for _ in range(10):
+                    gen.mutate()
+                    self.check_scoping(script)
+                self.parse(str(script))
+
+    def test_named_terms(self):
+        # Copies of a term with a :named attribute would define the name
+        # twice, or inside a quantifier.
+        formula = """
+        (declare-fun p () Bool)
+        (declare-fun q () Bool)
+        (assert (! (and p (not q)) :named h1))
+        (assert (forall ((b Bool)) (or b (! (or p q) :named h2))))
         (check-sat)
         """
-        formula1, glob = parse_str(formula1)
-        typecheck(formula1, glob)
-        declare = formula1.assert_cmd[0].term
-        sub = declare.subterms[0]
-        if local_compatible(declare, sub):
-            return False
-        if not local_compatible(sub, declare):
-            return False
-        formula2 = """
-        (declare-fun f3 () Int)
-        (assert (let ((?v_0 (+ (* 4 f3) 1))) (= ?v_0 0)))
-        (check-sat)
-        (exit)
-        """
-        formula2, glob = parse_str(formula2)
-        typecheck(formula2, glob)
-        declare = formula2.assert_cmd[0].term
-        sub1 = declare.subterms[0].subterms[0]
-        sub2 = declare.subterms[0].subterms[1]
-        if not local_compatible(sub1, sub2):
-            return False
-        if local_compatible(declare, sub1):
-            return False
-        return True
+        for seed in range(20):
+            random.seed(seed)
+            script = self.parse(formula)
+            unique_expr = get_unique_subterms(deepcopy_safe(script))
+            gen = GenTypeAwareMutation(script, Mockargs(), unique_expr)
+            for _ in range(10):
+                gen.mutate()
+                mutant = str(script)
+                self.assertLessEqual(mutant.count(":named h1"), 1, mutant)
+                self.assertLessEqual(mutant.count(":named h2"), 1, mutant)
 
-    def test_parent_pointer(self):
-        formula = """
-        (declare-fun skoX () Real)
-        (declare-fun skoS () Real)
-        (declare-fun skoC () Real)
-        (assert (let ((?v_2 (<= skoX 0))(?v_0 (* skoC (/ (- 235) 42)))) (let ((?v_1 (<= ?v_0 skoS))) (and (<= (* skoX (+ (/ (- 207) 6250000) (* skoX (/ 207 207)))) (/ (- 69) 250)) (and (not ?v_1) (and (or (not (<= skoS ?v_0)) ?v_2) (and (or ?v_1 ?v_2) (and (= (* skoS skoS) (+ 1 (* skoC (* skoC (- 1))))) (and (<= skoX 289) (<= 0 skoX))))))))))
-        (check-sat)
-        (exit)
-        """  # noqa: E501
-        formula, glob = parse_str(formula)
-        typecheck(formula, glob)
-        av_expr, expr_type = get_all_subterms(formula)
-        for t in av_expr:
-            if t.subterms:
-                for sub in t.subterms:
-                    if sub.parent != t:
-                        return False
-        return True
+    def test_parent_pointers(self):
+        # After a substitution, the new subterms point to the term they
+        # replaced and not to a copy of the term they come from.
+        script = self.parse(LOCALS)
+        hole = find(script, "(> c 2)")
+        repl = find(script, "(= (select c 1) x)")
+        hole.substitute(hole, repl)
+        for t in get_all_subterms_of(script.assert_cmd[0].term):
+            for sub in t.subterms or []:
+                self.assertIs(sub.parent, t)
 
-    def test_type_mutation_local(self):
-        formula = """
-        (declare-fun skoX () Real)
-        (declare-fun skoS () Real)
-        (declare-fun skoC () Real)
-        (assert (let ((?v_2 (<= skoX 0))(?v_0 (* skoC (/ (- 235) 42)))) (let ((?v_1 (<= ?v_0 skoS))) (and (<= (* skoX (+ (/ (- 207) 6250000) (* skoX (/ 207 207)))) (/ (- 69) 250)) (and (not ?v_1) (and (or (not (<= skoS ?v_0)) ?v_2) (and (or ?v_1 ?v_2) (and (= (* skoS skoS) (+ 1 (* skoC (* skoC (- 1))))) (and (<= skoX 289) (<= 0 skoX))))))))))
-        (check-sat)
-        (exit)
-        """  # noqa: E501
-        formula, glob = parse_str(formula)
-        typecheck(formula, glob)
-        av_expr, expr_type = get_all_subterms(formula)
-        unique_expr = get_unique_subterms(formula)
-        args = Mockargs()
-        gen = GenTypeAwareMutation(formula, args, unique_expr)
-        gen.generate()
+
+def get_all_subterms_of(term):
+    yield term
+    for sub in term.subterms or []:
+        yield from get_all_subterms_of(sub)
 
 
 if __name__ == "__main__":

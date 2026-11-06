@@ -35,6 +35,11 @@ Features:
     I   integers
     R   reals
     NL  non-linear arithmetic
+
+Division by a literal zero, e.g. (/ x 0.0) or (mod x 0), is undefined in
+SMT-LIB (the result is an unspecified value), so (/ x 0.0) is not a
+linear term. cvc5 rejects it in linear logics, z3 accepts it. Whether it
+counts as non-linear is set by the div_by_zero argument of infer_logic.
 """
 
 import re
@@ -96,6 +101,13 @@ FP_CONSTANTS = {
 }
 
 DECIMAL_RE = re.compile(r"^[0-9]+\.[0-9]+$")
+ZERO_RE = re.compile(r"^0+(\.0+)?$")
+
+# Pseudo-feature of _term_features for divisions by a literal zero; it is
+# never part of the features returned by infer_logic.
+DIV_BY_ZERO = "div0"
+
+DIV_BY_ZERO_MODES = ["nonlinear", "linear", "skip"]
 
 
 def parse_logic(name):
@@ -177,6 +189,17 @@ def _is_coefficient(term, ground_lets):
     return False
 
 
+def _is_zero(term):
+    """Checks whether term is a literal zero, e.g. 0, 0.0 or (- 0)."""
+    if isinstance(term, str):
+        return bool(ZERO_RE.match(term))
+    if term.is_const:
+        return bool(ZERO_RE.match(str(term.name)))
+    if term.op == "-" and term.subterms and len(term.subterms) == 1:
+        return _is_zero(term.subterms[0])
+    return False
+
+
 def _term_features(term, user_sorts, features, ground_lets):
     if term is None or isinstance(term, str):
         return
@@ -236,18 +259,40 @@ def _term_features(term, user_sorts, features, ground_lets):
             if any(not _is_coefficient(t, ground_lets)
                    for t in subterms[1:]):
                 features.add("NL")
+            if any(_is_zero(t) for t in subterms[1:]):
+                features.add(DIV_BY_ZERO)
 
     for sub in term.subterms or []:
         _term_features(sub, user_sorts, features, ground_lets)
 
 
-def infer_logic(script):
+def infer_logic(script, div_by_zero="nonlinear"):
     """
     Computes the features a script needs, i.e. the smallest logic in which
     it is valid. The inference is syntactic: it looks at declared sorts,
     operators and literals, not at the types of terms.
+    :div_by_zero: "nonlinear" if a division by a literal zero needs
+                  non-linear arithmetic (as in cvc5), "linear" (or "skip")
+                  if it does not (as in z3)
     :returns: frozenset of features (see the module docstring).
     """
+    features = set(_script_features(script))
+    if DIV_BY_ZERO in features:
+        features.discard(DIV_BY_ZERO)
+        if div_by_zero == "nonlinear":
+            features.add("NL")
+    return frozenset(features)
+
+
+def divides_by_zero(script):
+    """
+    Checks whether script divides by a literal zero, e.g. (/ x 0.0) or
+    (mod x 0).
+    """
+    return DIV_BY_ZERO in _script_features(script)
+
+
+def _script_features(script):
     features = set()
     user_sorts = set()
     for cmd in script.commands:
