@@ -34,6 +34,7 @@ from tests.unit.TestLogic import LogicTestCase
 from tests.unit.TestTheories import TheoriesTestCase
 from tests.unit.TestLocalVariables import LocalVariableMutationTestCase
 from tests.unit.TestSeedErrors import SeedErrorsTestCase
+from tests.unit.TestSolver import SolverTestCase
 
 sys.path.append("../")
 
