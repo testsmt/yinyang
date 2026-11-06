@@ -22,6 +22,7 @@
 
 import logging
 import datetime
+import traceback
 
 from logging.handlers import RotatingFileHandler
 
@@ -160,6 +161,22 @@ def log_skip_oversized_seed(seed, size, args):
     logging.info(
         "Skip seed " + seed + ": " + str(size) + " bytes, the file size"
         " limit is " + str(args.file_size_limit) + " bytes (-L)"
+    )
+
+
+def log_seed_error(seed, stage, e):
+    """
+    Log an error in yinyang while preparing or mutating a seed (or a pair of
+    seeds), with its traceback.
+    """
+    if isinstance(seed, (list, tuple)):
+        seed = " ".join(seed)
+    logging.error(
+        "Skip seed " + str(seed) + ": error in yinyang while " + stage
+        + ": " + type(e).__name__ + ": " + str(e)[:200]
+    )
+    logging.debug(
+        "".join(traceback.format_exception(type(e), e, e.__traceback__))
     )
 
 
