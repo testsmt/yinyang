@@ -22,6 +22,26 @@
 
 import copy
 
+from yinyang.src.parsing.Types import parse_sexpr
+
+
+def prefix_symbol(prefix, symbol):
+    """
+    Add prefix to symbol. For quoted symbols the prefix is added inside the
+    bars, e.g. |x y| becomes |scr1_x y|.
+    """
+    if len(symbol) > 1 and symbol[0] == "|" and symbol[-1] == "|":
+        return "|" + prefix + symbol[1:-1] + "|"
+    return prefix + symbol
+
+
+def param_names(sorted_vars):
+    """
+    :sorted_vars: sorted variables as a string, e.g. "((x Int) (|y z| Int))"
+    :returns: frozenset of the variable names
+    """
+    return frozenset(var[0] for var in parse_sexpr(sorted_vars))
+
 
 class Script:
     def __init__(self, commands, global_vars):
@@ -96,40 +116,99 @@ class Script:
                     types[cmd.symbol] = cmd.input_sort
         return vars, types
 
-    def _prefix_free_vars(self, prefix, e):
-        if isinstance(e, str):
-            return
-        if e.is_const:
-            return
-        if e.is_var and e.type:
-            if e in self.free_var_occs:
-                e.name = prefix + e.name
-            return
+    def _declared_symbols(self):
+        """
+        :returns: the symbols declared or defined by the commands: constants,
+                  functions, define-fun, define-fun-rec, define-funs-rec and
+                  define-const
+        """
+        symbols = []
+        for cmd in self.commands:
+            if isinstance(cmd, (DeclareConst, DeclareFun, DefineConst,
+                                DefineFun, DefineFunRec)):
+                symbols.append(cmd.symbol)
+            elif isinstance(cmd, DefineFunsRec):
+                symbols += [decl.symbol for decl in cmd.fun_decls]
+        return symbols
 
+    def _named_labels(self, e, labels):
+        """
+        Collect the names given by (! t :named n) in the term e.
+        """
+        if not isinstance(e, Term):
+            return
+        for key, value in e.label or []:
+            if key == ":named" and value is not None:
+                labels.append(value)
+        for sub in (e.let_terms or []) + (e.subterms or []):
+            self._named_labels(sub, labels)
+
+    def _rename_symbols(self, e, names, bound):
+        """
+        Rename the occurrences of the global symbols in names (a dict from
+        old to new names) in the term e. Variables bound by quantifiers,
+        lets and function parameters (bound) are not renamed.
+        """
+        if not isinstance(e, Term):
+            return
+        if e.is_var:
+            if e.name in names and e.name not in bound:
+                e.name = names[e.name]
+            return
+        if e.label:
+            e.label = [
+                (key, names.get(value, value) if key == ":named" else value)
+                for key, value in e.label
+            ]
+        if isinstance(e.op, Term) and e.op.name in names and \
+                e.op.name not in bound:
+            e.op.name = names[e.op.name]
+        if e.quantifier:
+            bound = bound | set(e.quantified_vars[0])
         if e.var_binders:
-            for i, var in enumerate(e.var_binders):
-                self._prefix_free_vars(prefix, e.let_terms[i])
-
-        for s in e.subterms:
-            self._prefix_free_vars(prefix, s)
+            for let_term in e.let_terms:
+                self._rename_symbols(let_term, names, bound)
+            bound = bound | set(e.var_binders)
+        for sub in e.subterms or []:
+            self._rename_symbols(sub, names, bound)
 
     def prefix_vars(self, prefix):
         """
-        Add a shared prefix to all variables
+        Add a shared prefix to all symbols declared or defined by the script
+        (constants, functions, defined functions and :named terms), in their
+        declarations and definitions and in all terms. For quoted symbols
+        the prefix is added inside the bars: |x y| becomes |scr1_x y|.
         :prefix: str
         """
+        symbols = self._declared_symbols()
         for cmd in self.commands:
-            if isinstance(cmd, DeclareConst):
-                cmd.symbol = prefix + cmd.symbol
-            if isinstance(cmd, DeclareFun):
-                if cmd.input_sort == "":
-                    cmd.symbol = prefix + cmd.symbol
-            if isinstance(cmd, Assert):
-                self._prefix_free_vars(prefix, cmd.term)
-        new_global_vars = {}
-        for global_var in self.global_vars:
-            new_global_vars[prefix + global_var] = self.global_vars[global_var]
-        self.global_vars = new_global_vars
+            self._named_labels(getattr(cmd, "term", None), symbols)
+        names = {symbol: prefix_symbol(prefix, symbol) for symbol in symbols}
+        for cmd in self.commands:
+            bound = frozenset()
+            if isinstance(cmd, DefineFun):
+                bound = param_names("(" + cmd.sorted_vars + ")")
+            elif isinstance(cmd, DefineFunRec):
+                bound = param_names("(" + " ".join(cmd.sorted_vars) + ")")
+            if isinstance(cmd, DefineFunsRec):
+                for decl, term in zip(cmd.fun_decls, cmd.terms):
+                    self._rename_symbols(
+                        term, names,
+                        param_names("(" + " ".join(decl.sorted_vars) + ")")
+                    )
+                for decl in cmd.fun_decls:
+                    decl.symbol = names[decl.symbol]
+                continue
+            if getattr(cmd, "symbol", None) in names:
+                cmd.symbol = names[cmd.symbol]
+            terms = getattr(cmd, "terms", None) or []
+            if isinstance(getattr(cmd, "term", None), Term):
+                terms = terms + [cmd.term]
+            for term in terms:
+                self._rename_symbols(term, names, bound)
+        self.global_vars = {
+            names.get(var, var): typ for var, typ in self.global_vars.items()
+        }
         self.vars, self.types = self._decl_commands()
 
     def merge_asserts(self):

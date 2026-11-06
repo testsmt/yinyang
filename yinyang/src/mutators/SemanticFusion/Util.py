@@ -27,6 +27,7 @@ from yinyang.src.parsing.Types import (
     ARRAY_TYPE,
     BITVECTOR_TYPE,
     FP_TYPE,
+    parse_sexpr,
     type2ffg,
 )
 from yinyang.src.parsing.Parse import parse_str
@@ -36,6 +37,10 @@ from yinyang.src.parsing.Ast import (
     Assert,
     DeclareConst,
     DeclareFun,
+    DefineConst,
+    DefineFun,
+    DefineFunRec,
+    DefineFunsRec,
     SMTLIBCommand,
 )
 from yinyang.src.mutators.SemanticFusion.VariableFusion import (
@@ -77,34 +82,143 @@ def is_constant(cmd):
     return False
 
 
-def is_sort(cmd):
-    if isinstance(cmd, SMTLIBCommand) and "-sort" in cmd.cmd_str:
+def fusion_vars(script):
+    """
+    :returns: the global variables of script that can be fused, i.e. the
+              declared constants (not functions or defined symbols), with
+              their types
+    """
+    constants = {cmd.symbol for cmd in script.commands if is_constant(cmd)}
+    return {
+        var: typ for var, typ in script.global_vars.items()
+        if var in constants
+    }
+
+
+def fused_name(names):
+    """
+    :returns: the name of the variable fusing the variables names, e.g.
+              scr1_x_scr2_y_fused, quoted if a name is quoted:
+              |scr1_x y_scr2_z_fused|
+    """
+    parts = [
+        name[1:-1] if len(name) > 1 and name[0] == name[-1] == "|" else name
+        for name in names
+    ]
+    name = "_".join(parts + ["fused"])
+    return "|" + name + "|" if parts != list(names) else name
+
+
+DECLARATION_COMMANDS = (
+    "declare-sort", "define-sort", "declare-datatype", "declare-datatypes",
+)
+
+
+def is_declaration(cmd):
+    """
+    Checks whether cmd declares or defines sorts or symbols.
+    """
+    if isinstance(cmd, (DeclareConst, DeclareFun, DefineConst, DefineFun,
+                        DefineFunRec, DefineFunsRec)):
         return True
-    return False
+    return isinstance(cmd, SMTLIBCommand) and \
+        cmd.cmd_str.lstrip("( \t\n").startswith(DECLARATION_COMMANDS)
+
+
+def declared_sorts(script):
+    """
+    :returns: dict mapping the sorts declared by declare-sort, define-sort,
+              declare-datatype and declare-datatypes to the text of their
+              declaration
+    """
+    sorts = {}
+    for cmd in script.commands:
+        if not (isinstance(cmd, SMTLIBCommand) and is_declaration(cmd)):
+            continue
+        text = " ".join(cmd.cmd_str.split())
+        try:
+            tree = parse_sexpr(text)
+        except ValueError:
+            continue
+        if tree[0] == "declare-datatypes" and len(tree) > 1:
+            names = [dec[0] for dec in tree[1] if isinstance(dec, list)]
+        else:
+            names = tree[1:2]
+        for name in names:
+            sorts[name] = text
+    return sorts
+
+
+def sort_clash(script1, script2):
+    """
+    Checks whether the scripts declare a sort or datatype with the same name
+    but different declarations. Sorts are not renamed by
+    Script.prefix_vars, so such scripts cannot be fused.
+    """
+    sorts1, sorts2 = declared_sorts(script1), declared_sorts(script2)
+    return any(
+        name in sorts2 and sorts2[name] != text
+        for name, text in sorts1.items()
+    )
+
+
+def is_header(cmd):
+    return isinstance(cmd, SMTLIBCommand) and \
+        cmd.cmd_str.lstrip("( \t\n").startswith(("set-info", "set-option"))
 
 
 def concat(op, script1, script2):
+    """
+    Combine two scripts with disjoint symbols (see Script.prefix_vars):
+    the leading set-info/set-option commands of script2, the declarations
+    and definitions of script1, then the commands of script2 with the
+    asserts of both scripts combined by op in place of its assert. The
+    combined assert comes after the last declaration of script2, as
+    definitions may follow the first assert of a script. Sort and datatype
+    declarations that occur in both scripts are kept once.
+    """
     script1.merge_asserts()
     script2.merge_asserts()
-    sorts = []
-    sorts = [
-        cmd for cmd in script1.commands + script2.commands if is_sort(cmd)
-    ]
-    sorts = list(set(sorts))
-    declares1 = [cmd for cmd in script1.commands if is_constant(cmd)]
     assert1 = [cmd for cmd in script1.commands if isinstance(cmd, Assert)][0]
     assert2 = [cmd for cmd in script2.commands if isinstance(cmd, Assert)][0]
-    conjunction = Assert(Term(op=op, subterms=[assert1.term, assert2.term]))
-    new_cmds = declares1
+    combined = Assert(Term(op=op, subterms=[assert1.term, assert2.term]))
 
-    for cmd in script2.commands:
-        if is_sort(cmd):
-            continue
-        if isinstance(cmd, Assert):
-            new_cmds.append(conjunction)
+    n_header = 0
+    while n_header < len(script2.commands) and \
+            is_header(script2.commands[n_header]):
+        n_header += 1
+    new_cmds = script2.commands[:n_header]
+    declared = set()
+
+    def add(cmd):
+        if isinstance(cmd, SMTLIBCommand):
+            text = " ".join(cmd.cmd_str.split())
+            if text in declared:
+                return
+            declared.add(text)
+        new_cmds.append(cmd)
+
+    for cmd in script1.commands:
+        if is_declaration(cmd):
+            add(cmd)
+    rest = [
+        cmd for cmd in script2.commands[n_header:]
+        if not isinstance(cmd, Assert)
+    ]
+    first_assert = next(
+        i for i, cmd in enumerate(script2.commands[n_header:])
+        if isinstance(cmd, Assert)
+    )
+    last_decl = max(
+        [i + 1 for i, cmd in enumerate(rest) if is_declaration(cmd)],
+        default=0,
+    )
+    rest.insert(max(first_assert, last_decl), combined)
+    for cmd in rest:
+        if is_declaration(cmd):
+            add(cmd)
         else:
             new_cmds.append(cmd)
-    new_cmds = sorts + new_cmds
     return Script(new_cmds, {**script1.global_vars, **script2.global_vars})
 
 

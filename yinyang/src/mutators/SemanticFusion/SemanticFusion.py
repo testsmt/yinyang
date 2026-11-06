@@ -34,7 +34,10 @@ from yinyang.src.mutators.SemanticFusion.VariableFusion import (
     z_sort
 )
 from yinyang.src.mutators.SemanticFusion.Util import (
+    fused_name,
+    fusion_vars,
     generate_fusion_function_templates,
+    sort_clash,
     populate_template_map,
     random_var_triplets,
     disjunction,
@@ -57,6 +60,7 @@ class SemanticFusion(Mutator):
         self.multiple_variables = self.args.multiple_variables
         self.oracle = self.args.oracle
         self.templates = {}
+        self.sort_clash = sort_clash(self.formula1, self.formula2)
         if not self.generate_functions:
             self._parse_mrs()
 
@@ -101,8 +105,8 @@ class SemanticFusion(Mutator):
             # xs and ys map variables names to template variable declarations.
             mapped_var1, mapped_var2, template =\
                 triplet[0], triplet[1], triplet[2]
-            z_name = "_".join(list(mapped_var1.keys()) +
-                              list(mapped_var2.keys()) + ["fused"])
+            z_name = fused_name(
+                list(mapped_var1.keys()) + list(mapped_var2.keys()))
             if z_name in fusion_vars_names:
                 continue
             
@@ -136,6 +140,10 @@ class SemanticFusion(Mutator):
         return formula
 
     def mutate(self):
+        if self.sort_clash:
+            # Sorts are not renamed: two different declarations of the same
+            # sort cannot be in one formula.
+            return self.formula1, False, False
         skip_seed = False
         if self.formula1.free_var_occs == [] and\
            self.formula2.free_var_occs == []:
@@ -146,19 +154,16 @@ class SemanticFusion(Mutator):
         formula1.prefix_vars("scr1_")
         formula2.prefix_vars("scr2_")
 
+        vars1, vars2 = fusion_vars(formula1), fusion_vars(formula2)
         templates = generate_fusion_function_templates(
-            formula1.global_vars,
-            formula2.global_vars,
+            vars1,
+            vars2,
             self.multiple_variables,
             self.generate_functions_size
         ) \
             if self.generate_functions \
             else self.templates
 
-        triplets = random_var_triplets(
-            formula1.global_vars,
-            formula2.global_vars,
-            templates
-        )
+        triplets = random_var_triplets(vars1, vars2, templates)
         fused = self.fuse(formula1, formula2, triplets)
         return fused, True, skip_seed
