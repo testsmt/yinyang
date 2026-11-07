@@ -71,6 +71,7 @@ from yinyang.src.core.Logger import (
     log_skip_seed_test,
     log_skip_out_of_logic,
     log_skip_div_by_zero,
+    log_seed_error,
 )
 from yinyang.src.core.FuzzerUtil import (
     get_seeds,
@@ -171,6 +172,42 @@ class Fuzzer:
             return True
         return False  # stop testing if timeout limit is exceeded
 
+    def init_mutator(self, seed):
+        """
+        Parse (and typecheck) the seed, or the pair of seeds for yinyang, and
+        set up the mutator for it.
+
+        :returns: False if the seed is invalid
+        """
+        if self.strategy == "typefuzz":
+            script, glob = self.get_script(seed)
+            if not script:
+                return False
+            self.init_logic([script])
+            typecheck(script, glob)
+            unique_expr = get_unique_subterms(script)
+            self.mutator = GenTypeAwareMutation(
+                script, self.args, unique_expr
+            )
+
+        elif self.strategy == "opfuzz":
+            script, _ = self.get_script(seed)
+            if not script:
+                return False
+            self.init_logic([script])
+            self.mutator = TypeAwareOpMutation(script, self.args)
+
+        elif self.strategy == "yinyang":
+            script1, _, script2, _ = self.get_script_pair(seed)
+            if not script1 or not script2:
+                return False
+            self.init_logic([script1, script2])
+            self.mutator = SemanticFusion(script1, script2, self.args)
+
+        else:
+            assert False
+        return True
+
     def run(self):
         """
         Realizes the main fuzzing loop. The procedure fetches seeds at random
@@ -183,34 +220,17 @@ class Fuzzer:
         log_strategy_num_seeds(self.strategy, num_seeds, num_targets)
 
         for seed in seeds:
-            if self.strategy == "typefuzz":
-                script, glob = self.get_script(seed)
-                if not script:
+            # An error in yinyang on one seed (e.g. a typechecker or mutator
+            # bug) must not stop the whole run: the seed is skipped.
+            try:
+                if not self.init_mutator(seed):
                     continue
-
-                self.init_logic([script])
-                typecheck(script, glob)
-                unique_expr = get_unique_subterms(script)
-                self.mutator = GenTypeAwareMutation(
-                    script, self.args, unique_expr
-                )
-
-            elif self.strategy == "opfuzz":
-                script, _ = self.get_script(seed)
-                if not script:
-                    continue
-                self.init_logic([script])
-                self.mutator = TypeAwareOpMutation(script, self.args)
-
-            elif self.strategy == "yinyang":
-                script1, _, script2, _ = self.get_script_pair(seed)
-                if not script1 or not script2:
-                    continue
-                self.init_logic([script1, script2])
-                self.mutator = SemanticFusion(script1, script2, self.args)
-
-            else:
-                assert False
+            except Exception as e:
+                n = 2 if self.strategy == "yinyang" else 1
+                self.statistic.invalid_seeds += n
+                self.statistic.failed_seeds += n
+                log_seed_error(seed, "preparing", e)
+                continue
 
             log_generation_attempt(self.args)
 
@@ -219,7 +239,12 @@ class Fuzzer:
             self.timeout_of_current_seed = 0
             for i in range(self.args.iterations):
                 self.print_stats()
-                mutant, success, skip_seed = self.mutator.mutate()
+                try:
+                    mutant, success, skip_seed = self.mutator.mutate()
+                except Exception as e:
+                    self.statistic.mutator_errors += 1
+                    log_seed_error(seed, "mutating", e)
+                    break  # Continue to next seed.
 
                 # Reason for unsuccessful generation: randomness in the
                 # mutator to more efficiently generate mutants.

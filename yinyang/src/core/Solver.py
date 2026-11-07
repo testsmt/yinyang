@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
+import signal
 import subprocess
 from enum import Enum
 
@@ -88,26 +90,22 @@ class Solver:
         self.cil = cil
 
     def solve(self, file, timeout, debug=False):
+        """
+        Run the solver on file. The solver runs in a process group of its
+        own, which is killed on timeout: solvers started by a wrapper script
+        must not keep running after the wrapper is killed.
+        """
         try:
             cmd = list(filter(None, self.cil.split(" "))) + [file]
             if debug:
                 print("cmd: " + " ".join(cmd), flush=True)
-            output = subprocess.run(
+            process = subprocess.Popen(
                 cmd,
-                timeout=timeout,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 shell=False,
+                start_new_session=True,
             )
-
-        except subprocess.TimeoutExpired as te:
-            if te.stdout and te.stderr:
-                stdout = te.stdout.decode()
-                stderr = te.stderr.decode()
-            else:
-                stdout = ""
-                stderr = ""
-            return stdout, stderr, 137
 
         except ValueError:
             stdout = ""
@@ -118,11 +116,36 @@ class Solver:
             print('error: solver "' + cmd[0] + '" not found', flush=True)
             exit(ERR_USAGE)
 
-        stdout = output.stdout.decode()
-        stderr = output.stderr.decode()
-        returncode = output.returncode
+        try:
+            stdout, stderr = process.communicate(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            kill_process_group(process)
+            stdout, stderr = process.communicate()
+            if stdout and stderr:
+                return stdout.decode(), stderr.decode(), 137
+            return "", "", 137
+        except BaseException:
+            kill_process_group(process)
+            process.wait()
+            raise
+
+        stdout = stdout.decode()
+        stderr = stderr.decode()
+        returncode = process.returncode
 
         if debug:
             print("output: " + stdout + "\n" + stderr)
 
         return stdout, stderr, returncode
+
+
+def kill_process_group(process):
+    """
+    Kill the process and all processes in its process group (see
+    start_new_session in Solver.solve).
+    """
+    try:
+        os.killpg(process.pid, signal.SIGKILL)
+    except (AttributeError, ProcessLookupError, PermissionError):
+        # No process groups (Windows), or the group is already gone.
+        process.kill()
