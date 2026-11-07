@@ -20,8 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import io
 import time
 import unittest
+from contextlib import redirect_stdout
 
 from yinyang.src.core.Fuzzer import Fuzzer
 from yinyang.src.core.Statistic import Statistic
@@ -70,8 +72,16 @@ class SeedErrorsTestCase(unittest.TestCase):
             return True
 
         fuzzer.init_mutator = init_mutator
-        with self.assertRaises(SystemExit):
+        with self.assertLogs(level="ERROR") as logs, \
+                redirect_stdout(io.StringIO()), \
+                self.assertRaises(SystemExit):
             fuzzer.run()
+        self.assertEqual(logs.output, [
+            "ERROR:root:Skip seed a.smt2: error in yinyang while "
+            "preparing: KeyError: 'Int'",
+            "ERROR:root:Skip seed b.smt2: error in yinyang while "
+            "mutating: RecursionError: maximum recursion depth exceeded",
+        ])
         self.assertEqual(fuzzer.statistic.total_seeds, 3)
         self.assertEqual(fuzzer.statistic.failed_seeds, 1)
         self.assertEqual(fuzzer.statistic.invalid_seeds, 1)

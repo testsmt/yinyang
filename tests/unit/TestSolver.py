@@ -34,12 +34,14 @@ def alive(pid):
         os.kill(pid, 0)
     except ProcessLookupError:
         return False
-    # A zombie still exists until its parent reaps it.
+    # A killed process is a zombie until it is reaped; it can also be
+    # reaped between os.kill and reading /proc, so a missing /proc entry
+    # means the process is gone (on systems with /proc).
     try:
         with open("/proc/%d/stat" % pid) as f:
             return f.read().split(")")[-1].split()[0] != "Z"
     except OSError:
-        return True
+        return not os.path.isdir("/proc/self")
 
 
 class SolverTestCase(unittest.TestCase):

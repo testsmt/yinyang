@@ -39,8 +39,8 @@ Note that you may want to add `yinyang/bin` to your PATH, for running yinyang co
 
 Usage
 -------------
-1. **Get SMT-LIB 2 benchmarks**. Edit `scripts/SMT-LIB-clone.sh` to select the logics for testing. Run `./scripts/SMT-LIB-clone.sh`
-to download the corresponding SMT-LIB 2 benchmarks. Alternatively, you can download benchmarks directly from the [SMT-LIB website](http://smtlib.cs.uiowa.edu/benchmarks.shtml) or supply your own benchmarks. 
+1. **Get SMT-LIB 2 benchmarks**. Run `./scripts/SMT-LIB-clone.sh QF_LIA QF_BV` to download the SMT-LIB 2 benchmarks of the given logics
+from the SMT-LIB release on Zenodo (without arguments, it lists the logics; it needs curl, tar and zstd). Alternatively, you can download benchmarks directly from the [SMT-LIB website](http://smtlib.cs.uiowa.edu/benchmarks.shtml) or supply your own benchmarks. 
 
 2. **Get and build SMT solvers** for testing. Install two or more [SMT solvers](http://smtlib.cs.uiowa.edu/solvers.shtml) that support the SMT-LIB 2 format. You may find it convenient to add them to your PATH. 
 
