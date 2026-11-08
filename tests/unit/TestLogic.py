@@ -80,6 +80,17 @@ class LogicTestCase(unittest.TestCase):
         self.assertEqual(logic_name(frozenset({"Q"})), "UF")
         self.assertEqual(logic_name(parse_logic("QF_IDL")), "QF_LIA")
 
+    def test_logic_name_strings(self):
+        # The only logics with strings are QF_S, QF_SLIA and QF_SNIA; z3
+        # does not know other names such as QF_SNRA (no String sort).
+        for name in ["QF_S", "QF_SLIA", "QF_SNIA"]:
+            self.assertEqual(logic_name(parse_logic(name)), name)
+        self.assertEqual(logic_name(frozenset({"S", "NL", "I"})), "QF_SNIA")
+        for features in [{"S", "R", "NL"}, {"S", "I", "Q"}, {"S", "I", "UF"},
+                         {"S", "BV"}, {"S", "A", "I"}, {"S", "I", "R"},
+                         {"S", "FP"}, {"S", "DT"}]:
+            self.assertEqual(logic_name(frozenset(features)), "ALL")
+
     def test_linear(self):
         self.assertEqual(infer(INT_XY + "(assert (= (* 2 x) y))"), {"I"})
         self.assertEqual(infer(INT_XY + "(assert (= (* x 2 3) y))"), {"I"})

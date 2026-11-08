@@ -139,9 +139,20 @@ def logic_name(features):
     """
     Converts a set of features into the smallest SMT-LIB logic name that
     contains all of them, e.g. {"UF", "I", "NL"} -> "QF_UFNIA".
+
+    The only SMT-LIB logics with strings are QF_S, QF_SLIA and QF_SNIA.
+    Other names with strings, e.g. QF_SNRA or QF_UFSLIA, are not known to
+    z3 (it then has no String sort) and lack the integers that strings need
+    (str.len), so ALL is used for strings with any other feature.
     """
+    if "S" in features:
+        if not features <= {"S", "I", "NL"}:
+            return "ALL"
+        if "NL" in features:
+            return "QF_SNIA"
+        return "QF_SLIA" if "I" in features else "QF_S"
     name = "" if "Q" in features else "QF_"
-    for feature in ["A", "UF", "BV", "FP", "DT", "S"]:
+    for feature in ["A", "UF", "BV", "FP", "DT"]:
         if feature in features:
             name += feature
     ints, reals = "I" in features, "R" in features
