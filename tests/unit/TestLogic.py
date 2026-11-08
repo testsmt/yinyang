@@ -24,8 +24,10 @@ import unittest
 import sys
 
 from yinyang.src.parsing.Parse import parse_str
+from yinyang.src.parsing.Typechecker import typecheck
 from yinyang.src.parsing.Logic import (
-    parse_logic, logic_name, infer_logic, divides_by_zero
+    parse_logic, logic_name, infer_logic, divides_by_zero,
+    is_real_logic, numerals_to_decimals,
 )
 from yinyang.src.core.Fuzzer import Fuzzer
 
@@ -79,6 +81,40 @@ class LogicTestCase(unittest.TestCase):
         self.assertEqual(logic_name(frozenset()), "QF_UF")
         self.assertEqual(logic_name(frozenset({"Q"})), "UF")
         self.assertEqual(logic_name(parse_logic("QF_IDL")), "QF_LIA")
+
+    def test_numerals_to_decimals(self):
+        # In real logics numerals are reals; written as decimals they stay
+        # reals when a mutant needs a logic with integers (or ALL).
+        self.assertTrue(is_real_logic("QF_UFNRA"))
+        self.assertTrue(is_real_logic("QF_RDL"))
+        for name in ["QF_NIRA", "QF_LIA", "ALL", "QF_BV", None]:
+            self.assertFalse(is_real_logic(name))
+        script, glob = parse_str(
+            "(set-logic QF_UFNRA)"
+            "(declare-fun f (Real Real) Real)(declare-fun x () Real)"
+            "(declare-fun c () Bool)"
+            "(define-fun g ((d Real)) Real (+ d 2))"
+            "(assert (let ((y 3)) (> (f (* 25 x) 16) (ite c x y))))"
+            "(assert (= (g 0) (/ 1 3) 1.5))")
+        numerals_to_decimals(script)
+        typecheck(script, glob)
+        self.assertEqual(str(script).split("\n")[3:], [
+            "(define-fun g ((d Real)) Real (+ d 2.0))",
+            "(assert (let ((y 3.0)) (> (f (* 25.0 x) 16.0) (ite c x y))))",
+            "(assert (= (g 0.0) (/ 1.0 3.0) 1.5))",
+        ])
+        self.assertEqual(infer_logic(script), {"UF", "R"})
+
+    def test_logic_name_strings(self):
+        # The only logics with strings are QF_S, QF_SLIA and QF_SNIA; z3
+        # does not know other names such as QF_SNRA (no String sort).
+        for name in ["QF_S", "QF_SLIA", "QF_SNIA"]:
+            self.assertEqual(logic_name(parse_logic(name)), name)
+        self.assertEqual(logic_name(frozenset({"S", "NL", "I"})), "QF_SNIA")
+        for features in [{"S", "R", "NL"}, {"S", "I", "Q"}, {"S", "I", "UF"},
+                         {"S", "BV"}, {"S", "A", "I"}, {"S", "I", "R"},
+                         {"S", "FP"}, {"S", "DT"}]:
+            self.assertEqual(logic_name(frozenset(features)), "ALL")
 
     def test_linear(self):
         self.assertEqual(infer(INT_XY + "(assert (= (* 2 x) y))"), {"I"})
@@ -182,6 +218,38 @@ class LogicTestCase(unittest.TestCase):
         fuzzer.init_logic([seed])
         self.assertEqual(fuzzer.mutant_logic(nonlinear), (None, True))
         self.assertNotIn("set-logic", fuzzer.script_str(seed))
+
+    def test_random_all(self):
+        # With --random-all, about half of the mutants get ALL instead of
+        # their logic; not for logics yinyang does not understand, and not
+        # for scripts declaring a sort that is built in under ALL.
+        import random
+        seed, _ = parse_str("(set-logic QF_LIA)" + INT_XY
+                            + "(assert (= x y))")
+        fuzzer = make_fuzzer("widen")
+        fuzzer.args.random_all = True
+        fuzzer.init_logic([seed])
+        random.seed(1)
+        logics = [fuzzer.random_all("QF_LIA", seed) for _ in range(200)]
+        self.assertEqual(set(logics), {"QF_LIA", "ALL"})
+        self.assertTrue(60 < logics.count("ALL") < 140)
+        self.assertIsNone(fuzzer.random_all(None, seed))
+
+        set_sort, _ = parse_str("(set-logic QF_UF)(declare-sort Set 0)"
+                                "(declare-const a Set)(assert (= a a))")
+        fuzzer.init_logic([set_sort])
+        self.assertEqual({fuzzer.random_all("QF_UF", set_sort)
+                          for _ in range(50)}, {"QF_UF"})
+
+        horn, _ = parse_str("(set-logic HORN)" + INT_XY + "(assert (= x y))")
+        fuzzer.init_logic([horn])
+        self.assertEqual({fuzzer.random_all("HORN", horn)
+                          for _ in range(50)}, {"HORN"})
+
+        fuzzer.args.random_all = False
+        fuzzer.init_logic([seed])
+        self.assertEqual({fuzzer.random_all("QF_LIA", seed)
+                          for _ in range(50)}, {"QF_LIA"})
 
     def test_div_by_zero(self):
         # Division by a literal zero is undefined in SMT-LIB; cvc5 rejects

@@ -118,6 +118,17 @@ def add_common_args(parser, rootpath, current_dir):
         default="nonlinear",
     )
     parser.add_argument(
+        "--random-all",
+        dest="random_all",
+        action="store_true",
+        default=True,
+    )
+    parser.add_argument(
+        "--no-random-all",
+        dest="random_all",
+        action="store_false",
+    )
+    parser.add_argument(
         "--seed",
         metavar="<N>",
         type=int,

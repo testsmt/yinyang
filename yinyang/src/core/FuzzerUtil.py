@@ -111,11 +111,22 @@ def get_seeds(args, strategy):
 
 
 def get_permutation_generator(seeds):
-    seeds_copy = [seed for seed in seeds]
-    for a in seeds:
-        random.shuffle(seeds_copy)
-        for b in seeds_copy:
-            yield a, b
+    """
+    Yields each ordered pair (a, b) of seeds once, including the pairs of a
+    seed with itself. The pairs come in rounds of len(seeds) pairs, in which
+    every seed is the first seed of one pair and the second seed of one
+    pair, so that all seeds are fused early on: in round k, seed i is
+    paired with seed i + k (mod n), for the offsets k = 0..n-1 in random
+    order.
+    """
+    n = len(seeds)
+    offsets = list(range(n))
+    random.shuffle(offsets)
+    for k in offsets:
+        order = list(range(n))
+        random.shuffle(order)
+        for i in order:
+            yield seeds[i], seeds[(i + k) % n]
 
 
 def init_oracle(args):

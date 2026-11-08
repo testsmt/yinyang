@@ -35,6 +35,7 @@ from tests.unit.TestTheories import TheoriesTestCase
 from tests.unit.TestLocalVariables import LocalVariableMutationTestCase
 from tests.unit.TestSeedErrors import SeedErrorsTestCase
 from tests.unit.TestSolver import SolverTestCase
+from tests.unit.TestFuzzerUtil import FuzzerUtilTestCase
 
 sys.path.append("../")
 

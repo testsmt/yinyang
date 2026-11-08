@@ -44,6 +44,7 @@ counts as non-linear is set by the div_by_zero argument of infer_logic.
 
 import re
 
+from yinyang.src.parsing.Types import REAL_TYPE
 from yinyang.src.parsing.Ast import (
     Term,
     DeclareConst,
@@ -139,9 +140,20 @@ def logic_name(features):
     """
     Converts a set of features into the smallest SMT-LIB logic name that
     contains all of them, e.g. {"UF", "I", "NL"} -> "QF_UFNIA".
+
+    The only SMT-LIB logics with strings are QF_S, QF_SLIA and QF_SNIA.
+    Other names with strings, e.g. QF_SNRA or QF_UFSLIA, are not known to
+    z3 (it then has no String sort) and lack the integers that strings need
+    (str.len), so ALL is used for strings with any other feature.
     """
+    if "S" in features:
+        if not features <= {"S", "I", "NL"}:
+            return "ALL"
+        if "NL" in features:
+            return "QF_SNIA"
+        return "QF_SLIA" if "I" in features else "QF_S"
     name = "" if "Q" in features else "QF_"
-    for feature in ["A", "UF", "BV", "FP", "DT", "S"]:
+    for feature in ["A", "UF", "BV", "FP", "DT"]:
         if feature in features:
             name += feature
     ints, reals = "I" in features, "R" in features
@@ -264,6 +276,52 @@ def _term_features(term, user_sorts, features, ground_lets):
 
     for sub in term.subterms or []:
         _term_features(sub, user_sorts, features, ground_lets)
+
+
+NUMERAL_RE = re.compile(r"^[0-9]+$")
+
+
+def is_real_logic(name):
+    """Checks whether the logic name has reals but no integers, e.g. QF_LRA."""
+    features = parse_logic(name) if name else None
+    return features is not None and "R" in features and "I" not in features
+
+
+def numerals_to_decimals(script):
+    """
+    Rewrites the numerals of script as decimals, e.g. 16 as 16.0. In a logic
+    with reals but no integers (e.g. QF_LRA) numerals are reals, but in a
+    logic with both (e.g. QF_NIRA or ALL) they are integers. Seeds of real
+    logics are rewritten so that they stay well-typed when a mutant needs a
+    logic with integers, e.g. (ite c x 1) with x Real, which cvc5 rejects in
+    QF_NIRA. Indices, e.g. of (_ extract 3 0), are not terms and stay as is.
+    """
+    def rewrite(term):
+        if term is None or isinstance(term, str):
+            return
+        if term.is_const and not term.is_indexed_id \
+                and isinstance(term.name, str) and NUMERAL_RE.match(term.name):
+            term.name += ".0"
+            term.type = REAL_TYPE
+        for sub in (term.let_terms or []) + (term.subterms or []):
+            rewrite(sub)
+
+    for cmd in script.commands:
+        terms = list(getattr(cmd, "terms", None) or [])
+        if getattr(cmd, "term", None) is not None:
+            terms.append(cmd.term)
+        for term in terms:
+            if isinstance(term, Term):
+                rewrite(term)
+
+
+# Sorts that z3 or cvc5 have built in with (set-logic ALL), so that a
+# script declaring a sort of this name is rejected under ALL although it is
+# valid in a logic without that theory, e.g. (declare-sort Set 0) in QF_UF.
+ALL_BUILTIN_SORTS = {
+    "Set", "Seq", "Array", "BitVec", "FloatingPoint", "RoundingMode",
+    "String", "RegLan", "Int", "Real", "UnitTuple",
+}
 
 
 def infer_logic(script, div_by_zero="nonlinear"):

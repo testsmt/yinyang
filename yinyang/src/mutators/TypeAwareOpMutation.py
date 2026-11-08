@@ -43,26 +43,33 @@ class TypeAwareOpMutation(Mutator):
                 continue
             if not line.strip():
                 continue
-            arity = -1
+            arity = None
             if ":arity" in line:
-                arity = line.split(":arity")[-1].split(" ")[-1].strip()
-                line = " ".join(line.split(" ")[:-2])
+                line, arity = line.split(":arity")
+                arity = arity.strip()
             if "->" in line:
                 op_from = line.split("->")[0].strip()
-                op_to = line.split("->")[1].strip()
-                self.unidirectional.append((arity, op_from, op_to))
+                ops_to = [op.strip() for op in line.split("->")[1].split(",")]
+                self.unidirectional.append((arity, op_from, ops_to))
                 continue
 
             op_class = [op.strip() for op in line.split(",")]
             self.bidirectional.append((arity, op_class))
 
     def arities_mismatch(self, arity, op_occ):
-        if arity == "2+" and len(op_occ.subterms) < 2:
-            return True
-
-        if arity == "1-" and len(op_occ.subterms) > 2:
-            return True
-        return False
+        """
+        Checks whether the number of arguments of op_occ violates the arity
+        condition of a mutation: "N" (exactly N), "N+" (at least N) or "N-"
+        (at most N) arguments; None means any number of arguments.
+        """
+        if arity is None:
+            return False
+        n = len(op_occ.subterms) if op_occ.subterms else 0
+        if arity.endswith("+"):
+            return n < int(arity[:-1])
+        if arity.endswith("-"):
+            return n > int(arity[:-1])
+        return n != int(arity)
 
     def get_replacee(self, op_occ):
         for b in self.bidirectional:
@@ -83,12 +90,12 @@ class TypeAwareOpMutation(Mutator):
                 return replacee
 
         for u in self.unidirectional:
-            arity, op, replacee = u[0], u[1], u[2]
-            if op_occ.op != op or op_occ.quantifier != op:
+            arity, op, replacees = u[0], u[1], u[2]
+            if op_occ.op != op and op_occ.quantifier != op:
                 continue
             if self.arities_mismatch(arity, op_occ):
                 continue
-            return replacee
+            return random.choice(replacees)
         return None
 
     def mutate(self):
@@ -100,6 +107,9 @@ class TypeAwareOpMutation(Mutator):
                 replacee = self.get_replacee(op_occ)
                 if replacee:
                     success = True
-                    op_occ.op = replacee
+                    if op_occ.quantifier:
+                        op_occ.quantifier = replacee
+                    else:
+                        op_occ.op = replacee
                     break
         return self.formula, success, False
