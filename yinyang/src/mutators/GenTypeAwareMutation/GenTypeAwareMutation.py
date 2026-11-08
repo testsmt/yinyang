@@ -31,6 +31,7 @@ from yinyang.src.mutators.GenTypeAwareMutation.Util import (
     visible_symbols
 )
 from yinyang.src.parsing.Ast import Const, Expr
+from yinyang.src.parsing.Cvc5 import cvc5_unsupported
 from yinyang.src.parsing.Types import ALL
 
 
@@ -244,8 +245,17 @@ class GenTypeAwareMutation(Mutator):
             t1 = random.choice(all_holes)
             t2 = self.get_replacee(t1)
             if t2:
-                success = True
+                if not getattr(self.args, "cvc5_compat", False):
+                    t1.substitute(t1, t2)
+                    success = True
+                    break
+                old = t1.copy_tree(t1.parent)
                 t1.substitute(t1, t2)
-                break
+                if not cvc5_unsupported(self.formula):
+                    success = True
+                    break
+                # e.g. a variable in a re.range argument: undo and try
+                # another hole.
+                t1.substitute(t1, old)
             all_holes.remove(t1)
         return self.formula, success, False  # False = never skip seed

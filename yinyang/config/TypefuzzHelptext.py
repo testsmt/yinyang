@@ -141,6 +141,11 @@ options:
     --random-all, --no-random-all
             use (set-logic ALL) instead of the mutant's logic for half
             of the mutants (default: on)
+    --cvc5-compat
+            avoid scripts that cvc5 rejects although they are valid
+            SMT-LIB: re.range with non-ground arguments, and RegLan
+            constants that cvc5 cannot eliminate (see docs/customization.rst).
+            Seeds that cvc5 rejects for these reasons are skipped
     -k, --keep-mutants  do not delete scratch files
     -n, --no-log    disable logging
     -q, --quiet     do not print statistics and other output

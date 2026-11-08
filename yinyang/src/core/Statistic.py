@@ -31,11 +31,13 @@ class Statistic:
         self.invalid_seeds = 0
         self.oversized_seeds = 0  # included in invalid_seeds
         self.failed_seeds = 0  # error in yinyang, included in invalid_seeds
+        self.cvc5_seeds = 0  # skipped by --cvc5-compat, in invalid_seeds
         self.mutator_errors = 0  # seeds stopped by an error in the mutator
         self.total_generations = 0
         self.unsuccessful_generations = 0
         self.out_of_logic = 0
         self.div_by_zero = 0  # skipped by --div-by-zero skip
+        self.cvc5_mutants = 0  # skipped by --cvc5-compat
         self.mutants = 0
         self.invalid_mutants = 0
         self.crashes = 0
@@ -79,6 +81,8 @@ class Statistic:
                 "%d over the file size limit" % self.oversized_seeds)
         if self.failed_seeds:
             reasons.append("%d failed in yinyang" % self.failed_seeds)
+        if self.cvc5_seeds:
+            reasons.append("%d not supported by cvc5" % self.cvc5_seeds)
         invalid = " (%s)" % ", ".join(reasons) if reasons else ""
         summary = (
             "\b\b%d seeds processed, \

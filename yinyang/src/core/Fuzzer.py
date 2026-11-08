@@ -34,6 +34,7 @@ from yinyang.src.core.Solver import Solver, SolverQueryResult, SolverResult
 
 from yinyang.src.parsing.Parse import parse_file
 from yinyang.src.parsing.Typechecker import typecheck
+from yinyang.src.parsing.Cvc5 import cvc5_unsupported
 from yinyang.src.parsing.Logic import (
     parse_logic,
     infer_logic,
@@ -75,6 +76,8 @@ from yinyang.src.core.Logger import (
     log_skip_seed_test,
     log_skip_out_of_logic,
     log_skip_div_by_zero,
+    log_skip_cvc5,
+    log_skip_seed_cvc5,
     log_seed_error,
 )
 from yinyang.src.core.FuzzerUtil import (
@@ -178,6 +181,23 @@ class Fuzzer:
             return True
         return False  # stop testing if timeout limit is exceeded
 
+    def cvc5_rejects_seeds(self, seed, scripts):
+        """
+        With --cvc5-compat, check whether cvc5 rejects one of the seed
+        scripts although it is valid SMT-LIB (see Cvc5.py). Such seeds are
+        skipped and counted as invalid.
+        """
+        if not getattr(self.args, "cvc5_compat", False):
+            return False
+        for script in scripts:
+            reason = cvc5_unsupported(script)
+            if reason:
+                self.statistic.cvc5_seeds += len(scripts)
+                self.statistic.invalid_seeds += len(scripts)
+                log_skip_seed_cvc5(seed, reason)
+                return True
+        return False
+
     def init_mutator(self, seed):
         """
         Parse (and typecheck) the seed, or the pair of seeds for yinyang, and
@@ -187,7 +207,7 @@ class Fuzzer:
         """
         if self.strategy == "typefuzz":
             script, glob = self.get_script(seed)
-            if not script:
+            if not script or self.cvc5_rejects_seeds(seed, [script]):
                 return False
             self.init_logic([script])
             typecheck(script, glob)
@@ -198,14 +218,15 @@ class Fuzzer:
 
         elif self.strategy == "opfuzz":
             script, _ = self.get_script(seed)
-            if not script:
+            if not script or self.cvc5_rejects_seeds(seed, [script]):
                 return False
             self.init_logic([script])
             self.mutator = TypeAwareOpMutation(script, self.args)
 
         elif self.strategy == "yinyang":
             script1, _, script2, _ = self.get_script_pair(seed)
-            if not script1 or not script2:
+            if not script1 or not script2 or \
+                    self.cvc5_rejects_seeds(seed, [script1, script2]):
                 return False
             self.init_logic([script1, script2])
             self.mutator = SemanticFusion(script1, script2, self.args)
@@ -273,6 +294,13 @@ class Fuzzer:
                     self.statistic.div_by_zero += 1
                     log_skip_div_by_zero(self.args, i)
                     continue  # Go to next iteration.
+
+                if getattr(self.args, "cvc5_compat", False):
+                    reason = cvc5_unsupported(mutant)
+                    if reason:
+                        self.statistic.cvc5_mutants += 1
+                        log_skip_cvc5(self.args, i, reason)
+                        continue  # Go to next iteration.
 
                 logic, in_logic = self.mutant_logic(mutant)
                 if not in_logic:

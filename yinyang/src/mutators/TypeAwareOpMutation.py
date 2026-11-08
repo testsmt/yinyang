@@ -23,6 +23,7 @@
 import random
 
 from yinyang.src.mutators.Mutator import Mutator
+from yinyang.src.parsing.Cvc5 import cvc5_unsupported
 
 
 class TypeAwareOpMutation(Mutator):
@@ -106,10 +107,17 @@ class TypeAwareOpMutation(Mutator):
                 op_occ = random.choice(self.formula.op_occs)
                 replacee = self.get_replacee(op_occ)
                 if replacee:
-                    success = True
+                    old = (op_occ.op, op_occ.quantifier)
                     if op_occ.quantifier:
                         op_occ.quantifier = replacee
                     else:
                         op_occ.op = replacee
+                    if getattr(self.args, "cvc5_compat", False) and \
+                            cvc5_unsupported(self.formula):
+                        # e.g. = -> distinct on the definition of a RegLan
+                        # constant: undo and mutate elsewhere.
+                        op_occ.op, op_occ.quantifier = old
+                        continue
+                    success = True
                     break
         return self.formula, success, False

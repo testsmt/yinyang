@@ -129,6 +129,10 @@ def add_common_args(parser, rootpath, current_dir):
         action="store_false",
     )
     parser.add_argument(
+        "--cvc5-compat",
+        action="store_true",
+    )
+    parser.add_argument(
         "--seed",
         metavar="<N>",
         type=int,
