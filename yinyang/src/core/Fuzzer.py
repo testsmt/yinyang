@@ -40,6 +40,8 @@ from yinyang.src.parsing.Logic import (
     divides_by_zero,
     logic_name,
     is_difference_logic,
+    is_real_logic,
+    numerals_to_decimals,
 )
 
 from yinyang.src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
@@ -149,6 +151,8 @@ class Fuzzer:
             logging.debug("Skipping invalid seed: error in parsing")
             return None, None
 
+        if is_real_logic(script.logic):
+            numerals_to_decimals(script)
         return script, glob
 
     def get_script(self, seed):

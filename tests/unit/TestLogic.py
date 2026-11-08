@@ -24,8 +24,10 @@ import unittest
 import sys
 
 from yinyang.src.parsing.Parse import parse_str
+from yinyang.src.parsing.Typechecker import typecheck
 from yinyang.src.parsing.Logic import (
-    parse_logic, logic_name, infer_logic, divides_by_zero
+    parse_logic, logic_name, infer_logic, divides_by_zero,
+    is_real_logic, numerals_to_decimals,
 )
 from yinyang.src.core.Fuzzer import Fuzzer
 
@@ -79,6 +81,29 @@ class LogicTestCase(unittest.TestCase):
         self.assertEqual(logic_name(frozenset()), "QF_UF")
         self.assertEqual(logic_name(frozenset({"Q"})), "UF")
         self.assertEqual(logic_name(parse_logic("QF_IDL")), "QF_LIA")
+
+    def test_numerals_to_decimals(self):
+        # In real logics numerals are reals; written as decimals they stay
+        # reals when a mutant needs a logic with integers (or ALL).
+        self.assertTrue(is_real_logic("QF_UFNRA"))
+        self.assertTrue(is_real_logic("QF_RDL"))
+        for name in ["QF_NIRA", "QF_LIA", "ALL", "QF_BV", None]:
+            self.assertFalse(is_real_logic(name))
+        script, glob = parse_str(
+            "(set-logic QF_UFNRA)"
+            "(declare-fun f (Real Real) Real)(declare-fun x () Real)"
+            "(declare-fun c () Bool)"
+            "(define-fun g ((d Real)) Real (+ d 2))"
+            "(assert (let ((y 3)) (> (f (* 25 x) 16) (ite c x y))))"
+            "(assert (= (g 0) (/ 1 3) 1.5))")
+        numerals_to_decimals(script)
+        typecheck(script, glob)
+        self.assertEqual(str(script).split("\n")[3:], [
+            "(define-fun g ((d Real)) Real (+ d 2.0))",
+            "(assert (let ((y 3.0)) (> (f (* 25.0 x) 16.0) (ite c x y))))",
+            "(assert (= (g 0.0) (/ 1.0 3.0) 1.5))",
+        ])
+        self.assertEqual(infer_logic(script), {"UF", "R"})
 
     def test_logic_name_strings(self):
         # The only logics with strings are QF_S, QF_SLIA and QF_SNIA; z3
