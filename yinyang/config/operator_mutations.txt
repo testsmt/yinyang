@@ -14,18 +14,20 @@
 ; Operator mutations can be conditioned on operator's arity. 
 ; 
 ; Example: 
-; =,distinct: arity: 2+ 
-; -,abs: arity: 1- 
+; =,distinct :arity 2+ 
+; abs,- :arity 1 
 ;
 ; This requires operators "=" and "distinct" to have at least two arguments to trigger the  
-; mutation, and "-","abs" to have at most one argument. At the moment, only the arities  
-; 2+ ("two or more") and 1- (one or less) are supported  
+; mutation, and "abs","-" to have exactly one argument. The arities N (exactly N),  
+; N+ (N or more) and N- (N or less) are supported. Operators of a class without an arity  
+; must accept the same numbers of arguments.  
 ; 
 ; Unidirectional mutations can be specified as   
 ; 
 ; abs -> - 
 ;
-; which corresponds to a one-way mutation from operator "abs" to operator "-" 
+; which corresponds to a one-way mutation from operator "abs" to operator "-". 
+; With several operators on the right (not -> and,or), one of them is chosen at random. 
 ;
 =,distinct
 exists,forall
@@ -34,7 +36,7 @@ and,or,=> :arity 3+
 and,or,=>,xor :arity 2
 <=,>=,<,>
 +,-,* :arity 2+
-mod,div
+mod,div :arity 2
 abs,- :arity 1
 re.++,re.union,re.inter,re.diff
 str.<=,str.<,str.prefixof,str.suffixof,str.contains
@@ -46,7 +48,8 @@ str.to_code,str.to_int
 str.from_code,str.from_int
 union,intersection,setminus
 bvnot,bvneg
-bvand,bvor,bvnand,bvnor,bvxor,bvxnor,bvsub,bvsdiv,bvsmod,bvadd,bvmul,bvudiv,bvurem,bvshl,bvlshr,bvashr
+bvand,bvor,bvnand,bvnor,bvxor,bvxnor,bvsub,bvsdiv,bvsmod,bvadd,bvmul,bvudiv,bvurem,bvshl,bvlshr,bvashr :arity 2
+bvand,bvor,bvxor,bvadd,bvmul :arity 3+
 bvule,bvugt,bvuge,bvslt,bvsle,bvsgt,bvsge
 fp.abs,fp.neg
 fp.add,fp.sub,fp.mul,fp.div
