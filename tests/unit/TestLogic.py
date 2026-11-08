@@ -219,6 +219,38 @@ class LogicTestCase(unittest.TestCase):
         self.assertEqual(fuzzer.mutant_logic(nonlinear), (None, True))
         self.assertNotIn("set-logic", fuzzer.script_str(seed))
 
+    def test_random_all(self):
+        # With --random-all, about half of the mutants get ALL instead of
+        # their logic; not for logics yinyang does not understand, and not
+        # for scripts declaring a sort that is built in under ALL.
+        import random
+        seed, _ = parse_str("(set-logic QF_LIA)" + INT_XY
+                            + "(assert (= x y))")
+        fuzzer = make_fuzzer("widen")
+        fuzzer.args.random_all = True
+        fuzzer.init_logic([seed])
+        random.seed(1)
+        logics = [fuzzer.random_all("QF_LIA", seed) for _ in range(200)]
+        self.assertEqual(set(logics), {"QF_LIA", "ALL"})
+        self.assertTrue(60 < logics.count("ALL") < 140)
+        self.assertIsNone(fuzzer.random_all(None, seed))
+
+        set_sort, _ = parse_str("(set-logic QF_UF)(declare-sort Set 0)"
+                                "(declare-const a Set)(assert (= a a))")
+        fuzzer.init_logic([set_sort])
+        self.assertEqual({fuzzer.random_all("QF_UF", set_sort)
+                          for _ in range(50)}, {"QF_UF"})
+
+        horn, _ = parse_str("(set-logic HORN)" + INT_XY + "(assert (= x y))")
+        fuzzer.init_logic([horn])
+        self.assertEqual({fuzzer.random_all("HORN", horn)
+                          for _ in range(50)}, {"HORN"})
+
+        fuzzer.args.random_all = False
+        fuzzer.init_logic([seed])
+        self.assertEqual({fuzzer.random_all("QF_LIA", seed)
+                          for _ in range(50)}, {"QF_LIA"})
+
     def test_div_by_zero(self):
         # Division by a literal zero is undefined in SMT-LIB; cvc5 rejects
         # it in linear logics ("A non-linear fact was asserted to

@@ -315,6 +315,15 @@ def numerals_to_decimals(script):
                 rewrite(term)
 
 
+# Sorts that z3 or cvc5 have built in with (set-logic ALL), so that a
+# script declaring a sort of this name is rejected under ALL although it is
+# valid in a logic without that theory, e.g. (declare-sort Set 0) in QF_UF.
+ALL_BUILTIN_SORTS = {
+    "Set", "Seq", "Array", "BitVec", "FloatingPoint", "RoundingMode",
+    "String", "RegLan", "Int", "Real", "UnitTuple",
+}
+
+
 def infer_logic(script, div_by_zero="nonlinear"):
     """
     Computes the features a script needs, i.e. the smallest logic in which

@@ -42,10 +42,12 @@ from yinyang.src.parsing.Logic import (
     is_difference_logic,
     is_real_logic,
     numerals_to_decimals,
+    ALL_BUILTIN_SORTS,
 )
 
 from yinyang.src.mutators.TypeAwareOpMutation import TypeAwareOpMutation
 from yinyang.src.mutators.SemanticFusion.SemanticFusion import SemanticFusion
+from yinyang.src.mutators.SemanticFusion.Util import declared_sorts
 from yinyang.src.mutators.GenTypeAwareMutation.Util import get_unique_subterms
 from yinyang.src.mutators.GenTypeAwareMutation.GenTypeAwareMutation import (
     GenTypeAwareMutation
@@ -277,7 +279,7 @@ class Fuzzer:
                     self.statistic.out_of_logic += 1
                     log_skip_out_of_logic(self.args, i, self.seed_logic)
                     continue  # Go to next iteration.
-                self.current_logic = logic
+                self.current_logic = self.random_all(logic, mutant)
 
                 (mutate_further, scratchfile) = self.test(mutant, i + 1)
                 if not mutate_further:  # Continue to next seed.
@@ -343,6 +345,21 @@ class Fuzzer:
         if self.args.logic_mode == "skip":
             return None, False
         return logic_name(self.logic_base | needed), True
+
+    def random_all(self, logic, script):
+        """
+        With --random-all (the default), use ALL instead of the mutant's
+        logic for half of the mutants, so that the solvers are also tested
+        with their configuration for ALL. Only logics that Logic.py
+        understands are replaced (not e.g. HORN), and not for scripts that
+        declare a sort that is built in under ALL, e.g. Set in z3.
+        """
+        if not getattr(self.args, "random_all", False) \
+                or logic is None or logic == "ALL" or self.logic_base is None:
+            return logic
+        if ALL_BUILTIN_SORTS & set(declared_sorts(script)):
+            return logic
+        return "ALL" if random.random() < 0.5 else logic
 
     def script_str(self, script):
         """

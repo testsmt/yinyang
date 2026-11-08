@@ -138,6 +138,9 @@ options:
                        --logic-mode
             linear:    they are linear (as in z3)
             skip:      skip them
+    --random-all, --no-random-all
+            use (set-logic ALL) instead of the mutant's logic for half
+            of the mutants (default: on)
     -k, --keep-mutants  do not delete scratch files
     -n, --no-log    disable logging
     -q, --quiet     do not print statistics and other output
