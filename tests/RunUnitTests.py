@@ -37,6 +37,7 @@ from tests.unit.TestSeedErrors import SeedErrorsTestCase
 from tests.unit.TestSolver import SolverTestCase
 from tests.unit.TestFuzzerUtil import FuzzerUtilTestCase
 from tests.unit.TestCvc5 import Cvc5TestCase
+from tests.unit.TestConsecutiveTimeouts import ConsecutiveTimeoutsTestCase
 
 sys.path.append("../")
 

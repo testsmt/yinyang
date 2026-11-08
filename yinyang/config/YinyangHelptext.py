@@ -126,6 +126,9 @@ options:
             log folder (default: ./logs)
     -t <secs>, --timeout <secs>
             timeout per SMT solver call in seconds (default: 8)
+    --consecutive-timeouts <N>
+            skip the rest of a seed after <N> consecutive mutants on which
+            a solver timed out, 0 to never skip (default: 2)
     -b <path>, --bugsfolder <path>
             set bug folder (default: ./bugs)
     -s <path>, --scratchfolder <path>

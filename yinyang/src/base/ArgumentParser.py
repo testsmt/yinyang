@@ -74,6 +74,12 @@ def add_common_args(parser, rootpath, current_dir):
         type=int,
     )
     parser.add_argument(
+        "--consecutive-timeouts",
+        default=2,
+        metavar="<N>",
+        type=int,
+    )
+    parser.add_argument(
         "-b",
         "--bugsfolder",
         metavar="path_to_folder",

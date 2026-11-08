@@ -214,6 +214,16 @@ def log_skip_out_of_logic(args, i, logic):
     )
 
 
+def log_skip_seed_timeouts(args, i):
+    logging.debug(
+        str(i)
+        + "/"
+        + str(args.iterations)
+        + " " + str(args.consecutive_timeouts)
+        + " consecutive mutants timed out, skipping the seed."
+    )
+
+
 def log_skip_seed_test(args, i):
     logging.debug(
         str(i)

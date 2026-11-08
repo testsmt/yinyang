@@ -22,99 +22,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import os
+# Runs yinyang from a checkout without installing it. An installation provides
+# yinyang as a console script, see setup.cfg.
+
 import sys
-import signal
-import inspect
 from pathlib import Path
 
-path = Path(__file__)
-rootpath = str(path.parent.absolute().parent)
-sys.path.append(rootpath)
+sys.path.insert(0, str(Path(__file__).absolute().parent.parent))
 
-current_dir = os.getcwd()
-
-from yinyang.src.base.Driver import run_checks
-from yinyang.src.base.Error import raise_runtime_error
-from yinyang.src.base.ArgumentParser import build_yinyang_parser
-from yinyang.src.base.Exitcodes import OK_BUGS, OK_NOBUGS
-from yinyang.src.base.Exitcodes import ERR_USAGE, ERR_INTERNAL
-
-from yinyang.src.core.Fuzzer import Fuzzer
-
-from yinyang.config.YinyangHelptext import (
-    usage,
-    header,
-    short_description,
-    long_description,
-    options,
-)
-
-
-def main():
-    parser = build_yinyang_parser(current_dir, usage)
-
-    if len(sys.argv) == 1:
-
-        # Show medium-length description when called without args containing
-        # one example and the usage dialogue.
-        print(header + "\n\nusage:" + usage + short_description, flush=True)
-        exit(ERR_USAGE)
-
-    elif "-h" in sys.argv or "--help" in sys.argv:
-
-        # If called for help, show long description containing general
-        # information on opfuzz, two examples with in-depth explanation,
-        # and the usage dialogue.
-        print(
-            header
-            + "\n"
-            + long_description
-            + "\n"
-            + options
-            + "\n"
-            + "usage:"
-            + usage
-            + "\n",
-            flush=True,
-        )
-        exit(OK_NOBUGS)
-
-    else:
-        args = run_checks(parser, "yinyang")
-        try:
-            fuzzer = Fuzzer(args, "yinyang")
-
-            def print_stats():
-                fuzzer.statistic.printsum()
-                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
-                    exit(OK_NOBUGS)
-                exit(OK_BUGS)
-
-            def stats_control_c(sig, frame):
-                print("\b\b\rUser interrupt", flush=True)
-                print_stats()
-                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
-                    exit(OK_NOBUGS)
-                exit(OK_BUGS)
-
-            def silent_control_c(sig, frame):
-                if fuzzer.statistic.crashes + fuzzer.statistic.soundness == 0:
-                    exit(OK_NOBUGS)
-                exit(OK_BUGS)
-
-            if not args.quiet:
-                signal.signal(signal.SIGINT, stats_control_c)
-            else:
-                signal.signal(signal.SIGINT, silent_control_c)
-
-            fuzzer.run()
-            exit(OK_NOBUGS)
-        except Exception as e:
-            trace = inspect.trace()
-            raise_runtime_error(trace, sys.argv, e)
-            exit(ERR_INTERNAL)
-
+from yinyang.src.base.Main import yinyang  # noqa: E402
 
 if __name__ == "__main__":
-    main()
+    yinyang()

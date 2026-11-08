@@ -44,6 +44,7 @@ class Statistic:
         self.soundness = 0
         self.duplicates = 0
         self.timeout = 0
+        self.timeout_seeds = 0  # skipped by --consecutive-timeouts
         self.solver_calls = 0
         self.effective_calls = 0
 
@@ -90,6 +91,11 @@ class Statistic:
             % (self.total_seeds, valid_seeds, self.invalid_seeds, invalid,
                num_bugs)
         )
+        if self.timeout_seeds:
+            summary += (
+                "\n%d seeds skipped after consecutive timeouts"
+                % self.timeout_seeds
+            )
         if self.mutator_errors:
             summary += (
                 "\n%d seeds stopped by an error in the mutator"

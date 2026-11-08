@@ -9,6 +9,7 @@ yinyang provides the following options. Please consult ``typefuzz --help`` for a
 * ``-i --iterations ITERATIONS`` the number of iterations on each seed. (default: 300)  
 * ``-m --modulo MODULO`` specifies how often the mutants will be forwarded to the SMT solvers. For example, with 300 iterations and 2 as a modulo, 150 mutants per seed file will be passed to the SMT solvers. High modulo and iteration counts prioritize deeper mutations. (default: 2) 
 * ``-t --timeout TIMEOUT`` imposes a timeout limit (in seconds) on each SMT solver for solving  mutant formula. (default: 8) 
+* ``--consecutive-timeouts N`` skips the rest of a seed after ``N`` consecutive mutants on which a solver timed out, ``0`` never skips. The mutants of a seed that is hard for a solver mostly time out as well, so the time is better spent on other seeds. (default: 2)
 * ``-d, --diagnose`` forwards solver outputs to stdout e.g. for solver command line diagnosis. 
 * ``-bugs BUGSFOLDER`` (default: ./bugs) 
 * ``-scratch SCRATCHFOLDER`` specifies where the mutant formulas are temporarily stored. Note, if you run yinyang with several processes in parallel, each instance should have its own scratch folder. (default: ./scratch)      
