@@ -21,6 +21,12 @@ yinyang provides the following options. Please consult ``typefuzz --help`` for a
 * ``--logic-mode`` how to handle the set-logic command of the seeds: ``widen`` keeps the seed's logic and widens it if a mutant needs more, ``skip`` keeps the seed's logic and skips mutants that need more, ``strip`` removes set-logic from all mutants. (default: widen)
 * ``--div-by-zero`` how to handle mutants that divide by a literal zero, e.g. ``(/ x 0.0)`` or ``(mod x 0)``. Division by zero is undefined in SMT-LIB, and solvers disagree on whether such terms are linear. ``nonlinear`` makes them need a non-linear logic, as in cvc5 (see ``--logic-mode``), ``linear`` treats them as linear, as in z3, ``skip`` skips them. (default: nonlinear)
 * ``--random-all``, ``--no-random-all`` whether to use ``(set-logic ALL)`` instead of the mutant's logic for half of the mutants, so that the solvers are also tested with their configuration for ALL. Logics that yinyang does not understand, e.g. ``HORN``, are kept, and so is the logic of scripts that declare a sort that is built in under ALL, e.g. ``Set`` in z3. (default: on)
+* ``--cvc5-compat`` avoid scripts that are valid SMT-LIB but rejected by cvc5 (checked with cvc5 1.4.2), so that no mutant is wasted on them. z3 accepts all of them, so the option is off by default. It handles two restrictions of cvc5:
+
+  * The arguments of ``re.range`` must be ground, e.g. ``(re.range x "c")`` gives ``expecting a constant string term in regexp range``. Ground terms such as ``(str.from_code 97)`` are accepted.
+  * Constants of sort ``RegLan`` must be eliminated by cvc5's preprocessing, otherwise cvc5 reports ``Regular expression variables are not supported``. A ``RegLan`` constant that occurs in an assertion must be defined by a top-level equation ``(= r t)`` (also as a conjunct of a top-level ``and``) in which ``r`` does not occur in ``t`` once the other ``RegLan`` constants are substituted. Equations under ``or``, ``ite`` or ``not``, ``distinct``, cyclic definitions such as ``(= r (re.* r))``, quantified ``RegLan`` variables and functions with arguments and range ``RegLan`` are rejected.
+
+  With the option, seeds that violate these restrictions are skipped, typefuzz and opfuzz undo a mutation that violates them and mutate elsewhere, and other mutants that violate them (e.g. from SemanticFusion) are skipped. cvc5 still answers some of these scripts, when it finds a conflict before it reaches the unsupported term.
 
 
 

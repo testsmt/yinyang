@@ -189,6 +189,22 @@ def log_skip_div_by_zero(args, i):
     )
 
 
+def log_skip_cvc5(args, i, reason):
+    logging.debug(
+        str(i)
+        + "/"
+        + str(args.iterations)
+        + " Mutant is not supported by cvc5 (" + reason + "), skipped."
+    )
+
+
+def log_skip_seed_cvc5(seed, reason):
+    logging.debug(
+        "Skipping seed " + str(seed) + ": not supported by cvc5 ("
+        + reason + ")"
+    )
+
+
 def log_skip_out_of_logic(args, i, logic):
     logging.debug(
         str(i)
