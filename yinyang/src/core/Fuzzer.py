@@ -74,6 +74,7 @@ from yinyang.src.core.Logger import (
     log_skip_oversized_seed,
     log_skip_seed_mutator,
     log_skip_seed_test,
+    log_skip_seed_timeouts,
     log_skip_out_of_logic,
     log_skip_div_by_zero,
     log_skip_cvc5,
@@ -264,6 +265,7 @@ class Fuzzer:
             unsuccessful_gens = 0
             successful_gens = 0
             self.timeout_of_current_seed = 0
+            consecutive_timeouts = 0
             for i in range(self.args.iterations):
                 self.print_stats()
                 try:
@@ -309,6 +311,7 @@ class Fuzzer:
                     continue  # Go to next iteration.
                 self.current_logic = self.random_all(logic, mutant)
 
+                timeouts = self.timeout_of_current_seed
                 (mutate_further, scratchfile) = self.test(mutant, i + 1)
                 if not mutate_further:  # Continue to next seed.
                     log_skip_seed_test(self.args, i)
@@ -317,6 +320,18 @@ class Fuzzer:
                 self.statistic.mutants += 1
                 if not self.args.keep_mutants:
                     os.remove(scratchfile)
+
+                # The mutants of a seed that is hard for a solver mostly
+                # time out as well: skip the seed after a few of them.
+                if self.timeout_of_current_seed > timeouts:
+                    consecutive_timeouts += 1
+                else:
+                    consecutive_timeouts = 0
+                limit = getattr(self.args, "consecutive_timeouts", 0)
+                if limit and consecutive_timeouts >= limit:
+                    self.statistic.timeout_seeds += 1
+                    log_skip_seed_timeouts(self.args, i + 1)
+                    break  # Continue to next seed.
 
             log_finished_generations(successful_gens, unsuccessful_gens)
         self.terminate()
