@@ -27,7 +27,7 @@ from yinyang.src.parsing.Parse import parse_str
 from yinyang.src.parsing.Typechecker import typecheck
 from yinyang.src.parsing.Logic import (
     parse_logic, logic_name, infer_logic, divides_by_zero,
-    is_real_logic, numerals_to_decimals,
+    is_real_logic, numerals_to_decimals, DIV_BY_ZERO_MODES,
 )
 from yinyang.src.core.Fuzzer import Fuzzer
 
@@ -287,6 +287,56 @@ class LogicTestCase(unittest.TestCase):
             fuzzer = make_fuzzer("widen", mode)
             fuzzer.init_logic([seed])
             self.assertEqual(fuzzer.mutant_logic(mutant), ("QF_LIA", True))
+
+    def test_ground_divisors(self):
+        # Checked with z3 5.3.3 and cvc5 1.4.2 in QF_LIA and QF_LRA.
+        # z3 accepts only numerals, decimals, unary - and / over them as
+        # divisors and factors; (- 5 2) is rejected as non-linear.
+        for formula in [
+            INT_XY + "(assert (= (div x (- 5 2)) y))",
+            INT_XY + "(assert (= (* x (- 5 2)) y))",
+            INT_XY + "(assert (= (div 7 (+ 1 1)) y))",
+            REAL_R + "(assert (= (/ r (- 5.0 2.0)) r))",
+            REAL_R + "(assert (= (/ 6.0 (* 2.0 3.0)) r))",
+            REAL_R + "(assert (= (* (/ (/ 1.0 2.0) 3.0) r) r))",
+            REAL_R + "(assert (= (/ r (/ 1.0 2.0 3.0)) r))",
+            REAL_R + "(assert (= (/ r (/ (- (- 1.0)) 2.0)) r))",
+            REAL_R + "(assert (= (/ 1133.0 (/ 1133.0 (/ 1133.0 100.0))) r))",
+            INT_XY + "(assert (= (* (div 4 2) x) y))",
+            INT_XY + "(assert (let ((c (- 5 2))) (= (* c x) y)))",
+        ]:
+            for mode in DIV_BY_ZERO_MODES:
+                self.assertIn("NL", infer(formula, mode), formula)
+            script, _ = parse_str(formula)
+            self.assertFalse(divides_by_zero(script), formula)
+        # Both accept these in linear logics.
+        for formula in [
+            INT_XY + "(assert (= (div x (- 5)) y))",
+            REAL_R + "(assert (= (/ r (/ 4.0 2.0)) r))",
+            REAL_R + "(assert (= (/ (* 100.0 1133.0) 100.0) r))",
+            REAL_R + "(assert (= (* (- (/ 1.0 2.0)) r) r))",
+            REAL_R + "(assert (= (/ r (/ (- 1.0) (- 2.0))) r))",
+            REAL_R + "(assert (= (* (- (- 1.0)) r) r))",
+        ]:
+            self.assertNotIn("NL", infer(formula), formula)
+        # Divisors that evaluate to zero: cvc5 rejects them in linear
+        # logics, also when they are not literals (E5: (- 5000000 5000000)
+        # from typefuzz).
+        for formula in [
+            REAL_R + "(assert (= (/ 1.0 (- 5000000.0 5000000.0)) r))",
+            INT_XY + "(assert (= (mod x (- 2 2)) y))",
+            INT_XY + "(assert (= (div x (* 3 (- 2 2))) y))",
+            REAL_R + "(assert (= (/ r (/ 0.0 2.0)) r))",
+            INT_XY + "(assert (let ((c (- 3 3))) (= (div x c) y)))",
+        ]:
+            self.assertIn("NL", infer(formula), formula)
+            script, _ = parse_str(formula)
+            self.assertTrue(divides_by_zero(script), formula)
+        # Values that are too large are not computed.
+        big = "(* " + " ".join(["1000000000000"] * 400) + ")"
+        script, _ = parse_str(
+            INT_XY + "(assert (= (div x (- %s %s)) y))" % (big, big))
+        self.assertFalse(divides_by_zero(script))
 
     def test_seed_logic(self):
         def seed(logic, body=INT_XY):

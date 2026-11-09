@@ -36,13 +36,15 @@ Features:
     R   reals
     NL  non-linear arithmetic
 
-Division by a literal zero, e.g. (/ x 0.0) or (mod x 0), is undefined in
-SMT-LIB (the result is an unspecified value), so (/ x 0.0) is not a
-linear term. cvc5 rejects it in linear logics, z3 accepts it. Whether it
-counts as non-linear is set by the div_by_zero argument of infer_logic.
+Division by zero, e.g. (/ x 0.0), (mod x 0) or (/ 1 (- 5 5)), is undefined
+in SMT-LIB (the result is an unspecified value), so (/ x 0.0) is not a
+linear term. cvc5 rejects it in linear logics, z3 accepts a literal zero.
+Whether it counts as non-linear is set by the div_by_zero argument of
+infer_logic.
 """
 
 import re
+from fractions import Fraction
 
 from yinyang.src.parsing.Types import REAL_TYPE
 from yinyang.src.parsing.Ast import (
@@ -102,9 +104,12 @@ FP_CONSTANTS = {
 }
 
 DECIMAL_RE = re.compile(r"^[0-9]+\.[0-9]+$")
-ZERO_RE = re.compile(r"^0+(\.0+)?$")
+NUMBER_RE = re.compile(r"^[0-9]+(\.[0-9]+)?$")
 
-# Pseudo-feature of _term_features for divisions by a literal zero; it is
+# Larger values (in bits) are not computed by _value, see there.
+MAX_VALUE_BITS = 4096
+
+# Pseudo-feature of _term_features for divisions by zero; it is
 # never part of the features returned by infer_logic.
 DIV_BY_ZERO = "div0"
 
@@ -186,30 +191,98 @@ def _op_name(op):
 
 def _is_coefficient(term, ground_lets):
     """
-    Checks whether term may be used as a coefficient in linear arithmetic.
-    Only numerals, decimals and "-" and "/" over them count, which is what
-    z3 accepts (it rejects e.g. (* (+ 1 2) x) in QF_LIA).
+    Checks whether term may be used as a coefficient (a factor or divisor)
+    in linear arithmetic. Only what z3 accepts counts: numerals and
+    decimals, unary "-" of a coefficient, and (/ a b) where a and b are
+    numerals or decimals, possibly negated. z3 rejects e.g. (* (+ 1 2) x),
+    (* (- 5 2) x), (div x (- 5 2)), (* (/ (/ 1.0 2.0) 3.0) x) and
+    (/ x (/ 1.0 2.0 3.0)) in linear logics. cvc5 accepts all ground terms.
+
+    ground_lets: maps the let variables bound to ground terms to
+                 (is_coefficient, value), see _value
     """
     if isinstance(term, str):
-        return bool(re.match(r"^[0-9]+(\.[0-9]+)?$", term))
+        return bool(NUMBER_RE.match(term))
     if term.is_const:
         return True
     if term.is_var:
-        return term.name in ground_lets
-    if isinstance(term.op, str) and term.op in ("-", "/") and term.subterms:
-        return all(_is_coefficient(t, ground_lets) for t in term.subterms)
+        return ground_lets.get(term.name, (False, None))[0]
+    if not isinstance(term.op, str) or not term.subterms:
+        return False
+    if term.op == "-" and len(term.subterms) == 1:
+        return _is_coefficient(term.subterms[0], ground_lets)
+    if term.op == "/" and len(term.subterms) == 2:
+        return all(_is_signed_number(t) for t in term.subterms)
     return False
 
 
-def _is_zero(term):
-    """Checks whether term is a literal zero, e.g. 0, 0.0 or (- 0)."""
+def _is_signed_number(term):
+    """Checks whether term is a numeral or decimal, possibly negated."""
     if isinstance(term, str):
-        return bool(ZERO_RE.match(term))
+        return bool(NUMBER_RE.match(term))
     if term.is_const:
-        return bool(ZERO_RE.match(str(term.name)))
+        return bool(NUMBER_RE.match(str(term.name)))
     if term.op == "-" and term.subterms and len(term.subterms) == 1:
-        return _is_zero(term.subterms[0])
+        sub = term.subterms[0]
+        return isinstance(sub, str) and bool(NUMBER_RE.match(sub)) or \
+            not isinstance(sub, str) and sub.is_const and \
+            bool(NUMBER_RE.match(str(sub.name)))
     return False
+
+
+def _value(term, ground_lets):
+    """
+    The value of a ground arithmetic term over numerals and decimals, e.g.
+    0 for (- 5 5), computed with exact rationals.
+
+    ground_lets: see _is_coefficient
+    :returns: a Fraction, or None if term is not such a term, divides by
+              zero, or a value exceeds MAX_VALUE_BITS (only possible with
+              deeply nested products, which are not worth the time)
+    """
+    if isinstance(term, str):
+        return Fraction(term) if NUMBER_RE.match(term) else None
+    if term.is_const:
+        name = str(term.name)
+        return Fraction(name) if NUMBER_RE.match(name) else None
+    if term.is_var:
+        return ground_lets.get(term.name, (False, None))[1]
+    if not isinstance(term.op, str) or not term.subterms:
+        return None
+    args = []
+    for sub in term.subterms:
+        v = _value(sub, ground_lets)
+        if v is None:
+            return None
+        args.append(v)
+    op = term.op
+    if op == "-" and len(args) == 1:
+        v = -args[0]
+    elif op in ("+", "-", "*"):
+        v = args[0]
+        for a in args[1:]:
+            v = v + a if op == "+" else v - a if op == "-" else v * a
+    elif op in ("/", "div", "mod"):
+        v = args[0]
+        for a in args[1:]:
+            if a == 0:
+                return None
+            if op == "/":
+                v = v / a
+            else:
+                # SMT-LIB: the remainder is non-negative.
+                q = v // a if a > 0 else -(v // -a)
+                v = q if op == "div" else v - a * q
+    elif op == "abs" and len(args) == 1:
+        v = abs(args[0])
+    elif op in ("to_real", "to_int") and len(args) == 1:
+        v = args[0] if op == "to_real" else Fraction(args[0].__floor__())
+    else:
+        return None
+    if max(v.numerator.bit_length(),
+           v.denominator.bit_length()) > MAX_VALUE_BITS:
+        return None
+    return v
 
 
 def _term_features(term, user_sorts, features, ground_lets):
@@ -240,13 +313,11 @@ def _term_features(term, user_sorts, features, ground_lets):
                        features)
 
     if term.let_terms:
-        ground_lets = set(ground_lets)
+        ground_lets = dict(ground_lets)
         for var, let_term in zip(term.var_binders, term.let_terms):
             _term_features(let_term, user_sorts, features, ground_lets)
-            if _is_coefficient(let_term, ground_lets):
-                ground_lets.add(var)
-            else:
-                ground_lets.discard(var)
+            ground_lets[var] = (_is_coefficient(let_term, ground_lets),
+                                _value(let_term, ground_lets))
 
     if isinstance(term.op, str):
         name = _op_name(term.op)
@@ -271,7 +342,7 @@ def _term_features(term, user_sorts, features, ground_lets):
             if any(not _is_coefficient(t, ground_lets)
                    for t in subterms[1:]):
                 features.add("NL")
-            if any(_is_zero(t) for t in subterms[1:]):
+            if any(_value(t, ground_lets) == 0 for t in subterms[1:]):
                 features.add(DIV_BY_ZERO)
 
     for sub in term.subterms or []:
@@ -329,9 +400,10 @@ def infer_logic(script, div_by_zero="nonlinear"):
     Computes the features a script needs, i.e. the smallest logic in which
     it is valid. The inference is syntactic: it looks at declared sorts,
     operators and literals, not at the types of terms.
-    :div_by_zero: "nonlinear" if a division by a literal zero needs
-                  non-linear arithmetic (as in cvc5), "linear" (or "skip")
-                  if it does not (as in z3)
+    :div_by_zero: "nonlinear" if a division by zero needs non-linear
+                  arithmetic (as in cvc5), "linear" (or "skip") if it does
+                  not (as in z3). A divisor that is not a coefficient, e.g.
+                  (- 5 5), always needs it (see _is_coefficient).
     :returns: frozenset of features (see the module docstring).
     """
     features = set(_script_features(script))
@@ -344,8 +416,8 @@ def infer_logic(script, div_by_zero="nonlinear"):
 
 def divides_by_zero(script):
     """
-    Checks whether script divides by a literal zero, e.g. (/ x 0.0) or
-    (mod x 0).
+    Checks whether script divides by zero, e.g. (/ x 0.0), (mod x 0) or
+    (/ 1 (- 5 5)).
     """
     return DIV_BY_ZERO in _script_features(script)
 
@@ -381,5 +453,5 @@ def _script_features(script):
 
         term = getattr(cmd, "term", None)
         if isinstance(term, Term):
-            _term_features(term, user_sorts, features, set())
+            _term_features(term, user_sorts, features, {})
     return frozenset(features)
