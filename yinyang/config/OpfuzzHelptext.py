@@ -169,8 +169,8 @@ options:
             skip:  keep the seed's logic, skip mutants that need more
             strip: remove set-logic from all mutants
     --div-by-zero <mode>
-            how to handle mutants that divide by a literal zero, e.g.
-            (/ x 0.0) or (mod x 0) (default: nonlinear)
+            how to handle mutants that divide by zero, e.g. (/ x 0.0),
+            (mod x 0) or (/ 1 (- 5 5)) (default: nonlinear)
             nonlinear: they need a non-linear logic (as in cvc5), see
                        --logic-mode
             linear:    they are linear (as in z3)
